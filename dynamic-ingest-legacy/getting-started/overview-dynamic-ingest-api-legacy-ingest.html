@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/landing-page.css">
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/tabs.css">
   <link rel="stylesheet" href="/assets/css/local.css">
-  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+  <link data-react-helmet="true" rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500&display=swap">
   <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/381443caa8.js" crossorigin="anonymous"></script>
   <script src="https://support.brightcove.com/site-assets/js/site/google-analytics.js"></script>
@@ -1268,235 +1268,19 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
             
           
             
-              <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
+                            <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
               <ul class="sidenav-submenu" style="display:none;">
                 
-                  
-                    <li><a href="/support/brightcove-answer.html">Brightcove ブの回答</a></li>
-                  
-                
-                  
-                    <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
+                <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
                   
                 
                   
-                    <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
-                  
+                <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
+              
+
                 
                   
-                    <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
-                  
-                
-              </ul>
-            
-          
-      </nav>
-    </div>
-    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
-  <!-- bootstrap layout -->
-
-<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
-
-<!-- search bar -->
-<div id="nav-search-box" style="margin-top: 1rem;"></div>
-<!-- in-page navigation for narrow screens -->
-<details class="centered-inpage-nav" id="centered_inpage_nav">
-  <summary><h6 class="toc">ページコンテンツ</h6></summary>
-  <nav id="centered_toc"></nav>
-  <ul id="centered_in_page_toc" class="list-none"></ul>
-</details>
-<!-- open in new tab/window -->
-<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
-
-
-
-
-
-
-<h1>概要: Dynamic Ingest API</h1>
-<article class="bcls-article">
-  <summary><p>このトピックでは、の使用方法を学習します<span translate="No">Dynamic Ingest API</span>ビデオコンテンツをアップロードおよび管理します。 </p> <aside class="bcls-aside bcls-aside--information">この概要は、動的取り込みに関するものであることに注意してください。<strong>レガシー取り込みシステム</strong>。新しいVideoCloudアカウントをお持ちの場合、またはアカウントをに変換した場合<strong>動的配信</strong>、に移動します<a href="/dynamic-ingest/getting-started/overview-dynamic-ingest-api-dynamic-delivery.html">代わりにこのページ</a>。</aside></summary>
-    <section class="bcls-section">
-    <h2 id="API_functionality">API機能</h2>
-
-    <p>BrightcoveのDynamicIngest（DI）APIは、ビデオソースファイルが顧客の保管場所からダウンロードされ、ソースファイルの指定されたレンディションが作成される機能に基づいています。（<a href="/dynamic-ingest/getting-started/source-file-upload-api-dynamic-ingest.html">動的インジェストがファイルにアクセスできる一時的な場所にソースファイルをアップロードするオプションもあります</a>）。このプラットフォームは、クラウド中心であり、グローバルに分散しており、最新のプラクティスに基づき、クラス最高の一貫性と速度を実現します。</p>
-
-    <aside class="bcls-aside bcls-aside--information">注：セグメント化されたビデオタイプ（HLSおよびDASH）の場合、一部のプレーヤーは、オーディオストリームとビデオストリームの長さがセグメントの長さを超えて異なる場合を処理しません。この問題が発生した場合は、短いセグメント長を使用してみてください。</aside>
-    </section>
-
-    <section class="bcls-section">
-    <h2 id="workflowoverview">ワークフローの概要</h2>
-
-    <p>メディア全体のトランスコーディングと保存には、多くのシステム/テクノロジーが使用されています。非対応形式:</p>
-
-    <ul>
-      <li><strong>コンテンツ管理システム（CMS）API</strong>：DI API で使用するビデオオブジェクトを作成します。</li>
-      <li><strong>Zencoder </strong> :複数のレンディションを作成するビデオをトランスコードします</li>
-      <li><strong>Amazon S3 </strong> :プロファイル設定に基づいて、マスターとレンディションをストレージに移動します。</li>
-      <li><strong>カタログ</strong> :ビデオに関連する必要な情報を格納します</li>
-    </ul>
-
-    <p>最初のトランスコーディングの後、メディアに対して次のアクションを実行できます。</p>
-
-    <ul><!-- the following item on hold indefinitely --><!-- <li><strong>Delete</strong>: Delete, when needed, the master or all items</li> -->
-      <li><strong>再トランスコード</strong>：マスターが存在するときに新しいレンディションを作成する (マスターが存在しない場合はエラー)</li>
-      <li><strong>置換</strong> :新しいマスタシェイプをポイントするか、既存のマスタシェイプを置換する</li>
-    </ul>
-    </section>
-
-    <section class="bcls-section">
-    <h2 id="operations">オペレーション</h2>
-
-    <p>DI API を使用する場合は、取り込みプロファイルの読み取りやインジェスト情報のアカウントへの書き込みなど、さまざまな操作を実行します。DI タスクに必要な操作の完全なリストを次に示します。</p>
-
-    <ul>
-      <li>動画-雲/動画/作成</li>
-      <li>ビデオ-クラウド/ビデオ/読み取り</li>
-      <!-- for adding images -->
-      <li>ビデオ-クラウド/ビデオ/更新</li>
-      <li>ビデオクラウド/取り込みプロファイル/プロファイル/読み取り</li>
-      <li>ビデオクラウド/取り込みプロファイル/アカウント/読み取り</li>
-      <li>ビデオクラウド/取り込みプロファイル/アカウント/書き込み</li>
-      <li>ビデオクラウド/取り込みプロファイル/プロファイル/書き込み</li>
-      <li>動画-クラウド/アップロード URL /読む</li>
-    </ul>
-
-    <p>クライアントの資格情報を取得するには、<a href="/general/managing-api-authentication-credentials.html"> Studio管理ツールを使用するか</a>、次のいずれかのドキュメントを参照してください。</p>
-
-    <ul>
-      <li><a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">OAuth:CURL を使用してクライアント認証情報を取得する</a></li>
-      <li><a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">OAuth:郵便配達を使用してクライアントの資格情報を取得する</a></li>
-    </ul>
-    </section>
-
-    <section class="bcls-section">
-    <h2 id="best_practices">ベストプラクティス</h2>
-
-    <aside class="bcls-aside bcls-aside--tip">
-    <ul>
-      <li>DIと<span translate="No">CMS API</span>（CMSAPIまたはIngestAPIリクエスト）</li>
-      <li>アカウントごとに100の同時DIジョブの制限（に変換されたアカウントのリクエストの大規模なバッチには追加のオプションがあります<a href="/dynamic-ingest/getting-started/overview-dynamic-ingest-api-dynamic-delivery.html">動的配信</a>）</li>
-      <li>ファイルあたり100GB未満のコンテンツを取り込む（より大きなファイルを取り込む必要がある場合は、アカウントマネージャーに連絡してください）</li>
-      <li>ファイルをバッチで取り込む場合は、同時の通常の優先度のジョブを100に制限し、1つのジョブが処理を完了するのを待ってから、別のジョブを追加します。</li>
-      <li>完全なバッチを取り込む前に、取り込みプロファイルの変更を検証します</li>
-      <li>あなたがすべき<strong>ない</strong>同じアセットに対して重複するジョブを処理しています。このインスタンスのアセットは、ビデオオブジェクト、特定の言語のオーディオトラック、特定の言語のテキストトラック、または特定のイメージタイプとして定義されます。ポイントを説明するいくつかの例を次に示します。
-      <ul>
-        <li>受け入れられない:ビデオファイルの取り込みリクエストを送信し、最初の取り込みジョブが完了する前に、同じビデオ ID を持つ別のビデオ取り込みリクエストを送信する</li>
-        <li>許容可能:ビデオファイルの取り込みリクエストを送信し、同じ動画 ID に関連付けられた英語のテキストトラックに対するインジェストリクエストを送信し、同じ動画 ID のサムネイル画像に対するインジェストリクエストを送信します。</li>
-        <li>許容可能:テキストトラックのインジェストジョブを英語で送信し、スペイン語のテキストトラックのインジェストリクエストを並行して送信する</li>
-        <li>受け入れられない:スペイン語のオーディオトラックを取り込むリクエストを送信し、すぐに同じビデオ ID で別のスペイン語のオーディオトラックを取り込むリクエストを送信する</li>
-      </ul>
-      </li>
-      <li><code translate="No">profile </code><strong>取り込み要求のフィールドはオプションです</strong>。<code translate="No">profile </code>アプリおよびインテグレーションでをハードコーディングすることは避けてください。代わりに、<strong>最もよく使用されるプロファイルをアカウントのデフォルトとして設定し</strong>、フィールドを省略するか、<a href="/ingest-profiles/references/reference.html#api-Profile-Get_All_Ingest_Profiles">アカウントで利用可能なプロファイルを取得し</a>、ユーザーに 1 つ選択するように強制します。</li>
-    </ul>
-    </aside>
-    </section>
-
-    <section class="bcls-section">
-    <h2 id="sourceLocations">有効なソースロケーション</h2>
-
-    <p>ダイナミックインジェストでは、次の場所からソースビデオファイルをプルできます。HTTP / HTTPSまたはS3-認証ありまたはなし</p>
-
-    <p>例:</p>
-
-    <ul>
-      <li>http://example.com/path/to/input.avi</li>
-      <li>https://dl.dropboxusercontent.com/u/3641457/Bird_Titmouse.mp4</li>
-      <li>s3: //my-bucket/video.mp4</li>
-    </ul>
-
-    <aside class="bcls-aside bcls-aside--information">注
-    <ul>
-      <li>ビデオファイル名（拡張子を含む）は、120 シングルバイト（60 全バイト）文字を超えないようにしてください。含まれている場合、ビデオは正常に取り込まれますが、後で再トランスコードすることはできません。</li>
-      <li>ホスト名（ファイルの場所またはコールバック URL 用）には、IETF 仕様ごとにアンダースコア文字やその他の句読点や特殊文字を含めることはできません。詳細については<a href="https://en.wikipedia.org/wiki/Hostname#Restrictions_on_valid_hostnames">、このWikipediaの記事を参照してください</a>。ホスト名が IETF 標準に準拠していない場合、エラーが返されます。</li>
-      <li>動的取り込みは<strong>ない</strong> Googleドライブはビデオファイルへの直接リンクを生成しないため、Googleドライブでホストされているファイルを取り込みます。</li>
-    </ul>
-    </aside>
-
-    <h3>S3 に関する注意事項</h3>
-
-    <p>動画が保護された S3 バケットにある場合、<a href="/dynamic-ingest/general/using-dynamic-ingest-s3.html">ファイルにアクセスするための動的インジェストのアクセス権限を設定する方法の詳細については、「S3 での動的インジェストの使用</a>」を参照してください。</p>
-
-    <p>プルベースの取り込みを使用する利点には、ワークフローが単純であり、独自のデジタルマスターのリポジトリがあることが含まれます。ただし、これが選択肢にない場合は、次を使用することもできます。<a href="/dynamic-ingest/getting-started/source-file-upload-api-dynamic-ingest.html">ソースファイルのアップロード</a>動画やその他のアセットを、DynamicIngestがアクセスできる一時的な場所にアップロードします。</p>
-    </section>
-
-    <section class="bcls-section">
-    <h2 id="Source_file_names">ソースファイル名</h2>
-
-    <p>すべての入力 URL は、Brightcove ブに送信するときに、<a href="https://tools.ietf.org/html/rfc3986#section-2.1"> RFC 3986 </a>に従って適切に URL エンコードする必要があります。つまり、<a href="https://tools.ietf.org/html/rfc3986#section-2.2"> URLのパスで見つかった予約文字はパーセントエンコードされ</a>（スペースがエンコードされる<code translate="No">%20</code>）、URLのクエリで見つかった予約文字はパーセントエンコードされます（スペースは<code translate="No">+</code>または<code translate="No">%20</code>、<code translate="No">+</code>にエンコードされています<code translate="No">%2B</code>）。</p>
-
-    <p><strong>署名付き</strong> S3（<strong> v2 </strong><em>には署名</em>、<em>有効期限</em>、<em> AWSAccessKeyId </em>が含まれ、<strong> v4 </strong>には<em> X-Amz-Algorithm が含まれています</em>、<em> X-Amz-Credential </em>、<em> X-Amz-Date </em><em>、<em> X-Amz-有効期限</em>、X-AMZ-SignedHeaders </em>、および<em> X-Amz-署名</em>）または<strong> GCS </strong>（<em>署名</em>、<em>有効期限</em>、および<em> GoogleAccessID </em>を含む) URL <strong>は、すでに適切にエンコードされている必要があり、そのまま使用できます</strong>。</p>
-
-    <aside class="bcls-aside bcls-aside--tip"><strong>ファイル名には</strong> 2 バイトの Unicode 文字を使用できます。</aside>
-    </section>
-
-    <section class="bcls-section">
-    <h2 id="ingestingVideos">ビデオの取り込み</h2>
-
-    <p>動画の取り込みに必要なAPI呼び出しは2つあります。</p>
-
-    <ol>
-      <li><span translate="No">CMS API</span>を呼び出して、Video Cloud システムにビデオオブジェクトを作成し、その ID を取得します。</li>
-      <li>DI APIを呼び出して、ビデオソースファイルのURLを指定し、<a href="/ingest-profiles-legacy/references/standard-ingest-profiles-legacy-transcoding.html">取り込みプロファイル</a>使用する</li>
-    </ol>
-
-    <p>基本リクエストのサンプルセットは、次のようになります。</p>
-
-    <h3>CMS API リクエスト</h3>
-
-    <dl>
-      <dt>HTTPメソッド</dt>
-      <dd>役職</dd>
-      <dt>URL をリクエスト</dt>
-      <dd>https://cms.api.brightcove.com/v1/accounts/{account_id}/videos</dd>
-      <dt>リクエスト本文</dt>
-      <dd>
-      <pre class="line-numbers">
-    <code class="language-json" translate="No">{
-    "name": "My new video"
-    }
-    </code>
-    </pre>
-      </dd>
-    </dl>
-
-    <p>応答データには<code translate="No">id </code>、次のリクエストで使用されるビデオが含まれます。</p>
-
-    <h3>API リクエストを取り込み</h3>
-
-    <dl>
-      <dt>HTTPメソッド</dt>
-      <dd>役職</dd>
-      <dt>URL をリクエスト</dt>
-      <dd>https://ingest.api.brightcove.com/v1/accounts/{account_id}/videos/{video_id}/ingest-requests</dd>
-      <dt>リクエスト本文</dt>
-      <dd>
-      <pre class="line-numbers">
-    <code class="language-json" translate="No">{
-    "master": {
-    "url": "http://host/master.mp4"
-    },
-    "profile": "high-resolution"
-    }
-    </code>
-    </pre>
-      </dd>
-    </dl>
-
-    <p>を参照してください<a href="/dynamic-ingest/getting-started/overview-dynamic-ingest-api-dynamic-delivery.html">クイックスタート</a> API呼び出しの詳細については、<a href="/dynamic-ingest-legacy/code-samples/dynamic-ingest-api-sample-ingesting-videos-legacy-ingest.html">作業サンプル</a>。</p>
-
-    <p>にとって<span translate="No">CMS API</span> Video Cloudシステムでビデオを作成するには、を呼び出します。<a href="/cms/getting-started/overview-cms-api.html#settingvalues"> CMSAPIの概要</a>。<code translate="No">name </code>ビデオは必須であり、ビデオメタデータに含まれる名前とその他の文字列（など<code translate="No">description </code>）<strong>は URI エンコードする必要があります</strong>。</p>
-    </section>
-
-    <section class="bcls-section">
-    <h2 id="sampleAssets">サンプルアセット</h2>
-
-    <p>Brightcove ラーニングサービスには、ダイナミックインジェストの開始時に試すためのサンプルアセットがいくつか用意されています。これらのアセットには、複数の言語での短い動画、画像、WebVTT キャプションが含まれます。</p>
-
-    <ul>
-      <li><a href="//solutions.brightcove.com/bcls/assets/videos/">ビデオ</a></li>
-      <li><a href="//solutions.brightcove.com/bcls/assets/images/">画像</a></li>
-      <li><a href="//solutions.brightcove.com/bcls/assets/vtt/">WebVTTキャプション</a></li>
+                    
     </ul>
     </section>
 

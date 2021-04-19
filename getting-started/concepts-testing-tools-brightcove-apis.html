@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/landing-page.css">
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/tabs.css">
   <link rel="stylesheet" href="/assets/css/local.css">
-  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+  <link data-react-helmet="true" rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500&display=swap">
   <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/381443caa8.js" crossorigin="anonymous"></script>
   <script src="https://support.brightcove.com/site-assets/js/site/google-analytics.js"></script>
@@ -1268,138 +1268,19 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
             
           
             
-              <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
+                            <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
               <ul class="sidenav-submenu" style="display:none;">
                 
-                  
-                    <li><a href="/support/brightcove-answer.html">Brightcove ブの回答</a></li>
-                  
-                
-                  
-                    <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
+                <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
                   
                 
                   
-                    <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
-                  
+                <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
+              
+
                 
                   
-                    <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
-                  
-                
-              </ul>
-            
-          
-      </nav>
-    </div>
-    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
-  <!-- bootstrap layout -->
-
-<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
-
-<!-- search bar -->
-<div id="nav-search-box" style="margin-top: 1rem;"></div>
-<!-- in-page navigation for narrow screens -->
-<details class="centered-inpage-nav" id="centered_inpage_nav">
-  <summary><h6 class="toc">ページコンテンツ</h6></summary>
-  <nav id="centered_toc"></nav>
-  <ul id="centered_in_page_toc" class="list-none"></ul>
-</details>
-<!-- open in new tab/window -->
-<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
-
-
-
-
-
-
-<article class="bcls-article">
-  <h1>概念:Brightcove ブ API のテストツール</h1>
-  <summary>このトピックでは、Brightcove LearningServicesがBrightcoveRESTfulAPIのテストと学習に役立つツールについて学習します。</summary>
-  <section class="bcls-section">
-    <h2 id="toolList">ツールのリスト</h2>
-    <p>このガイドでは、次のツールについて説明します。</p>
-    <table class="bcls-table">
-      <caption class="bcls-caption--table">APIテストツール</caption>
-      <thead class="bcls-table__head">
-          <tr>
-              <th>テストツール</th>
-              <th>API</th>
-          </tr>
-      </thead>
-      <tbody class="bcls-table__body">
-          <tr>
-              <td>api-tester.sh<a href="#shell"></a></td>
-              <td><a href="/getting-started/authentication-brightcove-api-requests.html">リクエストの認証にBrightcove ブ</a> OAuth を使用する任意の API</td>
-          </tr>
-          <tr>
-              <td><a href="#online">オンラインテスター</a></td>
-              <td><a href="/getting-started/authentication-brightcove-api-requests.html">リクエストの認証にBrightcove ブ</a> OAuth を使用する任意の API</td>
-          </tr>
-          <tr>
-              <td><a href="#Insomnia">不眠症</a></td>
-              <td>認証方法に関係なく、任意の REST API</td>
-          </tr>
-          <tr>
-              <td><a href="#Postman">郵便配達員</a></td>
-              <td>認証方法に関係なく、任意の REST API</td>
-          </tr>
-      </tbody>
-  </table>
-    <ul>
-      <li>MacOSまたはその他のUNIXまたはLINUXシステムで作業している場合、または次の場合にコマンドラインから実行できるシェルスクリプト<a href="https://general.support.brightcove.com/developer/concepts-set-curl.html">cURLがインストールされています</a> Windowsシステムの場合</li>
-      <li>どのブラウザでも動作するはずのオンラインテストツール</li>
-      <li>人気のPostmanRESTAPIテスターの使用ガイド</li>
-    </ul>
-  </section>
-  <section class="bcls-section">
-    <h2 id="shell">シェルスクリプト（cURL）</h2>
-    <p>コマンドラインツールは、と呼ばれるシェルスクリプトです。<strong> api-tester.sh</strong>アクセストークンを取得してAPI呼び出しを行います。api-testerスクリプトは、cURLを使用してhttp呼び出しを行います。 cURLは、MacMacOSおよびすべてのUnix / Linuxシステムに組み込まれています。WindowsでcURLを取得するには、を参照してください。<a href="https://general.support.brightcove.com/developer/concepts-set-curl.html"> cURLの設定</a>。次に、<a href="/assets/downloads/api-tester.sh.zip"> api-tester.shスクリプト</a></p>
-    <p class="BCL-aside">シェルスクリプトの完全なコードは、次の場所で確認できます。<a href="/oauth/guides/getting-access-tokens.html">アクセストークンの取得</a>。</p>
-    <h3>シェルスクリプトの実行</h3>
-    <p>シェルスクリプトをダウンロードしたら、好きな場所で解凍して、同じフォルダーのコマンドラインに移動します。スクリプトを実行するには、次のように入力します。</p>
-    <pre>
-	<code translate="No">bash api-tester.sh</code></pre>
-    <p>スクリプトを実行するたびに、次の5つの変数の入力を求められます。</p>
-    <ul>
-      <li>クライアントID（<a href="#obtaincredentials">以下のセクション</a>クライアント資格情報の取得について）</li>
-      <li>クライアントシークレット（<a href="#obtaincredentials">以下のセクション</a>クライアント資格情報の取得について）</li>
-      <li>完全なAPI呼び出し（例：<code translate="No">https://cms.api.brightcove.com/v1/accounts/12345678/videos</code></li>
-      <li>リクエスト動詞-次のいずれか：GET | POST |パッチ|プット| DELETE（GETがデフォルトです）</li>
-      <li>リクエストデータ-POST、PATCH、およびPUTに使用されます。 GETおよびDELETEリクエストの場合、これを空白のままにして、を押すだけです。<strong>戻る</strong></li>
-    </ul>
-    <p>コマンドラインツールは、と同じ応答を返します。<a href="#online">オンラインツール</a> -ただし、完全な応答もエコーされるため、何らかの理由でリクエストが失敗した場合に、ヘッダーと詳細情報を確認できます。また、応答の生のJSONと、きれいに印刷されたバージョンをエコーします。</p>
-  </section>
-  <section class="bcls-section">
-    <h2 id="online">オンラインツール</h2>
-    <p>オンラインテストツールは見つけることができます<a href="/general/concepts-api-tester.html">ここに</a>。コマンドラインツールのように、それはあなたに尋ねます：</p>
-    <ul>
-      <li>クライアントID</li>
-      <li>クライアントシークレット</li>
-      <li>完全なAPIリクエストURL</li>
-      <li>リクエストタイプ</li>
-      <li>送信するJSONデータ（ある場合）</li>
-    </ul>
-  </section>
-  <section class="bcls-section">
-    <h2 id="Insomnia">不眠症</h2>
-    <p>を参照してください<a href="/general/use-insomnia-api-requests.html">Insomniaを使用してAPIリクエストを行うためのステップバイステップガイド</a>。</p>
-  </section>
-  <section class="bcls-section">
-    <h2 id="Postman">郵便配達人</h2>
-    <p>を参照してください<a href="/general/use-postman-api-requests.html">Postmanを使用してAPIリクエストを行うためのステップバイステップガイド</a>。</p>
-  </section>
-  <section class="bcls-section">
-    <h2 id="obtaincredentials">資格情報を取得する</h2>
-    <p>Brightcove APIを使用するには、適切なクライアント資格情報が必要です。<code translate="No">client_id</code>そして<code translate="No">client_secret</code>。を参照してください<a href="/oauth/getting-started/overview-oauth-api-v4.html">OAuthの概要</a>クライアントの資格情報の流れをよりよく理解するため。</p>
-    <p><code translate="No">client_id</code>とを取得するには<code translate="No">client_secret</code>、OAuth UI に移動してアプリを登録する必要があります。</p>
-    <ul>
-      <li><a href="/general/managing-api-authentication-credentials.html">API 認証資格情報の管理</a></li>
-    </ul>
-    <p>また、CURL または Postman 経由で資格を取得することもできます。以下を参照してください。</p>
-    <ul>
-      <li><a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">CURL を使用してクライアント認証情報を取得する</a></li>
-      <li><a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">郵便配達を使用してクライアントの資格情報を取得する</a></li>
+                    
     </ul>
   </section>
 </article>

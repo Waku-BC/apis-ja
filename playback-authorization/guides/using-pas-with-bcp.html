@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/landing-page.css">
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/tabs.css">
   <link rel="stylesheet" href="/assets/css/local.css">
-  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+  <link data-react-helmet="true" rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500&display=swap">
   <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/381443caa8.js" crossorigin="anonymous"></script>
   <script src="https://support.brightcove.com/site-assets/js/site/google-analytics.js"></script>
@@ -1268,209 +1268,19 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
             
           
             
-              <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
+                            <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
               <ul class="sidenav-submenu" style="display:none;">
                 
-                  
-                    <li><a href="/support/brightcove-answer.html">Brightcove ブの回答</a></li>
-                  
-                
-                  
-                    <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
+                <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
                   
                 
                   
-                    <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
-                  
+                <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
+              
+
                 
                   
-                    <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
-                  
-                
-              </ul>
-            
-          
-      </nav>
-    </div>
-    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
-  <!-- bootstrap layout -->
-
-<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
-
-<!-- search bar -->
-<div id="nav-search-box" style="margin-top: 1rem;"></div>
-<!-- in-page navigation for narrow screens -->
-<details class="centered-inpage-nav" id="centered_inpage_nav">
-  <summary><h6 class="toc">ページコンテンツ</h6></summary>
-  <nav id="centered_toc"></nav>
-  <ul id="centered_in_page_toc" class="list-none"></ul>
-</details>
-<!-- open in new tab/window -->
-<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
-
-
-
-
-
-
-<h1>Brightcove ブプレーヤーでの再生認可 DRM の使用</h1>
-<article class="bcls-article">
-  <summary>このトピックでは、Brightcove ブの再生認証サービスを使用するように Brightcove Player を設定する方法について説明します。</summary>
-  
-  <br/>
-  <aside class="bcls-aside bcls-aside--tip">この機能は、Playback Authorization サービスの制限付き可用性フェーズにアクセスできる特定のお客様に対して使用できます。</aside>
-  
-  <section class="bcls-section">
-    <h2 id="Introduction">はじめに</h2>
-
-    <p>Brightcove ブの再生認証サービス (PAS) は、DRM で保護された HTTP ライブストリーミング暗号化 (HLSE) コンテンツでダイナミック配信を使用する場合に、さらに高度なセキュリティを提供します。PAS では、ライセンス要求は署名付き<a href="https://general.support.brightcove.com/developer/create-jwt.html"> JSON Web トークン (JWT) </a>を使用して認証されます。トークンは、ビデオがプレーヤーにロードされ、ソースが選択されると、ビデオライセンスを要求するときに使用されます。</p>
-    <p>このドキュメントでは、BrightcovePlayerでPASを使用することに焦点を当てています。一般的なPASの詳細については、<a href="/playback-authorization/getting-started/overview-playback-authorization-service.html">概要：再生認証サービス付きDRM </a>ドキュメント。</p>
-  </section>
-
-  <section class="bcls-section">
-    <h2 id="Overview">概要</h2>
-    <p>PASを使用するようにBrightcovePlayerを構成するには、ビデオのカタログ要求を行うときにトークンパラメーターを渡します。コードは次のセクションで示されます。コードを理解するための前提条件があることを確認するために、次のドキュメントの概念は、構築の基礎を提供するのに役立ちます。</p>
-    <ul>
-      <li><a href="https://general.support.brightcove.com/developer/create-jwt.html"><span translate="No">JSON Web Token</span>（JWT）の作成</a></li>
-      <li><a href="https://support.brightcove.com/concepts-using-javascript-promises">コンセプト：JavaScript の約束を使用する</a></li>
-      <li><a href="https://support.brightcove.com/player-catalog#Catalog_parameters_object">カタログパラメータ</a></li>
-      <li><a href="https://support.brightcove.com/configuring-brightcove-player-drm">BrightcoveプレーヤーをDRM用に構成する</a></li>
-    </ul>
-  </section>
-
-  <section class="bcls-section">
-    <h2 id="Using_a_token_in_the_catalog_parameters">カタログパラメータでトークンを使用する</h2>
-    <p>このセクションでは、PASを使用するようにプレーヤーを構成するために必要なコードについて詳しく説明します。これを行うには、文字列トークンをの一部として渡します<a href="https://support.brightcove.com/player-catalog#Catalog_parameters_object">カタログパラメータ</a>プロパティ名を使用したオブジェクト<code translate="No">bcovAuthToken</code>。</p>
-    <p>このアプローチは、DRMとHLSeの両方で機能します。プレーヤーは、Playback APIからロードされているソースのタイプを検出し、そのソースの正しい実装を提供します。</p>
-    <aside class="bcls-aside bcls-aside--information language-editable">注：この実装にはPlayerバージョンが必要です<strong>6.33.0</strong>以上。DRMを使用している場合は、バージョンが必要になります<strong>5.5.0</strong>またはそれ以降<a href="https://support.brightcove.com/configuring-brightcove-player-drm#Changelog">DRMプラグイン</a>。</aside>
-    <p>このサンプル実装コードは、<a href="https://support.brightcove.com/player-catalog#get_method"> catalog.get（）</a>トークンの提供中にビデオを要求するメソッド（トークンを置き換える必要があります<code translate="No">&lt;BCOV_AUTH_TOKEN&gt;</code>プレースホルダー）。ビデオIDをに含めないでください<code translate="No">&lt;video-js&gt;</code>鬼ごっこ。</p>
-    <pre class="line-numbers">
-<code class="language-html" translate="No">&lt;video-js id="myPlayerID"
-  data-account="1507807800001"
-  data-player="default"
-  data-embed="default"
-  controls
-  data-application-id&gt;&lt;/video-js&gt;
-&lt;script src="//players.brightcove.net/1507807800001/default_default/index.min.js"&gt;&lt;/script&gt;
-
-&lt;script&gt;
-  (function() {
-    var myPlayer = videojs.getPlayer('myPlayerID');
-
-    myPlayer.catalog.get({
-      type: 'video',
-      id: '6015247091001',
-      <span class="bcls-highlight">bcovAuthToken: '&lt;BCOV_AUTH_TOKEN&gt;</span>'
-    })
-      .then(function(videoReturned){
-        myPlayer.catalog.load(videoReturned);
-      })
-      .catch(function(err){
-        console.log('err:', err);
-      });
-  })();
-&lt;/script&gt;</code></pre>
-  </section>
-
-  <section class="bcls-section">
-    <h2 id="SSAI_configuration">SSAI構成</h2>
-    <p>SSAIでPASを使用する場合は、実行する必要のある小さな構成の追加が1つあります。名前付きのカタログパラメータオブジェクトに追加パラメータを追加する必要があります<code translate="No">adConfigId</code>。 </p>
-    <pre class="line-numbers">
-<code class="language-html" translate="No">&lt;video-js id="myPlayerID"
-  data-account="1507807800001"
-  data-player="default"
-  data-embed="default"
-  controls
-  data-application-id&gt;&lt;/video-js&gt;
-&lt;script src="//players.brightcove.net/1507807800001/default_default/index.min.js"&gt;&lt;/script&gt;
-
-&lt;script&gt;
-  (function() {
-    var myPlayer = videojs.getPlayer('myPlayerID');
-
-    myPlayer.catalog.get({
-      type: 'video',
-      id: '6015247091001',
-      bcovAuthToken: '<span class="bcls-input">BCOV_AUTH_TOKEN</span>',
-      <span class="bcls-highlight">adConfigId: '&lt;YOUR_ADD_CONFIG_ID&gt;</span>'
-    })
-      .then(function(videoReturned){
-        myPlayer.catalog.load(videoReturned);
-      })
-      .catch(function(err){
-        console.log('err:', err);
-      });
-  })();
-&lt;/script&gt;</code></pre>
-  </section>
-
-  <section class="bcls-section">
-    <h2 id="Using_a_custom_implementation">カスタム実装の使用</h2>
-    <p>を持っていないカスタム実装を使用している可能性があります<code translate="No">bcovAuthToken</code>で値を設定するには<a href="https://support.brightcove.com/player-catalog#get_method">catalog.get（）</a>メソッドリクエスト。独自のプレーヤーまたはサードパーティのプレーヤーを使用している場合は、次のいずれかの方法を使用して、トークンをライセンス要求に渡すことができます。</p>
-    <ul>
-      <li>
-        HTTPヘッダー：<code translate="No">BCOV-Auth</code>（HLSeではサポートされていません）
-      </li>
-      <li>
-        クッキー：<code translate="No">bcov-auth</code>（HLSeではサポートされていません）
-      </li>
-      <li>
-        クエリパラメータ：<code translate="No">bcov-auth</code>（HLSeでのみサポートされます）ライセンスURLではなく、マスターマニフェストURLに追加する必要があります。
-      </li>
-    </ul>
-    <p>
-      これは、設定する方法を示す例です。<code translate="No">source.emeHeaders['BCOV-Auth']</code>トークンに対するビデオオブジェクトの属性。これにより、<code translate="No">emeHeader</code>カタログリクエスト後の各ソース。
-    </p>
-    <pre class="line-numbers">
-<code class="language-html" translate="No">&lt;video-js id="myPlayerID"
-  data-account="1507807800001"
-  data-player="default"
-  data-embed="default"
-  controls
-  data-application-id&gt;&lt;/video-js&gt;
-&lt;script src="//players.brightcove.net/1507807800001/default_default/index.min.js"&gt;&lt;/script&gt;
-
-&lt;script&gt;
-  (function() {
-    var myPlayer = videojs.getPlayer('myPlayerID');
-
-    myPlayer.catalog.get({
-      type: 'video',
-      id: '6015247091001'
-    })
-    .then(function(video){
-      sources=video.sources;
-
-      for (let i = 0; i &lt; sources.length; i++) {
-        const source = sources[i];
-
-        // Only add the auth token as an eme header for DRM content
-        if (<span class="bcls-input">BCOV_AUTH_TOKEN</span> &amp;&amp; source.key_systems) {
-          source.emeHeaders = {
-              'BCOV-Auth': <span class="bcls-input">BCOV_AUTH_TOKEN</span>
-            };
-        }
-      }
-        myPlayer.catalog.load(video);
-      })
-      .catch(function(err){
-        console.log('err:', err);
-      });
-  })();
-&lt;/script&gt;</code></pre>
-    <!-- <p>
-      For more details about working with MPEG-DASH, see the <a href="https://support.brightcove.com/creating-dash-drm-manifest-brightcove-player">Creating a DASH DRM Manifest for the Brightcove Player</a> document.
-    </p> -->
-
-  </section>
-
-  <section class="bcls-section">
-    <h2 id="Related_topics">関連トピック</h2>
-
-    <ul>
-      <li><a href="http://docs.brightcove.com/en/staging/pas/overview-playback-authorization-service.html">概要:再生認証サービス付きの DRM </a></li>
-      <li><a href="/playback-authorization/getting-started/technical-workflow-pas.html">再生認証サービスで DRM を実装する</a></li>
-      <li><a href="/playback-authorization/guides/using-pas-with-sdks.html">ネイティブ SDK での再生認可 DRM の使用</a></li>
+                    
       <li>
         <a href="/playback-authorization/guides/additional-apis-for-pas.html">再生承認サービス用の追加の API </a>
       </li>

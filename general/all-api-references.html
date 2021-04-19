@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/landing-page.css">
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/tabs.css">
   <link rel="stylesheet" href="/assets/css/local.css">
-  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+  <link data-react-helmet="true" rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500&display=swap">
   <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/381443caa8.js" crossorigin="anonymous"></script>
   <script src="https://support.brightcove.com/site-assets/js/site/google-analytics.js"></script>
@@ -1268,152 +1268,19 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
             
           
             
-              <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
+                            <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
               <ul class="sidenav-submenu" style="display:none;">
                 
-                  
-                    <li><a href="/support/brightcove-answer.html">Brightcove ブの回答</a></li>
-                  
-                
-                  
-                    <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
+                <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
                   
                 
                   
-                    <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
-                  
+                <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
+              
+
                 
                   
-                    <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
-                  
-                
-              </ul>
-            
-          
-      </nav>
-    </div>
-    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
-  <!-- bootstrap layout -->
-
-<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
-
-<!-- search bar -->
-<div id="nav-search-box" style="margin-top: 1rem;"></div>
-<!-- in-page navigation for narrow screens -->
-<details class="centered-inpage-nav" id="centered_inpage_nav">
-  <summary><h6 class="toc">ページコンテンツ</h6></summary>
-  <nav id="centered_toc"></nav>
-  <ul id="centered_in_page_toc" class="list-none"></ul>
-</details>
-<!-- open in new tab/window -->
-<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
-
-
-
-
-
-
-<link rel="stylesheet" href="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/general-information/audio-content/audio-content.css" />
-
-<h1>すべての API リファレンス</h1>
-<article class="bcls-article">
-  <summary>すでにBrightcove ブ API に精通しており、参照情報を参照したいだけの場合は、このページにはすべてのリンクがあります。</summary>
-  <section class="bcls-section">
-    <h2 id="video_cloud_rest_apis">Video Cloud</h2>
-
-    <h3>プラットフォーム API</h3>
-
-    <ul>
-      <li><a href="/analytics/references/reference.html">アナリティクス API </a></li>
-      <li><a href="https://audience.support.brightcove.com/develop/reference.html">オーディエンス API </a></li>
-      <li><a href="/cms/references/reference.html">CMS API </a></li>
-      <li><a href="/data-collection/references/reference.html">データ収集API </a></li>
-      <li><a href="/delivery-system/references/reference.html">デリバリーシステム API </a></li>
-      <li><a href="/dynamic-ingest/references/reference.html">動的取り込み API </a></li>
-      <li><a href="/ingest-profiles/references/reference.html">プロファイルの取り込み API </a></li>
-      <li><a href="/oauth/references/reference.html">OAuth API </a></li>
-      <li><a href="/playback/references/reference_v1.html">再生 API </a></li>
-      <li><a href="/player-management/references/reference.html">プレーヤー管理 API </a></li>
-      <li><a href="/policy/references/reference.html">ポリシー API </a></li>
-      <li><a href="https://ssai.support.brightcove.com/vod/references/reference.html">SSAI API </a></li>
-      <li><a href="https://social.support.brightcove.com/develop/reference.html">ソーシャル API </a></li>
-      <li><a href="/social-syndication/references/configuration-reference.html">ソーシャルシンジケーション設定 API </a></li>
-      <li><a href="/social-syndication/references/feed-reference.html">ソーシャル・シンジケーション・フィード API </a></li>
-    </ul>
-
-    <h3>Brightcove Player API</h3>
-
-    <ul>
-      <li><a href="https://docs.brightcove.com/brightcove-player/current-release/index.html">現在のBrightcove ブプレーヤー API </a></li>
-      <li><a href="https://docs.brightcove.com/brightcove-player/5.x/index.html">5.x Brightcove ブプレーヤー API </a></li>
-      <li><a href="https://docs.brightcove.com/brightcove-player/1.x/index.html">1.x Brightcove ブプレーヤー API </a></li>
-    </ul>
-    </section>
-
-    <section class="bcls-section">
-    <h2 id="gallery">Gallery</h2>
-
-    <ul>
-      <li><a href="https://gallery.support.brightcove.com/develop/overview-page-experience-api.html">ページ内エクスペリエンス API </a>&nbsp; (プラットフォーム API)</li>
-      <li><a href="https://gallery.support.brightcove.com/develop/overview-page-experience-client-api.html">ページ内エクスペリエンス API </a>&nbsp; (クライアント API)</li>
-    </ul>
-    </section>
-
-    <section class="bcls-section">
-    <h2 id="Brightcove Player">Brightcove ブプレーヤー (スタンドアロン)</h2>
-
-    <ul>
-      <li><a href="https://docs.brightcove.com/brightcove-player/current-release/index.html">現在のBrightcove ブプレーヤー API </a></li>
-      <li><a href="https://docs.brightcove.com/brightcove-player/5.x/index.html">5.x Brightcove ブプレーヤー API </a></li>
-      <li><a href="https://docs.brightcove.com/brightcove-player/1.x/index.html">1.x Brightcove ブプレーヤー API </a></li>
-      <li><a href="/delivery-system/references/reference.html">デリバリーシステム API </a></li>
-      <li><a href="/oauth/references/reference.html">OAuth API </a></li>
-      <li><a href="/player-management/references/reference.html">プレーヤー管理 API </a></li>
-    </ul>
-    </section>
-
-    <section class="bcls-section">
-    <h2 id="device_sdks">デバイス SDK </h2>
-
-    <h3>Android</h3>
-
-    <ul>
-      <li><a href="https://docs.brightcove.com/android-sdk/javadoc/index.html">Android用プレーヤー SDK </a></li>
-      <!-- <li><a href="https://docs.brightcove.com/android-sdk/javadoc/com/brightcove/cast/package-frame.html">Cast plugin</a></li> -->
-      <li><a href="https://docs.brightcove.com/android-sdk/javadoc/com/brightcove/freewheel/controller/package-frame.html">フリーホイールプラグイン</a></li>
-      <li><a href="https://docs.brightcove.com/android-sdk/javadoc/com/brightcove/ima/package-frame.html">IMA プラグイン</a></li>
-      <li><a href="https://docs.brightcove.com/android-sdk/javadoc/com/brightcove/omniture/package-frame.html">オムニツアプラグイン</a></li>
-    </ul>
-
-    <h3>iOS</h3>
-
-    <ul>
-      <li><a href="https://docs.brightcove.com/ios-sdk/index.html">iOS用プレーヤー SDK </a></li>
-      <li><a href="https://docs.brightcove.com/ios-plugins/freewheel/index.html">フリーホイールプラグイン</a></li>
-      <li><a href="https://docs.brightcove.com/ios-plugins/ima/index.html">IMA プラグイン</a></li>
-      <li><a href="https://docs.brightcove.com/ios-plugins/omniture/index.html">オムニツアプラグイン</a></li>
-    </ul>
-
-    <h3>tvOS</h3>
-
-    <ul>
-      <li><a href="https://docs.brightcove.com/ios-sdk/index.html">iOS用プレーヤー SDK </a></li>
-    </ul>
-    </section>
-
-    <section class="bcls-section">
-    <h2 id="live_api">ライブ API</h2>
-
-    <ul>
-      <li><a href="https://live.support.brightcove.com/live-api/references/reference.html">ライブ API </a></li>
-    </ul>
-    </section>
-
-    <section class="bcls-section">
-    <h2 id="zencoder">Zencoder</h2>
-
-    <ul>
-      <li><a href="https://zencoder.support.brightcove.com/references/reference.html">Zencoder API </a></li>
+                    
     </ul>
     </section>
 

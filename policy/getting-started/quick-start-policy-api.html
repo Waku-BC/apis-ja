@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/landing-page.css">
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/tabs.css">
   <link rel="stylesheet" href="/assets/css/local.css">
-  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+  <link data-react-helmet="true" rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500&display=swap">
   <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/381443caa8.js" crossorigin="anonymous"></script>
   <script src="https://support.brightcove.com/site-assets/js/site/google-analytics.js"></script>
@@ -1268,86 +1268,19 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
             
           
             
-              <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
+                            <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
               <ul class="sidenav-submenu" style="display:none;">
                 
-                  
-                    <li><a href="/support/brightcove-answer.html">Brightcove ブの回答</a></li>
-                  
-                
-                  
-                    <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
+                <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
                   
                 
                   
-                    <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
-                  
+                <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
+              
+
                 
                   
-                    <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
-                  
-                
-              </ul>
-            
-          
-      </nav>
-    </div>
-    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
-  <!-- bootstrap layout -->
-
-<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
-
-<!-- search bar -->
-<div id="nav-search-box" style="margin-top: 1rem;"></div>
-<!-- in-page navigation for narrow screens -->
-<details class="centered-inpage-nav" id="centered_inpage_nav">
-  <summary><h6 class="toc">ページコンテンツ</h6></summary>
-  <nav id="centered_toc"></nav>
-  <ul id="centered_in_page_toc" class="list-none"></ul>
-</details>
-<!-- open in new tab/window -->
-<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
-
-
-
-
-
-
-<h1>コードサンプル：ポリシーキーの生成</h1>
-<article class="bcls-article">
-  <summary>このサンプルアプリは、ポリシーキーを生成します。ポリシーキーには、検索を有効にしたり、ドメイン制限や地域制限を追加したり、SSAI を要求したりするオプションがあります。</summary>
-  <section class="bcls-section">
-    <h2 id="Introduction">はじめに</h2>
-
-    <aside class="bcls-aside bcls-aside--information">注
-      <ul>
-        <li>ポリシーキーは、Video Cloud に保存されている動画を制御するためにのみ使用されます。スタンドアロンの Brightcove プレーヤーを使用している場合は、ポリシーキーにアクセスしたり、取得したりする必要はありません。</li>
-        <li>新しい Brightcove Player 用に生成されたポリシーキーは、検索、ドメイン制限、地理的フィルタリング、または SSAI の必須の既定では有効になりません。Policy API（またはこのサンプルアプリ）を使用して手動で設定する必要があります。詳細については、「<a href="/policy/getting-started/policy-keys.html">ポリシー API の概要</a>」ドキュメントを参照してください。</li>
-      </ul>
-    </aside>
-
-    <aside class="bcls-aside bcls-aside--information language-editable">このサンプルおよび関連するコードは、本番環境の開発のためのガイドとして提供されます。このコードは、実稼働での使用が認定されておらず、公式にはサポートされていません。</aside>
-  </section>
-
-  <details>
-    <summary>
-      <h2 id="obtain_credentials">資格情報を取得する</h2>
-    </summary>
-
-    <p>ポリシー API を使用するには、適切な認証情報が必要です。このクイックスタートでは、Brightcove ブのテストアカウントで作業するため、この手順を完了する必要はありませんが、自分のアカウントで作業するときはクライアント認証情報を取得する必要があることに注意してください。</p>
-
-    <ol>
-      <li>資格情報を取得するには、の手順に従ってください<a href="/general/managing-api-authentication-credentials.html">API資格情報の管理</a>。これは、クライアントの資格情報を取得するための推奨方法です。必要な権限は次のとおりです<strong>プレイヤーが読む</strong>そして<strong>プレーヤーの読み取り/書き込み</strong>：
-
-        <figure><img width="412" height="140" alt="必要なアクセス許可" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/policy-api/getting-started/quick-start/quick-start-required-permissions.png"/>
-          <figcaption>必要なアクセス許可</figcaption>
-        </figure>
-
-        <p>以下のガイドのいずれかの手順に従って、OAuth API を使用して認証情報を取得することもできます。</p>
-
-        <ul>
-          <li><a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">OAuth:CURL を使用してクライアント認証情報を取得する</a></li>
-          <li><a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">OAuth:郵便配達を使用してクライアントの資格情報を取得する</a></li>
+                    
         </ul>
       </li>
     </ol>

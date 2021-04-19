@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/landing-page.css">
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/tabs.css">
   <link rel="stylesheet" href="/assets/css/local.css">
-  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+  <link data-react-helmet="true" rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500&display=swap">
   <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/381443caa8.js" crossorigin="anonymous"></script>
   <script src="https://support.brightcove.com/site-assets/js/site/google-analytics.js"></script>
@@ -1268,67 +1268,19 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
             
           
             
-              <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
+                            <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
               <ul class="sidenav-submenu" style="display:none;">
                 
-                  
-                    <li><a href="/support/brightcove-answer.html">Brightcove ブの回答</a></li>
-                  
-                
-                  
-                    <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
+                <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
                   
                 
                   
-                    <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
-                  
+                <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
+              
+
                 
                   
-                    <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
-                  
-                
-              </ul>
-            
-          
-      </nav>
-    </div>
-    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
-  <!-- bootstrap layout -->
-
-<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
-
-<!-- search bar -->
-<div id="nav-search-box" style="margin-top: 1rem;"></div>
-<!-- in-page navigation for narrow screens -->
-<details class="centered-inpage-nav" id="centered_inpage_nav">
-  <summary><h6 class="toc">ページコンテンツ</h6></summary>
-  <nav id="centered_toc"></nav>
-  <ul id="centered_in_page_toc" class="list-none"></ul>
-</details>
-<!-- open in new tab/window -->
-<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
-
-
-
-
-
-
-<h1>360 度ビデオプロパティの設定</h1>
-<article class="bcls-article">
-  <summary>このトピックでは、CMS API を使用して 360° ビデオプロパティを設定する方法について説明します。Postman インターフェイスを使用して、リクエストを送信し、API からの応答を表示します。</summary>
-    <section class="bcls-section" id="Overview">
-    <h2>概要</h2>
-    
-    <p>ビデオを360°ビデオとして識別するには、projectionプロパティを設定する必要があります。このプロパティを設定することができます<a href="https://studio.support.brightcove.com/media/editing-video-properties-using-media-module.html">Studioでメディアモジュールを使用する</a>、またはこのトピックに示すようにプログラムで実行できます。</p>
-    
-    <aside class="bcls-aside bcls-aside--tip">この例では、Postmanアプリを使用して、CMSAPIでビデオプロパティを更新します。を始める方法を学ぶ<a href="/general/use-postman-api-requests.html">HTTPリクエストにPostmanを使用する</a>資料。</aside>
-    
-    <p>このトピックでは、次のタスクを実行します。</p>
-    
-    <ul>
-      <li><a href="#Get_client_credentials">クライアントの資格情報を取得する</a></li>
-      <li><a href="#Retrieve_video_information">ビデオ情報を取得する</a></li>
-      <li><a href="#Set_360_video_properties">360°ビデオのプロパティを設定する</a></li>
+                    
     </ul>
     </section>
     

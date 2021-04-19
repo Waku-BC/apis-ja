@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/landing-page.css">
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/tabs.css">
   <link rel="stylesheet" href="/assets/css/local.css">
-  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+  <link data-react-helmet="true" rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500&display=swap">
   <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/381443caa8.js" crossorigin="anonymous"></script>
   <script src="https://support.brightcove.com/site-assets/js/site/google-analytics.js"></script>
@@ -1268,143 +1268,19 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
             
           
             
-              <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
+                            <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
               <ul class="sidenav-submenu" style="display:none;">
                 
-                  
-                    <li><a href="/support/brightcove-answer.html">Brightcove ブの回答</a></li>
-                  
-                
-                  
-                    <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
+                <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
                   
                 
                   
-                    <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
-                  
+                <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
+              
+
                 
                   
-                    <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
-                  
-                
-              </ul>
-            
-          
-      </nav>
-    </div>
-    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
-  <!-- bootstrap layout -->
-
-<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
-
-<!-- search bar -->
-<div id="nav-search-box" style="margin-top: 1rem;"></div>
-<!-- in-page navigation for narrow screens -->
-<details class="centered-inpage-nav" id="centered_inpage_nav">
-  <summary><h6 class="toc">ページコンテンツ</h6></summary>
-  <nav id="centered_toc"></nav>
-  <ul id="centered_in_page_toc" class="list-none"></ul>
-</details>
-<!-- open in new tab/window -->
-<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
-
-
-
-
-
-
-<style type="text/css">
-.rotate-90 {
-  transform: rotate(-90deg);
-  transform-origin: 155% 70%;
-  max-width: 2em;
-  min-height: 220px;
-  height: 220px;
-  
-}
-.rotate-90 code {
-  word-break: unset;  
-}
-input[type='checkbox'] {
-  margin-right: 1rem;
-}
-fieldset legend {
-  border-bottom: none;
-}
-</style>
-<h1>概要: ディメンション、フィールド、パラメータ</h1>
-<article class="bcls-article">
-  <summary>ディメンションは、次の主要なデータカテゴリです。<span translate="No">Analytics API</span>データレポート。このトピックでは、ディメンションの対話型ガイドと、ディメンションに対して返されるフィールドについて説明します。また、レポートで結合できるディメンションと、さまざまな組み合わせで使用できるフィールドも表示されます。</summary>
-<section class="bcls-section">
-<h2 id="metrics">ディメンションとフィールド</h2>
-
-<p>ディメンションは、分析の主要なデータバケットです。個々のディメンションの完全なガイドを表示するには、以下のリストでディメンション名をクリックしてください。</p>
-
-<div id="dimensionsListCol1" class="fields-list-col">&nbsp;</div>
-
-<div id="dimensionsListCol2" class="fields-list-col">&nbsp;</div>
-
-<p id="dimensions">以下のディメンションを選択して、返されるフィールドを確認してください。クリックすることもできます<strong>リクエストする</strong>ボタンをクリックしてサンプルリクエストを作成し、結果を確認します。互換性のない複数のディメンションを選択すると、その旨のメッセージが表示されます。</p>
-
-<aside class="bcls-aside bcls-aside--information">注：フィールドを返すことはできませんのでご注意ください<code translate="No">video.custom_fields</code>、しかし場合によってはあなた<em>できる</em>戻る<code translate="No">video.custom_fields.{field_name}</code>。これは以下に表されていますが、<code translate="No">{field_name}</code>は実際のフィールド名ではないため、サンプルリクエストでは使用されません。</aside>
-
-<fieldset class="bcls-fieldset"><legend>入力</legend> <input id="account_id" type="hidden" value="1752604059001" />
-<h3>レポートするディメンションを選択します。</h3>
-
-<div id="dimensionsCol1" class="fields-list-col">&nbsp;</div>
-
-<div id="dimensionsCol2" class="fields-list-col">&nbsp;</div>
-
-<h3>返すフィールド：<button id="fieldsButton" class="bcls-button">すべて選択</button><button id="deselectFieldsButton" class="bcls-button">すべての選択を解除</button></h3>
-
-<div id="fieldsCol1" class="fields-list-col">&nbsp;</div>
-
-<div id="fieldsCol2" class="fields-list-col">&nbsp;</div>
-
-<p><button id="getData" class="bcls-button">これらのオプションを使用してリクエストを行う</button>（サンプルのBrightcoveアカウントを使用）</p>
-
-<aside class="bcls-aside bcls-aside--information">のデータ<code translate="No">ad_mode_begin</code>、<code translate="No">ad_mode_complete</code>、および<code translate="No">play_request</code> 2016年6月13日からご利用いただけます。</aside>
-</fieldset>
-
-<fieldset class="bcls-fieldset"><legend>出力</legend>
-
-<h3>最古<code translate="No">from</code>このディメンションの組み合わせの日付：<code id="fromDisplay">&nbsp;</code></h3>
-
-<h3 id="logger">&nbsp;</h3>
-
-<h5>サンプルAPIリクエスト：</h5>
-<textarea id="apiRequest" class="bcls-code">&nbsp;</textarea>
-
-<h3>応答データ</h3>
-
-<pre class="line-numbers">
-  <code id="responseData" class="language-json" translate="No">Response will appear here...</code></pre>
-</fieldset>
-
-<h3>注</h3>
-
-<ol>
-	<li>デフォルトでは、<code translate="No">video_view</code>返される唯一のフィールドです-他のフィールドは、の値で指定されている場合にのみ返されます<code translate="No">fields</code>パラメータ。</li>
-	<li>ディメンションまたはディメンションの組み合わせでサポートされていない、返すフィールドを指定した場合、<code translate="No">UNSUPPORTED_FIELD_COMBINATION_ERROR</code>エラーが返されます。</li>
-	<li>ザ・<code translate="No">bytes_delivered</code>フィールドには、ビデオデータ、画像、テキストトラック、その他のアセットなど、Video Cloudによってクライアントに配信されるすべてのデータと、プレーヤーコード自体が含まれます。このデータの一部はCDNから取得されており、最大3日間利用できない場合があります。</li>
-	<li>に表示されるフィールドに加えて<code translate="No">video</code>寸法、あなたも返すことができます<code translate="No">video.custom_fields.{field_name}</code></li>
-</ol>
-
-<h3>リクエストの例</h3>
-
-<p>複数の次元に関するレポートを取得するための一般的な使用例：デスクトップとモバイルデバイス間のビデオビューの内訳が必要であり、iOSデバイスとAndroidデバイスのモバイルデバイスビューの数、およびデスクトップの数も知りたいビューはMacとWindowsマシンでした。現在、Studio Analytics Moduleには、この情報を提供する標準レポートはありませんが、これを介して取得できます。<span translate="No">Analytics API</span>コール：</p>
-
-<pre class="line-numbers" style="white-space:pre-wrap;padding-top:1em;padding-bottom:1em;">
-  <code class="language-http" translate="No">https://analytics.api.brightcove.com/v1/data?accounts=57838016001&amp;dimensions=video,device_type,device_os&amp;from=2014-01-01&amp;to=2014-04-01&amp;fields=video_view</code></pre>
-
-<p>（この場合、2014年1月1日から4月1日までの期間のビデオ視聴をリクエストしています。）</p>
-
-<h3>cURLの使用例</h3>
-
-<p>を使用してAPIを試してみたい場合<a href="https://general.support.brightcove.com/developer/concepts-set-curl.html">カール</a>、ここにいくつかの注意事項があります：</p>
-
-<ul>
-	<li>最初に取得する必要があります<a href="/oauth/guides/getting-access-tokens.html">アクセストークン</a></li>
+                    
 	<li>リクエストのURLには常に含まれているため<a href="#params">URLパラメータ</a>、引用符（シングルまたはダブル）で囲む必要があります</li>
 </ul>
 

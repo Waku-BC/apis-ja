@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/landing-page.css">
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/tabs.css">
   <link rel="stylesheet" href="/assets/css/local.css">
-  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+  <link data-react-helmet="true" rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500&display=swap">
   <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/381443caa8.js" crossorigin="anonymous"></script>
   <script src="https://support.brightcove.com/site-assets/js/site/google-analytics.js"></script>
@@ -1268,94 +1268,19 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
             
           
             
-              <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
+                            <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
               <ul class="sidenav-submenu" style="display:none;">
                 
-                  
-                    <li><a href="/support/brightcove-answer.html">Brightcove ブの回答</a></li>
-                  
-                
-                  
-                    <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
+                <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
                   
                 
                   
-                    <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
-                  
+                <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
+              
+
                 
                   
-                    <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
-                  
-                
-              </ul>
-            
-          
-      </nav>
-    </div>
-    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
-  <!-- bootstrap layout -->
-
-<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
-
-<!-- search bar -->
-<div id="nav-search-box" style="margin-top: 1rem;"></div>
-<!-- in-page navigation for narrow screens -->
-<details class="centered-inpage-nav" id="centered_inpage_nav">
-  <summary><h6 class="toc">ページコンテンツ</h6></summary>
-  <nav id="centered_toc"></nav>
-  <ul id="centered_in_page_toc" class="list-none"></ul>
-</details>
-<!-- open in new tab/window -->
-<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
-
-
-
-
-
-
-<h1>スケジュールされた動画を追加</h1>
-<article class="bcls-article">
-  <summary><p>このサンプルでは、ビデオが将来利用可能になるようスケジュールする方法を学びます。これにより、ビデオが誤って再生される前に再生されることはありません。</p> <aside class="bcls-aside bcls-aside--information">このサンプルは、レガシー取り込みシステムを使用するアカウントを対象としています。アカウントが動的配信システムを使用している場合は、<a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-add-scheduled-videos-dynamic-delivery.html">代わりにこのバージョンを参照してください</a>。</aside></summary>
-  <section class="bcls-section">
-  <h2 id="Overview">概要</h2>
-  
-  <p>アカウントに新しい動画を追加する場合、今後しばらくの間、その動画を公開して視聴することを望まない場合があります。ただし、再生可能なレンディションが作成されると、ビデオは再生可能になる可能性があります。誤って動画を公開しているユーザーに加えて、スマートプレイリストに表示されるのは、リストの動画を選択する検索条件と一致するためです。</p>
-  
-  <p>偶発的な早すぎるリリースを防ぐ最善の方法は、ビデオを取り込むときに利用可能にするタイミングのためにビデオをスケジュールすることです。これを行うには、<code translate="No">schedule</code>のリクエスト本文のオブジェクト<span translate="No">CMS API</span>ビデオを作成する呼び出し：</p>
-  
-  <pre class="line-numbers">
-  <code class="language-json" translate="No">{
-    "name": "greatblueheron.mp4",
-    "schedule": {
-      "starts_at": "2017-03-10",
-      "ends_at": "2018-12-31"
-    }
-  }</code></pre>
-  
-  <p>ザ・<code translate="No">starts_at</code>そして<code translate="No">ends_at</code>値は、完全なISO 8601日時スタンプにすることも、ここに示すように日付部分を含めることもできます。両方のフィールドはオプションです。<code translate="No">starts_at</code>フィールドを省略すると、ビデオがすぐに使用できるようになります。<code translate="No">ends_at</code>フィールドを省略すると、ビデオが無期限に使用可能になります。</p>
-  </section>
-  
-  <section class="bcls-section">
-  <h2 id="gettingCredentials" class="bcls-expander-head">認証情報の取得</h2>
-  
-  <div class="bcls-expander-content">
-  <p><code translate="No">client_id</code>とを取得するには<code translate="No">client_secret</code>、OAuth UI に移動してこのアプリを登録する必要があります。</p>
-  
-  <ul>
-    <li><a href="/general/managing-api-authentication-credentials.html">API 認証資格情報の管理</a></li>
-  </ul>
-  
-  <p>必要な権限は次のとおりです。</p>
-  
-  <figure class="bcls-figure"><img class="bcls-image" alt="動的取り込み権限" src="/assets/images/dynamic-ingest/code-samples/di-permissions.png"/>
-  <figcaption class="bcls-caption--image">動的取り込み権限</figcaption>
-  </figure>
-  
-  <p>また、CURL または Postman 経由で資格を取得することもできます。以下を参照してください。</p>
-  
-  <ul>
-    <li><a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">CURL を使用してクライアント認証情報を取得する</a></li>
-    <li><a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">郵便配達を使用してクライアントの資格情報を取得する</a></li>
+                    
   </ul>
   
   <p>API から直接認証情報を取得する場合は、次の権限が必要です。</p>

@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/landing-page.css">
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/tabs.css">
   <link rel="stylesheet" href="/assets/css/local.css">
-  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+  <link data-react-helmet="true" rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500&display=swap">
   <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/381443caa8.js" crossorigin="anonymous"></script>
   <script src="https://support.brightcove.com/site-assets/js/site/google-analytics.js"></script>
@@ -1266,151 +1266,19 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
             
           
             
-              <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
+                            <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
               <ul class="sidenav-submenu" style="display:none;">
                 
-                  
-                    <li><a href="/support/brightcove-answer.html">Brightcove ブの回答</a></li>
-                  
-                
-                  
-                    <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
+                <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
                   
                 
                   
-                    <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
-                  
+                <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
+              
+
                 
                   
-                    <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
-                  
-                
-              </ul>
-            
-          
-      </nav>
-    </div>
-    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
-  <!-- bootstrap layout -->
-
-<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
-
-<!-- search bar -->
-<div id="nav-search-box" style="margin-top: 1rem;"></div>
-<!-- in-page navigation for narrow screens -->
-<details class="centered-inpage-nav" id="centered_inpage_nav">
-  <summary><h6 class="toc">ページコンテンツ</h6></summary>
-  <nav id="centered_toc"></nav>
-  <ul id="centered_in_page_toc" class="list-none"></ul>
-</details>
-<!-- open in new tab/window -->
-<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
-
-
-
-
-
-
-<style>
-  h1 i.fal,
-  h1 i.fab,
-  h1 i.fas,
-  h1 i.far {
-    font-size: 3rem;
-
-    color: rgb(239, 108, 42) ;
-    margin-right: .5rem;
-  }
-
-  .card-icon i {
-    color: rgb(239, 108, 42);
-  }
-
-  .card-wrapper {
-    justify-content: start;
-  }
-
-  .bcls-card ul li {
-    font-size: small;
-  }
-</style>
-
-<article class="bcls-article">
-  <h1><i class="fal fa-ban"></i>再生権限</h1>
-  <summary>Brightcove ブの再生権限管理サービスは、動画再生を管理するスケーラブルで表現力豊かな方法を提供します。</summary>
-
-  <section class="card-wrapper">
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    <!-- remove sections below when this goes live -->
-    <section class="bcls-card-small" onclick="window.location.href='/playback-authorization/getting-started/index.html'">
-      <div class="card-content">
-        <h2>新しいVideo Cloud Studioの基礎</h2>
-        <ul>
-          <li><a href="/playback-rights/getting-started/overview-epa.html">概要:プレイバック権限サービス</a></li>
-          <li><a href="/playback-rights/getting-started/implementing-epa.html">再生認証サービスで DRM を実装する</a></li>
-        </ul>
-      </div>
-    </section>
-    <section class="bcls-card-small" onclick="window.location.href='/playback-authorization/guides/index.html'">
-      <div class="card-content">
-        <h2>ガイド</h2>
-        <ul>
-          <li><a href="/playback-rights/guides/device-limits.html">デバイス制限の実装</a></li>
-          <li><a href="/playback-rights/guides/using-epa-with-bcp.html">Brightcove ブプレーヤーでの再生権限の使用</a></li>
-          <li><a href="/playback-rights/guides/using-epa-with-sdks.html">ネイティブ SDK での再生権限の使用</a></li>
-        </ul>
-      </div>
-    </section>
-    <section class="bcls-card-small" onclick="window.location.href='/playback-authorization/getting-started/index.html'">
-      <div class="card-content">
-        <h2>参考文献</h2>
-        <ul>
-          <li><a href="/playback-rights/references/epa-errors.html">再生権限エラーリファレンス</a></li>
-          <li><a href="/playback-rights/references/reference.html">監査 API リファレンス</a></li>
-          <li><a href="/playback-rights/references/reference.html">再生権限 API リファレンス</a></li>
-          <li><a href="/playback-rights/references/audit-api/reference.html">監査 API リファレンス</a></li>
-          <li><a href="/playback-rights/references/blacklist-api/reference.html">ブラックリスト API リファレンス</a></li>
-          <li><a href="/playback-rights/references/devices-api/reference.html">デバイス API リファレンス</a></li>
-          <li><a href="/playback-rights/references/key-api/reference.html">主要APIリファレンス</a></li>
+                    
         </ul>
       </div>
     </section>

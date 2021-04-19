@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/landing-page.css">
   <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/tabs.css">
   <link rel="stylesheet" href="/assets/css/local.css">
-  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+  <link data-react-helmet="true" rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500&display=swap">
   <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/381443caa8.js" crossorigin="anonymous"></script>
   <script src="https://support.brightcove.com/site-assets/js/site/google-analytics.js"></script>
@@ -1268,91 +1268,19 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
             
           
             
-              <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
+                            <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
               <ul class="sidenav-submenu" style="display:none;">
                 
-                  
-                    <li><a href="/support/brightcove-answer.html">Brightcove ブの回答</a></li>
-                  
-                
-                  
-                    <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
+                <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove ブのシステムステータスページの表示</a></li>
                   
                 
                   
-                    <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
-                  
+                <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
+              
+
                 
                   
-                    <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
-                  
-                
-              </ul>
-            
-          
-      </nav>
-    </div>
-    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
-  <!-- bootstrap layout -->
-
-<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
-
-<!-- search bar -->
-<div id="nav-search-box" style="margin-top: 1rem;"></div>
-<!-- in-page navigation for narrow screens -->
-<details class="centered-inpage-nav" id="centered_inpage_nav">
-  <summary><h6 class="toc">ページコンテンツ</h6></summary>
-  <nav id="centered_toc"></nav>
-  <ul id="centered_in_page_toc" class="list-none"></ul>
-</details>
-<!-- open in new tab/window -->
-<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
-
-
-
-
-
-
-<!--
-  This content appears on:
-
-  https://apis.support.brightcove.com/general/integrating-your-cms-video-cloud.html
-
-  https://studio.support.brightcove.com/admin/standard-ingest-profiles-dynamic-delivery-and-context-aware-encoding.html
-
-  If you update in one place, you MUST update it in all!
- -->
-
-<h1>標準トランスコードプロファイル</h1>
-<article class="bcls-article">
-  <summary>このトピックでは、動的配信およびコンテキスト認識エンコーディングを使用するときに提供される標準インジェストプロファイルのプロパティについて説明します。</summary>
-  <section class="bcls-section">
-    <h2 id="introduction">はじめに</h2>
-    <p><span translate="No">Dynamic Ingest API</span>を使用してダイナミックインジェストリクエストを作成するか、アップロードモジュールを使用してビデオをアップロードする場合は、Video Cloud の取り込みプロセスによって作成されるレンディションの数とタイプを決定するプロファイルを指定する必要があります。このトピックでは、<strong> HEVC（h.265）プロファイルを含む、<strong>動的配信およびコンテキスト認識エンコーディング</strong><strong>（CAE）</strong></strong>の各プロファイルに関する詳細情報を提供します。</p>
-    <aside class="bcls-aside bcls-aside--information language-editable">注
-      <ul>
-        <li>コンテキスト対応エンコーディングと HEVC エンコーディングは、Video Cloud の有料アドオンです。これらの機能をアカウントに追加する場合は、アカウントマネージャーにお問い合わせください。</li>
-        <li>動的配信以外のアカウントについては、「<a href="https://apis.support.brightcove.com/ingest-profiles-legacy/references/standard-ingest-profiles-legacy-transcoding.html">レガシーインジェストの標準取り込みプロファイル</a>」トピックを参照してください。</li>
-      </ul>
-    </aside>
-
-    <p>動的配信の概要は、<a href="https://apis.support.brightcove.com/dynamic-ingest/getting-started/overview-dynamic-delivery.html">動的配信の概要を参照してください</a>。</p>
-    <p>コンテキスト対応エンコーディングの概要については、「<a href="https://apis.support.brightcove.com/general/overview-context-aware-encoding.html">コンテキスト対応エンコーディングの概要</a>」を参照してください。</p>
-    <p>HEVCの概要については、<a href="/ingest-profiles/guides/hevc-video.html"> HEVCビデオを参照してください</a></p>
-    <p>注</p>
-    <ul>
-      <li>このドキュメントでは、HEVC プロファイルを含む、通常のダイナミック配信およびコンテキスト認識エンコーディングのプロファイルを示しています。</li>
-      <li>静的動的配信プロファイルとコンテキスト認識エンコーディングプロファイルの動作方法が異なるため、以下のプロファイルの詳細には異なる情報が表示されます。
-        <ul>
-          <li>静的動的配信プロファイルの場合、含まれるレンディションのリストが表示されます</li>
-          <li>コンテキスト対応エンコーディングプロファイルの場合、生成するレンディションの決定に使用される動的プロファイル設定の表が表示されます。</li>
-        </ul>
-      </li>
-    </ul>
-    <p>独自のカスタム取り込みプロファイルを作成することもできます。詳細については、次の該当するトピックを参照してください。</p>
-    <ul>
-      <li><a href="https://studio.support.brightcove.com/admin/creating-ingest-profiles-dynamic-delivery.html">動的配信用の取り込みプロファイルの作成</a></li>
-      <li><a href="https://studio.support.brightcove.com/admin/creating-ingest-profiles-context-aware-encoding.html">コンテキスト認識エンコーディングの取り込みプロファイルの作成</a></li>
+                    
     </ul>
   </section>
   <section class="bcls-section">
