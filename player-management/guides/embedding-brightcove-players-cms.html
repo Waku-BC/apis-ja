@@ -1277,10 +1277,457 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
                   
                 <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
               
-
-                
+                <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
                   
-                    
+                
+              </ul>
+            
+          
+      </nav>
+    </div>
+    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
+  <!-- bootstrap layout -->
+
+<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
+
+<!-- search bar -->
+<div id="nav-search-box" style="margin-top: 1rem;"></div>
+<!-- in-page navigation for narrow screens -->
+<details class="centered-inpage-nav" id="centered_inpage_nav">
+  <summary><h6 class="toc">ページコンテンツ</h6></summary>
+  <nav id="centered_toc"></nav>
+  <ul id="centered_in_page_toc" class="list-none"></ul>
+</details>
+<!-- open in new tab/window -->
+<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
+
+
+
+
+
+
+<!--
+  This content appears on:
+
+  https://apis.support.brightcove.com/player-management/guides/embedding-brightcove-players-cms.html
+
+  https://integrations.support.brightcove.com/general/embedding-brightcove-players-cms.html
+
+  If you update in one place, you MUST update it in all!
+ -->
+
+ <h1>CMS へのBrightcove ブプレーヤーの埋め込み</h1>
+ <article class="bcls-article">
+  <summary>このトピックでは、CMS ユーザが Brightcove Player をページに埋め込むためのダイアログを提供するガイダンスを提供します。</summary>
+  <section class="bcls-section">
+    <h2 id="introduction">はじめに</h2>
+    <p>CMS ユーザがページに動画または再生リストプレーヤーを埋め込む場合、ウェブページ上のBrightcove ブプレーヤーの外観や操作性を制御できるように、Brightcove ブプレーヤーの埋め込みコードの生成にできる限り柔軟性を与える必要があります。ただし、HTML または JavaScript の専門家であるとは思わないようにします。</p>
+    <p>このトピックでは、その方法に関するガイドラインを示します。このドキュメントのオーディエンスは主に Brightcove パートナーですが、Video Cloud またはスタンドアロンの Brightcove Player を CMS と統合するユーザーにとって役立ちます。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Player_embed_dialog_behavior">プレーヤーの埋め込みダイアログの動作</h2>
+    <p>ユーザーがWebページ上のプレーヤーのフォーマットを制御することを可能にするダイアログがあるはずです。このダイアログでは、ユーザーが以下のフィールドを設定できるようになります。このダイアログが表示される前に、ユーザはすでに Brightcove アカウントと動画または再生リストを選択していることを前提としています。そうでない場合は、<a href="#appendix_a">以下の付録 A </a>の説明に従って、最初にBrightcove ブのアカウントと動画または再生リストを選択します。</p>
+    <ol>
+      <li><strong>プレイヤー</strong> :ユーザーは、利用可能な Brightcove プレーヤーからプレーヤーを選択できる必要があります。動画プレーヤーを埋め込む場合は、プレイリストが有効でないプレーヤーのみを選択できます。プレイリストプレーヤーを埋め込む場合は、プレイリストが有効なプレーヤーのみを選択できます。</li>
+      <li><strong>自動再生</strong> :ユーザーは自動再生を有効/無効にできるはずです。デフォルトは無効です。</li>
+      <li><strong>ミュート</strong> :ユーザーはミュートを有効/無効にできるはずです。デフォルトは無効です。</li>
+      <li><strong>埋め込みタイプ</strong> :ユーザーは、iFrame と Javascript の埋め込みコードのいずれかを選択できるはずです。
+        <ol type="a">
+          <li>ビデオプレーヤーの場合、デフォルトは Javascript である必要があります。</li>
+          <li>プレイリストプレーヤーの場合、デフォルトは iFrame です。</li>
+        </ol>
+      </li>
+      <li><strong>サイズ</strong> :ユーザーはレスポンシブから選択できる必要があります<sup><strong><a href="#note1-1">[1-1]</a></strong></sup>または固定サイズ<sup><strong><a href="#note1-2">[1-2]</a></strong></sup>。
+        <ol type="a">
+          <li>ビデオプレーヤーの場合、デフォルトは [レスポンシブ] になります。</li>
+          <li>プレイリストプレーヤーの場合:
+            <ol type="i">
+              <li>iFrameの場合、デフォルトはレスポンシブでなければなりません。</li>
+              <li>Javascriptの場合、デフォルトは修正されるはずです。</li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+      <li><strong>アスペクト比</strong> :ユーザーは、アスペクト比<sup><strong><a href="#note1-1"> [1-1] </a></strong></sup>を選択できるはずです。
+        <ol type="a">
+          <li>次から選択できます。
+            <ul>
+              <li><code translate="No">16:9</code></li>
+              <li><code translate="No">4:3</code></li>
+              <li><code translate="No">Custom</code></li>
+            </ul>
+          </li>
+          <li>デフォルトはでなければなりません<code translate="No">16:9</code>。</li>
+        </ol>
+      </li>
+      <li><strong>幅、高さ:</strong>ユーザーは幅と高さ [ <sup><strong><a href="#note1-1"> 1-1] を入力できるはずです。</a></strong></sup>
+        <ol type="a">
+          <li>アスペクト比が<strong> 16:9 </strong>または<strong> 4:3 </strong>の場合、[ <strong>高さ</strong> ] フィールドはグレー表示され、[ <strong>幅</strong> ] と [ <strong>縦横比</strong> ] に基づいて自動的に計算されます。</li>
+          <li>[縦横比] が [カスタム] <code translate="No">360</code>の場合、既定値は [ <strong>幅] </strong>と [ <strong>高さ</strong> ] に設定する必要があります<code translate="No">640</code>。</li>
+        </ol>
+      </li>
+    </ol>
+    <h4>注</h4>
+    <ul>
+      <li id="note1-1"><sup><strong>[ 1-1] </strong></sup> CMS がコードを埋め込むためのネイティブコンテナを提供しており、ユーザーがレスポンシブ対固定および幅/高さを指定できる場合は、コンテナをサイジングに使用し、Brightcove ブの埋め込みコードを常にレスポンシブにする方が理にかなっています。</li>
+      <li id="note1-2"><sup><strong>[ 1-2] </strong></sup>以下に含まれるレスポンシブ埋め込みコードは、幅を最大幅として使用しています。</li>
+    </ul>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Related_Brightcove_documentation">Brightcove ブの関連ドキュメント</h2>
+    <h3>ビデオクラウドと CMS の統合に関する一般的なヘルプ</h3>
+    <p><a href="https://apis.support.brightcove.com/general/integrating-your-cms-video-cloud.html">CMSとビデオクラウドの統合</a></p>
+    <h3>プレイヤーのリストを取得する</h3>
+    <p><a href="https://apis.support.brightcove.com/player-management/references/reference.html#operation/GetPlayers">プレーヤー管理 API リファレンス</a></p>
+    <h3>プレイリストプレーヤーの識別</h3>
+    <ol>
+      <li>上記のプレーヤー管理 API リクエストによって返されたプレイヤーのリストを反復処理します。</li>
+      <li><code translate="No">playlist</code>フィールドを探します:
+        <ol type="a">
+          <li>フィールドが存在し、値がの場合<code translate="No">true</code>、それはプレイリストプレーヤーです</li>
+          <li>値が<code translate="No">false</code>または<code translate="No">playlist</code>存在しない場合は、次の手順を実行します。</li>
+        </ol>
+      </li>
+      <li><code translate="No">plugins</code>リストを反復処理し（存在する場合）、<code translate="No">registry_id</code>等しいフィールドを探します<code translate="No">@brightcove/videojs-bc-playlist-ui</code>。それが存在する場合は、プレイリストプレーヤーです。そうでない場合はそうではありません。プレイヤーリストの戻り値のサンプルは次のとおりです。
+        <pre class="line-numbers">
+<code class="language-json" translate="No">"items": [
+   {
+      {
+      "account_id": "4031511818001",
+      "branches": {
+        "master": { "configuration": {
+          "playlist": true, "plugins": [
+              {
+                "options": {
+                  "account_id": "4031511818001",
+                  "branches": {
+                    "master": { "configuration": {
+                      "id": "NkVhrXzug",
+                      <span class="bcls-highlight">"playlist": true,</span>
+                      "plugins": [], <span class="bcls-highlight">// this is a v1 playlist player</span> ...
+        {
+          "account_id": "4031511818001",
+          "branches": {
+            "master": { "configuration": {
+              "playlist": true,
+              "plugins": [
+                {
+                  "options": {
+                    "playOnSelect": true
+                  },
+                  <span class="bcls-highlight">"registry_id": "@brightcove/videojs-bc-playlist-ui"</span>,
+                  "version": "2.x" // this is a v2 playlist player
+                  }
+                }
+              ] ...
+</code></pre>
+      </li>
+    </ol>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Embed_parameters_and_code">パラメータとコードを埋め込む</h2>
+    <p>以下のセクションでは、ユーザーの選択に基づいて Brightcove プレーヤーの埋め込みコードを生成する方法について説明します。以下に説明するように、<code translate="No">%XYZ%</code>値は埋め込みコードに代入されます。</p>
+    <h3>共通パラメータ</h3>
+    <ul>
+      <li><code translate="No">%AUTOPLAY%</code> = <code translate="No">Autoplay</code>有効の場合は自動再生、<code translate="No">null</code>それ以外の場合は文字列です</li>
+      <li><code translate="No">%MUTED%</code> = <code translate="No">Muted</code>有効な場合はミュート、<code translate="No">null</code>それ以外の場合は文字列です</li>
+      <li><code translate="No">%ACCOUNTID%</code> = ユーザーが選択したBrightcove ブのアカウント ID</li>
+      <li><code translate="No">%VIDEOID%</code> = ユーザーが選択したビデオ ID</li>
+      <li><code translate="No">%PLAYLISTID%</code> = ユーザーが選択したプレイリスト ID</li>
+      <li><code translate="No">%PLAYERID%</code> = ユーザーが選択したビデオプレーヤーIDまたはプレイリストプレーヤー ID</li>
+      <li><code translate="No">%CMS%</code> = CMS の名前</li>
+      <li><code translate="No">%CMSVERSION%</code> = CMS のバージョン</li>
+      <li><code translate="No">%CONNECTORVERSION%</code> = コネクタのバージョン</li>
+    </ul>
+  </section>
+  <section class="bcls-section">
+    <h2 id="iFrame_video_player_embed">iFrame ビデオプレーヤーの埋め込み</h2>
+    <h3>レスポンシブサイジングのパラメータ（最大サイズ）</h3>
+    <pre>
+<code translate="No">%MAXWIDTH% = Width . ‘px’
+%MINWIDTH% = 0px
+%WIDTH% = 100% %HEIGHT% = 100%
+%PADDINGTOP%
+  if (Aspect Ratio == “16:9”) {
+    %PADDINGTOP% = 56%
+  } elseif (Aspect Ratio == “4:3”) {
+    %PADDINGTOP% = 75%
+  } elseif {
+  %PADDINGTOP% = (Height / Width * 100) . “%”
+  }</code></pre>
+    <h4>固定サイズのパラメータ</h4>
+    <pre>
+<code translate="No">%MINWIDTH% = Width . ‘px’
+%WIDTH% = Width . ‘px’
+%HEIGHT% = Height . ‘px’
+%PADDINGTOP%
+  if (Aspect Ratio == “16:9”) {
+    %PADDINGTOP% = 56%
+  } elseif (Aspect Ratio == “4:3”) {
+    %PADDINGTOP% = 75%
+  } elseif {
+  %PADDINGTOP% = (Height / Width * 100) . “%”
+  }</code></pre>
+    <h3>Brightcove ブの埋め込みコード</h3>
+    <pre>
+<code translate="No">&lt;div style="display: block; position: relative; min-width: %MINWIDTH%; max-width: %MAXWIDTH%;"&gt;
+  &lt;div style="padding-top: %PADDINGTOP%;"&gt;
+    &lt;iframe src="//players.brightcove.net/%ACCOUNTID%/%PLAYERID%_default/index.html?videoId=%VIDEOID%
+      &amp;usage=cms:%CMS%:%CMSVERSION%:%CONNECTORVERSION%:iframe
+      &amp;%AUTOPLAY%
+      &amp;%MUTED%"
+      allowfullscreen=””
+      webkitallowfullscreen=””
+      mozallowfullscreen=””
+      style= width: %WIDTH%; height: %HEIGHT%; position: absolute; top: 0; bottom: 0; right: 0; left: 0;"&gt;
+    &lt;/iframe&gt;
+  &lt;/div&gt;
+&lt;/div</code></pre>
+    <h3>実装例</h3>
+    <figure class="bcls-figure"><img class="bcls-image" alt="実装例" src="https://general.support.brightcove.com/assets/images/shared-content/integrations/18644-sample-iframe-implementation.png"/>
+      <figcaption class="bcls-caption--image">iframe サンプル実装</figcaption>
+    </figure>
+  </section>
+  <section class="bcls-section">
+    <h2 id="JavaScript_player_embed">JavaScript（ページ内）プレーヤーの埋め込み</h2>
+    <h3>レスポンシブサイジングのパラメータ（最大サイズ）</h3>
+    <pre>
+<code translate="No">%MAXWIDTH% = Width . ‘px’
+%MINWIDTH% = 0px
+%WIDTH% = 100% %HEIGHT% = 100%
+%PADDINGTOP%
+  if (Aspect Ratio == “16:9”) {
+    %PADDINGTOP% = 56%
+  } elseif (Aspect Ratio == “4:3”) {
+    %PADDINGTOP% = 75%
+  } elseif {
+  %PADDINGTOP% = (Height / Width * 100) . “%”
+  }</code></pre>
+    <h3>固定サイズのパラメータ</h3>
+    <pre>
+<code translate="No">%MINWIDTH% = Width . ‘px’
+%WIDTH% = Width . ‘px’
+%HEIGHT% = Height . ‘px’
+%PADDINGTOP%
+  if (Aspect Ratio == “16:9”) {
+    %PADDINGTOP% = 56%
+  } elseif (Aspect Ratio == “4:3”) {
+    %PADDINGTOP% = 75%
+  } elseif {
+  %PADDINGTOP% = (Height / Width * 100) . “%”
+  }</code></pre>
+    <h3>Brightcove ブの埋め込みコード</h3>
+    <pre>
+<code translate="No">&lt;div style="display: block; position: relative; min-width: %MINWIDTH%; max-width: %MAXWIDTH%;"&gt;
+  &lt;div style="padding-top: %PADDINGTOP%; "&gt;
+    &lt;video-js data-video-id="%VIDEOID%"
+      data-account="%ACCOUNTID%"
+      data-player="%PLAYERID%"
+      data-embed="default"
+      data-usage="cms: :%CMS%:%CMSVERSION%:%CONNECTORVERSION%:javascript" class="video-js"
+      controls %AUTOPLAY% %MUTED%
+      style="width: %WIDTH%; height: %HEIGHT%; position: absolute; top: 0; bottom: 0; right: 0; left: 0;"&gt;
+    &lt;/video-js&gt;
+    &lt;script src="https://players.brightcove.net/%ACCOUNTID%/%PLAYERID%_default/index.min.js"&gt;&lt;/script&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    <h3>実装例</h3>
+    <figure class="bcls-figure"><img class="bcls-image" alt="ページ内埋め込みサンプル実装" src="https://general.support.brightcove.com/assets/images/shared-content/integrations/18644-sample-inpage-implementation.png"/>
+      <figcaption class="bcls-caption--image">ページ内埋め込みサンプル実装</figcaption>
+    </figure>
+  </section>
+  <section class="bcls-section">
+    <h2 id="iframe_playlist_player_embed">iFrame プレイリストプレーヤーの埋め込み</h2>
+    <h3>レスポンシブサイジングのパラメータ（最大サイズ）</h3>
+    <pre>
+<code translate="No">%MAXWIDTH% = Width . ‘px’
+%MINWIDTH% = 0px
+%WIDTH% = 100% %HEIGHT% = 100%
+%PADDINGTOP%
+  if (Aspect Ratio == “16:9”) {
+    %PADDINGTOP% = 56%
+  } elseif (Aspect Ratio == “4:3”) {
+    %PADDINGTOP% = 75%
+  } elseif {
+  %PADDINGTOP% = (Height / Width * 100) . “%”
+  }</code></pre>
+    <h3>固定サイズのパラメータ</h3>
+    <pre>
+<code translate="No">%MINWIDTH% = Width . ‘px’
+%WIDTH% = Width . ‘px’
+%HEIGHT% = Height . ‘px’
+%PADDINGTOP%
+  if (Aspect Ratio == “16:9”) {
+    %PADDINGTOP% = 56%
+  } elseif (Aspect Ratio == “4:3”) {
+    %PADDINGTOP% = 75%
+  } elseif {
+  %PADDINGTOP% = (Height / Width * 100) . “%”
+  }</code></pre>
+    <h3>Brightcove ブの埋め込みコード</h3>
+    <pre>
+<code translate="No">&lt;div style="display: block; position: relative; min-width: %MINWIDTH%; max-width: %MAXWIDTH%;"&gt;
+  &lt;div style="padding-top: %PADDINGTOP%;"&gt;
+    &lt;iframe src="//players.brightcove.net/%ACCOUNTID%/%PLAYERID%_default/index.html?playlistId=%PLAYLISTID%
+      &amp;usage=cms:%CMS%:%CMSVERSION%:%CONNECTORVERSION%:iframe
+      &amp;%AUTOPLAY%
+      &amp;%MUTED%"
+      allowfullscreen=””
+      webkitallowfullscreen=””
+      mozallowfullscreen=””
+      style=" width: %WIDTH%; height: %HEIGHT%; position: absolute; top: 0; bottom: 0; right: 0; left: 0;"&gt;
+    &lt;/iframe&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    <h3>実装例</h3>
+    <figure class="bcls-figure"><img class="bcls-image" alt="ページ内埋め込みサンプル実装" src="https://general.support.brightcove.com/assets/images/shared-content/integrations/18644-sample-iframe-playlist-implementation.png"/>
+      <figcaption class="bcls-caption--image">ページ内埋め込みサンプル実装</figcaption>
+    </figure>
+  </section>
+  <section class="bcls-section">
+    <h2 id="javascript_playlist_player_embed">JavaScript (ページ内) プレイリストプレーヤーの埋め込み</h2>
+    <h3>レスポンシブサイジングのパラメータ（最大サイズ）</h3>
+    <pre>
+<code translate="No">%MAXWIDTH% = Width . ‘px’
+%MINWIDTH% = 0px
+%PADDINGTOP% = na
+%WIDTH% = 100%
+%HEIGHT% = 65%
+%THUMBNAILWIDTH% = Round((Width-NumThumbnails*4)/ NumThumbnails);
+%THUMBNAILHEIGHT% = Round(%THUMBNAILWIDTH% * %HEIGHT% / %WIDTH%);</code></pre>
+    <h3>固定サイズのパラメータ</h3>
+    <pre>
+<code translate="No">%MAXWIDTH% = Width . ‘px’
+%MINWIDTH% = Width . ‘px’
+%PADDINGTOP% = na
+%WIDTH% = Width . ‘px’
+%HEIGHT% = Height . ‘px’
+%THUMBNAILWIDTH% = Round((Width-NumThumbnails*4)/ NumThumbnails);
+%THUMBNAILHEIGHT% =Round(%THUMBNAILWIDTH% * %HEIGHT% / %WIDTH%);</code></pre>
+    <h3>Brightcove ブの埋め込みコード</h3>
+    <pre>
+<code translate="No">&lt;style type="text/css"&gt;
+  .vjs-playlist {
+    background-color: #000000;
+    width: %WIDTH%;
+    height: calc (%THUMBNAILHEIGHT% + 16px);
+    text-align: center;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
+  }
+
+  .vjs-playlist-title-container {
+    color: #FFFFFF;
+    /*display: none;*/
+    opacity: 1;
+    font-size: 0.7em;
+    font-family: sans-serif;
+    font-weight: bold;
+  }
+
+  .vjs-playlist-now-playing-text {
+    color: #FFFFFF;
+    /*display: none;*/
+    opacity: 1;
+    font-size: 0.7em;
+    font-family: sans-serif;
+    font-weight: bold;
+  }
+
+  .vjs-up-next-text {
+    color: #FFFFFF;
+    /*display: none;*/
+    opacity: 1;
+    font-family: sans-serif;
+    font-weight: bold;
+    text-align: right;
+  }
+
+  .vjs-playlist-duration {
+    color: #FFFFFF;
+    /*display: none;*/
+    opacity: 1;
+    font-family: sans-serif;
+    font-weight: bold;
+  }
+
+  .vjs-mouse.vjs-playlist {
+    background-color: #000000;
+  }
+
+  li.vjs-playlist-item {
+    background-color: #000000;
+    height: %THUMBNAILHEIGHT%;
+    width: %THUMBNAILWIDTH%;
+    display: inline-block;
+    border: 2px solid #000000;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    vertical-align: middle;
+  }
+
+  li.vjs-playlist-item:hover {
+    border-color: #FFFFFF;
+  }
+&lt;/style&gt;
+&lt;div style="
+display: block; position: relative; width: %WIDTH%; height: ; min-width:
+%MINWIDTH%; max-width: %MAXWIDTH%; "&gt;
+  &lt;video-js data-playlist-id="%PLAYLISTID%" data-account="%ACCOUNTID%" data-player="%PLAYERID%" data-embed="default" data- usage="cms:%CMS%:%CMSVERSION%:%CONNECTORVERSION%:javascript " class="video-js" controls %AUTOPLAY% %MUTED% style="
+width: %WIDTH%; height: %HEIGHT%; position: relative;
+top: 0px; bottom: 0px; right: 0px; left: 0px;
+“&gt; &lt;/video-js&gt; &lt;script
+src="https://players.brightcove.net/%ACCOUNTID%/%PLAYERID%_default/index .min.js "&gt;&lt;/script&gt;
+&lt;ol class="vjs-playlist vjs-csspointerevents vjs-mouse "&gt;&lt;/ol&gt; &lt;/div&gt;</code></pre>
+    <h3>実装例</h3>
+    <figure class="bcls-figure"><img class="bcls-image" alt="ページ内埋め込みサンプル実装" src="https://general.support.brightcove.com/assets/images/shared-content/integrations/18644-sample-inpage-playlist-implementation.png"/>
+      <figcaption class="bcls-caption--image">ページ内埋め込みサンプル実装</figcaption>
+    </figure>
+  </section>
+  <section class="bcls-section">
+    <h2 id="appendix_a">付録A</h2>
+    <p>プレーヤーの埋め込みダイアログを開く前に動画または再生リストが選択されていない場合は、ダイアログで動画またはプレイリスト（および必要に応じて Brightcove アカウント）を選択できる必要があります。ダイアログには、以下のフィールドが表示されます。</p>
+    <ol>
+      <li><strong>Brightcove ブのアカウント:</strong>Brightcove アカウントが選択されていない場合、ユーザは選択できるはずです。</li>
+      <li><strong>検索フィルタ:</strong>ユーザーは検索文字列を入力して、表示されている動画または再生リストのリストをフィルタリングできる必要があります。Brightcove ブの検索 API を使用する場合は、検索文字列を URI エンコードする必要があります（下の例を参照）。</li>
+      <li><strong>フォルダ:</strong>ユーザーは、Brightcove アカウントから Folder 名を選択して、表示される動画のリストをフィルタリングできます。Brightcove API にはフォルダ用のフィルタが組み込まれていないため、クライアントコードですべての動画を取得してから、フォルダでフィルタリングする必要があります。(プレイリストには適用されません)</li>
+      <li><strong>制限:</strong>ユーザーは、主に検索のパフォーマンスを向上させるために、返される動画の数を制限できる必要があります。Brightcove ブ検索を使用する場合、指定できる上限は 100 です。100 を超える動画を返すには、ページングメカニズムを実装する必要があります。また、ユーザーがフィルタするフォルダを選択した場合、クライアントはページングメカニズムを使用してアカウント内のすべてのビデオを要求し、フォルダによってそのリストをローカルにフィルタリングし、ユーザー制限で指定された動画の数を返す必要があります。(プレイリストには適用されません)</li>
+      <li><strong>並べ替え方法:</strong>ユーザーはソートフィールドを選択できるはずです。
+        <ol type="a">
+          <li>動画の場合、ユーザーは動画名、更新日、作成日、開始日、合計再生数を選択できる必要があります。デフォルトは更新日です。</li>
+          <li>プレイリストの場合、ユーザーは名前と変更日のいずれかを選択します。デフォルトは修正日です。</li>
+        </ol>
+      </li>
+      <li><strong>ソート順:</strong>ユーザーは、昇順または降順を選択できる必要があります。デフォルトは降順である必要があります。</li>
+    </ol>
+    <p>このダイアログには次の動作が必要です。</p>
+    <ol>
+      <li>上記のユーザー選択に基づいて、動画または再生リストのリストを表示します。ユーザーが1つのビデオまたは1つのプレイリストを選択できるようにします。</li>
+      <li>動画のリストを表示する場合：
+        <ol type="a">
+          <li>アクティブな動画のみが表示されます。</li>
+          <li>サムネイル画像、ビデオ名、および ID が表示されます。</li>
+          <li>選択できるビデオは 1 つだけです。</li>
+        </ol>
+      </li>
+      <li>プレイリストのリストを表示する場合:
+        <ol type="a">
+          <li>プレイリストが手動再生リストの場合は、プレイリスト名、ID、再生リストに含まれる動画の数を表示します。</li>
+          <li>プレイリストがスマートプレイリストの場合は、再生リスト名、ID、およびビデオ数の代わりに-を表示します。</li>
+          <li>選択できるプレイリストは 1 つだけです。</li>
+        </ol>
+      </li>
+      <li>新しいブラウザータブで動画またはプレイリストプレーヤーを開くクリック可能なリンクを表示します。</li>
+    </ol>
+    <h3>Brightcove ブの関連ドキュメント</h3>
+    <ul>
+      <li><a href="https://apis.support.brightcove.com/general/integrating-your-cms-video-cloud.html">CMSとビデオクラウドの統合</a></li>
+      <li><a href="/cms/references/reference.html#operation/GetVideos">動画の一覧を取得する</a></li>
+      <li><a href="/cms/references/reference.html#operation/GetPlaylists">プレイリストのリストを取得する</a></li>
     </ul>
     <h3>ダイアログの実装例</h3>
     <h4>ビデオ選択</h4>
