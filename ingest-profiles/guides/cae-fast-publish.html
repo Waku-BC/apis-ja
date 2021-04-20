@@ -1276,15 +1276,57 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
                 
                   
                 <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
-              
-
-                
-                  
+              </ul>
+            
+          
+            </nav>
+          </div>
+          <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
+        <!-- bootstrap layout -->
+      
+      <p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
+      
+      <!-- search bar -->
+      <div id="nav-search-box" style="margin-top: 1rem;"></div>
+      <!-- in-page navigation for narrow screens -->
+      <details class="centered-inpage-nav" id="centered_inpage_nav">
+        <summary><h6 class="toc">ページコンテンツ</h6></summary>
+        <nav id="centered_toc"></nav>
+        <ul id="centered_in_page_toc" class="list-none"></ul>
+      </details>
+      <!-- open in new tab/window -->
+      <a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
+      
+      
+      
+      
+      
+      
+      <h1>CAE 高速パブリッシュ</h1>
+      <article class="bcls-article">
+        <summary>コンテキスト認識エンコーディング (CAE) は優れたレンディションを実現しますが、ソースビデオを解析すると処理に時間がかかります。新しいビデオをできるだけ早くオンラインにすることが優先度の高い場合は、このドキュメントで説明されている高速パブリッシュオプションを使用すると、CAE を活用しながらビデオをすばやくパブリッシュできます。</summary>
+        <section class="bcls-section">
+          <h2 id="introduction">はじめに</h2>
+          
+          <p>高速公開により、次のことが可能になります<a href="/dynamic-ingest/ingest-guides/context-aware-encoding.html">CAE</a>それでも、すぐに再生できる1つ以上の一時的なレンディションを作成することで、できるだけ早くビデオをオンラインで入手できます。次に、次の条件が適用されます。</p>
+          
+          <ul>
+            <li>動的レンディションが利用可能になるとすぐに、一時的なレンディションではなく、動的レンディションが再生に使用されます。</li>
+            <li>すべての動的レンディションが処理された後のある時点で、一時レンディションは自動的に削除されます</li>
+          </ul>
+          
+          <section class="bcls-section">
+          <h2 id="requirements">要件</h2>
+          
+          <p>高速公開を使用するには、次のことを行う必要があります。</p>
+          
+          <ol>
+            <li>アカウントを有効にする<a href="/dynamic-ingest/getting-started/overview-dynamic-ingest-api-dynamic-delivery.html">動的配信</a></li>
+            <li>アカウントを有効にします<a href="/dynamic-ingest/ingest-guides/context-aware-encoding.html">CAE</a></li>
+            <li>を使用してカスタムCAE取り込みプロファイルを作成します<a href="/ingest-profiles/">プロファイルAPIの取り込み</a>（指示<a href="#create_fast_publish_profile">未満</a>）</li>
+          </ol>
+          </section>
                     
-      <li>を使用してカスタムCAE取り込みプロファイルを作成します<a href="/ingest-profiles/">プロファイルAPIの取り込み</a>（指示<a href="#create_fast_publish_profile">未満</a>）</li>
-    </ol>
-    </section>
-    
     <section class="bcls-section">
     <h2 id="custom_profile_for_fast_publish">高速公開用のカスタムプロファイル</h2>
     
