@@ -1277,10 +1277,117 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
                   
                 <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
               
-
-                
+                <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
                   
-                    
+                
+              </ul>
+            
+          
+      </nav>
+    </div>
+    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
+  <!-- bootstrap layout -->
+
+<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
+
+<!-- search bar -->
+<div id="nav-search-box" style="margin-top: 1rem;"></div>
+<!-- in-page navigation for narrow screens -->
+<details class="centered-inpage-nav" id="centered_inpage_nav">
+  <summary><h6 class="toc">ページコンテンツ</h6></summary>
+  <nav id="centered_toc"></nav>
+  <ul id="centered_in_page_toc" class="list-none"></ul>
+</details>
+<!-- open in new tab/window -->
+<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
+
+
+
+
+
+
+<h1>アクセストークンの取得</h1>
+<article class="bcls-article">
+  <summary>このトピックでは、アクセストークンの取得方法と、このロジックをアプリに実装するための戦略について説明します。</summary>
+  <section class="bcls-section">
+  <h2 id="gettingToken">トークンの取得</h2>
+
+  <p>APIリクエストをテストするためのアクセストークンを生成するだけの場合は、これを使用できます<a href="/oauth/code-samples/oauth-api-sample-get-access-token.html">サンプルアプリ</a>。</p>
+
+  <p>トークンはBrightcoveOAuthAPIから取得されます。アクセストークンを取得する前に、まず、アクセスするAPIと操作に固有のクライアント資格情報（クライアントIDとクライアントシークレット）を取得する必要があります。クライアントの資格情報を取得するには、を参照してください。<a href="/general/managing-api-authentication-credentials.html"> API資格情報の管理</a>。</p>
+
+  <p>資格情報を取得したら、次のようにしてアクセストークンを取得します。<code translate="No">POST</code>リクエスト先：</p>
+
+  <pre class="line-numbers">
+  <code class="language-http" translate="No">https://oauth.brightcove.com/v4/access_token</code></pre>
+
+  <p>この呼び出しでは、次のヘッダーを渡す必要があります。</p>
+
+  <ul>
+    <li><code class="language-http" translate="No">Content-Type: application/x-www-form-urlencoded</code></li>
+    <li><code class="language-http" translate="No">Authorization: Basic {client_id}:{client_secret}</code></li>
+  </ul>
+
+  <p>全体<code class="language-http" translate="No">{client_id}:{client_secret}</code>文字列はBase64でエンコードされている必要があります（文字列を次のように渡すと、curlは自動的にBase64でエンコードします<code translate="No">--user</code>資格情報;他の言語では、Base64エンコーディングを自分で処理する必要があります）。</p>
+
+  <p>また、次のキー/値のペアをリクエスト本文または URL パラメータとして送信する必要があります。</p>
+
+  <pre class="line-numbers">
+  <code class="language-http" translate="No">grant_type=client_credentials</code></pre>
+
+  <aside class="bcls-aside bcls-aside--information">以来、<code translate="No">Content-Type</code>でなければなりません<code translate="No">application/x-www-form-urlencoded</code>、キーと値のペアは、リクエストの本文に配置した場合でも、URLパラメータとしてAPIに送信されます。</aside>
+
+  <p>応答は次のようになります（ここでは読みやすくするためにプリティ印刷されています）。</p>
+
+  <pre class="line-numbers">
+  <code class="language-json" translate="No">{
+      "access_token": "ANB7xKhiUZmwltVd3f1odcHHM9VAwg02kwmLwtZwHv3SxGCOWLUf5W4G7X22PRjmR9StvFUqzpVZ1suOfyfOigdi-rnohxyEaSSuZceeLw_9OBW7fXldOG05HEgkeK3N-DBZZZyilodmjA1JWZHbgI3IU7Rmz5IPGyi-sDxHN3KlOr1BDZlLZpXPdFPwEyb6idq-z8AL-blKTSMtNI3_fz3oNBisfrHGUv5tXHoQT4B7FYcvdrap16gTOO7_wNt1zmgLJiUHvyxZgsgBchm_AhohVL-AYgcfCbCR0v7d2hgI4ag35pnZNeujDiBLfnCFcVMlqQGq8UEVZrmU9a8y4pVAGih_EImmghqmSrkxLPYZ800-vIWX-lw",
+      "token_type": "Bearer",
+      "expires_in": 300
+  }</code></pre>
+
+  <p><code translate="No">access_token</code>値は、次の形式で API <code translate="No">Authorization</code>呼び出しでヘッダーに渡す必要があるものです。</p>
+
+  <pre class="line-numbers">
+  <code class="language-http" translate="No">Authorization: Bearer {access_token}</code></pre>
+
+  <p>ザ・<code translate="No">expires_in</code> valueは、アクセストークンが有効な秒数です。</p>
+  </section>
+
+  <section class="bcls-section">
+  <h2 id="implementation">実装戦略</h2>
+
+  <p>アプリがBrightcoveAPIに対して散発的な呼び出しのみを行う場合は、無視することをお勧めします。<code translate="No">expires_in</code>パラメータを設定し、呼び出しごとに新しいアクセストークンをフェッチするだけです。その場合、処理シーケンスは次のようになります。</p>
+
+  <figure class="bcls-figure"><img class="bcls-image" alt="新しいトークンを取得" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/oauth-api/guides/get-token/get-token-new-token.png"/>
+  <figcaption class="bcls-caption--image">新しいトークンを取得</figcaption>
+  </figure>
+
+  <p>一方、アプリが頻繁に多数のAPI呼び出しをすばやく連続して行うことがわかっている場合（たとえば、長いレポートを生成する場合）、必要な場合にのみアクセストークンをフェッチする方が効率的です。これを行うには、2つの基本的な方法があります。</p>
+
+  <ol>
+    <li>先に進んでAPI呼び出しを試してみてください。<code translate="No">UNAUTHORIZED</code>エラーが発生した場合は、新しいトークンをフェッチして、API呼び出しを再度行ってください。この場合、処理シーケンスは次のようになります。
+
+    <figure class="bcls-figure"><img class="bcls-image" alt="コール失敗のチェックでトークンを取得する" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/oauth-api/guides/get-token/get-token-check-call-fail.png"/>
+    <figcaption class="bcls-caption--image">コール失敗のチェックでトークンを取得する</figcaption>
+    </figure>
+    </li>
+    <li>別のアプローチは、を追加することです<code translate="No">expires_in</code>トークンをフェッチするたびにエポック秒単位で現在の時刻に値を設定し、その後のAPI呼び出しで、有効期限を現在の時刻と照合して、新しいトークンをフェッチする必要があるかどうかを確認します。この場合、処理シーケンスは次のようになります。
+    <figure class="bcls-figure"><img class="bcls-image" alt="有効期限の確認でトークンを取得する" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/oauth-api/guides/get-token/get-token-check-expiration.png"/>
+    <figcaption class="bcls-caption--image">有効期限の確認でトークンを取得する</figcaption>
+    </figure>
+    </li>
+  </ol>
+  </section>
+
+  <section class="bcls-section">
+  <h2 id="Postman_and_Insomnia">郵便配達員と不眠症</h2>
+
+  <p>Brightcove OAuthシステムと連携してアクセストークンを取得するように、RESTAPIのいくつかの便利なテストツールを設定できます。最も人気のある2つのクロスプラットフォームツールでこれを行うための手順を含むガイドがあります。</p>
+
+  <ul>
+    <li><a href="/general/use-postman-api-requests.html">API リクエストに郵便配達を使用する</a></li>
+    <li><a href="/general/use-insomnia-api-requests.html">API リクエストにインソムニアを使用する</a></li>
   </ul>
   </section>
 
