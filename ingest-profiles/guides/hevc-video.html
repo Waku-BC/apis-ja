@@ -1277,10 +1277,564 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
                   
                 <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
               
-
-                
+                <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
                   
-                    
+                
+              </ul>
+            
+          
+      </nav>
+    </div>
+    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
+  <!-- bootstrap layout -->
+
+<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
+
+<!-- search bar -->
+<div id="nav-search-box" style="margin-top: 1rem;"></div>
+<!-- in-page navigation for narrow screens -->
+<details class="centered-inpage-nav" id="centered_inpage_nav">
+  <summary><h6 class="toc">ページコンテンツ</h6></summary>
+  <nav id="centered_toc"></nav>
+  <ul id="centered_in_page_toc" class="list-none"></ul>
+</details>
+<!-- open in new tab/window -->
+<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
+
+
+
+
+
+
+<h1>HEVCビデオ</h1>
+<article class="bcls-article">
+  <summary>このトピックでは、HEVC ビデオの Video Cloud サポートについて説明します。</summary>
+  <section class="bcls-section">
+    <h2 id="Introduction">はじめに</h2>
+    <h3>HEVCの利点</h3>
+    <p>高効率ビデオコーディング（<a href="https://en.wikipedia.org/wiki/High_Efficiency_Video_Coding"> HEVC </a>）、H.265とも呼ばれ、<a href="https://en.wikipedia.org/wiki/Advanced_Video_Coding">広く使用されている高度なビデオコーディング（AVC/H.264）の後継として設計されたビデオ圧縮規格です</a>。AVCと比較して、HEVCは同レベルのビデオ品質で約 20% 優れたデータ圧縮を提供するか、同じビットレートで実質的に向上したビデオ品質を提供します。</p>
+    <p>この圧縮の向上には、帯域幅の使用量を減らし、低いビットレートでより高いビデオ品質を実現し、最初のフレームまでの時間（TTFF）の短縮など、エンドビューア満足度を向上させることができます。</p>
+    <h3>デメリット</h3>
+    <p>主な欠点は、新しい技術であるため、HEVCビデオはクライアント（デバイス+ OS +ブラウザ/アプリを意味する）によってまだ広くサポートされていないことです。さらに、再生中に HEVC セグメントと AVC セグメントを切り替えることができるクライアントもあれば、そうでないクライアントもあります。</p>
+    <p>さらに、HEVC ビデオのトランスコードには H.264 よりも約 2 ～ 4 倍長くなります。</p>
+    <h3>公開設定</h3>
+    <p>HEVC サポートは Video Cloud <strong>の有料アドオンです</strong>。HEVCサポートに興味がある場合は、アカウントマネージャーにお問い合わせください。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Brightcove_HEVC_solution">Brightcove ブの HEVC ソリューション</h2>
+    <p>HEVC のメリットを提供しながら、視聴者がそれをサポートしていないテクノロジを使用できるようにするため、Brightcove ブは HEVC 以外の古いクライアントをサポートし、帯域幅の使用を最適化する包括的なソリューションを開発しました。このソリューションには複数の部分があります。</p>
+    <ul>
+      <li>トランスコーディング時に HEVC と AVC でエンコードされたレンディションの両方を作成 (オプションでプログレッシブダウンロード用の MP4 の作成)</li>
+      <li>HEVC レンディションと AVC レンディションの両方への参照を含むマニフェストの生成:
+        <ul>
+          <li>HLS: 混合バリアントストリーム (ビットレート順)</li>
+          <li>ダッシュ：HEVCとH.264用の別々の適応セットと、それらを切り替え可能と宣言する補足的なプロパティ</li>
+        </ul>
+      </li>
+      <li>ビューアクライアントタイプに基づくロジックをフィルタリングします。
+        <ul>
+          <li>要求するデバイスがレガシー、非 HEVC 対応デバイスの場合、マニフェストから HEVC ストリームを削除します。</li>
+          <li>HEVC 対応スイッチ不能デバイスへのマニフェストから H.264 ストリームを削除します</li>
+          <li>デバイスが両方のコーデックをデコードし、それらを切り替えることができる場合、HEVC ストリームと H.264 ストリームの両方の最適なサブセットを残す</li>
+        </ul>
+        <aside class="bcls-aside bcls-aside--information language-editable">フィルタリングには動的配信ルールが必要です。アカウントでこのルールを有効にする場合は、アカウントマネージャーにお問い合わせください。</aside>
+      </li>
+    </ul>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Supported_clients">サポートされているクライアント</h2>
+    <p>現在、HEVC は、Brightcove ブ Web またはネイティブデバイスプレーヤーを使用する次のクライアントでエンドツーエンドでサポートされています。</p>
+    <table class="bcls-table">
+      <caption class="bcls-caption--table">HEVC でサポートされている Web クライアント</caption>
+      <thead class="bcls-table__head">
+          <tr>
+              <th colspan="2" style="text-align: center;">Brightcove ブのウェブプレーヤー</th>
+          </tr>
+          <tr>
+              <th>OS</th>
+              <th>ブラウザー</th>
+          </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+          <tr>
+              <td>macOS 10.13+</td>
+              <td>Safari</td>
+          </tr>
+          <tr>
+              <td>iOS 11+</td>
+              <td>Safari</td>
+          </tr>
+          <tr>
+              <td>Apple TV</td>
+              <td>Airplay経由で</td>
+          </tr>
+          <tr>
+              <td>ウィンドウズ10</td>
+              <td>Edge ( <strong>プラグイン付きレガシーバージョン</strong> )</td>
+          </tr>
+      </tbody>
+  </table>
+    <table class="bcls-table">
+      <caption class="bcls-caption--table">HEVC でサポートされるデバイス</caption>
+      <thead class="bcls-table__head">
+          <tr>
+              <th colspan="2" style="text-align: center;">Brightcove ブのネイティブデバイス SDK プレーヤー</th>
+          </tr>
+          <tr>
+              <th>SDK</th>
+              <th>OS</th>
+          </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+          <tr>
+              <td>iOS SDK</td>
+              <td>iOS 11+</td>
+          </tr>
+          <tr>
+              <td>tvOS SDK</td>
+              <td>tvOS</td>
+          </tr>
+          <tr>
+              <td>Android SDK</td>
+              <td>Android APIレベル21（ロリポップバージョン5.0）以上<sup><strong><a href="#1-1"> [1-1] </a></strong></sup></td>
+          </tr>
+      </tbody>
+  </table>
+  <h3>注</h3>
+  <ul>
+    <li id="1-1"><sup><strong>[ 1-1] </strong></sup>詳細については、<a href="https://sdks.support.brightcove.com/android/playback/hevc-selection-native-sdk-android.html"> Android 用ネイティブ SDK での HEVC の選択を参照してください</a></li>
+  </ul>
+  </section>
+  <section class="bcls-section">
+    <h2 id="HEVC_ingest_profiles">HEVC 取り込みプロファイル</h2>
+    <p>アカウントで HEVC が有効になっている場合、再生用の HEVC レンディションを取得するには、アップロードモジュールまたは動的インジェスト API を使用して動画を取り込むときに HEVC 取り込みプロファイル（コンテキスト認識エンコーディングまたは動的配信）のいずれかを選択するだけです。
+      <figure class="bcls-figure">
+        <img class="bcls-image" src="https://general.support.brightcove.com/assets/images/shared-content/general/hevc-profiles.png" alt="HEVC 取り込みプロファイル"/>
+        <figcaption class="bcls-caption--image">HEVC 取り込みプロファイル</figcaption>
+      </figure>
+    </p>
+    <p>これらのプロファイルの完全な JSON <a href="#appendix_profiles">の詳細を以下に示します</a>。ソースに最適なレンディションセットを作成し、ストレージを最適化するには、CAE (コンテキスト対応エンコーディング) プロファイルを使用することをお勧めします。CAE では、ソースを検査するための処理時間がやや長くなるため、パブリッシュ可能なレンディションをできるだけ早く取得することが優先される場合は、<a href="https://apis.support.brightcove.com/ingest-profiles/guides/cae-fast-publish.html">高速パブリッシュ (Fast </a> Publish) オプションを使用してカスタム取り込みプロファイルを作成できます。</p>
+    <p>高速公開オプションまたはその他の理由でカスタムHEVCプロファイルを作成する必要がある場合は、<a href="https://studio.support.brightcove.com/admin/creating-ingest-profiles-context-aware-encoding.html#using_the_advanced_editor"> Studioの管理ページで詳細エディタを使用するか</a>、<a href="https://apis.support.brightcove.com/ingest-profiles/">プロファイルの取り込みAPIを使用する必要があります</a>。HEVC レンディションは Studio のシンプルエディタに表示されません。<a href="#appendix_renditions">利用可能なダイナミックデリバリーレンディションは以下の通りです</a>。</p>
+    <p>また、HEVC の標準レンディションは 1920 ピクセル以下の幅であることに注意してください。しかし、UHDレンディション（4K以上）をサポートしています。UHD レンディションが必要な場合は、Brightcove ブサポートに 1 つまたは複数の作成リクエストを送信できます。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="custom_cae_profiles">カスタム CAE プロファイル</h2>
+    <p>標準 CAE 取り込みプロファイルには、混合された HEVC/H.264 レンディションは含まれません。ただし、カスタムテーマを作成することはできます。現在、HEVC 用のカスタム CAE プロファイルを作成するには、Ingest Profiles API を使用する必要があります。</p>
+    <p>フィールド（下<code translate="No">dynamic_origin</code> &gt;&gt; <code translate="No">dynamic_profile_options</code>）不可欠なものは次のとおりです。</p>
+    <dl>
+      <dt><code translate="No">video_codecs</code></dt>
+      <dd>レンディションを作成するコーデックの配列。現在サポートされているコーデック値は、<code translate="No">h264</code>および<code translate="No">hevc</code></dd>
+      <dt><code translate="No">video_codec_options</code></dt>
+      <dd>
+        video_codecs で指定された各コーデックの出力用のオプション。<code translate="No">video_codec_options</code>のプロパティは、含まれているコーデック（現在は h264 または hevc）の名前を持つオブジェクトです。これらの各オブジェクトに許可されるプロパティは
+        <ul>
+          <li><code translate="No">min_renditions</code><em>必須</em></li>
+          <li><code translate="No">max_bitrate</code></li>
+          <li><code translate="No">max_first_rendition_bitrate</code></li>
+          <li><code translate="No">min_resolution</code></li>
+          <li><code translate="No">max_resolution</code></li>
+          <li><code translate="No">max_first_rendition_resolution</code></li>
+        </ul>
+        <aside class="bcls-aside bcls-aside--information language-editable">注
+          <ol>
+            <li>これらの設定は、グローバルレベルで指定することもできます。グローバルレベルとコーデック単位の両方の設定を使用する場合は、値に互換性がある必要があります。たとえば、<code translate="No">max_renditions</code>グローバルレベルで設定された値は、<code translate="No">min_renditions</code>コーデック単位で設定された値の合計以上である必要があります。</li>
+            <li>どちらも<code translate="No">max_renditions</code>そして<code translate="No">min_renditions</code>グローバル設定で必要です。</li>
+            <li>複数のコーデックを使用する場合、<code translate="No">video_configurations</code>そのような配列が明示的に定義されている場合は、特定の追加のルールが配列にも適用されます。具体的には、この配列の各エントリには、使用されるコーデックを記述する video_codec 要素も含まれる必要があります。さらに、このような構成で指定される解像度は、グローバルおよび特定のコーデックごとに指定された解像度制限と一致する必要があります。「必須」とマークされたビデオ設定の数は、グローバルに指定されたレンディションの数と特定のコーデックごとに一貫した制限にする必要があります。</li>
+          </ol>
+        </aside>
+      </dd>
+    </dl>
+    <h3>サンプル</h3>
+    <p>以下は、混合レンディションを使用する CAE プロファイルの例です。</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "name": "multi-platform-extended-dynamic-hevc-mixed-codec",
+  "display_name": "Multiplatform Extended HEVC (CAE) mixed-codec",
+  "description": "Deliver high quality content for a wide range content types and screen sizes including mobile, desktop and large screens.",
+  "account_id": 1486906377,
+  "digital_master": {
+    "rendition": "passthrough",
+    "distribute": false
+  },
+  "renditions": [],
+  "packages": [],
+  "dynamic_origin": {
+    "renditions": [
+      "default/audio64",
+      "default/audio128",
+    ],
+    "images": [
+      {
+        "label": "thumbnail",
+        "height": 90,
+        "width": 160
+      },
+      {
+        "label": "poster",
+        "height": 720,
+        "width": 1280
+      }
+    ],
+    "dynamic_profile_options": {
+      "max_renditions": 10,
+      "min_renditions": 2,
+      "max_bitrate": 12000,
+      "max_first_rendition_bitrate": 1000,
+      "max_first_rendition_resolution": {
+        "width": 1280,
+        "height": 720
+      },
+      "video_codecs": [
+        "h264",
+        "hevc"
+      ],
+      "video_codec_options": {
+        "h264": {
+          "min_renditions": 2,
+          "max_resolution": {
+            "width": 1280,
+            "height": 720
+          }
+        },
+        "hevc": {
+          "min_renditions": 2,
+          "max_resolution": {
+            "width": 1920,
+            "height": 1080
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
+  </section>
+  <section class="bcls-section">
+      <h2 id="limitations">制約事項</h2>
+        <p>以下は、HEVC サポートに関する現在の制限事項です。これらは、強化を行うと変更されることに注意してください。</p>
+        <ol>
+          <li>標準 CAE 取り込みプロファイルには、現在 HEVC レンディションが含まれています。これらは、HEVC 対応デバイスだけにビデオを配信することがわかっている場合にのみ使用してください。HEVC と H.264 レンディションの両方を含むカスタムプロファイルを作成できます。上記の「<a href="#custom_cae_profiles">カスタム CAE プロファイル</a>」セクションを参照してください。</li>
+          <li>
+            AAC オーディオのみがサポートされ、HEVC での EAC または AC3 オーディオコーデックはサポートされません。
+          </li>
+          <li>
+            HDRおよび10ビットビデオはサポートされていません。
+          </li>
+          <li>
+            Media UI では現在、すべてのレンディションが表示され、各レンディションの隣にコーデック情報は表示されません。
+          </li>
+          <!-- <li>The billing UI in Studio will not show HEVC transcoding usage. However, the backend system is tracking HEVC GB separately and will be sending the invoice as part of the normal process. The billing UI will be updated in a later release.</li> -->
+        </ol>
+        </section>
+  <section class="bcls-section">
+    <h2 id="appendix_profiles">付録 1:HEVC 取り込みプロファイル</h2>
+    <p>以下は、JSONでのHEVCプロファイルの完全なプロパティです。</p>
+    <ul>
+      <li><a href="#multi-platform-extended-dynamic-hevc">マルチプラットフォーム拡張 HEVC (CAE) </a></li>
+      <li><a href="#multi-platform-extended-dynamic-hevc-with-mp4">マルチプラットフォーム拡張 HEVC (CAE) と MP4 </a></li>
+      <li><a href="#multi-platform-extended-static-mixed-codec">マルチプラットフォーム拡張スタティック H.264 + HEVC </a></li>
+      <li><a href="#multi-platform-extended-static-mixed-codec-with-mp4">マルチプラットフォーム拡張スタティック H.264 + MP4 および HEVC </a></li>
+      <li><a href="#multi-platform-extended-static-hevc-with-mp4">マルチプラットフォーム拡張HEVC（MP4）</a></li>
+    </ul>
+    <h3>コンテキスト認識エンコーディング (CAE) プロファイル</h3>
+    <h4 id="multi-platform-extended-dynamic-hevc">マルチプラットフォーム拡張 HEVC (CAE)</h4>
+    <pre class="line-numbers"><code class="language-json" translate="No">  {
+      "version": 1,
+      "name": "multi-platform-extended-dynamic-hevc",
+      "display_name": "Multiplatform Extended HEVC (CAE)",
+      "description": "Deliver high quality content for a wide range content types and screen sizes including mobile, desktop and large screens.",
+      "account_id": -1,
+      "brightcove_standard": true,
+      "date_created": 1581706195164,
+      "date_last_modified": 1581706195164,
+      "digital_master": {
+        "rendition": "passthrough",
+        "distribute": false
+      },
+      "renditions": [
+
+      ],
+      "packages": [
+
+      ],
+      "dynamic_origin": {
+        "renditions": [
+          "default/audio64",
+          "default/audio128"
+        ],
+        "images": [
+          {
+            "label": "thumbnail",
+            "height": 90,
+            "width": 160
+          },
+          {
+            "label": "poster",
+            "height": 720,
+            "width": 1280
+          }
+        ],
+        "dynamic_profile_options": {
+          "min_renditions": 2,
+          "max_renditions": 8,
+          "min_resolution": {
+            "width": 320,
+            "height": 180
+          },
+          "max_resolution": {
+            "width": 1920,
+            "height": 1080
+          },
+          "max_frame_rate": 30,
+          "max_bitrate": 4200,
+          "max_first_rendition_bitrate": 250,
+          "video_codec": "hevc",
+          "fixed_frame_rate": true,
+          "bitrate_cap_to_bitrate_ratio": 1.5,
+          "buffer_size_to_bitrate_ratio": 2,
+          "bitrate_cap_offset": 0,
+          "buffer_size_offset": 0,
+          "sample_aspect_ratio": "1:1"
+        },
+        "hevc": true
+      },
+      "id": "5e470e014b23617ad079c486"
+    }</code></pre>
+    <h4 id="multi-platform-extended-dynamic-hevc-with-mp4">マルチプラットフォーム拡張 HEVC (CAE) と MP4</h4>
+    <pre class="line-numbers"><code class="language-json" translate="No">{
+      "version": 1,
+      "name": "multi-platform-extended-dynamic-hevc-with-mp4",
+      "display_name": "Multiplatform Extended HEVC (CAE) with MP4",
+      "description": "Deliver high quality content for a wide range content types and screen sizes including mobile, desktop, large screens, and syndication.",
+      "account_id": -1,
+      "brightcove_standard": true,
+      "date_created": 1581706195164,
+      "date_last_modified": 1581706195164,
+      "digital_master": {
+        "rendition": "passthrough",
+        "distribute": false
+      },
+      "renditions": [
+
+      ],
+      "packages": [
+
+      ],
+      "dynamic_origin": {
+        "renditions": [
+          "default/audio64",
+          "default/audio128",
+          "default/progressive2000"
+        ],
+        "images": [
+          {
+            "label": "thumbnail",
+            "height": 90,
+            "width": 160
+          },
+          {
+            "label": "poster",
+            "height": 720,
+            "width": 1280
+          }
+        ],
+        "dynamic_profile_options": {
+          "min_renditions": 2,
+          "max_renditions": 8,
+          "min_resolution": {
+            "width": 320,
+            "height": 180
+          },
+          "max_resolution": {
+            "width": 1920,
+            "height": 1080
+          },
+          "max_frame_rate": 30,
+          "max_bitrate": 3200,
+          "max_first_rendition_bitrate": 200,
+          "video_codec": "hevc",
+          "fixed_frame_rate": true,
+          "bitrate_cap_to_bitrate_ratio": 1.5,
+          "buffer_size_to_bitrate_ratio": 2,
+          "bitrate_cap_offset": 0,
+          "buffer_size_offset": 0,
+          "sample_aspect_ratio": "1:1"
+        },
+        "hevc": true
+      },
+      "id": "5e470e0c4c881c16fffdb88d"
+    }</code></pre>
+    <h3>動的配信プロファイル</h3>
+    <h4 id="multi-platform-extended-static-mixed-codec">マルチプラットフォーム拡張スタティック H.264 + HEVC</h4>
+    <pre class="line-numbers"><code class="language-json" translate="No">{
+      "version": 1,
+      "name": "multi-platform-extended-static-mixed-codec",
+      "display_name": "Multiplatform Extended Static H.264 + HEVC",
+      "description": "Deliver high quality content for a wide range content types and screen sizes including mobile, desktop and large screens.",
+      "account_id": -1,
+      "brightcove_standard": true,
+      "date_created": 1581706195164,
+      "date_last_modified": 1581706195164,
+      "digital_master": {
+        "rendition": "passthrough",
+        "distribute": false
+      },
+      "renditions": [
+
+      ],
+      "packages": [
+
+      ],
+      "dynamic_origin": {
+        "renditions": [
+          "default/video450",
+          "default/video700",
+          "default/video900",
+          "default/video1200",
+          "default/video2000",
+          "default/video2500",
+          "default/video3500",
+          "default/video3800",
+          "default/video300hevc",
+          "default/video550hevc",
+          "default/video1000hevc",
+          "default/video1300hevc",
+          "default/video1600hevc",
+          "default/video2850hevc",
+          "default/audio64",
+          "default/audio128"
+        ],
+        "images": [
+          {
+            "label": "thumbnail",
+            "height": 90,
+            "width": 160
+          },
+          {
+            "label": "poster",
+            "height": 720,
+            "width": 1280
+          }
+        ],
+        "hevc": true
+      },
+      "id": "5e46e57f305eb2517f27a543"
+    }</code></pre>
+    <h4 id="multi-platform-extended-static-mixed-codec-with-mp4">マルチプラットフォーム拡張スタティック H.264 + MP4 および HEVC</h4>
+    <pre class="line-numbers"><code class="language-json" translate="No">{
+      "version": 1,
+      "name": "multi-platform-extended-static-mixed-codec-with-mp4",
+      "display_name": "Multiplatform Extended Static H.264 + HEVC with MP4",
+      "description": "Deliver high quality content for a wide range content types and screen sizes including mobile, desktop and large screens, and syndication.",
+      "account_id": -1,
+      "brightcove_standard": true,
+      "date_created": 1581706195164,
+      "date_last_modified": 1581706195164,
+      "digital_master": {
+        "rendition": "passthrough",
+        "distribute": false
+      },
+      "renditions": [
+
+      ],
+      "packages": [
+
+      ],
+      "dynamic_origin": {
+        "renditions": [
+          "default/video450",
+          "default/video700",
+          "default/video900",
+          "default/video1200",
+          "default/video2000",
+          "default/video2500",
+          "default/video3500",
+          "default/video3800",
+          "default/video300hevc",
+          "default/video550hevc",
+          "default/video1000hevc",
+          "default/video1300hevc",
+          "default/video1600hevc",
+          "default/video2850hevc",
+          "default/progressive2000",
+          "default/audio64",
+          "default/audio128"
+        ],
+        "images": [
+          {
+            "label": "thumbnail",
+            "height": 90,
+            "width": 160
+          },
+          {
+            "label": "poster",
+            "height": 720,
+            "width": 1280
+          }
+        ],
+        "hevc": true
+      },
+      "id": "5e46e59b135b6662f386559d"
+    }</code></pre>
+    <h4 id="multi-platform-extended-static-hevc-with-mp4">マルチプラットフォーム拡張HEVC（MP4）</h4>
+    <pre class="line-numbers"><code class="language-json" translate="No">{
+      "version": 1,
+      "name": "multi-platform-extended-static-hevc-with-mp4",
+      "display_name": "Multiplatform Extended HEVC with MP4",
+      "description": "Deliver high quality content for a wide range content types and screen sizes including mobile, desktop, large screens, and syndication.",
+      "account_id": -1,
+      "brightcove_standard": true,
+      "date_created": 1581706195164,
+      "date_last_modified": 1581706195164,
+      "digital_master": {
+        "rendition": "passthrough",
+        "distribute": false
+      },
+      "renditions": [
+
+      ],
+      "packages": [
+
+      ],
+      "dynamic_origin": {
+        "renditions": [
+          "default/video300hevc",
+          "default/video550hevc",
+          "default/video1000hevc",
+          "default/video1300hevc",
+          "default/video1600hevc",
+          "default/video2850hevc",
+          "default/progressive2000",
+          "default/audio64",
+          "default/audio128"
+        ],
+        "images": [
+          {
+            "label": "thumbnail",
+            "height": 90,
+            "width": 160
+          },
+          {
+            "label": "poster",
+            "height": 720,
+            "width": 1280
+          }
+        ],
+        "hevc": true
+      },
+      "id": "5e46e57e708a441e00a7ba1a"
+    }</code></pre>
+
+  </section>
+  <section class="bcls-section">
+    <h2 id="appendix_renditions">付録2:HEVC ダイナミック配信レンディション</h2>
+    <p>以下は、JSONでのHEVCレンディションの完全なプロパティです。</p>
+    <ul>
+      <li><a href="#video300hevc">デフォルトの HEVC 300 </a></li>
+      <li><a href="#video550hevc">デフォルト HEVC 550 </a></li>
+      <li><a href="#video1000hevc">デフォルトの HEVC 1000 </a></li>
+      <li><a href="#video1300hevc">デフォルト HEVC 1300 </a></li>
+      <li><a href="#video1600hevc">デフォルトの HEVC 1600 </a></li>
+      <li><a href="#video2850hevc">デフォルトの HEVC 2850 </a></li>
+      <li><a href="#"></a></li>
     </ul>
     <h3 id="video300hevc">デフォルトの HEVC 300</h3>
     <pre class="line-numbers"><code class="language-json" translate="No">{

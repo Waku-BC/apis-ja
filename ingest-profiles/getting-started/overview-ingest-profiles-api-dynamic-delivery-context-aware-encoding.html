@@ -1277,10 +1277,128 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
                   
                 <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
               
-
-                
+                <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
                   
-                    
+                
+              </ul>
+            
+          
+      </nav>
+    </div>
+    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
+  <!-- bootstrap layout -->
+
+<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
+
+<!-- search bar -->
+<div id="nav-search-box" style="margin-top: 1rem;"></div>
+<!-- in-page navigation for narrow screens -->
+<details class="centered-inpage-nav" id="centered_inpage_nav">
+  <summary><h6 class="toc">ページコンテンツ</h6></summary>
+  <nav id="centered_toc"></nav>
+  <ul id="centered_in_page_toc" class="list-none"></ul>
+</details>
+<!-- open in new tab/window -->
+<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
+
+
+
+
+
+
+<h1>概要: Ingest Profiles API</h1>
+<article class="bcls-article">
+  <summary>このトピックでは、取り込みプロファイル API の概要を説明します。プロファイルの取り込み API を使用すると、Video Cloud アカウントのレンディションプロファイルの作成、取得、更新、削除を行うことができます。</summary>
+<section class="bcls-section">
+<h2 id="Managing_Ingest_Profiles">トランスコードプロファイルを管理する</h2>
+
+<p>このバージョンの概要は、<a href="/dynamic-ingest/getting-started/overview-dynamic-delivery.html">動的配信が有効になっているアカウント向けです</a>。これらのアカウントは、<a href="/dynamic-ingest/ingest-guides/context-aware-encoding.html">コンテキスト認識エンコーディングを有効にする場合とそうでない場合があります</a>。<a href="/ingest-profiles/getting-started/overview-ingest-profiles-api-dynamic-delivery-context-aware-encoding.html">従来の取り込みプロファイルについては</a>、別の概要があります。</p>
+
+<p>インジェストプロファイルは、動画をアップロードまたは再トランスコードするときに、トランスコーディングの仕様として使用されます。これらのプロファイルは、Ingest Profiles API を使用して管理できます。</p>
+
+<p>「<a href="/ingest-profiles/references/reference.html"> API リファレンス</a>」も参照してください。</p>
+
+<aside class="bcls-aside bcls-aside--information">注: <a href="https://studio.support.brightcove.com/admin/managing-ingest-profiles.html"> Studio </a>を使用して取り込みプロファイルを管理することもできます。Video Cloud を独自の CMS と統合する場合を除き、これを行うことをお勧めします。</aside>
+
+<aside class="bcls-aside bcls-aside--warning">ユーザーが取得したコンテンツを使用してプロファイルを更新する目的で、プログラムでプロファイルを取得した場合、ユーザーはプロファイルをサニタイズし、レンディションの「id」のようなものを削除する必要がありますが、プロファイルではなく、「バージョン」を完全に削除する必要があります。</aside>
+</section>
+
+<section class="bcls-section">
+<h2 id="glossary">用語集</h2>
+
+<dl>
+	<dt>プロファイルJSON</dt>
+	<dd>
+	<p>以下の「プロファイル JSON」という用語は、プロファイルオブジェクトの JSON 表現を意味します。リストには、最上位のプロファイルフィールドとレンディションオブジェクトのコレクションが含まれます。<a href="/ingest-profiles-legacy/references/standard-ingest-profiles-legacy-transcoding.html">すべてのアカウントに含まれる標準プロファイルの</a> JSON については「標準プロファイル」、DRM パッケージを含むサンプルプロファイルについては「<a href="/dynamic-ingest/ingest-guides/ingesting-content-drm.html">コンテンツセキュリティ (DRM および HLSE) </a>」を参照してください。</p>
+	</dd>
+	<dt>プロフィール ID</dt>
+	<dd>
+	<p><code translate="No">profile id</code>は、<code translate="No">id</code><code translate="No">name</code>プロファイル内のトップレベルフィールドまたはトップレベルフィールドのいずれかになります。この例では（プロファイルの断片）：</p>
+
+	<pre class="line-numbers">
+<code class="language-json" translate="No">{
+		"id": "f1b16093e2dc4f81810f1488",
+		"version": 1,
+		"name": "multi-platform-extended-static",
+		"description": "Deliver high quality content for a wide range content types and screen sizes including mobile, desktop and large screens.", ...</code></pre>
+
+	<p>「マルチプラットフォーム拡張静的」または「f1b16093e2dc4f81810f148" は両方とも有効なプロファイル ID です。プロファイルを初めて作成するときは、ID を含まない名前を持つプロファイルを指定します。応答には、ID を含む作成されたプロファイルが含まれます。その後、後続の API 呼び出しでどちらを使用することもできます。</p>
+	</dd>
+	<dt> 参照ID</dt>
+	<dd>
+	<p>は、<code translate="No">reference_id</code>プロファイル内のレンディションを一意に識別します。参照 ID は DRM パッケージングに使用され、将来的には他の目的に使用される可能性があります。プロファイル内で一意である以外に、参照 ID には任意の文字列を指定できます。スペースを含めることはできません。レンディションの形式を簡単に識別できるスキームを使用することをお勧めします。たとえば<code translate="No">mp4_1</code>、<code translate="No">mp4_2</code>、<code translate="No">hls1</code>、<code translate="No">hls2</code>など</p>
+	</dd>
+	<dt>プロファイルのバージョン</dt>
+	<dd>
+	<p>A <code translate="No">version</code>は、アカウントのプロファイルのリビジョン番号です。これは、長い整数値で表されます。注：JSON表現では引用符で囲まれていません。</p>
+	</dd>
+	<dt>アクティブなプロファイル</dt>
+	<dd>
+	<p>プロファイルは、<code translate="No">active</code>アップロードに使用できるかどうかです。たとえば、プロファイルを更新すると、アクティブなバージョン番号が増分された新しいプロファイルが取得され、古いバージョンは非アクティブになります。</p>
+	</dd>
+	<dt>標準プロファイル</dt>
+	<dd>
+	<p>プロファイルとは、<code translate="No">standard</code>Brightcove ブが使用するために提供されている場合です（つまり、単一のアカウントに固有のカスタムプロファイルではありません）。</p>
+	</dd>
+	<dt>既定のプロファイル</dt>
+	<dd>
+	<p>プロファイルとは<code translate="No">default</code>、プロファイルが明示的に選択されていないときに使用される場合です。アカウント設定がない場合、または設定でデフォルトのプロファイルを設定していない場合は、アカウントタイプに応じて Brightcove <code translate="No">standard</code>プロファイルの 1 つが使用されます。</p>
+	</dd>
+</dl>
+</section>
+
+<section class="bcls-section">
+<h2 id="serviceURL">ベース URL</h2>
+
+<p>サービス URL は次のとおりです。</p>
+
+<pre class="line-numbers">
+<code class="language-http" translate="No">https://ingestion.api.brightcove.com/v1/</code></pre>
+</section>
+
+<section class="bcls-section">
+<h2 id="authorization">認証</h2>
+
+<p>API の認証は、Brightcove ブの OAuth2 実装を介して行われます。アカウントで次の操作を行うアクセス許可を持つクライアント資格情報 (クライアント ID とクライアントシークレット) が必要です。</p>
+
+<ul>
+	<li><code translate="No">video-cloud/ingest-profiles/profile/read</code></li>
+	<li><code translate="No">video-cloud/ingest-profiles/profile/write</code></li>
+	<li><code translate="No">video-cloud/ingest-profiles/account/read</code></li>
+	<li><code translate="No">video-cloud/ingest-profiles/account/write</code></li>
+</ul>
+
+<p><code translate="No">client_id</code>とを取得するには<code translate="No">client_secret</code>、OAuth UI に移動してアプリを登録する必要があります。</p>
+
+<ul>
+	<li><a href="/general/managing-api-authentication-credentials.html">API 認証資格情報の管理</a></li>
+</ul>
+
+<p>また、CURL または Postman 経由で資格を取得することもできます。以下を参照してください。</p>
+
+<ul>
+	<li><a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">CURL を使用してクライアント認証情報を取得する</a></li>
+	<li><a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">郵便配達を使用してクライアントの資格情報を取得する</a></li>
 </ul>
 
 <p>クライアントの認証情報を使用して、API を呼び出すためのアクセストークンを取得します。アクセストークンは Authorization ヘッダーで渡されます。</p>
