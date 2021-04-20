@@ -1277,10 +1277,176 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
                   
                 <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
               
-
-                
+                <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
                   
-                    
+                
+              </ul>
+            
+          
+      </nav>
+    </div>
+    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
+  <!-- bootstrap layout -->
+
+<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
+
+<!-- search bar -->
+<div id="nav-search-box" style="margin-top: 1rem;"></div>
+<!-- in-page navigation for narrow screens -->
+<details class="centered-inpage-nav" id="centered_inpage_nav">
+  <summary><h6 class="toc">ページコンテンツ</h6></summary>
+  <nav id="centered_toc"></nav>
+  <ul id="centered_in_page_toc" class="list-none"></ul>
+</details>
+<!-- open in new tab/window -->
+<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
+
+
+
+
+
+
+<h1>キューポイントの追加</h1>
+<article class="bcls-article">
+  <summary>このサンプルでは、CMS API を使用してプログラムによってビデオにキューポイントを追加する方法を学習します。</summary>
+  <section class="bcls-section">
+    <h2 id="introduction">はじめに</h2>
+
+    <aside class="bcls-aside bcls-aside--information language-editable">このサンプルおよび関連するコードは、本番環境の開発のためのガイドとして提供されます。このコードは、実稼働での使用が認定されておらず、公式にはサポートされていません。</aside>
+
+    <p>キューポイントは、ビデオタイムライン上の指定された場所です。ビデオが再生されると、キューポイントに到達するたびにイベントが自動的にブロードキャストされます。PlayerAPIを使用すると、これらのイベントをリッスンして、必要なアクションを実行できます。さらに、プレーヤーに保存されているビデオメタデータからすべてのキューポイント情報を読み取ることができます<code translate="No">mediainfo</code>オブジェクト、それはあなたがすることを可能にします<a href="https://player.support.brightcove.com/code-samples/brightcove-player-sample-ad-indicators-playback-bar.html">ビデオタイムラインでキューポイントをマークします</a>必要に応じて何らかの方法で。</p>
+
+    <p>キューポイントには次の2種類があります。</p>
+
+    <ul>
+      <li>広告キューポイント：これらは、広告リクエストを行う必要がある場所をマークするために使用されます（ビデオとプレーヤーで広告が有効になっている場合）。</li>
+      <li>コードキューポイント：これらは、Player APIを使用して何らかのアクションを実行するために使用されます-いくつかの典型的な使用法は、ある種の行動を促すフレーズ（CTA）を表示したり、ビデオコンテンツに関連する画像やテキストをビデオオーバーレイとして表示したり、プレーヤーの周りのページ。</li>
+    </ul>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="implementation_overview">実装の概要</h2>
+
+    <p>キューポイントを追加できます<a href="https://studio.support.brightcove.com/media/working-cue-points-media-module.html">スタジオメディアモジュール</a>。このサンプルで使用する方法であるCMSAPIを使用してそれらを追加することもできます。</p>
+
+    <h3>HTTPメソッド</h3>
+
+    <p>キューポイントは、次のいずれかの場合に追加できます。<a href="/cms/references/reference.html#api-videoGroup-Create_Video">ビデオを作成する</a>または後で<a href="/cms/references/reference.html#api-videoGroup-Update_Video">更新リクエスト</a>。このサンプルでは、既存のビデオにそれらを追加します。<a href="/cms/references/reference.html#api-videoGroup-Update_Video">ビデオアップデート</a>リクエスト、つまり、<code translate="No">PATCH</code>方法。</p>
+
+    <aside class="bcls-aside bcls-aside--information language-editable">ビデオを再度更新してキューポイントを変更または追加する場合は、キューポイントの配列全体をリクエスト本文に含める必要があります。</aside>
+
+    <h3>終点</h3>
+
+    <p>ビデオ更新リクエストのエンドポイントは次のとおりです。</p>
+
+    <pre class="line-numbers">
+          <code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/<span class="bcls-input">account_id</span></code> / videos / <span class="bcls-input"> video_id</span></pre>
+
+    <h3>リクエスト本文</h3>
+
+    <p>リクエストの本文は、ビデオメタデータの多くのアイテムを含むことができるJSONオブジェクトです。ここでは、<code translate="No">cue_points</code>次のサンプルのように、キューポイントオブジェクトの配列に設定されているフィールド。</p>
+
+    <pre class="line-numbers">
+          <code class="language-json" translate="No">{
+          "cue_points": [
+              {
+                "name": "Ad Cue Point",
+                "type": "AD",
+                "time": 2.0,
+                "metadata": null,
+                "force_stop": false
+              },
+              {
+                "name": "Code Cue Point",
+                "type": "CODE",
+                "time": 4.0,
+                "metadata": "The metadata might be text or the url for an image to display",
+                "force_stop": true
+              }
+            ]
+          }</code></pre>
+
+    <h3>キューポイントオブジェクトフィールド</h3>
+
+    <p>以下は、キューポイントオブジェクトのフィールドの説明です。</p>
+
+    <table class="bcls-table">
+      <caption class="bcls-caption--table">キューポイントオブジェクトフィールド</caption>
+      <thead class="bcls-table__head">
+        <tr>
+          <th>フィールド</th>
+          <th>タイプ</th>
+          <th>必須</th>
+          <th>説明</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td ><code translate="No">name</code></td>
+          <td >文字列</td>
+          <td >いいえ</td>
+          <td >任意の名前-これは、PlayerAPIコードの特定のキューポイントを識別するのに役立つ場合があります</td>
+        </tr>
+        <tr>
+          <td ><code translate="No">type</code></td>
+          <td >文字列</td>
+          <td >はい</td>
+          <td >でなければなりません<code translate="No">AD</code>または<code translate="No">CODE</code></td>
+        </tr>
+        <tr>
+          <td ><code translate="No">time</code></td>
+          <td >番号</td>
+          <td >はい</td>
+          <td >ビデオの開始から秒単位のキューポイントの時間<sup><strong><a href="#note1">[1]</a></strong></sup></td>
+        </tr>
+        <tr>
+          <td ><code translate="No">metadata</code></td>
+          <td >文字列</td>
+          <td >いいえ</td>
+          <td >最大128文字のシングルバイト文字列-これは、オーバーレイのテキストや表示する画像の場所など、キューポイントイベントハンドラーに役立つ情報になる可能性があります</td>
+        </tr>
+        <tr>
+          <td ><code translate="No">force_stop</code></td>
+          <td >ブール値</td>
+          <td >いいえ</td>
+          <td >キューポイントに達したときにビデオを一時停止するかどうか（<code translate="No">force_stop</code> Brightcove Playerによって無視され、現在サポートする予定はありませんが、キューポイントイベントハンドラーで手動でビデオを一時停止できます）</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>注</h3>
+
+    <ul>
+      <li id="note1" ><sup><strong>[1]</strong></sup>技術的には、キューポイントは次のキューポイントに到達するまでアクティブです。したがって、Brightcove Playerから取得できるキューポイント配列には、<code translate="No">startTime</code>そして<code translate="No">endTime</code>同様に<code translate="No">time</code>キューポイント用。</li>
+    </ul>
+  </section>
+
+  <section class="bcls-section">
+    <details>
+      <summary>
+        <h2 id="getCredentials">認証資格情報の取得</h2>
+      </summary>
+      <p><span translate="No">CMS API</span>を使用するには、適切な資格情報が必要です。</p>
+
+      <p>ほとんどの場合、資格情報を取得する最も簡単な方法は、Studioの管理API認証セクションを使用することです（アカウントに対する管理者権限が必要です）。詳細については、「<a href="/general/managing-api-authentication-credentials.html"> API 認証資格情報の管理</a>」を参照してください。ほとんどの場合、<span translate="No">CMS API</span>おそらくすべての操作のパーミッションを取得したいだけです。</p>
+
+      <figure class="bcls-figure"><img class="bcls-image" alt="CMS API のアクセス許可" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/cms-api/cms-permissions.png"/>
+        <figcaption class="bcls-caption--image">CMS API のアクセス許可</figcaption>
+      </figure>
+
+      <p>必要な権限が Studio で使用できない場合、または OAuth API から直接取得する場合は、以下に示す [ <strong>クライアント認証情報の取得</strong> ] ドキュメントを選択します。どちらのオプションを選択しても、正しい操作権限を要求する必要があります。以下を cURL または Postman で使用して、CMS API のすべての権限を取得できます。</p>
+
+      <pre class="line-numbers">
+          <code class="language-json" translate="No">"operations": [
+            "video-cloud/video/all",
+            "video-cloud/playlist/all",
+            "video-cloud/sharing-relationships/all",
+            "video-cloud/notifications/all"
+          ]</code></pre>
+
+      <ul>
+        <li><a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">OAuth:cURL を使用してクライアント認証情報を取得する</a></li>
+        <li><a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">OAuth:郵便配達を使用してクライアントの資格情報を取得する</a></li>
       </ul>
     </details>
   </section>

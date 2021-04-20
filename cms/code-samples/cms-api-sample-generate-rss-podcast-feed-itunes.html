@@ -1277,10 +1277,110 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
                   
                 <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
               
-
-                
+                <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
                   
-                    
+                
+              </ul>
+            
+          
+      </nav>
+    </div>
+    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
+  <!-- bootstrap layout -->
+
+<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
+
+<!-- search bar -->
+<div id="nav-search-box" style="margin-top: 1rem;"></div>
+<!-- in-page navigation for narrow screens -->
+<details class="centered-inpage-nav" id="centered_inpage_nav">
+  <summary><h6 class="toc">ページコンテンツ</h6></summary>
+  <nav id="centered_toc"></nav>
+  <ul id="centered_in_page_toc" class="list-none"></ul>
+</details>
+<!-- open in new tab/window -->
+<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
+
+
+
+
+
+
+<h1>iTunes用のRSSポッドキャストフィード</h1>
+<article class="bcls-article">
+  <summary>このサンプルでは、の使用方法を学習します<span translate="No">CMS API</span> AppleiTunes用のRSSポッドキャストフィードを生成します。</summary>
+  <section class="bcls-section">
+    <h2 id="Introduction">はじめに</h2>
+
+    <p>このアプリはポッドキャストを作成します<a href="https://itunespartner.apple.com/en/podcasts/overview">iTunesのRSSフィード</a> VideoCloudアカウントの1つ以上の音声のみのタイトルから。</p>
+
+    <aside class="bcls-aside bcls-aside--information language-editable">このサンプルおよび関連するコードは、本番環境の開発のためのガイドとして提供されます。このコードは、実稼働での使用が認定されておらず、公式にはサポートされていません。</aside>
+
+    <p><strong>注：必要な情報をすべて入力しても、フィードが生成されない場合、または動画が含まれていない場合は、<a href="#troubleshooting">トラブルシューティング</a>以下のセクション。</strong></p>
+
+    <section class="bcls-subsection">
+      <h3>このアプリを使用するために必要なもの：</h3>
+
+      <ul>
+        <li>検索で返されたすべての動画がフィードに含まれます。したがって、タグまたはカスタムフィールドを使用して、含めたい動画を正確に識別する必要があります。</li>
+        <li>フィード内のURL <strong>しなければならない</strong> MP4レンディションをポイントします。選択した動画にMP4レンディションがない場合、アプリは<strong>ない</strong>それらをフィードに含めます。</li>
+        <li>あなたが満足していることを確認してください<a href="https://help.apple.com/itc/podcasts_connect/#/itc1723472cb">Appleの要件</a>画像などについて。このアプリは、ポッドキャストのアートワークにポスター画像を使用します。カスタムを作成する必要があるかもしれません<a href="https://studio.support.brightcove.com/admin/managing-ingest-profiles.html">取り込みプロファイル</a>ポスターのサイズを画像の要件に合わせるため。</li>
+        <li>こちらもご覧ください<a href="https://help.apple.com/itc/podcasts_connect/?lang=en#/itc2b3780e76">ポッドキャストのベストプラクティス</a>（このアプリは、入力が許す限りそれらに従います）。</li>
+        <li>ポッドキャストは、オーディオのみのコンテンツとしてビデオクラウドに追加されます-を参照してください<a href="/general/audio-content.html">オーディオコンテンツ</a>これを行う方法の詳細については。</li>
+        <li>ポッドキャストのタイトル。タイトルが与えられていない場合、<code translate="No">name</code>ビデオ（またはエピソードのグループの最初のビデオ）のが使用されます。</li>
+        <li>ポッドキャストの説明。</li>
+        <li>あなたのサイトのURL（例：https：//yoursiteurl.com）</li>
+        <li>このフィードがホストされるURL（例：https：//yoursiteurl.com/feeds/podcast.rss）</li>
+        <li>著者（個人名または組織名）。</li>
+        <li>ポッドキャストの連絡先メールアドレス</li>
+        <li>放送の概要（これを省略した場合は、<code translate="No">description</code>ビデオクラウドから）。</li>
+      </ul>
+
+      <p>以下のアプリには、提供する必要のあるすべての情報の入力フィールドが含まれています。アプリがデータとビデオのメタデータをポッドキャストフィードフィールドにマッピングする方法を確認するには、<a href="#Field_mappings">フィールドマッピング</a>ページ下部のセクション。</p>
+    </section>
+
+    <section class="bcls-subsection">
+      <h3>URLトークン化</h3>
+
+      <p>上記の要件に加えて、アカウントのURLトークン化を変更する必要があります。VideoCloudは<code translate="No">ttl</code>コンテンツが盗まれるのを防ぐためのレンディションのURLへのトークン。デフォルトでは、これらのトークンの寿命は非常に短く、ポッドキャストには短すぎます。あなたはする必要があります<a href="https://supportportal.brightcove.com/s/login/?language=en_US">Brightcoveサポートに連絡する</a>トークンの存続可能時間の値を高く設定するようにします。指定できる範囲は 1 時間から 1 年です。ポッドキャストを利用できるようにする時間に適した値に設定するように依頼します。ただし、これはアカウント設定であることを覚えておいてください。他の動画のセキュリティを危険にさらす可能性があるため、この値を高く設定しないでください。</p>
+    </section>
+
+    <section class="bcls-subsection">
+      <h3>アプリの動作に関する注意事項</h3>
+
+      <ul>
+        <li>フィードに必要な情報を入力した後、アカウントから（最大20）動画を取得します</li>
+        <li>ポッドキャストビデオに名前を付けたり、タグを付けたり、カスタムフィールド値を設定したりすると、見つけやすくなります。</li>
+        <li>次に、フィード用に1つ以上のビデオを選択します</li>
+        <li>複数の動画を選択した場合、アプリはこれらがポッドキャストエピソードであり、動画のアクティブ化日がエピソードの順序を反映していると想定します</li>
+      </ul>
+    </section>
+  </section>
+
+  <section class="bcls-section">
+    <details>
+      <summary>
+        <h2 id="getCredentials">資格情報を取得する</h2>
+      </summary>
+
+      <p><span translate="No">CMS API</span>を使用するには、適切な資格情報が必要です。</p>
+
+      <p>ほとんどの場合、資格情報を取得する最も簡単な方法は、Studioの管理API認証セクションを使用することです（アカウントに対する管理者権限が必要です）。詳細については、「<a href="/general/managing-api-authentication-credentials.html"> API 認証資格情報の管理</a>」を参照してください。ほとんどの場合、<span translate="No">CMS API</span>おそらくすべての操作のパーミッションを取得したいだけです。</p>
+
+      <figure class="bcls-figure"><img class="bcls-image" alt="CMS API のアクセス許可" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/cms-api/cms-permissions.png"/>
+        <figcaption class="bcls-caption--image">CMS API のアクセス許可</figcaption>
+      </figure>
+
+      <p>必要な権限が Studio で使用できない場合、または OAuth API から直接取得する場合は、以下に示す [ <strong>クライアント認証情報の取得</strong> ] ドキュメントを選択します。どちらのオプションを選択しても、正しい操作権限を要求する必要があります。以下を cURL または Postman で使用して、CMS API のすべての権限を取得できます。</p>
+
+      <pre class="line-numbers">
+        <code class="language-json" translate="No">"operations": [
+          "video-cloud/video/all"
+        ]</code></pre>
+
+      <ul>
+        <li><a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">OAuth:cURL を使用してクライアント認証情報を取得する</a></li>
+        <li><a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">OAuth:郵便配達を使用してクライアントの資格情報を取得する</a></li>
       </ul>
     </details>
   </section>

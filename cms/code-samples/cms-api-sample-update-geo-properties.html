@@ -1277,10 +1277,77 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
                   
                 <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
               
-
-                
+                <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
                   
-                    
+                
+              </ul>
+            
+          
+      </nav>
+    </div>
+    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
+  <!-- bootstrap layout -->
+
+<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
+
+<!-- search bar -->
+<div id="nav-search-box" style="margin-top: 1rem;"></div>
+<!-- in-page navigation for narrow screens -->
+<details class="centered-inpage-nav" id="centered_inpage_nav">
+  <summary><h6 class="toc">ページコンテンツ</h6></summary>
+  <nav id="centered_toc"></nav>
+  <ul id="centered_in_page_toc" class="list-none"></ul>
+</details>
+<!-- open in new tab/window -->
+<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
+
+
+
+
+
+
+<h1>図形プロパティの更新</h1>
+<article class="bcls-article">
+  <summary>このサンプルでは、アカウント内のすべての動画の地情報フィルタリングプロパティを更新する方法を学習します。アプリはサンプルアカウントの 1 つでのみ実行されますが、再作成する場合は、アクセストークンの取得と API リクエストの実行に使用されるプロキシを除き、すべてのコードが CodePen にあります。プロキシのコードはページのさらに下に表示されます。</summary>
+  <section class="bcls-section">
+    <h2 id="limitations">このアプリの制限事項</h2>
+
+    <aside class="bcls-aside bcls-aside--information language-editable">このサンプルおよび関連するコードは、本番環境の開発のためのガイドとして提供されます。このコードは、実稼働での使用が認定されておらず、公式にはサポートされていません。</aside>
+
+    <ul>
+      <li>アプリは、同じ地理設定でアカウント内のすべてのビデオを更新します-フォルダまたはいくつかの検索条件でそれらを要求することによって、ビデオの一部だけを選択するオプションを追加することはかなり簡単です。</li>
+      <li>例外処理はありません-ここで使用されているような小さなアカウントの場合、それはあまり重要ではありません-APIリクエストがタイムアウトした場合、その時点でアプリが失敗し、単にそれを再実行できます。大規模なアカウントの場合、いくつかの例外処理を追加したいでしょう-少なくとも<code translate="No">offset</code>変数を使用します。この変数は、処理された動画の数を追跡するため、その時点でアプリを再起動できます。</li>
+      <li>大規模なアカウントの場合、処理が完了するまでには時間がかかり、アプリが処理を開始した後に追加された動画は失われます。ただし、アプリは処理した動画の数を教えてくれるので、後で別の数の動画を取得して、見逃した動画がないかどうかを確認できます。結果は作成日の昇順でソートされるため、見逃した動画はアカウントに追加された最後の動画になります。</li>
+    </ul>
+  </section>
+
+  <section class="bcls-section">
+    <details>
+      <summary>
+        <h2 id="getCredentials">資格情報を取得する</h2>
+      </summary>
+
+      <p ><span translate="No">CMS API</span>を使用するには、適切な資格情報が必要です。</p>
+
+      <p >ほとんどの場合、資格情報を取得する最も簡単な方法は、Studioの管理API認証セクションを使用することです（アカウントに対する管理者権限が必要です）。詳細については、「<a href="/general/managing-api-authentication-credentials.html"> API 認証資格情報の管理</a>」を参照してください。ほとんどの場合、<span translate="No">CMS API</span>おそらくすべての操作のパーミッションを取得したいだけです。</p>
+
+      <figure class="bcls-figure"><img class="bcls-image" alt="CMS API のアクセス許可" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/cms-api/cms-permissions.png"/>
+        <figcaption class="bcls-caption--image">CMS API のアクセス許可</figcaption>
+      </figure>
+
+      <p >必要な権限が Studio で使用できない場合、または OAuth API から直接取得する場合は、以下に示す [ <strong>クライアント認証情報の取得</strong> ] ドキュメントを選択します。どちらのオプションを選択しても、正しい操作権限を要求する必要があります。以下を cURL または Postman で使用して、CMS API のすべての権限を取得できます。</p>
+
+      <pre class="line-numbers">
+            <code class="language-json" translate="No">"operations": [
+              "video-cloud/video/all",
+              "video-cloud/playlist/all",
+              "video-cloud/sharing-relationships/all",
+              "video-cloud/notifications/all"
+            ]</code></pre>
+
+      <ul>
+        <li><a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">OAuth:cURL を使用してクライアント認証情報を取得する</a></li>
+        <li><a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">OAuth:郵便配達を使用してクライアントの資格情報を取得する</a></li>
       </ul>
     </details>
   </section>
