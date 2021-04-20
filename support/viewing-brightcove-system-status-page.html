@@ -1114,10 +1114,90 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
                   
                 <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
               
-
-                
+                <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
                   
-                    
+                
+              </ul>
+            
+          
+      </nav>
+    </div>
+    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
+  <!-- bootstrap layout -->
+
+<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
+
+<!-- search bar -->
+<div id="nav-search-box" style="margin-top: 1rem;"></div>
+<!-- in-page navigation for narrow screens -->
+<details class="centered-inpage-nav" id="centered_inpage_nav">
+  <summary><h6 class="toc">ページコンテンツ</h6></summary>
+  <nav id="centered_toc"></nav>
+  <ul id="centered_in_page_toc" class="list-none"></ul>
+</details>
+<!-- open in new tab/window -->
+<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
+
+
+
+
+
+
+<!-- 
+  This content appears on all sites!
+  
+  If you update in one place, you MUST update it in all!
+ -->
+
+ <h1>Brightcove Systemのステータスページを表示する</h1>
+ <article class="bcls-article">
+  <summary>このトピックでは、Brightcove のサービスおよびアプリケーションの更新に関する [Brightcove System Status] ページを表示します。</summary>
+  <section class="bcls-section">
+    <p>Brightcove ブは、すべての Brightcove サービスとアプリケーションのステータスを継続的に監視します。サービスに何らかの中断があると、システムステータスページに表示されます。本ページには、予定されているメンテナンス通知もすべて掲載されます。</p>
+    <p>[システムステータス] ページにアクセスするには、<a href="https://status.brightcove.com"> https://status.brightcove.com </a>にアクセスするか、ナビゲーションヘッダーから [サポート] アイコン ( <img class="bcls-image--no-border" alt="" src="https://general.support.brightcove.com/assets/images/support/question-icon.png"/> ) をクリックし、[ &nbsp;<strong>システムステータス</strong> ] をクリックします。</p>
+    <figure class="bcls-figure"><img class="bcls-image--no-border" alt="" src="https://general.support.brightcove.com/assets/images/support/system-status.png"/></figure>
+    <p>投稿されたすべての通知には、以下の情報が含まれます。</p>
+    <ul>
+      <li>インシデントステータス
+        <ul>
+          <li>運用可能 (緑)</li>
+          <li>通知 (青-システムは現在動作中ですが、遅延または断続的な停止の影響を受ける)</li>
+          <li>部分的なサービス中断 (黄色)</li>
+          <li>フルサービスの中断 (赤)</li>
+        </ul>
+      </li>
+      <li>コンポーネント － 影響を受けるサービスまたは領域</li>
+      <li>場所
+        <ul>
+          <li>アジア・太平洋</li>
+          <li>アメリカ</li>
+          <li>エメア</li>
+          <li>日本</li>
+        </ul>
+      </li>
+      <li>現在の状態とステータス。状態には以下があります。
+        <ul>
+          <li>調査中-エンジニアが問題を調査中</li>
+          <li>特定-エンジニアが問題を特定し、修正を検討している</li>
+          <li>モニタリング-問題の解決とエンジニアリング監視により、すべてが正常であることを確認する</li>
+          <li>解決済み-問題が解決しました</li>
+        </ul>
+      </li>
+    </ul>
+    <p>投稿されたメッセージはすべて英語で、使用時間は東部標準時 (GMT-5) です。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="history">システム状態の履歴を表示する</h2>
+    <p>システムステータスの履歴を表示するには、ページ上部の[<strong>履歴</strong>]リンクをクリックします。</p>
+    <figure class="bcls-figure"><img class="bcls-image--no-border" alt="" src="https://general.support.brightcove.com/assets/images/support/system-status-history.png"/></figure>
+  </section>
+  <section class="bcls-section">
+    <h2 id="subscribe">システム状態の変更を購読する</h2>
+    <p>サインアップして、システムステータスが変更されたときに通知を受け取ることができます。このセクションの構成は次のとおりです。</p>
+    <ul>
+      <li><a href="#email">メールを購読中</a></li>
+      <li><a href="#webhook">webhookを購読中</a></li>
+      <li><a href="#manage">サブスクリプションの管理</a></li>
     </ul>
     <h3 id="email">メールを購読中</h3>
     <p>メールで通知を受信するには、[ <strong>購読</strong> ] ボタンをクリックし、メールアドレスを入力して [ <strong>購読</strong> ] をクリックします。</p>
