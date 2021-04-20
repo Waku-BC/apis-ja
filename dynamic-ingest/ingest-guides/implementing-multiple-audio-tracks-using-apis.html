@@ -1277,10 +1277,537 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
                   
                 <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
               
-
-                
+                <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
                   
-                    
+                
+              </ul>
+            
+          
+      </nav>
+    </div>
+    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
+  <!-- bootstrap layout -->
+
+<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
+
+<!-- search bar -->
+<div id="nav-search-box" style="margin-top: 1rem;"></div>
+<!-- in-page navigation for narrow screens -->
+<details class="centered-inpage-nav" id="centered_inpage_nav">
+  <summary><h6 class="toc">ページコンテンツ</h6></summary>
+  <nav id="centered_toc"></nav>
+  <ul id="centered_in_page_toc" class="list-none"></ul>
+</details>
+<!-- open in new tab/window -->
+<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
+
+
+
+
+
+
+<h1>複数のオーディオトラックの実装</h1>
+<article class="bcls-article">
+  <summary>このトピックでは、Dynamic Ingest および CMS API を使用して、ビデオの複数のオーディオトラックを追加および管理する方法について説明します。</summary>
+    <section class="bcls-section">
+    <h2 id="introduction">はじめに</h2>
+
+    <p>複数のオーディオトラックを 1 つのタイトルに関連付ける機能は、いくつかの重要なシナリオで役立ちます。</p>
+
+    <ul>
+      <li>同じビデオを異なる言語で再生し、グローバルに幅広いリーチに対応 </li>
+      <li>視覚障害者の説明を音声で提供</li>
+    </ul>
+
+    <p>オーディオトラックの追加はStudioでも実行できることに注意してください。を参照してください。<a href="https://studio.support.brightcove.com/media/adding-audio-tracks-videos-using-media-module.html">メディアモジュールを使用したビデオへのオーディオトラックの追加</a>詳細については。</p>
+
+    <h3>サポートされているビデオ形式</h3>
+
+    <p>複数のオーディオトラックがサポートされています<code translate="No">HLS V4+</code>そして<code translate="No">DASH</code> -ありとなし<code translate="No">DRM</code>保護。</p>
+
+    <aside class="bcls-aside bcls-aside--information">注：
+    <ul>
+      <li>複数のオーディオトラックは、次のように設定されたビデオでのみ使用できます<a href="/dynamic-ingest/getting-started/overview-dynamic-ingest-api-dynamic-delivery.html">動的配信</a>。</li>
+      <li>アカウントは、複数のオーディオトラックに対して有効にする必要があります。アカウントを有効にするには、アカウントマネージャーに連絡してください。</li>
+      <li>ビデオが取り込まれた後にオーディオトラックが追加される場合は、ビデオが取り込まれたのと同じ取り込みプロファイルを使用する必要があります</li>
+    </ul>
+    </aside>
+
+    <h3>サンプル</h3>
+
+    <p>以下は、複数のオーディオトラックを含むビデオの簡単な例です。</p>
+    <iframe src="//players.brightcove.net/57838016001/default_default/index.html?videoId=5413700943001" allowfullscreen="" webkitallowfullscreen="" mozallowfullscreen="" width="600" height="337.5"></iframe></section>
+
+    <section class="bcls-section">
+    <h2 id="setup">セットアップ</h2>
+
+    <p>のセットアップ<span translate="No">Dynamic Ingest</span>ビデオ、画像、オーディオトラックを取り込んでいるかどうかに関係なく、リクエストは同じです。<span translate="No">WebVTT</span>ファイル、またはこれらすべて：</p>
+
+    <dl>
+      <dt >URL をリクエスト</dt>
+      <dd >
+      <pre class="line-numbers">
+      <code class="language-http" translate="No">https://ingest.api.brightcove.com/v1/accounts/{account_id}/videos/{video_id}/ingest-requests</code></pre>
+      </dd>
+      <dt >認証</dt>
+      <dd >認証には、<code translate="No">Bearer</code><code translate="No">Authorization</code>アクセストークンをトークンとしてヘッダーに渡す必要があります。
+      <pre class="line-numbers">
+      <code class="language-bash" translate="No">Authorization: Bearer {access_token}</code></pre>
+
+      <p>アクセストークンを取得するには、次のものが必要になります<strong>クライアントの資格情報</strong>（下記参照）。アクセストークンを取得するプロセスについては、を参照してください。<a href="/oauth/guides/getting-access-tokens.html">アクセストークンを取得する</a>。</p>
+      </dd>
+    </dl>
+
+    <h3>S3 に関する注意</h3>
+
+    <p>ソースファイルが保護されたS3バケットからプルされる場合は、バケットポリシーを設定して許可する必要があります<span translate="No">Video Cloud</span>ファイルにアクセスします。見る<a href="/dynamic-ingest/general/using-dynamic-ingest-s3.html#setPolicy">使用する<span translate="No">Dynamic Ingest</span> S3で</a>詳細については。</p>
+    </section>
+
+    <section class="bcls-section">
+      <details>
+    <summary>
+      <h2 id="gettingCredentials">認証情報の取得</h2>
+    </summary>
+
+    <p><code translate="No">client_id</code>とを取得するには<code translate="No">client_secret</code>、OAuth UI に移動してこのアプリを登録する必要があります。</p>
+
+    <ul>
+      <li><a href="/general/managing-api-authentication-credentials.html">API 認証資格情報の管理</a></li>
+    </ul>
+
+    <p>必要な権限は次のとおりです。</p>
+
+    <figure class="bcls-figure"><img class="bcls-image" alt="動的取り込み権限" src="/assets/images/dynamic-ingest/code-samples/di-permissions.png"/>
+    <figcaption class="bcls-caption--image"><span translate="No">Dynamic Ingest</span>パーミッション</figcaption>
+    </figure>
+
+    <p>を介して資格情報を取得することもできます<span translate="No">CURL</span>または<span translate="No">Postman</span> - 見る：</p>
+
+    <ul>
+      <li><a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">を使用してクライアント資格情報を取得する<span translate="No">CURL</span></a></li>
+      <li><a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">を使用してクライアント資格情報を取得する<span translate="No">Postman</span></a></li>
+    </ul>
+
+    <p>API から直接認証情報を取得する場合は、次の権限が必要です。</p>
+
+    <pre class="line-numbers">
+      <code class="language-json" translate="No">[
+        "video-cloud/video/all",
+        "video-cloud/ingest-profiles/profile/read",
+        "video-cloud/ingest-profiles/account/read",
+        "video-cloud/upload-urls/read"
+      ]</code></pre>
+    </details>
+    </section>
+
+    <section class="bcls-section">
+    <h2 id="workflow">ワークフロー</h2>
+
+    <p>2つの主な使用例があります。</p>
+
+    <ul>
+      <li>複数のオーディオトラックを含む新しいビデオを取り込む
+      <figure class="bcls-figure"><img class="bcls-image" style="max-height:175px" alt="新しいビデオワークフロー" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/di-api/guides/multiple-audio-tracks/new-video-workflow.svg"/>
+      <figcaption class="bcls-caption--image">新しいビデオワークフロー</figcaption>
+      </figure>
+      </li>
+      <li>既存のビデオに複数のオーディオトラックを追加する
+      <figure class="bcls-figure"><img class="bcls-image" style="max-height:175px" alt="既存のビデオワークフロー" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/di-api/guides/multiple-audio-tracks/existing-video.svg"/>
+      <figcaption class="bcls-caption--image">既存のビデオワークフロー</figcaption>
+      </figure>
+      </li>
+    </ul>
+
+    <p>以下のセクションでAPIリクエストの詳細を見ていきます。</p>
+    </section>
+
+    <section class="bcls-section">
+    <h2 id="Audio_track_metadata">オーディオトラックのメタデータ</h2>
+
+    <p>オーディオトラックに添付されたメタデータフィールドがいくつかあります-これらのいくつかはトラックを取り込むときに設定されますが、他はによって作成されます<span translate="No">Video Cloud</span>。これらのフィールドの一部は読み取り専用であり、その他はユーザーが更新できます。メタデータフィールドについては、関連するAPIリクエストのコンテキストで以下で詳しく説明しますが、Brightcove Playerが複数のオーディオトラックを処理する方法を決定する上で重要であるため、2つの特定のフィールドについてここで説明する必要があります。</p>
+
+    <h3><code translate="No">language</code></h3>
+
+    <p>ザ・<code translate="No">language</code>取り込み中に各トラックに設定されるフィールドは、トラックの言語を指定します。トラックがビデオ内の話し言葉のダブである場合、これは重要です。このフィールドの値は、次のような2文字のコードになります。<code translate="No">en</code>または<code translate="No">hi</code>。言語コードの完全なリストについては、<code translate="No">Subtag</code>の値<a href="http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry">http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry</a>。</p>
+
+    <h3><code translate="No">variant</code></h3>
+
+    <p>ザ・<code translate="No">variant</code>フィールドは、オーディオトラックの種類を示します。標準的な意味を持つ可能な値は次のとおりです。</p>
+
+    <ul>
+      <li><code translate="No">main</code> -メイントラック、通常はビデオファイルに多重化されたトラック</li>
+      <li><code translate="No">alternate</code> -代替オーディオトラック</li>
+      <li><code translate="No">commentary</code> -ビデオトラックの解説を提供するオーディオトラック</li>
+      <li><code translate="No">dub</code> -別の言語で話された単語のダビングされたバージョンを含むトラック</li>
+      <li><code translate="No">descriptive</code> -トラックは何らかの方法でビデオコンテンツを説明しています</li>
+    </ul>
+
+    <h3>アカウントのデフォルト</h3>
+
+    <p>アカウントのデフォルトを設定できます<code translate="No">language</code>そして<code translate="No">variant</code> Brightcove Playerによってデフォルトとして扱われるオーディオトラックを決定します（以下のセクションで説明するように、トラックのメタデータを更新することでデフォルトをオーバーライドすることもできます）。アカウントのデフォルトを設定するには、<a href="https://supportportal.brightcove.com/s/login/?language=en_US"> Brightcoveサポートに連絡する</a>。</p>
+    </section>
+
+    <section class="bcls-section">
+    <h2 id="Ingest_audio_tracks">オーディオトラックを取り込む</h2>
+
+    <p>次に、前述の2つのユースケースのオーディオトラックを取り込むためのAPI呼び出しについて説明します。</p>
+
+    <h3>複数のオーディオトラックを含む新しいビデオ</h3>
+
+    <h4>ビデオオブジェクトを作成します（<span translate="No">CMS API</span>）</h4>
+
+    <ol class="blcs-tasklist">
+      <li>ビデオオブジェクトを作成するときに、ビデオメタデータのいくつかのアイテムを追加できますが、ここでは最小限のものを追加します。<code translate="No">name</code>ビデオの場合：
+
+      <pre class="line-numbers">
+      <code class="language-json" translate="No">{
+          "name": "<span class="bcls-input">YOUR_VIDEO_NAME</span>"
+      }</code></pre>
+      </li>
+      <li>上記のJSONを（プレースホルダーテキストを動画名に置き換えて）リクエスト本文として送信します<code translate="No">POST</code>リクエストする<code translate="No">https://cms.api.brightcove.com/v1/accounts/<span class="bcls-input">YOUR_ACCOUNT_ID</span>/videos</code></li>
+      <li>応答で多くのビデオメタデータが返されますが、ここで重要なのは<code translate="No">id</code>（ビデオID）、次のステップに必要です。</li>
+    </ol>
+
+    <h4>ビデオトラックとオーディオトラックを取り込む</h4>
+
+    <p>次に、ビデオトラックとオーディオトラックを取り込みます（画像やテキストトラックなどの他のアセットを追加することもできますが、ここでは単純にしておきます）。少し紛らわしいと思うかもしれませんが、<code translate="No">audio_tracks</code>リクエスト本文のJSONに2回表示されます。</p>
+
+    <ul>
+      <li>アン<code translate="No">audio_tracks</code>内のオブジェクト<code translate="No">master</code>オブジェクトには、ビデオファイルに含まれるオーディオトラックのメタデータが含まれます（存在する場合-これはオーディオの多重化とも呼ばれます）-オーディオトラックはすでにに含まれているため、これにはオーディオファイルのURLなしでメタデータのみが含まれますビデオファイル</li>
+      <li>トップレベル<code translate="No">audio_tracks</code>取り込みている追加のオーディオトラックを説明するオブジェクト-これらには、オーディオファイルのURLとその他のメタデータが含まれます</li>
+    </ul>
+
+    <ol class="bcls-tasklist">
+      <li>リクエスト本文で送信されるJSONデータは次のとおりです。
+      <pre class="line-numbers">
+      <code class="language-json" translate="No">{
+        "master": {
+            "url": "<span class="bcls-input">https://learning-services-media.brightcove.com/videos/Great_Blue_Heron.mp4</span>",
+            "audio_tracks": [
+                {
+                    "language": "<span class="bcls-input">en</span>",
+                    "variant": "main"
+                }
+            ]
+        },
+        "audio_tracks": {
+            "merge_with_existing": true,
+            "masters": [
+                {
+                    "url": "<span class="bcls-input">http://learning-services-media.brightcove.com/audio/celtic_lullaby.m4a</span>",
+                    "language": "<span class="bcls-input">en</span>",
+                    "variant": "<span class="bcls-input">alternate</span>"
+                },
+                {
+                    "url": "<span class="bcls-input">http://learning-services-media.brightcove.com/audio/audio1.m4a</span>",
+                    "language": "<span class="bcls-input">en</span>",
+                    "variant": "<span class="bcls-input">commentary</span>"
+                }
+            ]
+        },
+          "profile": "<span class="bcls-input">BoltIngestProfile</span>",
+          "capture-images": true,
+          "callbacks": [
+              "http://solutions.brightcove.com/bcls/di-api/di-callbacks.php"
+          ]
+      }</code></pre>
+      </li>
+      <li>上記のJSONを送信し、プレースホルダーを独自のURLに置き換えて、<code translate="No">language</code>そして<code translate="No">variant</code>値、<code translate="No">POST</code>リクエストする<code translate="No">https://ingest.api.brightcove.com/v1/accounts/<span class="bcls-input">ACCOUNT_ID</span>/videos/<span class="bcls-input">ID/ingest-requests</span></code>（<code translate="No">ID</code>これは、ビデオオブジェクトを作成するためのリクエストから返されたビデオIDです）</li>
+    </ol>
+
+    <h3 id="Add_audio_tracks_to_an_existing_video">既存のビデオにオーディオトラックを追加する</h3>
+
+    <p>既存のビデオにオーディオトラックを追加する場合、手順は同じですが、リクエストを行う必要がない点が異なります。<span translate="No">CMS API</span>ビデオはすでに存在するため、作成します。そして、へのリクエストで<span translate="No">Dynamic Ingest</span> API、ビデオファイルまたはのURLを含める必要はありません<code translate="No">audio_tracks</code>下<code translate="No">master</code>オーディオで多重化されたメタデータを提供します。ただし、既存のビデオのオーディオトラックに多重化されたメタデータを含める必要があります。したがって、取り込みリクエストのJSONは次のようになります。</p>
+
+    <pre class="line-numbers">
+      <code class="language-json" translate="No">{
+        "audio_tracks": {
+            "merge_with_existing": true,
+            "masters": [
+                {
+                    "url": "<span class="bcls-input">http://learning-services-media.brightcove.com/audio/celtic_lullaby.m4a</span>",
+                    "language": "<span class="bcls-input">en</span>",
+                    "variant": "<span class="bcls-input">alternate</span>"
+                },
+                {
+                    "url": "<span class="bcls-input">http://learning-services-media.brightcove.com/audio/audio1.m4a"</span>,
+                    "language": "<span class="bcls-input">en</span>",
+                    "variant": "<span class="bcls-input">commentary</span>"
+                }
+            ]
+        },
+          "profile": "BoltIngestProfile",
+          "capture-images": true,
+          "callbacks": [
+              "http://solutions.brightcove.com/bcls/di-api/di-callbacks.php"
+          ]
+      }</code></pre>
+
+    <h3>取り込み用のオーディオトラックフィールド</h3>
+
+    <table class="bcls-table">
+      <caption class="bcls-caption--table">オーディオトラックフィールド</caption>
+      <thead class="bcls-table__head">
+        <tr>
+          <th>フィールド</th>
+          <th>タイプ</th>
+          <th>説明</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">master.audio_tracks</code></td>
+          <td>オブジェクト []</td>
+          <td>オーディオで多重化されたメタデータ</td>
+        </tr>
+        <tr>
+          <td><code translate="No">master.audio_tracks.language</code></td>
+          <td>文字列</td>
+          <td>のサブタグからの音声で多重化された言語コード<a href="http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry">http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry</a></td>
+        </tr>
+        <tr>
+          <td><code translate="No">master.audio_tracks.variant</code></td>
+          <td>文字列</td>
+          <td>オーディオトラックの種類: <code translate="No">main</code> | | <code translate="No">alternate<code translate="No">dub</code></code> | <code translate="No">commentary</code> | <code translate="No">descriptive</code> ( <code translate="No">main</code>は一般的にオーディオで多重化されたものに使用されます）</td>
+        </tr>
+        <tr>
+          <td><code translate="No">audio_tracks</code></td>
+          <td>オブジェクト</td>
+          <td>追加のオーディオトラックに関する情報</td>
+        </tr>
+        <tr>
+          <td><code translate="No">audio_tracks.merge_with_existing</code></td>
+          <td>ブール値</td>
+          <td>これらのトラックを既存のトラックにマージするか、置き換えるか</td>
+        </tr>
+        <tr>
+          <td><code translate="No">audio_tracks.masters</code></td>
+          <td>オブジェクト []</td>
+          <td>個々のオーディオトラックの情報</td>
+        </tr>
+        <tr>
+          <td><code translate="No">audio_tracks.masters.url</code></td>
+          <td>文字列</td>
+          <td>オーディオトラックファイルのURL</td>
+        </tr>
+        <tr>
+          <td><code translate="No">audio_tracks.masters.language</code></td>
+          <td>文字列</td>
+          <td><a href="http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry">http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry </a>のサブタグからのオーディオトラックの言語コード</td>
+        </tr>
+        <tr>
+          <td><code translate="No">audio_tracks.masters.variant</code></td>
+          <td>文字列</td>
+          <td>オーディオトラックの種類: <code translate="No">main</code> | | <code translate="No">alternate<code translate="No">dub</code></code> | <code translate="No">commentary</code> | <code translate="No">descriptive</code> ( <code translate="No">main</code>は一般的にオーディオで多重化されたものに使用されます）</td>
+        </tr>
+      </tbody>
+    </table>
+    </section>
+
+    <section class="bcls-section">
+    <h2 id="Notifications">通知</h2>
+
+    <p>1つ以上を指定した場合<strong>折り返し電話</strong> URL（上記の取り込みリクエストのサンプルJSONのように）、<span translate="No">Video Cloud</span>取り込みたオーディオトラックごとに通知を送信します。通知は次のようになります。</p>
+
+    <pre class="line-numbers">
+      <code class="language-json" translate="No">{
+        "entity": "default/audio128",
+        "entityType": "DYNAMIC_RENDITION",
+        "version": "1",
+        "action": "CREATE",
+        "jobId": "0f703adb-0f17-4a35-8395-21c7fcdd2649",
+        "videoId": "5298468208001",
+        "dynamicRenditionId": "default/audio128",
+        "accountId": "1910141565001",
+        "status": "SUCCESS",
+        "language" : "en",
+        "variant" : "alternate"
+      }</code></pre>
+
+    <p>オーディオトラックの通知を特定するには、<code translate="No">language</code>そして<code translate="No">variant</code>通知のフィールド。ザ・<code translate="No">"action": "CREATE"</code>そして<code translate="No">"status": "SUCCESS"</code>フィールドは、トラックが正常に取り込まれたことを示します。</p>
+    </section>
+
+    <section class="bcls-section">
+    <h2 id="Managing_audio_tracks">オーディオトラックの管理</h2>
+
+    <p>オーディオトラックを取り込んだら、<span translate="No">CMS API</span>。</p>
+
+    <h3>ビデオのすべてのオーディオトラックメタデータを取得する</h3>
+
+    <p>ビデオに関連付けられているすべてのオーディオトラックのメタデータを取得するには、<code translate="No">GET</code>リクエスト先：</p>
+
+    <pre class="line-numbers">
+      <code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/<span class="bcls-input">account_id</span>/videos/<span class="bcls-input">video id</span>/audio_tracks</code></pre>
+
+    <p>応答は、各オーディオトラックのメタデータを含むオブジェクトの配列になります。詳細については、以下の回答フィールドの表を参照してください。</p>
+
+    <pre class="line-numbers">
+      <code class="language-json" translate="No">[
+        {
+          "id": "en_alternate",
+          "language": "en",
+          "variant": "alternate",
+          "duration": 86100,
+          "encoding_rates": [
+            64000,
+            96000,
+            127000
+          ]
+        },
+        {
+          "id": "en_commentary",
+          "language": "en",
+          "variant": "commentary",
+          "duration": 34203,
+          "encoding_rates": [
+            10000,
+            13000,
+            15000
+          ]
+        },
+        {
+          "id": "en_main",
+          "language": "en",
+          "variant": "main",
+          "duration": 31488,
+          "encoding_rates": [
+            62000,
+            94000,
+            125000
+          ]
+        }
+      ]</code></pre>
+
+    <p>メディアモジュールのビデオを表示して、Studioでこの情報を表示することもできます。</p>
+
+    <figure class="bcls-figure"><img class="bcls-image" alt="スタジオのオーディオトラック情報" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/di-api/guides/multiple-audio-tracks/audio-tracks-in-studio.png"/>
+    <figcaption class="bcls-caption--image">スタジオのオーディオトラック情報</figcaption>
+    </figure>
+
+    <h3>1つのオーディオトラックのメタデータを取得する</h3>
+
+    <p>ビデオに関連付けられた1つのオーディオトラックのメタデータを取得するには、<code translate="No">GET</code>リクエスト先：</p>
+
+    <pre class="line-numbers">
+      <code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/<span class="bcls-input">account_id</span>/videos/<span class="bcls-input">video id</span>/audio_tracks/<span class="bcls-input">audio_track_id</span></code></pre>
+
+    <p>応答は、各オーディオトラックのメタデータを含むオブジェクトになります。詳細については、以下の回答フィールドの表を参照してください。</p>
+
+    <h3>オーディオトラックメタデータの更新</h3>
+
+    <p>オーディオトラックの書き込み可能なメタデータフィールドを更新するには、<code translate="No">PATCH</code>リクエスト先：</p>
+
+    <pre class="line-numbers">
+      <code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/<span class="bcls-input">account_id</span>/videos/<span class="bcls-input">video id</span>/audio_tracks/<span class="bcls-input">audio_track_id</span></code></pre>
+
+    <p>リクエストの本文に、変更するフィールドを含めます（例：</p>
+
+    <pre class="line-numbers">
+      <code class="language-json" translate="No">{
+          "language": "es",
+          "is_default": true
+      }</code></pre>
+
+    <h3>オーディオトラックを削除する</h3>
+
+    <p>オーディオトラックを削除するには、次の宛先にDELETEリクエストを送信します。</p>
+
+    <pre class="line-numbers">
+      <code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/<span class="bcls-input">account_id</span>/videos/<span class="bcls-input">video id</span>/audio_tracks/<span class="bcls-input">audio_track_id</span></code></pre>
+
+    <p>削除プロセスは非同期であり、すぐに完了しない可能性があるため、成功応答コードは204（コンテンツなし）ではなく202（承認済み）になる可能性があることに注意してください。</p>
+
+    <table class="bcls-table">
+      <caption class="bcls-caption--table">オーディオトラックメタデータフィールド</caption>
+      <thead class="bcls-table__head">
+        <tr>
+          <th>フィールド</th>
+          <th>タイプ</th>
+          <th>読み取り専用</th>
+          <th>説明</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">id</code></td>
+          <td>文字列</td>
+          <td>はい</td>
+          <td>として形成されたトラックのID <strong> language_variant</strong> -これらの値が変更されると、IDが変更される可能性があることに注意してください</td>
+        </tr>
+        <tr>
+          <td><code translate="No">language</code></td>
+          <td>文字列</td>
+          <td>いいえ</td>
+          <td><a href="http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry">http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry </a>のサブタグからのオーディオトラックの言語コード</td>
+        </tr>
+        <tr>
+          <td><code translate="No">variant</code></td>
+          <td>文字列</td>
+          <td>いいえ</td>
+          <td>オーディオトラックの種類: <code translate="No">main</code> | | <code translate="No">alternate<code translate="No">dub</code></code> | <code translate="No">commentary</code> | <code translate="No">descriptive</code> ( <code translate="No">main</code>は一般的にオーディオで多重化されたものに使用されます）</td>
+        </tr>
+        <tr>
+          <td><code translate="No">duration</code></td>
+          <td>数値</td>
+          <td>はい</td>
+          <td>ミリ秒単位のトラックの長さ</td>
+        </tr>
+        <tr>
+          <td><code translate="No">encoding_rates</code></td>
+          <td>数[]</td>
+          <td>はい</td>
+          <td>このトラックで使用可能なエンコーディングのリスト（bps単位）</td>
+        </tr>
+        <tr>
+          <td><code translate="No">is_default</code></td>
+          <td>ブール値</td>
+          <td>いいえ</td>
+          <td>trueの場合、これは再生のデフォルトトラックとして使用されます（アカウントレベルのデフォルトを上書きします）</td>
+        </tr>
+      </tbody>
+    </table>
+    </section>
+
+    <section class="bcls-section">
+    <h2 id="Playback">再生</h2>
+
+    <p>Brightcove WebおよびSDKプレーヤーが複数のオーディオトラックを処理する方法については、以下を参照してください。</p>
+
+    <ul>
+      <li><a href="https://player.support.brightcove.com/general/multiple-audio-tracks.html">複数のオーディオトラック（Webプレーヤー）</a></li>
+      <li><a href="https://sdks.support.brightcove.com/features/multiple-audio-tracks-native-sdks.html">ネイティブSDKを使用した複数のオーディオトラック</a></li>
+    </ul>
+    </section>
+
+    <section class="bcls-section">
+    <h2 id="Known_issues">既知の問題</h2>
+
+    <dl>
+      <dt >オーディオマスターが保存されない</dt>
+      <dd >
+      <ul>
+        <li><span translate="No">Video Cloud</span>意志<strong>ない</strong>オーディオマスターを保存する</li>
+        <li>ビデオマスターからビデオを再トランスコードすると、追加のオーディオトラックが失われるため、を使用して再追加する必要があります。<a href="#Add_audio_tracks_to_an_existing_video">既存のビデオにオーディオトラックを追加する</a>上記の方法</li>
+      </ul>
+      </dd>
+      <dt >オーディオのみのファイルを使用する必要があります</dt>
+      <dd >オーディオトラックは、ビデオトラックを含まないオーディオ専用ファイルである必要があります</dd>
+      <dt ><code translate="No">HLSv3</code>、<code translate="No">HLS</code>同じセグメントにオーディオとビデオがあります</dt>
+      <dd >
+      <ul>
+        <li>再生APIは返されません<code translate="No">HLSv3</code>マニフェスト</li>
+        <li>すべて<code translate="No">HLS</code>マニフェストには、デコードされたビデオ/オーディオが含まれます</li>
+      </ul>
+      </dd>
+      <dt >スムーズなストリーミング</dt>
+      <dd >スムーズストリーミング URL は使用できません。</dd>
+      <dt >社会的分布</dt>
+      <dd >配信に使用するオーディオトラックを選択することはできません。ビデオソースに含まれるトラック（オーディオのマルチプレス）が常に使用されます。</dd>
+      <dt >Studio</dt>
+      <dd >
+      <ul>
+        <li>スタジオはオーディオトラックに関する情報を表示します</li>
+        <li>Studioを使用してオーディオトラックを追加するには、を参照してください。<a href="https://player.support.brightcove.com/general/multiple-audio-tracks.html">複数のオーディオトラック</a></li>
       </ul>
       </dd>
       <dt >1 つの「デフォルト」トラックを超えるオーディオトラックの順序</dt>
