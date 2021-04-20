@@ -1277,10 +1277,97 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
                   
                 <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
               
-
-                
+                <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
                   
-                    
+                
+              </ul>
+            
+          
+      </nav>
+    </div>
+    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
+  <!-- bootstrap layout -->
+
+<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
+
+<!-- search bar -->
+<div id="nav-search-box" style="margin-top: 1rem;"></div>
+<!-- in-page navigation for narrow screens -->
+<details class="centered-inpage-nav" id="centered_inpage_nav">
+  <summary><h6 class="toc">ページコンテンツ</h6></summary>
+  <nav id="centered_toc"></nav>
+  <ul id="centered_in_page_toc" class="list-none"></ul>
+</details>
+<!-- open in new tab/window -->
+<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
+
+
+
+
+
+
+<article class="bcls-article">
+  <h1> MRSS ジェネレータ</h1>
+  <summary>このサンプルでは、再生 API を使用して MRSS <a href="http://www.rssboard.org/rss-2-0-1">仕様に基づいて</a> MRSS フィードを生成する方法を学習します。</summary>
+  <section class="bcls-section">
+    <h2 id="limitations">制約事項</h2>
+    
+    <p>コンテンツのセキュリティのため、Brightcove ブ API によって返される動画とアセットの URL <strong>は署名されています</strong>。つまり、トークンには短時間（通常は数時間）が含まれますが、これはアカウント設定によって異なります。つまり、このツールによって生成された MRSS コード内の URL は、一定期間だけ有効です。</p>
+    
+    <p>これには次の 2 つの方法のいずれかで対処できます。</p>
+    
+    <ul>
+      <li>アカウントのメディア URL に添付されたトークンの「存続期間」を増やすよう、Brightcove ブサポートに依頼することができます。値は、1 年までの任意の期間に設定できます。ただし、これはアカウントレベルの設定であり、変更はすべての動画に適用されます。</li>
+      <li>または、このアプリの独自のバージョンを作成し、トークンの有効期間内で MRSS フィードの新しいバージョンを定期的に作成することもできます。</li>
+    </ul>
+    
+    <aside class="bcls-aside bcls-aside--information language-editable">このサンプルおよび関連するコードは、本番環境の開発のためのガイドとして提供されます。このコードは、実稼働での使用が認定されておらず、公式にはサポートされていません。</aside>
+    </section>
+    
+    <section class="bcls-section">
+    <h2 id="Alternative_samples">代替サンプル</h2>
+    
+    <p><span translate="No">CMS API</span>プロキシアプリ経由を使用して MRSS フィードを生成するための追加のサンプルがあります。</p>
+    
+    <ul>
+      <li><a href="/cms/code-samples/cms-api-sample-mrss-generator.html">CMS API サンプル:MRSS ジェネレータ</a></li>
+      <li><a href="/cms/code-samples/cms-api-sample-mrss-feed-playlist.html">CMS API サンプル:プレイリストからの MRSS フィード</a></li>
+    </ul>
+    
+    <p>Brightcove ブのお客様が PHP <a href="https://github.com/registerguard/brightcove-cms-api-php-rss">だけで作成したこの代替サンプルにも興味があるかもしれません</a>。</p>
+    
+    <p>よりもPlayback APIを使用する唯一の利点は、アプリが完全にクライアント側であることです。アクセストークンを取得するためにサーバー側のプロキシは必要ありません。<span translate="No">CMS API</span></p>
+    </section>
+    
+    <section class="bcls-section">
+    <h2 id="Authentication">認証</h2>
+    
+    <p>要求はポリシーキーによって認証され、次の 3 つの方法のいずれかで渡すことができます。</p>
+    
+    <ol>
+      <li><code translate="No">Accept</code>ヘッダーの引数で：
+    
+      <pre class="line-numbers">
+    <code class="language-http" translate="No">Accept: application/json;pk={policy_key}</code></pre>
+    
+      <p>ブラウザベースのクライアントでは、CORS の「プリフライト中」チェックの一部として、まず追加の要求なしで要求を進めることができるため、これはブラウザベースのクライアントに推奨される方法です。これにより、ブラウザ要求が初めて行われた時のレイテンシーが節約されます。</p>
+      </li>
+      <li>realm <code translate="No">Authorization</code>キーワードを使用したヘッダーで<code translate="No">BCOV-Policy</code> :
+      <pre class="line-numbers">
+    <code class="language-http" translate="No">Authorization: BCOV-Policy {policy_key}</code></pre>
+      </li>
+      <li><code translate="No">BCOV-Policy</code>ヘッダー:
+      <pre class="line-numbers">
+    <code class="language-http" translate="No">BCOV-Policy: {policy_key}</code></pre>
+      </li>
+    </ol>
+    
+    <h3>ポリシーキーの取得</h3>
+    
+    <p>このアプリには、<strong>検索が有効なポリシーキーが必要です</strong>。Brightcove Players <strong>に自動的に追加されるデフォルトのポリシーキーでは検索が有効になっていないため</strong>、これらのキーのいずれかを使用することはできません。検索が有効なポリシーキーを生成するには、次の 2 つの方法があります。</p>
+    
+    <ol>
+      <li><a href="/policy/getting-started/quick-start-policy-api.html">ポリシーキークイックスタートを使用して、基本ポリシーキーを生成できます</a></li>
       <li><a href="/policy/getting-started/overview-policy-api.html">ポリシー API </a>へのリクエストを行うことができます。</li>
     </ol>
     

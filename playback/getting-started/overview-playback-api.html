@@ -1277,10 +1277,1226 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
                   
                 <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
               
-
-                
+                <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
                   
-                    
+                
+              </ul>
+            
+          
+      </nav>
+    </div>
+    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
+  <!-- bootstrap layout -->
+
+<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
+
+<!-- search bar -->
+<div id="nav-search-box" style="margin-top: 1rem;"></div>
+<!-- in-page navigation for narrow screens -->
+<details class="centered-inpage-nav" id="centered_inpage_nav">
+  <summary><h6 class="toc">ページコンテンツ</h6></summary>
+  <nav id="centered_toc"></nav>
+  <ul id="centered_in_page_toc" class="list-none"></ul>
+</details>
+<!-- open in new tab/window -->
+<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
+
+
+
+
+
+
+<h1>概要: 再生API</h1>
+<article class="bcls-article">
+  <summary>再生 API は、Video Cloud からビデオとプレイリストのデータを取得するために使用されます。通常、ウェブページまたはモバイルアプリでプレーヤーにビデオデータを取得するために使用されます。</summary>
+    <section class="bcls-section">
+    <h2 id="Introduction">はじめに</h2>
+
+    <p>Playback API は、Web ページやモバイルアプリから動画や再生リストのデータを取得するときのクライアント側での使用を目的とした、低レイテンシー API です。です<strong><em>ない</em></strong> Video CloudをCMSまたは他のシステムと統合する際に使用する一般的なメディア管理API-そのためには、<a href="/cms/getting-started/overview-cms-api.html"> CMS API</a>。</p>
+
+    <p>再生APIの結果は、再生可能なビデオのみを返すようにフィルタリングされます（状態=アクティブ、取り込み完了フラグ= true、スケジュールされている場合は正しいデータ/時間）。これは、他のレンディションがまだ処理中である場合でも、1つのレンディションが存在するとすぐにプレーヤーがビデオを再生できることを意味します。現在再生できない動画を取得する必要がある場合は、もう一度<a href="/cms/getting-started/overview-cms-api.html">CMS API</a>代わりに。</p>
+
+    <p>パフォーマンスを最大化するために、PlaybackAPIによってアクセスされるビデオデータが短期間キャッシュされることにも注意してください。キャッシュされる特定のデータセットIDの長さは異なりますが、最大20分かかる場合があります。</p>
+
+    <p>「<a href="/playback/references/reference_v1.html"> API リファレンス</a>」も参照してください。</p>
+
+    <aside class="bcls-aside bcls-aside--tip">
+    <p >プレーヤーで現在ビデオに関する情報のみが必要な場合は、Playback API <code translate="No">mediainfo</code>呼び出しを行う代わりにオブジェクトを使用できます。</p>
+
+    <p><code translate="No">mediainfo</code>オブジェクトには、プレーヤーに現在ロードされているビデオに関する情報が含まれますが、Playback API は任意のビデオに関する情報を取得できます。詳細については、<a href="https://player.support.brightcove.com/references/video-metadata-mediainfo.html"> mediainfo ドキュメントからのビデオメタデータを参照してください</a>。</p>
+    </aside>
+    </section>
+
+    <section class="bcls-section">
+    <h2 id="Use_cases">ユースケース</h2>
+
+    <p>ザ・<a href="https://player.support.brightcove.com/getting-started/">Brightcove ブプレーヤー</a>そしてその<a href="https://sdks.support.brightcove.com/">BrightcoveSDKプレーヤー</a>再生APIのメソッドと同じカタログメソッドを含めます。実行時に動画やプレイリストを取得して再生する場合は、ほとんどの場合、これらのメソッドを使用できます。</p>
+
+    <p>ただし、プレーヤーが存在しないモバイルアプリ画面でビデオまたはプレイリストのビューを提供することをお勧めします。</p>
+
+    <p>さらに、たとえばビデオポータルのランディングページとして、画面にプレーヤーを表示せずに、ビデオまたはプレイリストを取得してそれらに関する情報を表示したい場合があります。</p>
+
+    <p>これらの場合、PlaybackAPIは便利です。</p>
+    </section>
+
+    <section class="bcls-section">
+    <h2 id="General_Information">一般情報</h2>
+
+    <aside class="bcls-aside bcls-aside--information">
+    <p>現在、Playback APIは、IPv6プロトコルを使用するIPアドレスからのリクエストをサポートしていません。</p>
+    </aside>
+
+    <h3>ベース URL</h3>
+
+    <p>再生APIのベースURLは次のとおりです。</p>
+
+    <pre >
+<code class="language-http" translate="No">https://edge.api.brightcove.com/playback/v1</code></pre>
+
+    <aside class="bcls-aside bcls-aside--warning">
+    <ul>
+      <li>使用する必要があります<strong>https</strong>プロトコルとして。</li>
+      <li>IP制限を使用しているお客様<strong>しなければならない</strong>使用する<code translate="No">https://edge-elb.api.brightcove.com/playback/v1</code>標準のURLの代わりに; IP制限のある北米以外で使用されるプレーヤーの詳細については、次の情報を確認してください。<a href="/player-management/guides/player-configuration-guide.html#iprestrictions">プレーヤー構成ガイド</a>発生する可能性のある問題を防ぐため。</li>
+    </ul>
+    </aside>
+
+    <h4>アカウントパス</h4>
+
+    <p>いずれの場合も、特定の Video Cloud アカウントに対してリクエストが行われます。したがって、<code translate="No">accounts</code>あなたは常にベースURLにアカウントIDが続く用語を追加します：</p>
+
+    <pre>
+<code class="language-http" translate="No">https://edge.api.brightcove.com/playback/v1/<strong>accounts/{account_id}</strong></code></pre>
+
+    <h3>認証</h3>
+
+    <p>要求はポリシーキーによって認証され、次の 3 つの方法のいずれかで渡すことができます。</p>
+
+    <ol class="bcls-tasklist">
+      <li><code translate="No">Accept</code>ヘッダーの引数で：
+
+      <pre>
+<code class="language-http" translate="No">Accept: application/json;pk={policy_key}</code></pre>
+
+      <p>ブラウザベースのクライアントでは、CORS の「プリフライト中」チェックの一部として、まず追加の要求なしで要求を進めることができるため、これはブラウザベースのクライアントに推奨される方法です。これにより、ブラウザ要求が初めて行われた時のレイテンシーが節約されます。</p>
+      </li>
+      <li>realm <code translate="No">Authorization</code>キーワードを使用したヘッダーで<code translate="No">BCOV-Policy</code> :
+      <pre >
+<code class="language-http" translate="No">Authorization: BCOV-Policy {policy_key}</code></pre>
+      </li>
+      <li><code translate="No">BCOV-Policy</code>ヘッダー:
+      <pre >
+<code class="language-http" translate="No">BCOV-Policy: {policy_key}</code></pre>
+      </li>
+    </ol>
+
+    <h3>ポリシーキーの取得</h3>
+
+    <p>ポリシーキーを取得する方法は3つあります。</p>
+
+    <ol class="bcls-tasklist-restart">
+      <li>すべてのBrightcoveプレーヤーには自動的に1人が割り当てられます。プレーヤーのポリシーキーを取得する手順については、<a href="/policy/getting-started/policy-keys.html">このドキュメント</a>。ポリシーキーはアカウント全体で優れているため、そのプレイヤーがページに埋め込まれているかどうかに関係なく、ポリシーキーを使用できます。</li>
+      <li><a href="/policy/getting-started/quick-start-policy-api.html">ポリシーキークイックスタートを使用して、基本ポリシーキーを生成できます</a></li>
+      <li><a href="/policy/getting-started/policy-keys.html">ポリシー API </a>へのリクエストを行うことができます。</li>
+    </ol>
+    </section>
+
+    <section class="bcls-section">
+    <h2 id="Token_authentication">トークン認証</h2>
+
+    <p>HLSおよびDASHコンテンツのトークン認証がサポートされています。トークン認証が必要な場合は、アカウントでトークン認証を有効にする方法についてアカウントマネージャーにお問い合わせください。</p>
+    </section>
+
+    <section class="bcls-section">
+    <h2 id="avoid_hardcoded_urls">ハードコードされたURLを避ける</h2>
+
+    <p>サムネイル、ポスター、動画ファイル、その他のメディアの URL は、ページやアプリケーションでハードコーディングしないでください。ザ・<span translate="No">Playback API</span>メディアファイルのURLの最新のキャッシュバージョンを返しますが、URL自体は変更される可能性があります。これらのURLは、ページがロードされるたびに<span translate="No">CMS API</span>（または<span translate="No">Playback API</span>）リクエストを使用して取得するか、6時間以内にキャッシュする必要があります。</p>
+
+    <h3>動画および画像URLのキャッシュ</h3>
+
+    <p><strong>動画や画像の URL をキャッシュしてページのパフォーマンスを向上させることもできますが、キャッシュは定期的に更新する必要があります。</strong>ページのパフォーマンスを改善するため、取得したURLをキャッシュする場合、少なくとも6時間毎にAPI呼び出しを繰り返して、キャッシュをリフレッシュするようにしてください。</p>
+    </section>
+
+    <section class="bcls-section">
+    <h2 id="Methods">メソッド</h2>
+
+    <p>APIは、次のタイプの次のGETリクエストのみをサポートします。</p>
+
+    <ul>
+      <li><a href="#Get_video_by_id">IDでビデオを取得</a></li>
+      <li><a href="#Get_video_by_reference_id">参照IDでビデオを取得</a></li>
+      <li><a href="#Get_videos">SSAIでビデオを入手</a></li>
+      <li><a href="#Get_video_with_SSAI">ビデオを入手</a></li>
+      <li><a href="#Get_playlist_by_id">IDでプレイリストを取得</a></li>
+      <li><a href="#Get_playlist_by_reference_id">参照IDでプレイリストを取得</a></li>
+    </ul>
+    </section>
+
+    <section class="bcls-section">
+    <h2 id="Video_requests">ビデオリクエスト</h2>
+
+    <p>単一のビデオオブジェクトは、ビデオIDまたは参照IDのいずれかを使用して取得できます。</p>
+
+    <h3 id="Get_video_by_id">IDでビデオを取得</h3>
+
+    <h4>終点</h4>
+
+    <pre >
+<code class="language-http" translate="No">https://edge.api.brightcove.com/playback/v1/accounts/{account_id}/videos/{video_id}</code></pre>
+
+    <h4>例</h4>
+
+    <pre >
+<code class="language-http" translate="No">https://edge.api.brightcove.com/playback/v1/accounts/57838016001/videos/38467382999</code></pre>
+
+    <details>
+      <summary>
+        <h2>レスポンスの例</h2>
+      </summary>
+
+      <pre class="line-numbers">
+<code class="language-json" translate="No">{
+  "account_id": "107767373999",
+  "ad_keys": null,
+  "created_at": "2010-07-12T22:37:34.760Z",
+  "description": "Avatar_MakingAScene_Featurette",
+  "duration": 595560,
+  "id": "38467382999",
+  "long_description": null,
+  "name": "Avatar_MakingAScene_Featurette",
+  "published_at": "2010-07-12T22:37:34.760Z",
+  "reference_id": "AvatarMakingShort",
+  "text_tracks": [],
+  "updated_at": "2010-07-12T22:54:29.666Z",
+  "cue_points": [
+    {
+      "id": "111637107001",
+      "name": "Pre-roll",
+      "type": "AD",
+      "time": 0,
+      "metadata": null,
+      "force_stop": false
+    }
+  ],
+  "custom_fields": {
+    "moretext": "this is the first video uploaded",
+    "mylist": "abc"
+  },
+  "link": {
+    "text": "Full Dvd at Amazon",
+    "url": "http://www.amazon.com/Avatar-Sam-Worthington/dp/B002VPE1AW"
+  },
+  "tags": [
+    "copied"
+  ],
+  "poster_sources": [
+    {
+      "src": "http://brightcove04.o.brightcove.com/107767373999/107767373999_111728861001_vs-111727994001.jpg?pubId=107767373999&amp;videoId=38467382999"
+    }
+  ],
+  "thumbnail_sources": [
+    {
+      "src": "http://brightcove04.o.brightcove.com/107767373999/107767373999_111728862001_th-111727994001.jpg?pubId=107767373999&amp;videoId=38467382999"
+    }
+  ],
+  "poster": "http://brightcove04.o.brightcove.com/107767373999/107767373999_111728861001_vs-111727994001.jpg?pubId=107767373999&amp;videoId=38467382999",
+  "thumbnail": "http://brightcove04.o.brightcove.com/107767373999/107767373999_111728862001_th-111727994001.jpg?pubId=107767373999&amp;videoId=38467382999",
+  "sources": [
+    {
+      "avg_bitrate": 379000,
+      "width": 320,
+      "duration": 595560,
+      "size": 28196307,
+      "stream_name": "mp4:107767373999/107767373999_111728840001_Avatar-MakingAScene-Featurette.mp4?__nn__=1497926354001&amp;slist=107767373999/&amp;auth=daEciavcicRbhbtdSaBdBdVbXd0aUdTcMaX-bvRrSa-hca-slyCzrux_zJAq_HFCB_EvE&amp;aifp=bcosuds",
+      "codec": "H264",
+      "asset_id": "111728840001",
+      "container": "MP4",
+      "height": 180,
+      "app_name": "rtmp://cp150446.edgefcs.net/ondemand"
+    },
+    {
+      "avg_bitrate": 379000,
+      "width": 320,
+      "src": "http://uds.ak.o.brightcove.com/107767373999/107767373999_111728840001_Avatar-MakingAScene-Featurette.mp4?pubId=107767373999&amp;videoId=38467382999",
+      "size": 28196307,
+      "height": 180,
+      "duration": 595560,
+      "container": "MP4",
+      "codec": "H264",
+      "asset_id": "111728840001"
+    }, ... 6 more sources ...
+
+  ]
+}</code></pre>
+    </details>
+
+    <h3 id="Get_video_by_reference_id">参照IDでビデオを取得</h3>
+
+    <h4>終点</h4>
+
+    <pre >
+<code class="language-http" translate="No">https://edge.api.brightcove.com/playback/v1/accounts/{account_id}/videos/ref:{reference_id}</code></pre>
+
+    <h4>例</h4>
+
+    <pre >
+<code class="language-http" translate="No">https://edge.api.brightcove.com/playback/v1/accounts/57838016001/videos/ref:nature_2010-07-12</code></pre>
+
+    <details>
+      <summary>
+        <h2>レスポンスの例</h2>
+      </summary>
+
+      <pre class="line-numbers">
+<code class="language-json" translate="No">{
+  "account_id": "107767373999",
+  "ad_keys": null,
+  "created_at": "2010-07-12T22:37:34.760Z",
+  "description": "Avatar_MakingAScene_Featurette",
+  "duration": 595560,
+  "id": "38467382999",
+  "long_description": null,
+  "name": "Avatar_MakingAScene_Featurette",
+  "published_at": "2010-07-12T22:37:34.760Z",
+  "reference_id": "nature_2010-07-12",
+  "text_tracks": [],
+  "updated_at": "2010-07-12T22:54:29.666Z",
+  "cue_points": [
+    {
+      "id": "111637107001",
+      "name": "Pre-roll",
+      "type": "AD",
+      "time": 0,
+      "metadata": null,
+      "force_stop": false
+    }
+  ],
+  "custom_fields": {
+    "moretext": "this is the first video uploaded",
+    "mylist": "abc"
+  },
+  "link": {
+    "text": "Full Dvd at Amazon",
+    "url": "http://www.amazon.com/Avatar-Sam-Worthington/dp/B002VPE1AW"
+  },
+  "tags": [
+    "copied"
+  ],
+  "poster_sources": [
+    {
+      "src": "http://brightcove04.o.brightcove.com/107767373999/107767373999_111728861001_vs-111727994001.jpg?pubId=107767373999&amp;videoId=38467382999"
+    }
+  ],
+  "thumbnail_sources": [
+    {
+      "src": "http://brightcove04.o.brightcove.com/107767373999/107767373999_111728862001_th-111727994001.jpg?pubId=107767373999&amp;videoId=38467382999"
+    }
+  ],
+  "poster": "http://brightcove04.o.brightcove.com/107767373999/107767373999_111728861001_vs-111727994001.jpg?pubId=107767373999&amp;videoId=38467382999",
+  "thumbnail": "http://brightcove04.o.brightcove.com/107767373999/107767373999_111728862001_th-111727994001.jpg?pubId=107767373999&amp;videoId=38467382999",
+  "sources": [
+    {
+      "avg_bitrate": 379000,
+      "width": 320,
+      "duration": 595560,
+      "size": 28196307,
+      "stream_name": "mp4:107767373999/107767373999_111728840001_Avatar-MakingAScene-Featurette.mp4?__nn__=1497926354001&amp;slist=107767373999/&amp;auth=daEciavcicRbhbtdSaBdBdVbXd0aUdTcMaX-bvRrSa-hca-slyCzrux_zJAq_HFCB_EvE&amp;aifp=bcosuds",
+      "codec": "H264",
+      "asset_id": "111728840001",
+      "container": "MP4",
+      "height": 180,
+      "app_name": "rtmp://cp150446.edgefcs.net/ondemand"
+    },
+    {
+      "avg_bitrate": 379000,
+      "width": 320,
+      "src": "http://uds.ak.o.brightcove.com/107767373999/107767373999_111728840001_Avatar-MakingAScene-Featurette.mp4?pubId=107767373999&amp;videoId=38467382999",
+      "size": 28196307,
+      "height": 180,
+      "duration": 595560,
+      "container": "MP4",
+      "codec": "H264",
+      "asset_id": "111728840001"
+    }, ... 6 more sources ...
+
+  ]
+}</code></pre>
+    </details>
+    </section>
+
+    <section class="bcls-section">
+    <h2 id="Search_videos">動画を検索する</h2>
+
+    <p>あなたは使用する必要があります<a href="/policy/getting-started/overview-policy-api.html#Search_videos">検索対応のポリシーキー</a>、PlaybackAPIを使用して動画を検索する場合。詳細については、<a href="/playback/references/reference_v1.html#api-videoGroup-Get_Videos">再生APIリファレンス</a>資料。</p>
+
+    <aside class="bcls-aside bcls-aside--information">再生 API 検索では、リクエストごとに 100 本の動画に制限があり、上限は 1000 動画です。1000本を超える動画を返品する必要がある場合は、<a href="/cms/index.html"> CMS API</a>。</aside>
+
+    <h3 id="Parameters">パラメーター</h3>
+
+    <p><strong>すべてのパラメータはオプションであることに注意してください</strong>。彼らはに適用されます<code translate="No">GET Videos</code>リクエストのみ。</p>
+
+    <table class="bcls-table">
+      <caption class="bcls-caption--table">GETビデオリクエストパラメータ</caption>
+      <thead class="bcls-table__head">
+        <tr>
+          <th>パラメーター</th>
+          <th>説明</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">q</code></td>
+          <td>検索用のクエリ文字列-詳細については、<a href="/cms/searching/cms-and-playback-apis-video-search-v2.html">検索ガイド</a></td>
+        </tr>
+        <tr>
+          <td><code translate="No"><a href="#paging">limit</a></code></td>
+          <td>返す動画数-1 ～ 100 の整数を指定してください。<strong>デフォルト:</strong> 20</td>
+        </tr>
+        <tr>
+          <td><code translate="No"><a href="#offset">offset</a> </code></td>
+          <td>スキップする動画の数（ページング結果用）。正の整数である必要があります。<strong>デフォルト:</strong> 0</td>
+        </tr>
+        <tr>
+          <td><code translate="No"><a href="#sort">sort</a></code></td>
+          <td>並べ替えの基準となるフィールドを指定するストリング。<br/>皮切りに<code translate="No">-</code>降順で並べ替えます。<br/>の値が<code translate="No">q</code>が指定されている場合、デフォルトの並べ替えは「スコア」（検索結果と元のクエリの関連性）によるものです。<br/>の値がない場合<code translate="No">q</code>が提供されている場合、デフォルトのソートは<code translate="No">updated_at</code>降順。<br/>次のフィールドは並べ替えに有効です。<code translate="No">name</code>、<code translate="No">reference_id</code>、<code translate="No">created_at</code>、<code translate="No">published_at</code>、<code translate="No">updated_at</code>、<code translate="No">schedule_starts_at</code>、<code translate="No">schedule_ends_at</code>、<code translate="No">state</code>、<code translate="No">plays_total</code>、および<code translate="No">plays_trailing_week</code><br/>詳細については、<a href="/playback/references/reference_v1.html#api-videoGroup-Get_Videos">ビデオを入手</a>再生APIリファレンスのセクション</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 id="search">検索パラメータの使用</h3>
+
+    <p>Brightcove ブの<span translate="No">Playback API</span>あなたのビデオを検索するためのプログラム的な方法を提供します<span translate="No"><span translate="No">Video Cloud</span> </span>図書館。</p>
+
+    <p>動画データの基本検索および複雑な検索を実行するには、<code translate="No">q</code>パラメーターを使用します。</p>
+
+    <pre >
+<code class="language-http" translate="No">https://edge.api.brightcove.com/playback/v1/accounts/1752604051111/videos?<strong>q={search terms}</strong></code></pre>
+
+    <p>動画を検索する方法については、「<a href="/cms/searching/cms-and-playback-apis-video-search-v2.html">ビデオの検索</a>」ドキュメントを参照してください。</p>
+
+    <h3 id="paging">ページングの結果</h3>
+
+    <p>使用<code translate="No"><a href="#Parameters">limit</a></code>リクエストで返すアイテムの数を指定するパラメータ（最大100）。その後、を使用することができます<code translate="No"><a href="#Parameters">offset</a></code>より大きい結果セットをページスルーするパラメータ<code translate="No">limit</code>。<code translate="No">offset</code>はスキップする項目の数です。</p>
+
+    <p>たとえば、次の検索では、結果セットの合計に少なくとも 75 本の動画が含まれていると仮定して、結果セット全体の 51 ～ 75 の動画が返されます。</p>
+
+    <pre >
+<code class="language-http" translate="No">/videos?q=updated_at:2014-01-01..2014-06-30&amp;limit=25&amp;offset=50</code></pre>
+
+    <p>ザ・<code translate="No">limit</code>そして<code translate="No">offset</code>パラメータは動画にのみ使用できます。</p>
+
+    <h4>ページングのベストプラクティス</h4>
+
+    <p>再生APIから結果セットをページングするときは、次の手順に従うことをお勧めします。</p>
+
+    <ol  class="bcls-tasklist-restart">
+      <li>使用<code translate="No"><a href="/cms/references/reference.html#api-videoGroup-Get_Videos">limit</a></code>そして<code translate="No"><a href="/cms/references/reference.html#api-videoGroup-Get_Videos">offset</a></code>結果セットからデータのグループを返すパラメータ。
+
+      <pre >
+<code class="language-http" translate="No">/accounts/578380111111/videos?q=tags:nature&amp;limit=20&amp;offset=50</code></pre>
+      </li>
+      <li>応答するたびに、<code translate="No">count</code>フィールドには、結果セット内のビデオの最大数が常に表示されます。
+      <pre class="line-numbers">
+<code class="language-json" translate="No">{"count": 171,
+  "videos": [ ... ]
+}</code></pre>
+
+      <aside class="bcls-aside bcls-aside--information">再生APIの検索は1000本の動画に制限されていることに注意してください。</aside>
+      </li>
+      <li>合計<code translate="No">count</code>最初のリクエストの動画の数を使用して、リクエストする必要のあるページ数を決定できます。<br/><br/>または、<code translate="No">count</code>各応答で値を付け、<code translate="No">count</code>ページサイズにページサイズを掛けた値以下である<code translate="No">limit</code>。
+      <pre >
+<code class="language-http" translate="No">count &lt;= page-number * limit</code></pre>
+      </li>
+    </ol>
+
+    <h3>ビデオ結果のソート</h3>
+
+    <p>パラメータを使用する<code translate="No">sort=field_name</code>結果の並べ替え方法を指定します。次のビデオフィールドで並べ替えることができます。<sup><strong><a href="#note1-1"> [1-1]</a></strong></sup></p>
+
+    <aside class="bcls-aside bcls-aside--information">フィールド名の前にマイナス記号（<code translate="No">sort=<span class="bcls-highlight">-</span>field_name</code>）降順。</aside>
+
+    <ul>
+      <li> name</li>
+      <li> reference_id</li>
+      <li> created_at</li>
+      <li>published_at</li>
+      <li> updated_at</li>
+      <li>schedule_starts_at（注：これは<strong>ソート</strong>フィールド- <strong>検索フィールドは<code translate="No">schedule.starts_at</code></strong>）</li>
+      <li>schedule_ends_at（注：これは<strong>ソート</strong>フィールド- <strong>検索フィールドは<code translate="No">schedule.ends_at</code></strong>）</li>
+      <li>state</li>
+      <li>Plays_total <sup><strong><a href="#note1-2"> [1-2]</a></strong></sup></li>
+      <li>Plays_trailing_week <sup><strong><a href="#note1-2"> [1-2]</a></strong></sup></li>
+    </ul>
+
+    <p><strong>備考</strong></p>
+
+    <ul>
+      <li id="note1-1"><sup><strong>[1-1]</strong></sup>ビデオ検索呼び出しに並べ替え値を指定しない場合、結果は関連性によって並べ替えられます。<code translate="No">GET</code>ビデオ呼び出しの並べ替え値を指定しない場合、<code translate="No">updated_at</code>結果は降順でソートされます。</li>
+      <li id="note1-2"><sup><strong>[1-2]</strong></sup>並べ替えることができます<code translate="No">plays_total</code>または<code translate="No">plays_trailing_week</code>、ただし、これらのフィールドは結果に含まれません</li>
+    </ul>
+
+    <h4 id="largeDataSets">すべてのビデオと大きなデータセット</h4>
+
+    <p>アカウント内のすべての動画、または多数の動画を取得する場合は、以下の点に注意する必要があります。</p>
+
+    <ol class="bcls-tasklist-restart">
+      <li>許可されている最大の<code translate="No">limit</code>（100）を使いたくなるかもしれませんが、API リクエストがタイムアウトする可能性を最小限に抑えるには、25 以下のバッチで動画を取得することをお勧めします。</li>
+      <li>大きなデータセットをページングすると、操作中にビデオデータが更新され、アイテムが応答にシフトする可能性があります。
+      <ul>
+        <li>連続したページで項目が繰り返し表示されることがあります</li>
+        <li>以前のレスポンスセットに移行したため、アイテムが見逃される可能性がある</li>
+      </ul>
+
+      <p>最初の可能性を考慮するには、動画の取得が完了したら、アプリは項目リスト全体を重複排除する必要があります。2番目の可能性を処理するには、（重複除外後）取得されたアイテムの合計数を期待していた数と比較し、要求を再実行し、結果をlast_modified_date（降順）でソートする必要があります。欠落したアイテムをピックアップするために、複数のバッチを取得する必要はありません。</p>
+      </li>
+      <li>返された結果を適切に並べ替えることにより、前の項目のシナリオの可能性を減らすことができます。<strong>検索の関連性によるデフォルトの並べ替えは</strong>、キーワード、タグ、およびカスタムフィールド値の組み合わせを検索する複雑なアルゴリズムに基づいています。複数のキーワード、タグ、カスタムフィールドに基づいて動画を検索する場合は、関連性で並べ替える必要があります。ただし、すべての動画または大規模な動画セットを取得する場合は、<code translate="No">sort</code>パラメーターを明示的に設定することで、返されるアイテムの順序をより詳細に制御できます。</li>
+    </ol>
+
+    <h3 id="Get_videos">ビデオを入手する</h3>
+
+    <h4>終点</h4>
+
+    <pre>
+<code class="language-http" translate="No">https://edge.api.brightcove.com/playback/v1/accounts/{account_id}/videos</code></pre>
+
+    <h4>例</h4>
+
+    <pre >
+<code class="language-http" translate="No">https://edge.api.brightcove.com/playback/v1/accounts/57838016001/videos?q=tags:nature,name:nature</code></pre>
+
+    <h4>レスポンスの例</h4>
+
+    <pre class="line-numbers">
+<code class="language-json" translate="No">{
+  "count": 123,
+  "videos":
+    [
+      {&lt;video1 fields&gt;},
+      {&lt;video2 fields&gt;},
+      ...
+    ]
+}</code></pre>
+
+    <h4>エラー応答</h4>
+
+    <p>検索が有効になっていないポリシーキーでGetVideosエンドポイントを使用しようとすると、PlaybackAPIから次のエラーメッセージが表示されます。</p>
+
+    <pre class="line-numbers">
+<code class="language-json" translate="No">[
+  {
+    "api_call": "search",
+    "error_subcode": "API",
+    "error_code": "ACCESS_DENIED",
+    "message": "Access to this resource is forbidden by access policy."
+  }
+]</code></pre>
+    </section>
+
+    <section class="bcls-section">
+    <h2 id="Find_related_videos">関連動画を探す</h2>
+
+    <p>再生APIを使用すると、指定した動画に関連する動画をアカウントで検索できます。に基づく<code translate="No">name</code>そして<code translate="No">short description</code>指定されたビデオのうち、APIは次のフィールドで部分一致を検索します。</p>
+
+    <ul>
+      <li><code translate="No">name</code></li>
+      <li><code translate="No">short description</code></li>
+      <li><code translate="No">long description</code></li>
+      <li><code translate="No">tags</code></li>
+    </ul>
+
+    <p>地理的制限が有効になっている場合、結果の全ページが表示されない場合があります。</p>
+
+    <aside class="bcls-aside bcls-aside--information">注
+    <ul>
+      <li>あなたは使用する必要があります<a href="/policy/getting-started/overview-policy-api.html#Search_videos">検索対応のポリシーキー</a>、PlaybackAPIを使用して関連する動画を検索する場合。</li>
+      <li>このエンドポイントの応答結果は、関連する動画を見つけるためのアルゴリズムを改善するため、変更される可能性があります。結果を変更したくない場合、または関連するビデオの検索を正確に制御したい場合は、<a href="#Search_videos">ビデオを検索</a>機能。</li>
+    </ul>
+    </aside>
+
+    <h3>パラメーター</h3>
+
+    <p>次のURLパラメータは、GET関連の動画リクエストに使用できます。</p>
+
+    <table class="bcls-table">
+      <caption class="bcls-caption--table">GET関連動画リクエストパラメータ</caption>
+      <thead class="bcls-table__head">
+        <tr>
+          <th>パラメーター</th>
+          <th>説明</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">limit</code></td>
+          <td>返す動画の数 (既定値は 20、最大 = 100)</td>
+        </tr>
+        <tr>
+          <td><code translate="No">ad_config_id</code></td>
+          <td>ad_config_idを追加して返します<a href="#Video_request_with_SSAI">SSAIのビデオ</a></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>デフォルトでは、応答には最大20本のビデオが含まれます。あなたは使用することができます<code translate="No">limit</code>最大100本の動画を返すパラメータですが、待ち時間が長くなります。</p>
+
+    <p>ないことに注意してください<code translate="No">offset</code>関連するビデオを見つけるときのパラメータ。これにより、ビデオの結果をページングできなくなります。</p>
+
+    <h3>ビデオIDを使用して関連ビデオを取得する</h3>
+
+    <h4>終点</h4>
+
+    <pre >
+<code class="language-http" translate="No">https://edge.api.brightcove.com/playback/v1/accounts/{account_id}/videos/{video_id}/related</code></pre>
+
+    <h4>例</h4>
+
+    <pre >
+<code class="language-http" translate="No">https://edge.api.brightcove.com/playback/v1/accounts/1752604059001/videos/5565662146001/related</code></pre>
+
+    <h3>参照IDを使用して関連動画を取得する</h3>
+
+    <h4>終点</h4>
+
+    <pre >
+<code class="language-http" translate="No">https://edge.api.brightcove.com/playback/v1/accounts/{account_id}/videos/ref:{reference_id}/related</code></pre>
+
+    <h4>例</h4>
+
+    <pre >
+<code class="language-http" translate="No">https://edge.api.brightcove.com/playback/v1/accounts/1752604059001/videos/ref:nature/related</code></pre>
+
+    <h3>レスポンスの例</h3>
+
+    <p>以下の応答では、<code translate="No">count</code>フィールドとは異なり、<a href="#Search_videos">ビデオを検索</a>応答。</p>
+
+    <pre class="line-numbers">
+<code class="language-json" translate="No">{
+  "videos":
+    [
+      {&lt;video1 fields&gt;},
+      {&lt;video2 fields&gt;},
+      ...
+    ]
+}</code></pre>
+
+    <h4>エラー応答</h4>
+
+    <p>検索が有効になっていないポリシーキーで関連するエンドポイントの検索を使用しようとすると、PlaybackAPIから次のエラーメッセージが表示されます。</p>
+
+    <pre class="line-numbers">
+<code class="language-json" translate="No">[
+  {
+    "api_call": "search",
+    "error_subcode": "API",
+    "error_code": "ACCESS_DENIED",
+    "message": "Access to this resource is forbidden by access policy."
+  }
+]</code></pre>
+    </section>
+
+    <section class="bcls-section">
+    <h2 id="Video_request_with_SSAI">SSAIによるビデオリクエスト</h2>
+
+    <p>アプリケーションでBrightcoveWebプレーヤーまたはBrightcoveネイティブSDKを使用していない場合でも、独自のプレーヤーでサーバー側広告挿入（SSAI）を使用できます。</p>
+
+    <aside class="bcls-aside bcls-aside--information">注
+    <ul>
+      <li>SSAI を使用するには、Video Cloud <a href="/dynamic-ingest/getting-started/overview-dynamic-delivery.html">アカウントをダイナミック配信に設定し</a>、SSAI を有効にする必要があります。この機能の使用を開始するには、アカウントマネージャーにお問い合わせください。</li>
+      <li>現在、SSAIはサポートしていません<a href="https://player.support.brightcove.com/general/multiple-audio-tracks.html">複数のオーディオトラック</a>。</li>
+    </ul>
+    </aside>
+
+    <h3 id="Get_video_with_SSAI">SSAIでビデオを入手</h3>
+
+    <p>SSAIを使用して動画を返すには、PlaybackAPIリクエストのURLパラメーターとして広告構成IDを追加します。このリクエストでは、動画IDまたは動画参照IDのいずれかを使用できます。</p>
+
+    <aside class="bcls-aside bcls-aside--information">サーバーサイド広告挿入（SSAI）を使用するには、動画が<a href="https://studio.support.brightcove.com/admin/creating-ingest-profiles-context-aware-encoding.html">動的配信のために摂取</a>。</aside>
+
+    <h4>URLパラメーターを持つエンドポイント</h4>
+
+    <p>追加する<code translate="No">ad_config_id</code>再生APIリクエストの最後まで：</p>
+
+    <pre >
+<code class="language-http" translate="No">https://edge.api.brightcove.com/playback/v1/accounts/{account_id}/videos/{video_id}?ad_config_id={ad_config_id}</code></pre>
+
+    <h4>例</h4>
+
+    <pre >
+<code class="language-http" translate="No">https://edge.api.brightcove.com/playback/v1/accounts/1752604059001/videos/5565662146001?ad_config_id=1234abcd</code></pre>
+
+    <p>以下のサンプル応答では、次のことに気付くでしょう。</p>
+
+    <ul>
+      <li>広告設定IDを含めなかった場合の応答と同様です。</li>
+      <li>の要素<code translate="No">sources</code>配列には、という新しいプロパティが含まれます<code translate="No">vmap</code>。</li>
+      <li>広告がコンテンツのどこにあるかを知りたい場合は、にリンクされているVMAPファイルを読むことができます。<code translate="No">vmap</code>プロパティ。</li>
+      <li>ザ・<code translate="No">src</code>内のプロパティ<code translate="No">sources</code>配列には、HLSまたはDASHソースへのURLが含まれます。これは、広告設定IDが使用されていない場合の応答と同じですが、<code translate="No">src</code>メインコンテンツに広告が組み込まれます。</li>
+    </ul>
+
+    <details>
+      <summary>
+        <h2>レスポンスの例</h2>
+      </summary>
+
+      <pre class="line-numbers">
+<code class="language-json" translate="No">{
+  "description": "The story of a giant rabbit with a heart bigger than himself. ",
+  "poster_sources": [
+    {
+      "src": "https://cf-images.us-east-1.prod.boltdns.net/v1/jit/3723496277001/dd5bd69c-e962-4a43-9dbd-94faaaba1785/main/1280x720/5m17s130ms/match/image.jpg"
+    }
+  ],
+  "tags": [],
+  "cue_points": [],
+  "custom_fields": {},
+  "account_id": "3723496277001",
+  "sources": [
+    {
+      "ext_x_version": "4",
+      <span class="bcls-highlight">"vmap": "http://ssaiplayback.prod.boltdns.net/playback/once/v1/vmap/hls/v4/clear/3723496277001/7a3316d9-1b06-4d62-bec8-3919b43fffbb/dd5bd69c-e962-4a43-9dbd-94faaaba1785/content.vmap?bc_token=NTllMTMxYjNfMTdkOTY2YThhNjU5MDk5ZTQ3NDBkNmUxOTYyOGRkNzM0ZjBiM2RjMGEwOThjOGFkYjk1MWQxMzFmNGYzMjA5YQ%3D%3D"</span>,
+      "type": "application/x-mpegURL",
+      "src": "http://ssaiplayback.prod.boltdns.net/playback/once/v1/hls/v4/clear/3723496277001/7a3316d9-1b06-4d62-bec8-3919b43fffbb/dd5bd69c-e962-4a43-9dbd-94faaaba1785/master.m3u8?bc_token=NTllMTMxYjNfZGM5ZDg0NGM2ZGJjZDcxZTFjOGYyODBlMzM2NmNmMmJkMWNhZDczNWViNzRiMjIwNjg5MjkzZGM0ZmJlMTc1Yw%3D%3D"
+    },
+    ...
+  ],
+  "created_at": "2017-05-15T17:09:11.171Z"
+}</code></pre>
+    </details>
+
+    <h3 id="Require_ad_config_id">ad_config_idが必要</h3>
+
+    <p>ポリシーAPIを使用して、ポリシーキーを作成できます。<code translate="No">ad_config_id</code>再生APIにリクエストを送信するときのURLパラメータ。この機能の設定の詳細については、<a href="/policy/references/reference.html#operation/CreateAPolicyKey">ポリシーAPIリファレンス</a>資料。</p>
+
+    <p>ポリシーキーが要求するように設定されている場合<code translate="No">ad_config_id</code>、およびそれをPlayback APIリクエストに追加しない場合、次のエラーが発生します。</p>
+
+    <pre class="line-numbers">
+<code class="language-json" translate="No">[
+  {
+    "error_subcode": "AD_CONFIG",
+    "error_code": "ACCESS_DENIED",
+    "message": "Missing required ad_config_id parameter"
+  }
+]</code></pre>
+    </section>
+
+    <section class="bcls-section">
+    <h2 id="Playlist_requests">プレイリストリクエスト</h2>
+
+    <p>プレイリストビデオオブジェクトは、プレイリストIDまたはその参照IDのいずれかを使用して取得できます。</p>
+
+    <h3>パラメーター</h3>
+
+    <p>次のURLパラメータはプレイリストリクエストに使用できます</p>
+
+    <table class="bcls-table">
+      <caption class="bcls-caption--table">プレイリストリクエストパラメータ</caption>
+      <thead class="bcls-table__head">
+        <tr>
+          <th>パラメーター</th>
+          <th>説明</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td>制限量</td>
+          <td>返す動画の数 (既定値は 20、最大 = 100)</td>
+        </tr>
+        <tr>
+          <td>offset</td>
+          <td>スキップするビデオの数（プレイリストの最初から、デフォルト= 0）</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>たとえば、リクエストに追加されたこれらのパラメータ（？limit = 40＆offset = 20）は、プレイリストに21〜60本の動画を返します（その数が多いと仮定します）。</p>
+
+    <h3 id="Get_playlist_by_id">IDでプレイリストを取得</h3>
+
+    <h4>終点</h4>
+
+    <pre >
+<code class="language-http" translate="No">https://edge.api.brightcove.com/playback/v1/accounts/{account_id}/playlists/{playlist_id}</code></pre>
+
+    <h4>例</h4>
+
+    <pre >
+<code class="language-http" translate="No">https://edge.api.brightcove.com/playback/v1/accounts/57838016001/playlists/38467382999</code></pre>
+
+        <details>
+    <summary>
+      <h2 id="Sample_response">レスポンスの例</h2>
+    </summary>
+
+    <pre class="line-numbers">
+<code class="language-json" translate="No">{
+  "account_id": "107767373999",
+  "created_at": "2010-07-12T22:43:30.290Z",
+  "description": null,
+  "id": "111592530001",
+  "name": "Play One",
+  "reference_id": null,
+  "type": "EXPLICIT",
+  "updated_at": "2010-07-12T22:51:25.055Z",
+
+  "videos": [
+    {
+      "description": "Avatar_MakingAScene_Featurette",
+      "poster_sources": [
+        {
+          "src": "http://brightcove04.o.brightcove.com/107767373999/107767373999_111728861001_vs-111727994001.jpg?pubId=107767373999&amp;videoId=38467382999"
+        }
+      ],
+      "tags": [
+        "copied"
+      ],
+      "cue_points": [
+        {
+          "id": "111637107001",
+          "name": "Pre-roll",
+          "type": "AD",
+          "time": 0,
+          "metadata": null,
+          "force_stop": false
+        }
+      ],
+      "custom_fields": {
+        "moretext": "this is the first video uploaded",
+        "mylist": "abc"
+      },
+      "account_id": "107767373999",
+      "sources": [
+        {
+          "avg_bitrate": 379000,
+          "width": 320,
+          "duration": 595560,
+          "size": 28196307,
+          "stream_name": "mp4:107767373999/107767373999_111728840001_Avatar-MakingAScene-Featurette.mp4?__nn__=1497926354001&amp;slist=107767373999/&amp;auth=daEciavcicRbhbtdSaBdBdVbXd0aUdTcMaX-bvRrSa-hca-slyCzrux_zJAq_HFCB_EvE&amp;aifp=bcosuds",
+          "codec": "H264",
+          "asset_id": "111728840001",
+          "container": "MP4",
+          "height": 180,
+          "app_name": "rtmp://cp150446.edgefcs.net/ondemand"
+        },
+        {
+          "avg_bitrate": 379000,
+          "width": 320,
+          "src": "http://uds.ak.o.brightcove.com/107767373999/107767373999_111728840001_Avatar-MakingAScene-Featurette.mp4?pubId=107767373999&amp;videoId=38467382999",
+          "size": 28196307,
+          "height": 180,
+          "duration": 595560,
+          "container": "MP4",
+          "codec": "H264",
+          "asset_id": "111728840001"
+        },
+        {
+          "avg_bitrate": 267000,
+          "width": 320,
+          "duration": 595560,
+          "size": 19894997,
+          "stream_name": "mp4:107767373999/107767373999_111728852001_Avatar-MakingAScene-Featurette.mp4?__nn__=1497926354001&amp;slist=107767373999/&amp;auth=daEciavcicRbhbtdSaBdBdVbXd0aUdTcMaX-bvRrSa-hca-slyCzrux_zJAq_HFCB_EvE&amp;aifp=bcosuds",
+          "codec": "H264",
+          "asset_id": "111728852001",
+          "container": "MP4",
+          "height": 180,
+          "app_name": "rtmp://cp150446.edgefcs.net/ondemand"
+        },
+        {
+          "avg_bitrate": 267000,
+          "width": 320,
+          "src": "http://uds.ak.o.brightcove.com/107767373999/107767373999_111728852001_Avatar-MakingAScene-Featurette.mp4?pubId=107767373999&amp;videoId=38467382999",
+          "size": 19894997,
+          "height": 180,
+          "duration": 595560,
+          "container": "MP4",
+          "codec": "H264",
+          "asset_id": "111728852001"
+        },
+        {
+          "avg_bitrate": 549000,
+          "width": 480,
+          "duration": 595567,
+          "size": 40889436,
+          "stream_name": "mp4:107767373999/107767373999_111728860001_Avatar-MakingAScene-Featurette.mp4?__nn__=1497926354001&amp;slist=107767373999/&amp;auth=daEciavcicRbhbtdSaBdBdVbXd0aUdTcMaX-bvRrSa-hca-slyCzrux_zJAq_HFCB_EvE&amp;aifp=bcosuds",
+          "codec": "H264",
+          "asset_id": "111728860001",
+          "container": "MP4",
+          "height": 268,
+          "app_name": "rtmp://cp150446.edgefcs.net/ondemand"
+        },
+        {
+          "avg_bitrate": 549000,
+          "width": 480,
+          "src": "http://uds.ak.o.brightcove.com/107767373999/107767373999_111728860001_Avatar-MakingAScene-Featurette.mp4?pubId=107767373999&amp;videoId=38467382999",
+          "size": 40889436,
+          "height": 268,
+          "duration": 595567,
+          "container": "MP4",
+          "codec": "H264",
+          "asset_id": "111728860001"
+        },
+        {
+          "avg_bitrate": 835000,
+          "width": 640,
+          "duration": 595567,
+          "size": 62142992,
+          "stream_name": "mp4:107767373999/107767373999_111728865001_Avatar-MakingAScene-Featurette.mp4?__nn__=1497926354001&amp;slist=107767373999/&amp;auth=daEciavcicRbhbtdSaBdBdVbXd0aUdTcMaX-bvRrSa-hca-slyCzrux_zJAq_HFCB_EvE&amp;aifp=bcosuds",
+          "codec": "H264",
+          "asset_id": "111728865001",
+          "container": "MP4",
+          "height": 360,
+          "app_name": "rtmp://cp150446.edgefcs.net/ondemand"
+        },
+        {
+          "avg_bitrate": 835000,
+          "width": 640,
+          "src": "http://uds.ak.o.brightcove.com/107767373999/107767373999_111728865001_Avatar-MakingAScene-Featurette.mp4?pubId=107767373999&amp;videoId=38467382999",
+          "size": 62142992,
+          "height": 360,
+          "duration": 595567,
+          "container": "MP4",
+          "codec": "H264",
+          "asset_id": "111728865001"
+        },
+        {
+          "avg_bitrate": 1744000,
+          "width": 640,
+          "duration": 595567,
+          "size": 129836869,
+          "stream_name": "mp4:107767373999/107767373999_111735357001_Avatar-MakingAScene-Featurette.mp4?__nn__=1497926354001&amp;slist=107767373999/&amp;auth=daEciavcicRbhbtdSaBdBdVbXd0aUdTcMaX-bvRrSa-hca-slyCzrux_zJAq_HFCB_EvE&amp;aifp=bcosuds",
+          "codec": "H264",
+          "asset_id": "111735357001",
+          "container": "MP4",
+          "height": 360,
+          "app_name": "rtmp://cp150446.edgefcs.net/ondemand"
+        },
+        {
+          "avg_bitrate": 1744000,
+          "width": 640,
+          "src": "http://uds.ak.o.brightcove.com/107767373999/107767373999_111735357001_Avatar-MakingAScene-Featurette.mp4?pubId=107767373999&amp;videoId=38467382999",
+          "size": 129836869,
+          "height": 360,
+          "duration": 595567,
+          "container": "MP4",
+          "codec": "H264",
+          "asset_id": "111735357001"
+        },
+        {
+          "avg_bitrate": 1249000,
+          "width": 640,
+          "duration": 595567,
+          "size": 92994065,
+          "stream_name": "mp4:107767373999/107767373999_111735369001_Avatar-MakingAScene-Featurette.mp4?__nn__=1497926354001&amp;slist=107767373999/&amp;auth=daEciavcicRbhbtdSaBdBdVbXd0aUdTcMaX-bvRrSa-hca-slyCzrux_zJAq_HFCB_EvE&amp;aifp=bcosuds",
+          "codec": "H264",
+          "asset_id": "111735369001",
+          "container": "MP4",
+          "height": 360,
+          "app_name": "rtmp://cp150446.edgefcs.net/ondemand"
+        },
+        {
+          "avg_bitrate": 1249000,
+          "width": 640,
+          "src": "http://uds.ak.o.brightcove.com/107767373999/107767373999_111735369001_Avatar-MakingAScene-Featurette.mp4?pubId=107767373999&amp;videoId=38467382999",
+          "size": 92994065,
+          "height": 360,
+          "duration": 595567,
+          "container": "MP4",
+          "codec": "H264",
+          "asset_id": "111735369001"
+        }
+      ],
+      "name": "Avatar_MakingAScene_Featurette",
+      "reference_id": "AvatarMakingShort",
+      "long_description": null,
+      "duration": 595560,
+      "published_at": "2010-07-12T22:37:34.760Z",
+      "text_tracks": [],
+      "updated_at": "2010-07-12T22:54:29.666Z",
+      "thumbnail": "http://brightcove04.o.brightcove.com/107767373999/107767373999_111728862001_th-111727994001.jpg?pubId=107767373999&amp;videoId=38467382999",
+      "poster": "http://brightcove04.o.brightcove.com/107767373999/107767373999_111728861001_vs-111727994001.jpg?pubId=107767373999&amp;videoId=38467382999",
+      "link": {
+        "text": "Full Dvd at Amazon",
+        "url": "http://www.amazon.com/Avatar-Sam-Worthington/dp/B002VPE1AW"
+      },
+      "id": "38467382999",
+      "ad_keys": null,
+      "thumbnail_sources": [
+        {
+          "src": "http://brightcove04.o.brightcove.com/107767373999/107767373999_111728862001_th-111727994001.jpg?pubId=107767373999&amp;videoId=38467382999"
+        }
+      ],
+      "created_at": "2010-07-12T22:37:34.760Z"
+    }
+  ],
+}</code></pre>
+    </details>
+
+    <h3 id="Get_playlist_by_reference_id">参照IDでプレイリストを取得</h3>
+
+    <h4>終点</h4>
+
+    <pre>
+<code class="language-http" translate="No">https://edge.api.brightcove.com/playback/v1/accounts/{account_id}/playlists/ref:{reference_id}</code></pre>
+
+    <h4>例</h4>
+
+    <pre >
+<code class="language-http" translate="No">https://edge.api.brightcove.com/playback/v1/accounts/57838016001/playlists/ref:nature_2010-07-12</code></pre>
+
+        <details>
+    <summary>
+      <h2 id="Sample_response">レスポンスの例</h2>
+    </summary>
+
+    <pre class="line-numbers">
+<code class="language-json" translate="No">{
+  "account_id": "107767373999",
+  "created_at": "2010-07-12T22:43:30.290Z",
+  "description": null,
+  "id": "111592530001",
+  "name": "Play One",
+  "reference_id": nature_2010-07-12,
+  "type": "EXPLICIT",
+  "updated_at": "2010-07-12T22:51:25.055Z",
+
+  "videos": [
+    {
+      "description": "Avatar_MakingAScene_Featurette",
+      "poster_sources": [
+        {
+          "src": "http://brightcove04.o.brightcove.com/107767373999/107767373999_111728861001_vs-111727994001.jpg?pubId=107767373999&amp;videoId=38467382999"
+        }
+      ],
+      "tags": [
+        "copied"
+      ],
+      "cue_points": [
+        {
+          "id": "111637107001",
+          "name": "Pre-roll",
+          "type": "AD",
+          "time": 0,
+          "metadata": null,
+          "force_stop": false
+        }
+      ],
+      "custom_fields": {
+        "moretext": "this is the first video uploaded",
+        "mylist": "abc"
+      },
+      "account_id": "107767373999",
+      "sources": [
+        {
+          "avg_bitrate": 379000,
+          "width": 320,
+          "duration": 595560,
+          "size": 28196307,
+          "stream_name": "mp4:107767373999/107767373999_111728840001_Avatar-MakingAScene-Featurette.mp4?__nn__=1497926354001&amp;slist=107767373999/&amp;auth=daEciavcicRbhbtdSaBdBdVbXd0aUdTcMaX-bvRrSa-hca-slyCzrux_zJAq_HFCB_EvE&amp;aifp=bcosuds",
+          "codec": "H264",
+          "asset_id": "111728840001",
+          "container": "MP4",
+          "height": 180,
+          "app_name": "rtmp://cp150446.edgefcs.net/ondemand"
+        },
+        {
+          "avg_bitrate": 379000,
+          "width": 320,
+          "src": "http://uds.ak.o.brightcove.com/107767373999/107767373999_111728840001_Avatar-MakingAScene-Featurette.mp4?pubId=107767373999&amp;videoId=38467382999",
+          "size": 28196307,
+          "height": 180,
+          "duration": 595560,
+          "container": "MP4",
+          "codec": "H264",
+          "asset_id": "111728840001"
+        },
+        {
+          "avg_bitrate": 267000,
+          "width": 320,
+          "duration": 595560,
+          "size": 19894997,
+          "stream_name": "mp4:107767373999/107767373999_111728852001_Avatar-MakingAScene-Featurette.mp4?__nn__=1497926354001&amp;slist=107767373999/&amp;auth=daEciavcicRbhbtdSaBdBdVbXd0aUdTcMaX-bvRrSa-hca-slyCzrux_zJAq_HFCB_EvE&amp;aifp=bcosuds",
+          "codec": "H264",
+          "asset_id": "111728852001",
+          "container": "MP4",
+          "height": 180,
+          "app_name": "rtmp://cp150446.edgefcs.net/ondemand"
+        },
+        {
+          "avg_bitrate": 267000,
+          "width": 320,
+          "src": "http://uds.ak.o.brightcove.com/107767373999/107767373999_111728852001_Avatar-MakingAScene-Featurette.mp4?pubId=107767373999&amp;videoId=38467382999",
+          "size": 19894997,
+          "height": 180,
+          "duration": 595560,
+          "container": "MP4",
+          "codec": "H264",
+          "asset_id": "111728852001"
+        },
+        {
+          "avg_bitrate": 549000,
+          "width": 480,
+          "duration": 595567,
+          "size": 40889436,
+          "stream_name": "mp4:107767373999/107767373999_111728860001_Avatar-MakingAScene-Featurette.mp4?__nn__=1497926354001&amp;slist=107767373999/&amp;auth=daEciavcicRbhbtdSaBdBdVbXd0aUdTcMaX-bvRrSa-hca-slyCzrux_zJAq_HFCB_EvE&amp;aifp=bcosuds",
+          "codec": "H264",
+          "asset_id": "111728860001",
+          "container": "MP4",
+          "height": 268,
+          "app_name": "rtmp://cp150446.edgefcs.net/ondemand"
+        },
+        {
+          "avg_bitrate": 549000,
+          "width": 480,
+          "src": "http://uds.ak.o.brightcove.com/107767373999/107767373999_111728860001_Avatar-MakingAScene-Featurette.mp4?pubId=107767373999&amp;videoId=38467382999",
+          "size": 40889436,
+          "height": 268,
+          "duration": 595567,
+          "container": "MP4",
+          "codec": "H264",
+          "asset_id": "111728860001"
+        },
+        {
+          "avg_bitrate": 835000,
+          "width": 640,
+          "duration": 595567,
+          "size": 62142992,
+          "stream_name": "mp4:107767373999/107767373999_111728865001_Avatar-MakingAScene-Featurette.mp4?__nn__=1497926354001&amp;slist=107767373999/&amp;auth=daEciavcicRbhbtdSaBdBdVbXd0aUdTcMaX-bvRrSa-hca-slyCzrux_zJAq_HFCB_EvE&amp;aifp=bcosuds",
+          "codec": "H264",
+          "asset_id": "111728865001",
+          "container": "MP4",
+          "height": 360,
+          "app_name": "rtmp://cp150446.edgefcs.net/ondemand"
+        },
+        {
+          "avg_bitrate": 835000,
+          "width": 640,
+          "src": "http://uds.ak.o.brightcove.com/107767373999/107767373999_111728865001_Avatar-MakingAScene-Featurette.mp4?pubId=107767373999&amp;videoId=38467382999",
+          "size": 62142992,
+          "height": 360,
+          "duration": 595567,
+          "container": "MP4",
+          "codec": "H264",
+          "asset_id": "111728865001"
+        },
+        {
+          "avg_bitrate": 1744000,
+          "width": 640,
+          "duration": 595567,
+          "size": 129836869,
+          "stream_name": "mp4:107767373999/107767373999_111735357001_Avatar-MakingAScene-Featurette.mp4?__nn__=1497926354001&amp;slist=107767373999/&amp;auth=daEciavcicRbhbtdSaBdBdVbXd0aUdTcMaX-bvRrSa-hca-slyCzrux_zJAq_HFCB_EvE&amp;aifp=bcosuds",
+          "codec": "H264",
+          "asset_id": "111735357001",
+          "container": "MP4",
+          "height": 360,
+          "app_name": "rtmp://cp150446.edgefcs.net/ondemand"
+        },
+        {
+          "avg_bitrate": 1744000,
+          "width": 640,
+          "src": "http://uds.ak.o.brightcove.com/107767373999/107767373999_111735357001_Avatar-MakingAScene-Featurette.mp4?pubId=107767373999&amp;videoId=38467382999",
+          "size": 129836869,
+          "height": 360,
+          "duration": 595567,
+          "container": "MP4",
+          "codec": "H264",
+          "asset_id": "111735357001"
+        },
+        {
+          "avg_bitrate": 1249000,
+          "width": 640,
+          "duration": 595567,
+          "size": 92994065,
+          "stream_name": "mp4:107767373999/107767373999_111735369001_Avatar-MakingAScene-Featurette.mp4?__nn__=1497926354001&amp;slist=107767373999/&amp;auth=daEciavcicRbhbtdSaBdBdVbXd0aUdTcMaX-bvRrSa-hca-slyCzrux_zJAq_HFCB_EvE&amp;aifp=bcosuds",
+          "codec": "H264",
+          "asset_id": "111735369001",
+          "container": "MP4",
+          "height": 360,
+          "app_name": "rtmp://cp150446.edgefcs.net/ondemand"
+        },
+        {
+          "avg_bitrate": 1249000,
+          "width": 640,
+          "src": "http://uds.ak.o.brightcove.com/107767373999/107767373999_111735369001_Avatar-MakingAScene-Featurette.mp4?pubId=107767373999&amp;videoId=38467382999",
+          "size": 92994065,
+          "height": 360,
+          "duration": 595567,
+          "container": "MP4",
+          "codec": "H264",
+          "asset_id": "111735369001"
+        }
+      ],
+      "name": "Avatar_MakingAScene_Featurette",
+      "reference_id": "AvatarMakingShort",
+      "long_description": null,
+      "duration": 595560,
+      "published_at": "2010-07-12T22:37:34.760Z",
+      "text_tracks": [],
+      "updated_at": "2010-07-12T22:54:29.666Z",
+      "thumbnail": "http://brightcove04.o.brightcove.com/107767373999/107767373999_111728862001_th-111727994001.jpg?pubId=107767373999&amp;videoId=38467382999",
+      "poster": "http://brightcove04.o.brightcove.com/107767373999/107767373999_111728861001_vs-111727994001.jpg?pubId=107767373999&amp;videoId=38467382999",
+      "link": {
+        "text": "Full Dvd at Amazon",
+        "url": "http://www.amazon.com/Avatar-Sam-Worthington/dp/B002VPE1AW"
+      },
+      "id": "38467382999",
+      "ad_keys": null,
+      "thumbnail_sources": [
+        {
+          "src": "http://brightcove04.o.brightcove.com/107767373999/107767373999_111728862001_th-111727994001.jpg?pubId=107767373999&amp;videoId=38467382999"
+        }
+      ],
+      "created_at": "2010-07-12T22:37:34.760Z"
+    }
+  ],
+}</code></pre>
+    </details>
+    </section>
+
+    <section class="bcls-section">
+    <h2 id="Captions">キャプション</h2>
+
+    <p>クローズドキャプションは、動画にアクセスしたい個人向けの追加情報を提供します。聴覚障害者や聴きにくい人が動画の音声部分にアクセスするためには、キャプションが必要です。キャプションを初めて使用する場合は、<a href=" https://studio.support.brightcove.com/media/overview-adding-captions-video.html">概要を参照してください。ビデオドキュメントにキャプションを追加する</a>。</p>
+
+    <h3>外部WebVTT</h3>
+
+    <p>外部 WebVTT キャプションは、動画とは別のテキストファイルです。キャプションファイルをビデオに関連付けるには、次のようにします。</p>
+
+    <ul>
+      <li><a href="https://studio.support.brightcove.com/media/adding-captions-videos-using-media-module.html">Media モジュールを使用したキャプションの追加</a></li>
+      <li><a href="/cms/managing-videos/using-cms-api-add-webvtt-captions-text-tracks.html">CMS API を使用したキャプションの追加</a></li>
+    </ul>
+
+    <h4>レスポンスの例</h4>
+
+    <p>以下は、Mediaモジュールを使用してWebVTTキャプションファイルがビデオに追加されたPlaybackAPIからのサンプル応答です。テキストトラックに注意してください<code translate="No">src</code>プロパティは、外部キャプションファイルを指します。</p>
+
+    <pre class="line-numbers">
+<code class="language-json" translate="No">{
+"text_tracks": [
+{
+  "mime_type": null,
+  "account_id": "20318290001",
+  "default": true,
+  "sources": [
+    {
+      "src": "https://static.3playmedia.com/p/files/2240988/threeplay_transcripts/6418302.vtt?project_id=10127&amp;format_id=51&amp;refresh=1515241856"
+    }
+  ],
+  "src": "https://static.3playmedia.com/p/files/2240988/threeplay_transcripts/6418302.vtt?project_id=10127&amp;format_id=51&amp;refresh=1515241856",
+  "asset_id": null,
+  "label": "English",
+  "id": "13d66def-d004-4e75-b160-4ac693eff7d7",
+  "kind": "captions",
+  "srclang": "en"
+}
+],
+}</code></pre>
+
+    <h3>マニフェストの WebVTT</h3>
+
+    <p>マニフェストの WebVTT キャプションは、動画とともに取り込まれています。これは、最初にビデオを取り込んだとき、またはビデオを取り込んだ後に行うことができます。マニフェスト内のキャプションは次のように作成できます。</p>
+
+    <ul>
+      <li><a href="/dynamic-ingest/ingest-guides/ingesting-webvtt-files-text-trackscaptions.html">WebVTT ファイルの取り込み</a></li>
+      <li><a href="/dynamic-ingest/getting-started/overview-dynamic-ingest-api-dynamic-delivery.html#ingest_captions">動的取り込み API を使用したキャプションの取り込み</a></li>
     </ul>
 
     <h4>レスポンスの例</h4>
