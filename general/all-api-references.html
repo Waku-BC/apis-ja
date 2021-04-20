@@ -1277,168 +1277,291 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
                   
                 <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
               
-
-                
-                  
-                    
-    </ul>
-    </section>
-
-  </article>
-<!-- complete bootstrap layout -->
-    </div>
-    <div class="col-sm-2 right-side-bar">
+              </ul>
+            
+          
+            </nav>
+          </div>
+          <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
+        <!-- bootstrap layout -->
       
-      <nav class="right-side-nav" id="right_side_nav">
-        <h6 class="toc">ページコンテンツ</h6>
-        <ul id="in_page_nav" class="list-none"></ul>
-      </nav>
+      <p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
       
-    </div>
-  </div>
-</div>
-
-<hr>
-<footer class="bcls-footer" role="contentinfo">
-  <div class="row">
-    <div class="region region-footer-top-center col-md-12">
-      <nav role="navigation" aria-labelledby="block-brightcovesupport-menu" id="block-brightcovesupport" class="footer-menu">
-
-        <h2>Brightcove ブサポート</h2>
-
-        <ul class="menu">
-          <li>
-            <a href="https://status.brightcove.com">システムステータス</a>
-          </li>
-          <li>
-            <a href="https://supportportal.brightcove.com/s/login/?">サポートへのお問い合わせ</a>
-          </li>
-          <li>
-            <a href="https://support.brightcove.com/">ドキュメンテーション</a>
-          </li>
-        </ul>
-
-      </nav>
-      <nav role="navigation" aria-labelledby="block-training-menu" id="block-training" class="footer-menu">
-
-        <h2>トレーニング</h2>
-
-        <ul class="menu">
-          <li>
-            <a href="https://studio.support.brightcove.com/training/online-training-courses.html">オンラインコース</a>
-          </li>
-          <li>
-            <a href="https://studio.support.brightcove.com/training/register-training.html">コースに登録する</a>
-          </li>
-          <li>
-            <a href="https://university.brightcove.com/">Brightcove University</a>
-          </li>
-        </ul>
-
-      </nav>
-      <nav role="navigation" aria-labelledby="block-brightcove-menu" class="footer-menu">
-
-        <h2>Brightcove</h2>
-
-        <ul class="menu">
-          <li>
-            <a href="https://www.brightcove.com">Brightcove.com</a>
-          </li>
-          <li>
-            <a href="https://supportportal.brightcove.com/s/login/?">お問合せ</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </div>
-  <div class="row">
-    <div class="region region-footer-bottom-center col-md-12">
-      <div class="bcls-copyright footer-menu">
-        <table>
-          <tr>
-            <td>
-              <div id="bc_copyright" class="field field--name-field-copyright-year field--type-string field--label-hidden field--item" style="float: left;"> Brightcove Inc. All rights reserved.</div>
-            </td>
-            <td><a href="https://www.brightcove.com/en/legal/privacy">プライバシー</a> | <a href="https://www.brightcove.com/en/terms-and-conditions">利用規約</a></td>
-            <td>
-              <div class="gf-links-cols footer-menu">
-                <div class="gf-social"><a href="https://www.linkedin.com/company/16439" title="LinkedIn" newtab="newtab" class="gf-social-linkedin"><i class="fab fa-linkedin-in" style="font-size: 1.5rem;"></i></a><a href="https://twitter.com/brightcove" title="Twitter" newtab="newtab" class="gf-social-twitter"><i class="fab fa-twitter" style="font-size: 1.5rem;"></i></a><a href="https://www.facebook.com/Brightcove" title="Facebook" newtab="newtab" class="gf-social-facebook"><i class="fab fa-facebook-f" style="font-size: 1.5rem;"></i></a>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </table>
+      <!-- search bar -->
+      <div id="nav-search-box" style="margin-top: 1rem;"></div>
+      <!-- in-page navigation for narrow screens -->
+      <details class="centered-inpage-nav" id="centered_inpage_nav">
+        <summary><h6 class="toc">ページコンテンツ</h6></summary>
+        <nav id="centered_toc"></nav>
+        <ul id="centered_in_page_toc" class="list-none"></ul>
+      </details>
+      <!-- open in new tab/window -->
+      <a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
+      
+      
+      
+      
+      
+      
+      <link rel="stylesheet" href="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/general-information/audio-content/audio-content.css" />
+      
+      <h1>すべての API リファレンス</h1>
+      <article class="bcls-article">
+        <summary>すでにBrightcove ブ API に精通しており、参照情報を参照したいだけの場合は、このページにはすべてのリンクがあります。</summary>
+        <section class="bcls-section">
+          <h2 id="video_cloud_rest_apis">Video Cloud</h2>
+      
+          <h3>プラットフォーム API</h3>
+      
+          <ul>
+            <li><a href="/analytics/references/reference.html">アナリティクス API </a></li>
+            <li><a href="https://audience.support.brightcove.com/develop/reference.html">オーディエンス API </a></li>
+            <li><a href="/cms/references/reference.html">CMS API </a></li>
+            <li><a href="/data-collection/references/reference.html">データ収集API </a></li>
+            <li><a href="/delivery-system/references/reference.html">デリバリーシステム API </a></li>
+            <li><a href="/dynamic-ingest/references/reference.html">動的取り込み API </a></li>
+            <li><a href="/ingest-profiles/references/reference.html">プロファイルの取り込み API </a></li>
+            <li><a href="/oauth/references/reference.html">OAuth API </a></li>
+            <li><a href="/playback/references/reference_v1.html">再生 API </a></li>
+            <li><a href="/player-management/references/reference.html">プレーヤー管理 API </a></li>
+            <li><a href="/policy/references/reference.html">ポリシー API </a></li>
+            <li><a href="https://ssai.support.brightcove.com/vod/references/reference.html">SSAI API </a></li>
+            <li><a href="https://social.support.brightcove.com/develop/reference.html">ソーシャル API </a></li>
+            <li><a href="/social-syndication/references/configuration-reference.html">ソーシャルシンジケーション設定 API </a></li>
+            <li><a href="/social-syndication/references/feed-reference.html">ソーシャル・シンジケーション・フィード API </a></li>
+          </ul>
+      
+          <h3>Brightcove Player API</h3>
+      
+          <ul>
+            <li><a href="https://docs.brightcove.com/brightcove-player/current-release/index.html">現在のBrightcove ブプレーヤー API </a></li>
+            <li><a href="https://docs.brightcove.com/brightcove-player/5.x/index.html">5.x Brightcove ブプレーヤー API </a></li>
+            <li><a href="https://docs.brightcove.com/brightcove-player/1.x/index.html">1.x Brightcove ブプレーヤー API </a></li>
+          </ul>
+          </section>
+      
+          <section class="bcls-section">
+          <h2 id="gallery">Gallery</h2>
+      
+          <ul>
+            <li><a href="https://gallery.support.brightcove.com/develop/overview-page-experience-api.html">ページ内エクスペリエンス API </a>&nbsp; (プラットフォーム API)</li>
+            <li><a href="https://gallery.support.brightcove.com/develop/overview-page-experience-client-api.html">ページ内エクスペリエンス API </a>&nbsp; (クライアント API)</li>
+          </ul>
+          </section>
+      
+          <section class="bcls-section">
+          <h2 id="Brightcove Player">Brightcove ブプレーヤー (スタンドアロン)</h2>
+      
+          <ul>
+            <li><a href="https://docs.brightcove.com/brightcove-player/current-release/index.html">現在のBrightcove ブプレーヤー API </a></li>
+            <li><a href="https://docs.brightcove.com/brightcove-player/5.x/index.html">5.x Brightcove ブプレーヤー API </a></li>
+            <li><a href="https://docs.brightcove.com/brightcove-player/1.x/index.html">1.x Brightcove ブプレーヤー API </a></li>
+            <li><a href="/delivery-system/references/reference.html">デリバリーシステム API </a></li>
+            <li><a href="/oauth/references/reference.html">OAuth API </a></li>
+            <li><a href="/player-management/references/reference.html">プレーヤー管理 API </a></li>
+          </ul>
+          </section>
+      
+          <section class="bcls-section">
+          <h2 id="device_sdks">デバイス SDK </h2>
+      
+          <h3>Android</h3>
+      
+          <ul>
+            <li><a href="https://docs.brightcove.com/android-sdk/javadoc/index.html">Android用プレーヤー SDK </a></li>
+            <!-- <li><a href="https://docs.brightcove.com/android-sdk/javadoc/com/brightcove/cast/package-frame.html">Cast plugin</a></li> -->
+            <li><a href="https://docs.brightcove.com/android-sdk/javadoc/com/brightcove/freewheel/controller/package-frame.html">フリーホイールプラグイン</a></li>
+            <li><a href="https://docs.brightcove.com/android-sdk/javadoc/com/brightcove/ima/package-frame.html">IMA プラグイン</a></li>
+            <li><a href="https://docs.brightcove.com/android-sdk/javadoc/com/brightcove/omniture/package-frame.html">オムニツアプラグイン</a></li>
+          </ul>
+      
+          <h3>iOS</h3>
+      
+          <ul>
+            <li><a href="https://docs.brightcove.com/ios-sdk/index.html">iOS用プレーヤー SDK </a></li>
+            <li><a href="https://docs.brightcove.com/ios-plugins/freewheel/index.html">フリーホイールプラグイン</a></li>
+            <li><a href="https://docs.brightcove.com/ios-plugins/ima/index.html">IMA プラグイン</a></li>
+            <li><a href="https://docs.brightcove.com/ios-plugins/omniture/index.html">オムニツアプラグイン</a></li>
+          </ul>
+      
+          <h3>tvOS</h3>
+      
+          <ul>
+            <li><a href="https://docs.brightcove.com/ios-sdk/index.html">iOS用プレーヤー SDK </a></li>
+          </ul>
+          </section>
+      
+          <section class="bcls-section">
+          <h2 id="live_api">ライブ API</h2>
+      
+          <ul>
+            <li><a href="https://live.support.brightcove.com/live-api/references/reference.html">ライブ API </a></li>
+          </ul>
+          </section>
+      
+          <section class="bcls-section">
+          <h2 id="zencoder">Zencoder</h2>
+      
+          <ul>
+            <li><a href="https://zencoder.support.brightcove.com/references/reference.html">Zencoder API </a></li>
+          </ul>
+          </section>
+      
+        </article>
+      <!-- complete bootstrap layout -->
+          </div>
+          <div class="col-sm-2 right-side-bar">
+            
+            <nav class="right-side-nav" id="right_side_nav">
+              <h6 class="toc">ページコンテンツ</h6>
+              <ul id="in_page_nav" class="list-none"></ul>
+            </nav>
+            
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</footer>
-
-</div>
-</div>
-<script>
       
-  var searchBox = sajari.init({
-    mode: "search-box",
-    project: "1588255093746585379", // Set this to your project.
-    collection: "brightcove-documenation", // Set this to your collection.
-    instantPipeline: "autocomplete", // Pipeline used as you type
-    inputPlaceholder: "Search", // Input element placeholder
-    maxSuggestions: 5, // Maximum number of suggestions to show
-    attachSearchBox: document.getElementById("nav-search-box") // DOM element to attach to
-  });
-  
-    searchBox("sub", "pipeline.search-sent", function (_, query) {
-      window.location = "/search.html?q=" + encodeURIComponent(query.q);
-    });
-  
-
-</script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/https-fix.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/setDate.js"></script>
-  
-  <script src="https://support.brightcove.com/site-assets/js/site/prism.js"></script>
-  
-  <script src="https://support.brightcove.com/site-assets/js/site/site.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/tabs.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/toc.js"></script>
-  <script src="/assets/js/sites_nav.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/bcls-utils.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/local-link-fix.js"></script>
-  <script src="/assets/js/feedback.js"></script>
-  
-  <script src="/assets/js/sajari-search-foot.js"></script>
-  
-  <!-- <script src="/assets/js/sajari-index.js"></script> -->
-  <style>
-    a.sj-paginator__page-number.sj-paginator__page-number--current.css-so0ov7 {
-      background-color: lightblue;
-    }
-    div.sj-tabs__tab {
-      margin-top: 3rem;
-      margin-left: .3rem;
-      border-top-left-radius: .4rem;
-      border-top-right-radius: .4rem;
-      background-color:#e8e8e8;
-    }
-
-    div.sj-tabs__tab.sj-tabs__tab--selected {
-      border-bottom-color: crimson;
-      background-color: #f8f8f8;
-    }
-
-    p.sj-results__result__description.css-p9jvyt {
-      font-size: 1rem;
-    }
-
-    .sj-result__text.css-31l7gp h3 {
-      color: navy;
-      font-size: 1.4rem;
-    }
-    </style>
-
-</body>
-
-</html>
+      <hr>
+      <footer class="bcls-footer" role="contentinfo">
+        <div class="row">
+          <div class="region region-footer-top-center col-md-12">
+            <nav role="navigation" aria-labelledby="block-brightcovesupport-menu" id="block-brightcovesupport" class="footer-menu">
+      
+              <h2>Brightcove ブサポート</h2>
+      
+              <ul class="menu">
+                <li>
+                  <a href="https://status.brightcove.com">システムステータス</a>
+                </li>
+                <li>
+                  <a href="https://supportportal.brightcove.com/s/login/?">サポートへのお問い合わせ</a>
+                </li>
+                <li>
+                  <a href="https://support.brightcove.com/">ドキュメンテーション</a>
+                </li>
+              </ul>
+      
+            </nav>
+            <nav role="navigation" aria-labelledby="block-training-menu" id="block-training" class="footer-menu">
+      
+              <h2>トレーニング</h2>
+      
+              <ul class="menu">
+                <li>
+                  <a href="https://studio.support.brightcove.com/training/online-training-courses.html">オンラインコース</a>
+                </li>
+                <li>
+                  <a href="https://studio.support.brightcove.com/training/register-training.html">コースに登録する</a>
+                </li>
+                <li>
+                  <a href="https://university.brightcove.com/">Brightcove University</a>
+                </li>
+              </ul>
+      
+            </nav>
+            <nav role="navigation" aria-labelledby="block-brightcove-menu" class="footer-menu">
+      
+              <h2>Brightcove</h2>
+      
+              <ul class="menu">
+                <li>
+                  <a href="https://www.brightcove.com">Brightcove.com</a>
+                </li>
+                <li>
+                  <a href="https://supportportal.brightcove.com/s/login/?">お問合せ</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <div class="row">
+          <div class="region region-footer-bottom-center col-md-12">
+            <div class="bcls-copyright footer-menu">
+              <table>
+                <tr>
+                  <td>
+                    <div id="bc_copyright" class="field field--name-field-copyright-year field--type-string field--label-hidden field--item" style="float: left;"> Brightcove Inc. All rights reserved.</div>
+                  </td>
+                  <td><a href="https://www.brightcove.com/en/legal/privacy">プライバシー</a> | <a href="https://www.brightcove.com/en/terms-and-conditions">利用規約</a></td>
+                  <td>
+                    <div class="gf-links-cols footer-menu">
+                      <div class="gf-social"><a href="https://www.linkedin.com/company/16439" title="LinkedIn" newtab="newtab" class="gf-social-linkedin"><i class="fab fa-linkedin-in" style="font-size: 1.5rem;"></i></a><a href="https://twitter.com/brightcove" title="Twitter" newtab="newtab" class="gf-social-twitter"><i class="fab fa-twitter" style="font-size: 1.5rem;"></i></a><a href="https://www.facebook.com/Brightcove" title="Facebook" newtab="newtab" class="gf-social-facebook"><i class="fab fa-facebook-f" style="font-size: 1.5rem;"></i></a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </footer>
+      
+      </div>
+      </div>
+      <script>
+            
+        var searchBox = sajari.init({
+          mode: "search-box",
+          project: "1588255093746585379", // Set this to your project.
+          collection: "brightcove-documenation", // Set this to your collection.
+          instantPipeline: "autocomplete", // Pipeline used as you type
+          inputPlaceholder: "Search", // Input element placeholder
+          maxSuggestions: 5, // Maximum number of suggestions to show
+          attachSearchBox: document.getElementById("nav-search-box") // DOM element to attach to
+        });
+        
+          searchBox("sub", "pipeline.search-sent", function (_, query) {
+            window.location = "/search.html?q=" + encodeURIComponent(query.q);
+          });
+        
+      
+      </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://support.brightcove.com/site-assets/js/site/https-fix.js"></script>
+        <script src="https://support.brightcove.com/site-assets/js/site/setDate.js"></script>
+        
+        <script src="https://support.brightcove.com/site-assets/js/site/prism.js"></script>
+        
+        <script src="https://support.brightcove.com/site-assets/js/site/site.js"></script>
+        <script src="https://support.brightcove.com/site-assets/js/site/tabs.js"></script>
+        <script src="https://support.brightcove.com/site-assets/js/site/toc.js"></script>
+        <script src="/assets/js/sites_nav.js"></script>
+        <script src="https://support.brightcove.com/site-assets/js/site/bcls-utils.js"></script>
+        <script src="https://support.brightcove.com/site-assets/js/site/local-link-fix.js"></script>
+        <script src="/assets/js/feedback.js"></script>
+        
+        <script src="/assets/js/sajari-search-foot.js"></script>
+        
+        <!-- <script src="/assets/js/sajari-index.js"></script> -->
+        <style>
+          a.sj-paginator__page-number.sj-paginator__page-number--current.css-so0ov7 {
+            background-color: lightblue;
+          }
+          div.sj-tabs__tab {
+            margin-top: 3rem;
+            margin-left: .3rem;
+            border-top-left-radius: .4rem;
+            border-top-right-radius: .4rem;
+            background-color:#e8e8e8;
+          }
+      
+          div.sj-tabs__tab.sj-tabs__tab--selected {
+            border-bottom-color: crimson;
+            background-color: #f8f8f8;
+          }
+      
+          p.sj-results__result__description.css-p9jvyt {
+            font-size: 1rem;
+          }
+      
+          .sj-result__text.css-31l7gp h3 {
+            color: navy;
+            font-size: 1.4rem;
+          }
+          </style>
+      
+      </body>
+      
+      </html>
