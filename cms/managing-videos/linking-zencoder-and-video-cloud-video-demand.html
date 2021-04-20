@@ -1277,10 +1277,71 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
                   
                 <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
               
-
-                
+                <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
                   
-                    
+                
+              </ul>
+            
+          
+      </nav>
+    </div>
+    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
+  <!-- bootstrap layout -->
+
+<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
+
+<!-- search bar -->
+<div id="nav-search-box" style="margin-top: 1rem;"></div>
+<!-- in-page navigation for narrow screens -->
+<details class="centered-inpage-nav" id="centered_inpage_nav">
+  <summary><h6 class="toc">ページコンテンツ</h6></summary>
+  <nav id="centered_toc"></nav>
+  <ul id="centered_in_page_toc" class="list-none"></ul>
+</details>
+<!-- open in new tab/window -->
+<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
+
+
+
+
+
+
+<h1>Zencoder と Video Cloud のリンク</h1>
+<article class="bcls-article">
+  <summary>このトピックでは、Zencoder を使用してトランスコードされた動画を Video Cloud のリモートアセットとして追加することで、Zencoder と Video Cloud をリンクする方法について説明します。</summary>
+    <section id="together" class="bcls-section">
+    <h2>ZencoderとVideo Cloudの統合</h2>
+    
+    <p>オンラインビデオのデプロイに Video Cloud を使用しようとしている Zencoder カスタマーでも、Zencoder のトランスコーディング機能を活用したい Video Cloud のお客様でも、どちらのプラットフォームも利用できます。</p>
+    
+    <aside class="bcls-aside bcls-aside--information">このソリューションがVideoCloudで機能するためには、次のいずれかが必要です。<strong>プロまたはエンタープライズ</strong>アカウント。また、パブリッシャは、自分のVideo Cloudアカウントから<strong>リモートアセットをストリームできる必要があります</strong>。これは通常、CDN（Akamai、Limelight など）との何らかの関係が必要であることを意味します。コンテンツはBrightcove ブハウスアカウントにはないため、コンテンツを保存できます。</aside>
+    
+    <p>コンテンツの所有者は、Zencoder APIを使用して、Zencoderにコンテンツをダウンロードしたり、モバイル、Web、コネクティッドTVなど向けのレンディションを作成したります。次に、Video Cloudプレーヤへのストリーミング用にCDNでこのコンテンツをプッシュすることができます。Video Cloudではリモートアセットは、API、Mediaモジュール、またはFTPマニフェストファイルによって作成する必要があります。これにより、Video Cloud Media API を使用してメタデータと CDN 上のリモートアセットへのポインタを取得できます。</p>
+    </section>
+    
+    <section id="implementation" class="bcls-section">
+    <h2>実装</h2>
+    
+    <p>次に、ソリューションの高レベルのアーキテクチャを示します。</p>
+    
+    <figure class="bcls-figure"><img class="bcls-image" alt="Zencoder から Video クラウドへ" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/cms-api/guides/zencoder-videocloud/assets/zencoder-videocloud-logic.svg"/>
+    <figcaption class="bcls-caption--image">Zencoder から Video クラウドへ</figcaption>
+    </figure>
+    
+    <p>次に、統合のための高レベルの手順を示します。</p>
+    
+    <h3>Zencoder を使用してビデオをトランスコードする</h3>
+    
+    <ol class="bcls-tasklist">
+      <li>Zencoderをアプリケーション（CMS、Webアプリなど）と統合します-を参照してください<a href="https://app.zencoder.com">十分に文書化されたAPIおよび統合ライブラリ</a>詳細については。</li>
+      <li>パブリッシャの動画プレーヤにコンテンツをストリームできる任意の場所を出力場所にできます。通常は、AkamaiやLimelightのようなCDNです。</li>
+    </ol>
+    
+    <h3>ビデオクラウドにビデオを追加する</h3>
+    
+    <ol class="bcls-tasklist">
+      <li><a href="/cms/references/reference.html#api-videoGroup-Create_Video">新しいビデオを作成する</a>ビデオクラウドで。</li>
+      <li>ビデオの作成リクエストに含めることができないメタデータを追加する必要がある場合は、<a href="/cms/references/reference.html#api-videoGroup-Update_Video">ビデオメタデータを更新する</a></li>
       <li><a href="/cms/references/reference.html#api-assetGroup">ビデオをリモートレンディションとして追加する</a> CDNまたは他のリポジトリからのURLを使用して、ビデオに移動します。ほとんどの場合、<a href="/cms/references/reference.html#api-assetGroup-Add_Rendition">レンディションを追加</a> H.264レンディションまたはを追加する操作<a href="/cms/references/reference.html#api-assetGroup-Add_HLS_Manifest">HSLマニフェストを追加</a> HLSレンディションを追加します。</li>
     </ol>
     </section>

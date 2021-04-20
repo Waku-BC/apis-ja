@@ -1277,10 +1277,178 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
                   
                 <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
               
-
-                
+                <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
                   
-                    
+                
+              </ul>
+            
+          
+      </nav>
+    </div>
+    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
+  <!-- bootstrap layout -->
+
+<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
+
+<!-- search bar -->
+<div id="nav-search-box" style="margin-top: 1rem;"></div>
+<!-- in-page navigation for narrow screens -->
+<details class="centered-inpage-nav" id="centered_inpage_nav">
+  <summary><h6 class="toc">ページコンテンツ</h6></summary>
+  <nav id="centered_toc"></nav>
+  <ul id="centered_in_page_toc" class="list-none"></ul>
+</details>
+<!-- open in new tab/window -->
+<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
+
+
+
+
+
+
+<h1>CMS /再生 API リリースノート</h1>
+<article class="bcls-article">
+  <summary>CMS および再生 API のリリースノート。</summary>
+  <section class="bcls-section">
+    <h2 id="2019">2019年リリース</h2>
+
+    <table class="bcls-table-release-notes">
+      <caption class="bcls-caption--table">2019 リリースノート</caption>
+      <thead class="bcls-table__head">
+        <tr>
+          <th>日付</th>
+          <th>API</th>
+          <th>リリースノート</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td id="2019-04-19" style="white-space: nowrap;">2019-04-25</td>
+          <td>CMS API</td>
+          <td>
+            <ul>
+              <li><a href="/cms/searching/cms-and-playback-apis-video-search-v2.html">動画検索用のインフラストラクチャにアップグレードすると</a>、パフォーマンスと検索結果が向上します。</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td id="2019-04-19">2019-04-25</td>
+          <td>CMS API</td>
+          <td>
+            <ul>
+              <li><code translate="No">include_details</code><a href="/cms/references/reference.html#operation/GetVideosInPlaylist">プレイリストリクエストで動画を取得するためのパラメータを追加します</a>。</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td id="2019-04-19">2019-04-19</td>
+          <td>CMS API</td>
+          <td>
+            <ul>
+              <li>プレイリストの動画リクエストに応じてテキストトラックデータを抑制するために追加されたパラメータ。詳細については、「<a href="/cms/references/reference.html#operation/DeletePlaylists"> CMS API リファレンス</a>」を参照してください。</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="2018">2018年のリリース</h2>
+    <table class="bcls-table-release-notes">
+      <caption class="bcls-caption--table">2018 リリースノート</caption>
+      <thead class="bcls-table__head">
+        <tr>
+          <th>日付</th>
+          <th>API</th>
+          <th>リリースノート</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td id="2018-01-25" style="white-space: nowrap;">2018-07-22</td>
+          <td>CMS API</td>
+          <td>
+            <ul>
+              <li>カスタムフィールドの照合が強制されるときに、メディア共有に変更を追加します。詳細については、<a href="/cms/managing-videos/media-sharing-cms-api.html#Limitations"> CMS API を使用したメディア共有を参照してください</a>。</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td id="2018-03-02">2018-03-02</td>
+          <td>再生API</td>
+          <td>
+            <ul>
+              <li><a href="/playback/getting-started/overview-playback-api.html#Find_related_videos">関連動画検索機能を追加します</a>。詳細については、「<a href="/playback/references/reference_v1.html#api-videoGroup-Get_Related_Videos_by_ID_or_Reference_ID">再生 API リファレンス</a>」を参照してください。</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td id="2018-01-25">2018-01-25</td>
+          <td>CMS API</td>
+          <td>
+            <ul>
+              <li><a href="/cms/searching/cms-and-playback-apis-video-search-v2.html#supported_search_fields"><em>最近削除された動画の検索を追加します</em></a>。</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td id="2018-01-15">2018-01-15</td>
+          <td>CMS API</td>
+          <td>
+            <ul>
+              <li><a href="/cms/managing-videos/media-sharing-cms-api.html#restrictions_on_sharing">メディア共有に地理フィルタリングマッチングを適用しました</a>。</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="2017">2017年リリース</h2>
+    <table class="bcls-table-release-notes">
+      <caption class="bcls-caption--table">2018 リリースノート</caption>
+      <thead class="bcls-table__head">
+        <tr>
+          <th>日付</th>
+          <th>API</th>
+          <th>リリースノート</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td id="2017-12-18" style="white-space: nowrap;">2017-12-18</td>
+          <td>CMS API</td>
+          <td>
+            <ul>
+              <li><a href="/cms/managing-videos/media-sharing-cms-api.html#CMS_API_operations">メディア共有にカスタムフィールドのマッチングを強制追加しました</a>。</li>
+              <li><a href="/cms/references/reference.html#api-mediasharingGroup">CMS API メディア共有の新しい操作が追加されました</a>。
+                <ul>
+                  <li>チャンネルをリストする</li>/doc-assets/doc-assets/site-assets/images/site/check16.png
+                  <li>チャンネル詳細の取得</li>
+                  <li>チャンネルを更新</li>
+                </ul>
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td id="2017-10-13">2017-10-13</td>
+          <td>CMS API</td>
+          <td>
+            <ul>
+              <li><a href="/cms/managing-videos/media-sharing-cms-api.html">メディア共有 API </a>が追加されました</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td id="2017-07-21">2017-07-21</td>
+          <td>再生API</td>
+          <td>
+            <ul>
+              <li><a href="/cms/searching/cms-and-playback-apis-video-search-v2.html">動画検索が追加されました</a></li>
             </ul>
           </td>
         </tr>

@@ -1276,11 +1276,187 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
                 
                   
                 <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
-              
-
-                
+                <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
                   
-                    
+                
+              </ul>
+            
+          
+      </nav>
+    </div>
+    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
+  <!-- bootstrap layout -->
+
+<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
+
+<!-- search bar -->
+<div id="nav-search-box" style="margin-top: 1rem;"></div>
+<!-- in-page navigation for narrow screens -->
+<details class="centered-inpage-nav" id="centered_inpage_nav">
+  <summary><h6 class="toc">ページコンテンツ</h6></summary>
+  <nav id="centered_toc"></nav>
+  <ul id="centered_in_page_toc" class="list-none"></ul>
+</details>
+<!-- open in new tab/window -->
+<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
+
+
+
+
+
+
+<h1>ラベルの操作</h1>
+<article class="bcls-article">
+  <summary>このトピックでは、CMS API を使用してラベルを作成、管理、および使用する方法について説明します。</summary>
+  <section class="bcls-section">
+    <h2 id="Introduction">はじめに</h2>
+    <aside class="bcls-aside bcls-aside--tip language-editable">アカウントのラベルは自動的に有効にならないことに注意してください。アカウントでラベルを有効にするには、<a href="https://supportportal.brightcove.com/s/login/"> Brightcoveサポートに連絡する</a>。</aside>
+    <p>ラベルはタグに似ています。それらをビデオに追加してから、それらを使用してビデオのグループを検索することができますが、いくつかの明確な利点があります。</p>
+    <ul>
+      <li>
+        ラベルはアカウントレベルで作成され、動画に適用されます。
+        <p>これは、ビデオライブラリを整理することが目的である場合は特に重要です。たとえば、タグを使用してビデオを整理しようとしている場合は、次のようなタグを作成できます。<code translate="No">birds</code>、<code translate="No">fish</code>、および<code translate="No">insects</code>。そうすれば、すべての鳥の動画を簡単に検索して見つけ、それらのスマートな再生リストを作成できます。ただし、新しい動画を追加するユーザーが誤って入力した場合<code translate="No">bird</code>の代わりに<code translate="No">birds</code>、新しいタグがあり、動画はあなたのものではありません<code translate="No">birds</code>コレクション。</p>
+        <p>と呼ばれるラベルを作成する場合<code translate="No">birds</code>代わりに、そのラベルのみをビデオに追加できます。存在しないラベルを誤って追加することはできません<code translate="No">birds</code>代わりに。</p>
+      </li>
+      <li>
+        ラベルは、次のような階層パスとして作成されます。<code translate="No">/nature/birds/shore_birds</code>。
+        <p>これは、部分パスまたはフルパスを検索（またはそれに基づいてプレイリストを作成）できることを意味します。
+          <ul>
+            <li><code translate="No">q=labels:/nature</code> -ラベルが付いているすべての動画を返します<code translate="No">nature</code></li>
+            <li><code translate="No">q=labels:/nature/birds</code> -を返します<code translate="No">birds</code>のサブグループ<code translate="No">nature</code>ビデオ</li>
+            <li><code translate="No">q=labels:/nature/birds/shore_birds</code> -を返します<code translate="No">shore_birds</code>のサブグループ<code translate="No">/nature/birds</code>ビデオ</li>
+          </ul>
+        </p>
+      </li>
+    </ul>
+  </section>
+  <section class="bcls-section">
+    <h2 id="creating_managing_labels">ラベルの作成と管理</h2>
+    <p>アカウントのラベルは、を使用して作成および管理できます<span translate="No">CMS API</span><code translate="No">/v1/accounts/{account_id}/labels</code>エンドポイント。</p>
+    <p>以下に示すすべてのAPIエンドポイントがCMSベースURLに追加されることに注意してください。</p>
+    <pre><code class="language-http" translate="No">https://cms.api.brightcove.com</code></pre>
+    <h3>ラベルの作成</h3>
+    <p>新しいラベルは、フルパスを送信することで作成できます。<code translate="No">POST</code>リクエスト：</p>
+    <h4>リクエストエンドポイントの例</h4>
+    <pre><code class="language-http" translate="No">/v1/accounts/1234567890/labels</code></pre>
+    <h4>リクエスト本文の例</h4>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "path": "/nature/birds/shore_birds/"
+}</code></pre>
+    <p>ご了承ください<em>すべて</em>パス内にまだ存在しないラベルが作成されます。別のグループを追加したい場合<code translate="No">forest_birds</code>、送信します：</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "path": "/nature/birds/forest_birds/"
+}</code></pre>
+    <p>今回は、<code translate="No">forest_birds</code>サブラベルが作成されます。<code translate="No">nature</code>そして<code translate="No">birds</code>すでに存在しています。</p>
+    <p>同様に、新しいサブグループを追加する場合<code translate="No">sandpipers</code>に<code translate="No">shore_birds</code>、送信します：</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "path": "/nature/birds/shore_birds/sandpipers"
+}</code></pre>
+    <h4>レスポンスの例</h4>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "path": "/nature/birds/shore_birds/sandpipers/"
+}</code></pre>
+        <h3>ラベルの取得</h3>
+    <p>アカウントのすべてのラベルを取得するには、<code translate="No">GET</code>リクエスト：</p>
+    <h4>リクエストエンドポイントの例</h4>
+    <pre><code class="language-http" translate="No">/v1/accounts/1234567890/labels</code></pre>
+    <h4>レスポンスの例</h4>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "account_id": "57838016001",
+  "labels": [
+    "/nature/birds/",
+    "/nature/birds/shore_birds/",
+    "/nature/birds/forest_birds/",
+    "/nature/mammals/seamammals/"
+  ],
+  "version": 4
+}</code></pre>
+    <h3>ラベルの更新</h3>
+    <p>ラベルを更新するには、<code translate="No">PATCH</code>リクエスト先：</p>
+    <pre><code class="language-http" translate="No">/v1/accounts/{account_id}/labels/by_path/{path}</code></pre>
+    <h4>リクエストエンドポイントの例</h4>
+    <pre><code class="language-http" translate="No">/v1/accounts/1234567890/labels/by_path//nature/birds/shore_birds</code></pre>
+    <h4>リクエスト本文の例</h4>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "new_label": "coastal_birds"
+}</code></pre>
+    <p>注意してください<code translate="No">new_label</code>値は、の最後の項目を置き換えます<code translate="No">{path}</code>リクエストに含まれています。したがって、代わりに交換したい場合<code translate="No">/birds</code>と<code translate="No">/avian</code>、リクエストと本文は次のようになります。</p>
+    <h5>終点</h5>
+    <pre><code class="language-http" translate="No">/v1/accounts/1234567890/labels/by_path//nature/birds/</code></pre>
+    <h5>リクエスト本文</h5>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "new_label": "avian"
+}</code></pre>
+    <p>このリクエストの後、<code translate="No">coastal_birds</code>パスは<code translate="No">/nature/wildlife/avian/coastal_birds</code>。階層内の追加サブラベルのパスが変更されるため、<code translate="No">/nature/birds/forest_birds</code>になります<code translate="No">/nature/wildlife/avian/forest_birds</code></p>
+    <p>応答には、更新されたラベルの数が含まれます。</p>
+    <h5>レスポンスの例</h5>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "path": "/nature/avian",
+  "labels_updated": "2"
+}</code></pre>
+    <h3>ラベルを削除する</h3>
+    <p>ラベルを削除するには、<code translate="No">DELETE</code>更新要求と同じエンドポイントに送信された要求。そのサブラベルで終わるパス（および追加のサブラベルを持つパス）のみが削除され、上位レベルのラベルは保持されます。</p>
+    <p>たとえば、次の3つのラベルパスがあるとします。</p>
+    <pre><code translate="No">
+      /nature/wildlife/avian/coastal_birds
+      /nature/wildlife/avian/coastal_birds/sandpipers
+      /nature/wildlife/avian/forest_birds
+    </code></pre>
+    <p>送信<code translate="No">DELETE</code>リクエストする<code translate="No">/v1/accounts/1234567890/labels/by_path//nature/wildlife/avian/coastal_birds</code>上記の最初のパスは削除されますが、3番目のパスには影響しません。</p>
+    <aside class="bcls-aside bcls-aside--information language-editable">ラベルを削除すると、ラベルが追加されたすべての動画から非同期的に削除されます。</aside>
+  </section>
+  <section class="bcls-section">
+    <h2 id="adding_labels_videos">ビデオへのラベルの追加と更新</h2>
+    <p>フルラベルパスの配列としてビデオにラベルを追加します。</p>
+    <pre class="line-numbers"><code class="language-json" translate="No">[
+      "/nature/wildlife/avian/coastal_birds",
+      "/nature/wildlife/avian/coastal_birds/sandpipers"
+]</code></pre>
+    <p>ラベル配列はに含めることができます<a href="/cms/references/reference.html#operation/CreateVideo">ビデオの作成（POST）リクエスト</a>または<a href="/cms/references/reference.html#operation/UpdateVideo">ビデオの更新（PATCH）リクエスト</a>。</p>
+    <p>ビデオラベルを更新するには、更新された完全なビデオ配列を<a href="/cms/references/reference.html#operation/UpdateVideo">ビデオの更新（PATCH）リクエスト</a>。したがって、たとえば、<code translate="No">/nature/wildlife/avian/forest_birds</code>、配列を送信します：</p>
+    <pre class="line-numbers"><code class="language-json" translate="No">[
+      "/nature/wildlife/avian/coastal_birds",
+      "/nature/wildlife/avian/coastal_birds/sandpipers",
+      "/nature/wildlife/avian/forest_birds"
+]</code></pre>
+    <aside class="bcls-aside bcls-aside--warning language-editable">ビデオラベルを追加または更新するときに含めるラベルに注意してください<strong>存在する必要があります</strong>または、リクエストはエラーを返します。</aside>
+  </section>
+  <section class="bcls-section">
+    <h2 id="searching_videos_label">ラベルによる動画の検索</h2>
+    <p>あなたはによってビデオを検索することができます<code translate="No">labels</code>検索でサポートされている他のフィールドと同じように。はじめに述べたように、検索パスにサブラベルを追加すると、検索結果がフィルタリングされます。</p>
+    <table class="bcls-table">
+      <caption class="bcls-caption--table">ラベルの例で検索</caption>
+      <thead class="bcls-table__head">
+          <tr>
+              <th>サンプル検索</th>
+              <th>それが返すもの</th>
+          </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+          <tr>
+              <td><code translate="No">q=labels:/nature</code></td>
+              <td>で始まるラベルパスを持つすべての動画<code translate="No">/nature</code></td>
+          </tr>
+          <tr>
+              <td><code translate="No">q=labels:/nature/wildlife</code></td>
+              <td>で始まるラベルパスを持つすべての動画<code translate="No">/nature/wildlife</code></td>
+          </tr>
+          <tr>
+              <td><code translate="No">q=labels:/nature/wildlife/avian</code></td>
+              <td>で始まるラベルパスを持つすべての動画<code translate="No">/nature/wildlife/avian</code></td>
+          </tr>
+      </tbody>
+  </table>
+  </section>
+  <!-- <section class="bcls-section">
+    <h2 id="playlists_based_on_labels">Playlists based on labels</h2>
+    <p>Smart playlists can be built based on label search strings just as they can for tag search strings. See <a href="https://apis.support.brightcove.com/cms/managing-videos/managing-playlists-using-cms-api.html">Managing Playlists Using the CMS API</a> for details.</p>
+  </section> -->
+  <section class="bcls-section">
+    <h2 id="Limitations">制約事項</h2>
+    <ul>
+      <li>アカウントには最大10,000個のラベルを追加できます</li>
+      <li>ラベルによる検索は現在、<a href="/cms/searching/cmsplayback-api-videos-search.html"> v1検索構文のみ</a></li>
       <li>ラベルは<strong>ない</strong>を使用してアフィリエイトに共有されるビデオメタデータに含まれています<a href="https://apis.support.brightcove.com/cms/managing-videos/media-sharing-cms-api.html">メディア共有</a>。</li>
     </ul>
   </section>

@@ -1277,10 +1277,72 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
                   
                 <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
               
-
-                
+                <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
                   
-                    
+                
+              </ul>
+            
+          
+      </nav>
+    </div>
+    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
+  <!-- bootstrap layout -->
+
+<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
+
+<!-- search bar -->
+<div id="nav-search-box" style="margin-top: 1rem;"></div>
+<!-- in-page navigation for narrow screens -->
+<details class="centered-inpage-nav" id="centered_inpage_nav">
+  <summary><h6 class="toc">ページコンテンツ</h6></summary>
+  <nav id="centered_toc"></nav>
+  <ul id="centered_in_page_toc" class="list-none"></ul>
+</details>
+<!-- open in new tab/window -->
+<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
+
+
+
+
+
+
+<h1>練習領域:CMS API</h1>
+<article class="bcls-article">
+  <summary>このトピックでは、を開始する方法を学習します<span translate="No">CMS API</span>一般的なリクエストタイプのいくつかとそれらが返すデータを確認します。</summary>
+  <section class="bcls-section" id="Overview">
+    <h2>概要</h2>
+
+    <p>このクイックスタートは、を介して利用可能な操作に慣れるために役立ちます<span translate="No">CMS API</span>。ザ・<span translate="No">CMS API</span> 30を超えるさまざまな操作が可能であるため、このチュートリアルではそれらすべてを網羅しているわけではありませんが、代わりに、最も一般的に使用される操作のいくつかをテストして、それらが返すデータの種類を確認できます。</p>
+
+    <aside class="bcls-aside bcls-aside--information language-editable">このサンプルおよび関連するコードは、本番環境の開発のためのガイドとして提供されます。このコードは、実稼働での使用が認定されておらず、公式にはサポートされていません。</aside>
+
+    <aside class="bcls-aside bcls-aside--tip language-editable">このドキュメントで使用されているAPIの詳細については、<a href="/cms/getting-started/overview-cms-api.html"><span translate="No">CMS API</span>概要概要</a>ドキュメントと<a href="/cms/references/reference.html"><span translate="No">CMS API</span>参照</a>。</aside>
+  </section>
+
+  <section id="obtaincredentials" class="bcls-section">
+    <h2>資格情報を取得する</h2>
+
+    <p>BrightcoveのRESTfulAPIのほとんどと同様に、<span translate="No">CMS API</span>が必要<span translate="No">OAuth</span>トークンにアクセスしてリクエストを承認します。アクセストークンを取得するには、まず、要求する操作の種類に対するアクセス許可を持つクライアント資格情報を取得する必要があります。このクイックスタートでは、Brightcove ラーニングサービスのサンプルアカウントで API リクエストを行うため、ここで認証情報を取得する必要はありませんが、何が起こっているのかを理解しておく必要があります。ザ・<span translate="No">CodePen</span>次のようなプロキシにAPIリクエスト情報を送信します<a href="/oauth/guides/getting-access-tokens.html#php">これです</a>。プロキシはプライベートな場所からクライアントの資格情報にアクセスし、それらを使用して一時的なアクセストークンを生成します。<a href="/oauth/getting-started/overview-oauth-api-v4.html"><span translate="No">OAuth API</span></a>次に、APIリクエストを作成し、レスポンスデータを返します。</p>
+
+    <p>自分のアカウントでリクエストを試すには、クライアントの資格情報を取得して、<a href="/getting-started/concepts-testing-tools-brightcove-apis.html"> APIテストツール</a>。</p>
+
+    <ol>
+      <li>認証情報を取得するには、「<a href="/general/managing-api-authentication-credentials.html"> API 認証情報の管理</a>」の手順に従います。これは、クライアントの資格情報を取得するための推奨方法です。ほとんどの場合、すべてのアクセス許可を取得する必要があります。
+
+        <figure class="bcls-figure"><img class="bcls-image" alt="OAuth パーミッション" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/cms-api/getting-started/quick-start/quick-start-required-permissions.png"/>
+          <figcaption class="bcls-caption--image">OAuth パーミッション</figcaption>
+        </figure>
+
+        <p>を使用して資格情報を取得することもできます<span translate="No">OAuth API</span>、以下のいずれかのガイドの指示に従ってください。以下をcurlまたはPostmanとともに使用して、適切な権限を取得できます。</p>
+      </li>
+    </ol>
+
+    <pre class="line-numbers">
+  <code class="language-json" translate="No">"operations": ["video-cloud/video/all"]</code></pre>
+
+    <ul>
+      <li><a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">OAuth:CURL を使用してクライアント認証情報を取得する</a></li>
+      <li><a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">OAuth:を使用してクライアント資格情報を取得する<span translate="No">Postman</span></a></li>
     </ul>
   </section>
 
