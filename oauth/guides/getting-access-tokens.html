@@ -1149,11 +1149,11 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
   <section class="bcls-section">
   <h2 id="gettingToken">トークンの取得</h2>
 
-  <p>APIリクエストをテストするためのアクセストークンを生成するだけの場合は、これを使用できます<a href="/oauth/code-samples/oauth-api-sample-get-access-token.html">サンプルアプリ</a>。</p>
+  <p>APIリクエストをテストするためのアクセストークンを生成するだけの場合は、こちらの<a href="/oauth/code-samples/oauth-api-sample-get-access-token.html">サンプルアプリ</a>を使用できます。</p>
 
-  <p>トークンはBrightcoveOAuthAPIから取得されます。アクセストークンを取得する前に、まず、アクセスするAPIと操作に固有のクライアント資格情報（クライアントIDとクライアントシークレット）を取得する必要があります。クライアントの資格情報を取得するには、を参照してください。<a href="/general/managing-api-authentication-credentials.html"> API資格情報の管理</a>。</p>
+  <p>トークンはBrightcoveOAuthAPIから取得されます。アクセストークンを取得する前に、まず、アクセスおよび操作したいAPIに固有のクライアント資格情報（クライアントIDとクライアントシークレット）を取得する必要があります。クライアントの資格情報を取得するには、<a href="/general/managing-api-authentication-credentials.html"> API資格情報の管理</a>を参照してください。</p>
 
-  <p>資格情報を取得したら、次のようにしてアクセストークンを取得します。<code translate="No">POST</code>リクエスト先：</p>
+  <p>資格情報を取得したら、次の宛先に<code translate="No">POST</code>リクエストを送信してアクセストークンを取得します：</p>
 
   <pre class="line-numbers">
   <code class="language-http" translate="No">https://oauth.brightcove.com/v4/access_token</code></pre>
@@ -1165,16 +1165,16 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <li><code class="language-http" translate="No">Authorization: Basic {client_id}:{client_secret}</code></li>
   </ul>
 
-  <p>全体<code class="language-http" translate="No">{client_id}:{client_secret}</code>文字列はBase64でエンコードされている必要があります（文字列を次のように渡すと、curlは自動的にBase64でエンコードします<code translate="No">--user</code>資格情報;他の言語では、Base64エンコーディングを自分で処理する必要があります）。</p>
+  <p>全体<code class="language-http" translate="No">{client_id}:{client_secret}</code>文字列はBase64でエンコードする必要があります（文字列を<code translate="No">--user</code>資格情報として渡すと、curlは自動的にBase64でエンコードします。他の言語では、Base64エンコーディングを自身で行う必要があります）。</p>
 
-  <p>また、次のキー/値のペアをリクエスト本文または URL パラメータとして送信する必要があります。</p>
+  <p>また、次のキー/バリューのペアをリクエスト本文または URL パラメータとして送信する必要があります。</p>
 
   <pre class="line-numbers">
   <code class="language-http" translate="No">grant_type=client_credentials</code></pre>
 
-  <aside class="bcls-aside bcls-aside--information">以来、<code translate="No">Content-Type</code>でなければなりません<code translate="No">application/x-www-form-urlencoded</code>、キーと値のペアは、リクエストの本文に配置した場合でも、URLパラメータとしてAPIに送信されます。</aside>
+  <aside class="bcls-aside bcls-aside--information"><code translate="No">Content-Type</code>は、<code translate="No">application/x-www-form-urlencoded</code>である必要があるため、リクエストの本文に入力した場合でも、キーとバリューのペアはURLパラメータとしてAPIに送信されることに注意して下さい。</aside>
 
-  <p>応答は次のようになります（ここでは読みやすくするためにプリティ印刷されています）。</p>
+  <p>応答は次のようになります（ここでは読みやすくするために整形しています）。</p>
 
   <pre class="line-numbers">
   <code class="language-json" translate="No">{
@@ -1183,18 +1183,18 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       "expires_in": 300
   }</code></pre>
 
-  <p><code translate="No">access_token</code>値は、次の形式で API <code translate="No">Authorization</code>呼び出しでヘッダーに渡す必要があるものです。</p>
+  <p><code translate="No">access_token</code>値は、次の形式のAPIコールで、<code translate="No">Authorization</code>ヘッダーに渡す必要がある値です。</p>
 
   <pre class="line-numbers">
   <code class="language-http" translate="No">Authorization: Bearer {access_token}</code></pre>
 
-  <p>ザ・<code translate="No">expires_in</code> valueは、アクセストークンが有効な秒数です。</p>
+  <p><code translate="No">expires_in</code>値は、アクセストークンが有効な秒数です。</p>
   </section>
 
   <section class="bcls-section">
   <h2 id="implementation">実装戦略</h2>
 
-  <p>アプリがBrightcoveAPIに対して散発的な呼び出しのみを行う場合は、無視することをお勧めします。<code translate="No">expires_in</code>パラメータを設定し、呼び出しごとに新しいアクセストークンをフェッチするだけです。その場合、処理シーケンスは次のようになります。</p>
+  <p>アプリがBrightcove APIに対して散発的な呼び出しのみを行う場合は、<code translate="No">expires_in</code>パラメータを無視して、呼び出しごとに新しいアクセストークンをフェッチすることをお勧めします。その場合、処理シーケンスは次のようになります。</p>
 
   <figure class="bcls-figure"><img class="bcls-image" alt="新しいトークンを取得" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/oauth-api/guides/get-token/get-token-new-token.png"/>
   <figcaption class="bcls-caption--image">新しいトークンを取得</figcaption>
@@ -1203,13 +1203,13 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
   <p>一方、アプリが頻繁に多数のAPI呼び出しをすばやく連続して行うことがわかっている場合（たとえば、長いレポートを生成する場合）、必要な場合にのみアクセストークンをフェッチする方が効率的です。これを行うには、2つの基本的な方法があります。</p>
 
   <ol>
-    <li>先に進んでAPI呼び出しを試してみてください。<code translate="No">UNAUTHORIZED</code>エラーが発生した場合は、新しいトークンをフェッチして、API呼び出しを再度行ってください。この場合、処理シーケンスは次のようになります。
+    <li>APIコールを試してみましょう。<code translate="No">UNAUTHORIZED</code>エラーが発生した場合は、新しいトークンをフェッチして、API呼び出しを再度行ってください。この場合、処理シーケンスは次のようになります。
 
     <figure class="bcls-figure"><img class="bcls-image" alt="コール失敗のチェックでトークンを取得する" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/oauth-api/guides/get-token/get-token-check-call-fail.png"/>
     <figcaption class="bcls-caption--image">コール失敗のチェックでトークンを取得する</figcaption>
     </figure>
     </li>
-    <li>別のアプローチは、を追加することです<code translate="No">expires_in</code>トークンをフェッチするたびにエポック秒単位で現在の時刻に値を設定し、その後のAPI呼び出しで、有効期限を現在の時刻と照合して、新しいトークンをフェッチする必要があるかどうかを確認します。この場合、処理シーケンスは次のようになります。
+    <li>もう一つの方法は、<code translate="No">expires_in</code>トークンをフェッチするたびにエポック秒単位で現在の時刻を追加し、その後のAPIコールで、有効期限を現在の時刻と照合して、新しいトークンをフェッチする必要があるかどうかを確認する方法です。この場合、処理シーケンスは次のようになります。
     <figure class="bcls-figure"><img class="bcls-image" alt="有効期限の確認でトークンを取得する" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/oauth-api/guides/get-token/get-token-check-expiration.png"/>
     <figcaption class="bcls-caption--image">有効期限の確認でトークンを取得する</figcaption>
     </figure>
@@ -1218,13 +1218,13 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
   </section>
 
   <section class="bcls-section">
-  <h2 id="Postman_and_Insomnia">郵便配達員と不眠症</h2>
+  <h2 id="Postman_and_Insomnia">PostmanとInsomnia</h2>
 
-  <p>Brightcove OAuthシステムと連携してアクセストークンを取得するように、RESTAPIのいくつかの便利なテストツールを設定できます。最も人気のある2つのクロスプラットフォームツールでこれを行うための手順を含むガイドがあります。</p>
+  <p>Brightcove OAuthシステムと連携してアクセストークンを取得するように、RESTAPIのいくつかの便利なテストツールを使用できます。最も人気のある2つのクロスプラットフォームツールでこれを行うための手順を含むガイドがあります。</p>
 
   <ul>
-    <li><a href="/general/use-postman-api-requests.html">API リクエストに郵便配達を使用する</a></li>
-    <li><a href="/general/use-insomnia-api-requests.html">API リクエストにインソムニアを使用する</a></li>
+    <li><a href="/general/use-postman-api-requests.html">API リクエストにPostmanを使用する</a></li>
+    <li><a href="/general/use-insomnia-api-requests.html">API リクエストにInsomniaを使用する</a></li>
   </ul>
   </section>
 
@@ -1235,18 +1235,18 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
 
   <h3>シェルスクリプトの例</h3>
 
-  <p>最初の例は、上記の最初の実装ロジックを実装するシェルスクリプトです。ユーザーからの入力を受け取り、常に新しいトークンを取得してから、API呼び出しを行います。このスクリプトは、どのBrightcove APIでも機能し、アプリをビルドするときにAPI呼び出しをテストするのに役立つ場合があります。</p>
+  <p>最初の例は、前述の実装ロジックを実装するシェルスクリプトです。ユーザーからの入力を受け取り、常に新しいトークンを取得してから、APIコールを行います。このスクリプトは、どのBrightcove APIでも機能し、アプリをビルドするときにAPIコールをテストするのに役立つことがあります。</p>
 
   <aside class="bcls-aside bcls-aside--information">
-  <p>注：このスクリプトは、cURLとjqコマンドラインアプリを使用します。見る<a href="https://general.support.brightcove.com/developer/concepts-set-curl.html">cURLとjqを設定する</a>セットアップ手順について。Python json.toolは、応答をきれいに出力するためにも使用されますが、それはすでにシステムにインストールされているはずです。</p>
+  <p>注：このスクリプトは、cURLとjqコマンドラインアプリを使用します。セットアップ手順については、<a href="https://general.support.brightcove.com/developer/concepts-set-curl.html">cURLとjqを設定する</a>を参照して下さい。Python json.toolは、応答をきれいに出力するためにも使用されますが、既にシステムにインストールされているはずです。</p>
 
-  <p>スクリプトを実行するには、コードを次のように保存します<strong>api-tester.sh</strong>システムで、同じフォルダーにあるコマンドラインを開き、次のように入力します。<code translate="No">bash api-tester.sh</code> -次の入力を求めるプロンプトが表示されます。</p>
+  <p>スクリプトを実行するには、コードを<strong>api-tester.sh</strong>としてシステムに保存し、同じフォルダーでコマンドラインを開き、<code translate="No">bash api-tester.sh</code>と入力します。次の入力を求めるプロンプトが表示されます。</p>
 
   <ul>
     <li>クライアントID（必須）</li>
     <li>クライアントシークレット（必須）</li>
-    <li>完全なAPI呼び出し（必須）</li>
-    <li>呼び出しのHTTP動詞：GET | POST |パッチ|プット| DELETE（必須）</li>
+    <li>完全なAPIコール（必須）</li>
+    <li>呼び出しのためのHTTP動詞：GET | POST | PATCH | put | DELETE（必須）</li>
     <li>リクエスト本文のデータ（オプション）</li>
   </ul>
   </aside>
@@ -1310,7 +1310,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
 
   <h3 id="ruby">Rubyの例</h3>
 
-  <p>次の例は、最初の実装ロジックも使用するRubyスクリプトです。常にトークンを取得してからAPI呼び出しを行います。この例では、Analytics APIを呼び出しますが、任意のAPIで動作するように適合させることができます。</p>
+  <p>次の例は、最初の実装ロジックも使用するRubyスクリプトです。常にトークンを取得してからAPIコールを行います。この例では、Analytics APIを呼び出しますが、任意のAPIで動作するように適応させることができます。</p>
 
   <h4>Rubyコード</h4>
 
@@ -1331,7 +1331,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
 
   <h3 id="python">Pythonの例</h3>
 
-  <p>このサンプルは、上記の3番目の実装ロジックを実装するPythonスクリプトです。それは作ろうとします<span translate="No">Analytics API</span>呼び出しますが、UNAUTHORIZEDエラーで呼び出しが失敗した場合、新しいアクセストークンをフェッチし、呼び出しを再試行します。</p>
+  <p>このサンプルは、上記の3番目の実装ロジックを実装するPythonスクリプトです。それは作ろうとします<span translate="No">Analytics API</span>コールを行いますが、UNAUTHORIZEDエラーで呼び出しが失敗した場合、新しいアクセストークンをフェッチし、呼び出しを再試行します。</p>
 
   <p>このスクリプトは、外部ファイルからクライアントの資格情報も読み取ります。資格情報データファイルはPythonコードの下に表示されます。</p>
 
