@@ -1,0 +1,141 @@
+---
+title:  'ライブAPI：ID3タイミングメタデータを挿入します'
+description:  'このトピックでは、Live APIを使用してID3タイミングメタデータをライブストリームに挿入する方法について説明します。'
+parent: Guides 
+grandparent: Live API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+ <summary>{{ page.description }}</summary>
+<section class="bcls-section">
+<h2 id="Insert_ID3_timed_metadata">概要</h2>
+
+<p>ID3タイミングメタデータは、特定の時点でライブストリームを使用してデータを送信するために使用されます。進行中のジョブのID3タイミングメタデータを挿入するには、<code translate="No">POST </code>リクエスト先：</p>
+
+<pre class="line-numbers">
+<code class="language-http" translate="No">https://api.bcovlive.io/v1/jobs/<span class="bcls-input">JOB_ID</span>/id3tag
+</code></pre>
+
+<h3>リクエスト本文の例</h3>
+
+<pre class="line-numbers">
+<code class="language-json" translate="No">{
+ "id3_tag": {
+ "name": "cp1",
+ "value": "Some information I want to send",
+   "timecode": "15:50:49:16"
+ }
+}</code></pre>
+
+<aside class="bcls-aside bcls-aside--warning">注:
+<ul>
+  <li>のみ<code translate="No">id3_tag</code>オブジェクトはリクエストで送信できます</li>
+	<li>あなたが使用する場合<code translate="No">timecode </code>プロパティ、ジョブは挿入の最新のリクエストのみを保存します</li>
+	<li>あなたが使用する場合<code translate="No">timecode </code>プロパティの場合、エンコーダは、OnFIを介してtcプロパティに格納されているSMPTE形式（HH：MM：SS：FF）のタイムコードを送信する必要があります</li>
+	<li>WirecastやOBSなどのソフトウェアエンコーダー<strong>しない</strong> RTMPストリームのOnFIパケットを介したタイムコードの送信をサポートする</li>
+	<li>エレメンタルハードウェアエンコーダ<strong>行う</strong> RTMPストリームのOnFIパケットを介したタイムコードの送信をサポートする</li>
+	<li>ID3v2状態タグ<code translate="No">name</code>最大4文字まで使用できます。</li>
+	<li><code translate="No">value</code>最大256KBまで可能です。</li>
+	<li><code translate="No">Timecode</code>オプションです。省略した場合、挿入はすぐに行われます。</li>
+</ul>
+</aside>
+
+<ul>
+</ul>
+
+<h3>レスポンスの例</h3>
+
+<pre class="line-numbers">
+<code class="language-json" translate="No">{
+"id": "JOB_ID",
+"id3_tag": {
+"tag_name": "BCOV",
+"tag_value": "my value"
+}
+}</code></pre>
+</section>
+
+<section class="bcls-section">
+<h2 id="Do_SMPTE_timecodes_exist">SMPTEタイムコードは入力に存在しますか？</h2>
+
+<p>すべてのエンコーダーがSMPTEタイムコードを送信するわけではありません。それらが入力に存在するかどうかを確認するには、次のようなタグのVODチャンクリストを確認する方法があります。<code class="language-html" translate="No">#VOD-TIMING:timecode=15:18:36:01,wallclock=1549047672441,tsvideo=25400,tsaudio=-1</code>。VODチャンクリストのURLは、<code class="language-html" translate="No">output_media_files[0].playback_url_vod</code>ジョブ情報を取得するとき。</p>
+
+<h2 id="Do_SMPTE_timecodes_exist">ライブプレイリストを分析してタイムコードを取得する</h2>
+
+<p>Brightcove Liveジョブを作成すると、デフォルトのマスタープレイリストが返されます。例は次のとおりです。</p>
+
+<pre>
+<code class="language-html" translate="No">https://bcovlive-a.akamaihd.net/ade7a7b3aaea4a4d8107fb8bb262381e/eu-central-1/52725330351/playlist.m3u8</code></pre>
+
+<p>URL拡張子の最後の部分に「_vod」を追加する必要があるVODマスタープレイリストが必要になります。<strong>プレイリスト_vod.m3u8</strong></p>
+
+<pre>
+<code class="language-html" translate="No">https://bcovlive-a.akamaihd.net/ade7a7b3aaea4a4d8107fb8bb262381e/eu-central-1/52725330351/playlist_vod.m3u8</code></pre>
+
+<p>プレイリストはで構成されます&nbsp;いくつかのレンディション/プロファイル。プレイリストを「カール」すると、レンディションを見ることができます。例：</p>
+
+<pre class="line-numbers">
+<code class="language-javascript" translate="No">
+curl -i "https://bcovlive-a.akamaihd.net/ade7a7b3aaea4a4d8107fb8bb262381e/eu-central-1/52725330351/playlist_vod.m3u8"
+
+#EXTM3U
+#EXT-X-VERSION:3
+#EXT-X-STREAM-INF:BANDWIDTH=4292608,CODECS="avc1.100.41,mp4a.40.2",RESOLUTION=1920x1080
+profile_0/chunklist_vod.m3u8
+#EXT-X-STREAM-INF:BANDWIDTH=2654208,CODECS="avc1.100.41,mp4a.40.2",RESOLUTION=1280x720
+profile_1/chunklist_vod.m3u8
+#EXT-X-STREAM-INF:BANDWIDTH=1937408,CODECS="avc1.77.41,mp4a.40.2",RESOLUTION=960x540
+profile_2/chunklist_vod.m3u8
+#EXT-X-STREAM-INF:BANDWIDTH=1118208,CODECS="avc1.77.31,mp4a.40.2",RESOLUTION=640x360
+profile_3/chunklist_vod.m3u8</code></pre>
+
+<p>レンディション/プロファイルプレイリストの完全なリストは&nbsp;次の「profile_0」および「profile_1」URLのようになります。</p>
+
+<pre>
+<code class="language-html" translate="No">https://bcovlive-a.akamaihd.net/ade7a7b3aaea4a4d8107fb8bb262381e/eu-central-1/52725330351/profile_0/chunklist_vod.m3u8</code></pre>
+
+<pre>
+<code class="language-html" translate="No">https://bcovlive-a.akamaihd.net/ade7a7b3aaea4a4d8107fb8bb262381e/eu-central-1/52725330351/profile_1/chunklist_vod.m3u8</code></pre>
+
+</section>
+
+<section class="bcls-section">
+    <ol class="bcls-tasklist-restart">
+<p>タイムコードを確認するためにこれらのVODプレイリストを確認するためのいくつかのオプションがあります。</p>
+
+
+
+    <li>「curl」コマンドを実行できます。例：</li>
+
+<pre class="line-numbers">
+<code class="language-javascript" translate="No">
+curl -i "https://bcovlive-a.akamaihd.net/ade7a7b3aaea4a4d8107fb8bb262381e/eu-central-1/52725330351/profile_0/chunklist_vod.m3u8"
+#EXTM3U
+#EXT-X-VERSION:3
+#EXT-X-TARGETDURATION:8
+#EXT-X-MEDIA-SEQUENCE:0
+#EXT-X-DISCONTINUITY-SEQUENCE:0
+#EXT-X-INDEPENDENT-SEGMENTS
+#BCOV-RENDITION-DATA-X-STREAM-INF:BANDWIDTH=4292608,RESOLUTION=1920x1080,FRAME-RATE=25.000,CODECS="mp4a.40.2,avc1.100.41"
+#VOD-STARTTIMESTAMP:1573207934483
+#VOD-MANIFESTSTARTTIME:1573207934483
+#VOD-TOTALDELETEDDURATION:0.0
+#VOD-FRAMERATE:25.0
+#VOD-TIMING:timecode=null,wallclock=1573207934483,tsvideo=3480040,tsaudio=3480007
+#EXT-X-PROGRAM-DATE-TIME:2019-11-08T10:12:11.871+00:00
+#EXTINF:7.2,
+2etzot2c_66e2f8bc56774f4b9a2e26adee46c5b3_media_2.ts
+#VOD-TIMING:timecode=null,wallclock=1573207941720,tsvideo=3487240,tsaudio=3487239
+#EXT-X-PROGRAM-DATE-TIME:2019-11-08T10:12:19.071+00:00</code></pre>
+
+
+
+
+	
+    <li>Safari &nbsp;ブラウザを使用している場合は、マスタープレイリストまたはチャンクリストの 1 つを再生できます。次に、開発者ネットワークタブを開き、「chunklist」を検索します。そのうちの1つを選択し、プレビュータブを見てください。</li>
+    <figure class="bcls-figure"><img alt="" class="bcls-image--no-border" width="750" height="400" src="/assets/images/live-api/18758/0.png" /></figure>
+	<li>Safari をお持ちでない場合は、の Akamai プレーヤーを使用して、別のブラウザーで同じプロセスを適用できます<code class="language-html" translate="No">http://players.akamai.com/hls/</code>。Akamai Player でプレイリストを読み込み、ブラウザのネットワークタブを開いて「チャンクリスト」を検索します。</li>
+	<li>あなたがプロキシを持っているなら、「チャールズ」として、それは同じ原則です。Safari または Akamai HLS プレーヤーで VOD プレイリストの 1 つを再生し、プロキシで結果をフィルタリングして、返されたチャンクリストの 1 つを確認します。</li>
+</ol>
+</section>
+</article>

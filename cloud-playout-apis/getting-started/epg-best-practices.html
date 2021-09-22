@@ -1,0 +1,95 @@
+---
+title:  'EPG API：ベストプラクティス'
+parent: Getting Started 
+grandparent: Cloud Playout APIs
+description:  This topic provides best practices for working with the Cloud Playout EPG API.
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+	<summary>{{page.description}}</summary>
+	<section class="bcls-section">
+		<h2 id="Introduction">入門</h2>
+		<p>EPG APIは、クラウドプレイアウトチャネルのXML電子番組ガイドを返します。これは、Webページまたはアプリにプログラム情報を表示するのに役立ちます。このトピックでは、APIがどのように機能するかについて説明し、APIを最も効果的に使用するための推奨事項を示します。</p>
+	</section>
+	<section class="bcls-section">
+		<h2 id="channel_states">チャネル状態</h2>
+		<h3>アクティブな状態</h3>
+		<ul>
+			<li><code translate="no">下書き</code>（チャンネルの将来の開始予定時刻/停止時刻の場合）</li>
+			<li><code translate="no">再スケジュール</code></li>
+			<li><code translate="no">スケジュール</code></li>
+			<li><code translate="no">起動</code></li>
+			<li>START_ERROR<code translate="no"></code></li>
+			<li><code translate="no">作成</code></li>
+			<li>CREATE_ERROR<code translate="no"></code></li>
+			<li><code translate="no">ランニング</code></li>
+		</ul>
+		<h3>非アクティブ状態</h3>
+		<ul>
+			<li><code translate="no">下書き</code>（停止したチャネルは再びドラフト状態になります）</li>
+			<li><code translate="no">アイドル</code></li>
+			<li><code translate="no">停止</code></li>
+			<li>STOP_ERROR<code translate="no"></code></li>
+			<li>START_ERROR<code translate="no"></code></li>
+			<li><code translate="no">削除</code>（EPGレコードはありません-これにより、EPG APIが500応答コードを返す可能性があります）</li>
+			<li><code translate="no">DELETE_ERROR</code>（EPGレコードはありません-これにより、EPG APIが500応答コードを返す可能性があります）</li>
+		</ul>
+	</section>
+	<section class="bcls-section">
+		<h2 id="EPG_Query_Recommendation">EPGクエリの推奨事項</h2>
+		<ul>
+			<li>デフォルトのEPGクエリ（のクエリパラメータなし）<code translate="No">start</code>、<code translate="No">stop</code>、または<code translate="No"></code>制限</code>提供）は、100個のEPGレコード（または100未満の場合はすべてのレコード）を返します。返される数は、に設定することで変更できます。<code translate="no">制限</code>パラメータ。</li>
+			<li>最大14日間のレコードは、明示的な開始時刻と終了時刻、およびEPGクエリの上限値を指定することで引き続き提供されます。</li>
+			<li>処理時間は処理するレコードの数に応じて指数関数的に増加するため、EPGレコードをクエリするページ付けされた方法を使用することをお勧めします（を参照）。<a href="#pagination">ページ付け</a>以下）バルクデータをフェッチするため。</li>
+		</ul>
+	</section>
+	<section class="bcls-section">
+		<h2 id="pagination">ページネーション</h2>
+		<p>最高のパフォーマンスを得るには、多数のレコードのクエリをページネーションすることをお勧めします。</p>
+		<ol class="bcls-tasklist-restart">
+			<li>
+				クエリパラメータを使用せずにリクエストを開始します。
+<pre><code class="language-http" translate="No">https://sm.cloudplayout.brightcove.com/accounts/<span class="bcls-input">{account_id}</span>/channels/<span class="bcls-input">{channel_id}</span>/epg
+				</code></pre>
+				<ul>
+					<li>チャネルが実行されていない場合、チャネルの開始時刻または現在の時刻のいずれか遅い方から100レコードが返されます。</li>
+					<li>チャネルが実行されている場合、100レコードは、過去のプログラムと将来のプログラムの50/50の組み合わせになります</li>
+				</ul>
+			</li>
+			<li>データの追加ページについては、<code translate="no">始める</code>に等しいパラメータセット<code translate="no">ストップ</code>の属性値<code translate="no">プログラム</code>前の応答で返された最後のレコードのタグ- <strong>プラス1秒</strong>。</li>
+	</ol>
+	<h3>例</h3>
+	<p>最初のクエリが次のような応答を返したとしましょう。</p>
+<pre class="line-numbers"><code class="language-xml">&lt;tv&gt; ... &lt;programme channel = "channel_id" start = "20210228000457" stop = " <span class="bcls-highlight"> 20210228001457</span> "&gt; &lt;title&gt;ライブ&lt;/ title&gt; &lt;desc&gt;ライブ&lt;/ desc&gt; &lt;length units =" seconds "&gt; 600.0 &lt;/ length&gt; &lt;icon src =" https://img.brightcove.com/cloudplayout/live- icon.jpg "width =" "height =" "/&gt; &lt;category&gt; live &lt;/ category&gt; &lt;keyword&gt; eyJ2aWRlb19pZCI6IjcwNzAxMjE2NDgyMjAyIiwib3JkZXIiOjMsInRhZ3MiOiJyb21hbmNlIiwiY3VzdG9</code></pre>
+		<p>ハイライトされた<code translate="no">ストップ</code>最後のレコードの値は、次の形式のタイムスタンプです。<code translate="no"> YYYYMMDDhhmmss</code>、ISO 8601形式の場合：<code translate="No">2021-02-28 00:14:57</code>。</p>
+		<p>この値に1秒を追加すると、次のようになります。<code translate="No">2021-02-28 00:14:58</code>。</p>
+		<p>次のリクエストのクエリパラメータは次のようになります。<code translate="no"> start = 2021-02-28％2000％3A14％3A57-開始（および<code translate="no">終わり</code>）パラメータはURIエンコードする必要があります。</code></p>
+		<p>すべてのレコードを取得するには、リクエストを増やしながら送信を続けます<code translate="no">始める</code>「要求された時間ウィンドウでチャネルは実行状態になりません」というメッセージを含むHTTP422応答を取得するまでの値。</p>
+	</section>
+	<section class="bcls-section">
+		<h2 id="Additional_notes">EPG応答動作に関する追加の注意事項</h2>
+		<p>EPG APIの動作に関する以下の注意事項は、目的の応答を取得するリクエストの作成を支援することを目的としています。</p>
+		<ul>
+			<li>EPGは、チャネルの現在の状態に基づいて動的に構築されるため、チャネルがアクティブな状態にある場合は、<code translate="No">RUNNING</code>、その後、EPGはスケジュールされたチャネル開始時間から将来のデータを生成します。</li>
+			<li>チャネルが存在する場合<code translate="No">RUNNING</code>状態では、クエリパラメータなしで呼び出されたEPGは、過去と将来のスケジュールデータの混合（50％分割-100の制限で、これは最大50の過去のレコードと50の将来のレコードを生成します）を提供します。</li>
+			<li>チャンネルを停止または削除すると、<code translate="No">INACTIVE</code>州;チャネルが実行を終了したため、将来のEPGレコードは使用できなくなります。
+				<ul>
+					<li>このような場合、EPGは空のデータセットまたは422エラーコードのいずれかを返します。</li>
+					<li>非アクティブ状態のいずれかに履歴データが必要な場合、EPGリクエストのクエリパラメータには過去の開始/終了時刻が含まれている必要があります。</li>
+				</ul>
+			</li>
+			<li>EPGリクエストに両方がある場合<code translate="No">end</code>時間と<code translate="No">limit</code>、<code translate="No">limit</code>が優先され、多くのレコードが生成されます。この場合、指定された終了時刻より遅れてレコードを受け取る可能性があります。</li>
+			<li>NS <code translate="No">start</code> / <code translate="No">end</code>ウィンドウは14日を超えることはできません。<code translate="No">start</code>履歴EPGを取得するには、現在の日時より14日早くすることができます。現在の日時から最大14日間、将来のEPGデータを照会することもできます。</li>
+			<li>提供された終了時刻と開始時刻の差が14日を超える場合、APIは、リクエストの時刻からスケジュールされたチャネル停止時刻までの14日間、または14日間のいずれか早い方のスケジュールデータを生成します。</li>
+			<li>どちらも<code translate="No">start</code>そして<code translate="No">end</code>タイムゾーンオフセットの有無にかかわらず日時値を受け入れることができます-タイムゾーンオフセットが含まれていない場合、UTCが想定されます</li>
+			<li>どちらも<code translate="No">start</code>そして<code translate="No">end</code>値はURIエンコードする必要があります。</li>
+		</ul>
+		<h3>EPG APIが422エラーコードを返す理由</h3>
+		<ul>
+			<li>EPG開始時間は、チャネル開始時間または現在の時間のいずれか大きい方から14日を超えることはできません。</li>
+			<li>EPG開始時刻は、現在時刻の14日より前にすることはできません。</li>
+			<li>EPG間隔は14日以下である必要があります（開始時間と終了時間は14日以内である必要があります）</li>
+			<li>チャネルは、要求された時間ウィンドウで実行状態になります（EPGは、スケジュールされたチャネル停止時間を超える開始時間で要求されます）開始時間を指定するか、終了時間より短くする必要があります（開始時間&lt;終了時間）</li>
+		</ul>
+	</section>
+</article>

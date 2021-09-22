@@ -1,0 +1,245 @@
+---
+title: '視聴者ごとの同時ストリームの制限'
+description: 「このトピックでは、Brightcoveの再生制限を使用するときに同時ストリームを制限する方法を学習します。」
+parent: Guides 
+grandparent: Playback Restrictions
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  
+  <!-- <br/>
+  <aside class="bcls-aside bcls-aside--tip">This feature is available for a specific set of customers with access to the Limited Availability phase of Brightcove Playback Restrictions.</aside> -->
+
+  <section class="bcls-section">
+    <h2 id="Introduction">入門</h2>
+
+    <p>同時ストリーム制限では、特定のユーザーがいつでも視聴できるビデオストリームの数を定義します。ユーザーごとに同時配信を制限すると、視聴者はアカウントを持っていない友人と資格情報を共有できなくなります。</p>
+    <p>
+      同時ストリーム数が最大数に達すると、ビューアー、またはアカウントの資格情報を持つユーザーが追加のストリームを開こうとすると、最も古いセッションが停止されるか、最新のリクエストがブロックされます。この動作はユーザーが制御します。
+    </p>
+    <p>
+      この機能は DRM ワークフローにフックされるため、セキュリティで保護され、最小限の統合で使用できます。
+    </p>
+
+    <p>この機能を初めて使用する場合は、<a href="/playback-restrictions/getting-started/overview-playback-restrictions.html">概要：Brightcoveの再生制限</a>資料。</p>
+
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Account_setup">アカウント設定</h2>
+
+    <p>アカウントのストリーム同時実行を有効にする場合は、アカウントマネージャーにお問い合わせください。</p>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Implementation">実装</h2>
+    <p>
+      この機能を使用するには、コンテンツを暗号化されたDRMにする必要があります。実装するには、次の手順に従います。
+    </p>
+    <ol class="bcls-tasklist">
+      <li>
+        <p>クレーム値を決定します。</p>
+        <ul>
+          <li>NS <code translate="No">climit</code>クレームは、同時に再生できるウォッチャーまたはストリームの数を示します。 </li>
+          <li>
+            NS <code translate="No">cbeh</code>クレームは、並行性をブロックする方法を定義します。ストリーム制限に達すると、新しいビューア（異なるIPアドレスとデバイスを意味する）をブロックするか、新しいストリーム要求（セッション）をブロックすることができます。
+            <ul>
+              <li><code translate="No">cbeh</code>価値<code translate="No">BLOCK_NEW_USER</code> -新しい視聴者をブロックする</li>
+              <li><code translate="No">cbeh</code>価値<code translate="No">BLOCK_NEW</code> -新しいストリームをブロックする</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>希望する同時ストリーム制限に関連付けられたクレームを使用してJSONWeb Tokent（JWT）を作成します。詳細については、<a href="https://general.support.brightcove.com/developer/create-jwt.html">の作成<span translate="No">JSONWebトークン</span>（JWT）</a>資料。
+      </li>
+      <li>
+        再生制限を使用するようにプレーヤーを構成し、<span translate="No"> JSONWebトークン</span>（JWT）ビデオコンテンツを取得するとき。詳細については、<a href="/playback-rights/getting-started/implementing-epa.html#Configure_your_player">プレーヤーを構成する</a>再生権利管理サービスの実装ドキュメントのセクション。
+      </li>
+    </ol>
+
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Renewal_interval">更新間隔</h2>
+    <p>
+      同時ストリーム制限が適用されるように、DRM ライセンス更新要求は、定義された更新間隔に基づいて再生中に送信されます。セットアップ時に、この更新間隔を定義する必要があります。
+    </p>
+    <p>
+      ミッドストリーム再生承認要求では、公開キー ID とともに JWT トークンで同時実行制限を指定する必要があります。
+    </p>
+
+    <p>今日、各更新リクエストは、購入したライセンスの数に応じて追加ライセンスとしてカウントされます。これは、間隔を決めるときに考慮する必要があります。</p>
+    <table class="bcls-table">
+      <thead class="bcls-table__head">
+        <tr>
+          <th>更新間隔</th>
+          <th>2 時間のコンテンツでストリームごとにライセンス提供</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td>なし</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>15分</td>
+          <td>8</td>
+        </tr>
+        <tr>
+          <td>5分</td>
+          <td>24</td>
+        </tr>
+        <tr>
+          <td>2分</td>
+          <td>60</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Understanding_behavior">動作を理解する</h2>
+    <p>
+      この機能を使用すると、ストリームをブロックするための動作を選択できます。
+    </p>
+    <h3>最も古いストリームをブロックする</h3>
+    <p>
+      Brightcoveは、DRM で保護されたコンテンツの再生ストリームの制限をサポートしています。新しい更新要求が処理されると、最も古いセッションが停止します。これにより、新しいユーザ要求にアクセス権が与えられ、有効ではなくなった可能性のある最も古い要求をブロックし、ネットワークまたはデバイスの障害に関するメッセージを表示します。
+    </p>
+    <p>
+      これはデフォルトの動作です。
+    </p>
+    <figure class="bcls-figure">
+      <img class="bcls-image--no-border" src="//learning-services-media.brightcove.com/doc-assets/pas/concurrency-general.png" alt="Block oldest stream">
+      <figcaption class="bcls-caption--image">最も古いストリームをブロックする</figcaption>
+    </figure>
+
+    <p>
+      <strong>ユーザーアクティビティ:</strong>
+    </p>
+    <ol>
+      <li>
+        ベン、ジェイソン、サラが映画を見始める。
+      </li>
+      <li>
+        ジェイミーも視聴を開始することを決定し、ベンの今後の更新要求が拒否されます。
+      </li>
+      <li>
+        ベンは映画を再起動し、ジェイソンの更新要求が失敗しました。
+      </li>
+      <li>
+        ジェイソンは後で別の映画を見始め、サラの映画が停止する。
+      </li>
+    </ol>
+
+    <h3>新しいリクエストをブロックする</h3>
+    <p>
+      または、同時ストリーム数が最大数に達したときに、新しいライセンス要求をブロックすることもできます。これにより、現在のすべてのユーザーが新しいユーザーの要求にメッセージを表示しながら、監視し続けることができます。
+    </p>
+    <p>
+      この動作を有効にするには、を設定する必要があります<code translate="No">cbeh</code>あなたの主張<a href="https://general.support.brightcove.com/developer/create-jwt.html">JSON Web Token（JWT）</a>次のように：
+    </p>
+    <pre><code class="language-json" translate="No">&quot;cbeh&quot;: &quot;BLOCK_NEW&quot;</code></pre>
+    <br />
+    <p>
+      例を次に示します。
+    </p>
+    <figure class="bcls-figure">
+      <img class="bcls-image--no-border" src="//learning-services-media.brightcove.com/doc-assets/pas/block-new-request.png" alt="Block new request">
+      <figcaption class="bcls-caption--image">新しいリクエストをブロックする</figcaption>
+    </figure>
+
+    <p>
+      <strong>ユーザーアクティビティ:</strong>
+    </p>
+    <ol>
+      <li>
+        ベン、ジェイソン、サラが映画を見始める。
+      </li>
+      <li>
+        ジェイミーは視聴を開始しようとしますが、上限のためリクエストはブロックされます。
+      </li>
+      <li>
+        ジェイソンは視聴を停止し、別の視聴者が視聴を開始できるようにします。ジェイミーが映画を見始める。
+      </li>
+    </ol>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="PlayReady">PlayReady</h2>
+    <p>PlayReadyはミッドストリームライセンスチェックをサポートしていません。</p>
+    <h3>現在のBrightcoveプレーヤー</h3>
+    <p>Brightcove Player v6.48.x以降を使用している場合、プレーヤーは、PlayReadyの代わりにWidevineを使用するようにEdgeブラウザーの優先順序を設定します。したがって、PlayReadyは問題にはなりません。</p>
+    <p>EPA DRMソース選択の修正は、ChromiumEdgeブラウザーの<a href="https://player.support.brightcove.com/release-notes/brightcove-player-release-notes.html">Brightcoveプレーヤーのリリースノート</a>。</p>
+    <h3>古いバージョン</h3>
+    <p>古いバージョンのBrightcovePlayerは、最初にPlayReadyのChromiumEdgeブラウザーのデフォルトを使用します。この場合、ミッドストリームライセンスチェックを手動で実行する必要があります。</p>
+    <p>
+      プレーヤーに手動ライセンス更新を実装するには、を参照してください。<a href="https://docs.microsoft.com/en-us/playready/features/concurrency-limiting"> Microsoftの同時実行制限</a>資料。
+    </p>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Safari">Safari</h2>
+    <p>
+      Safari ブラウザーでは同時実行制限がサポートされていますが、更新要求は送信されません。つまり、新しいセッション/ストリームは他のブラウザよりも長い期間ブロックされます。
+    </p>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Notes">注</h2>
+    <p>
+      この機能には、次の注意事項が適用されます。
+    </p>
+    <ul>
+      <li>
+        手動によるライセンス更新要求は、次の場合に実施する必要があります。
+        <ul>
+          <li>
+            Brightcove以外のプレイヤーでの同時実行制限（Widevine によって保護されている場合を除く）
+          </li>
+          <li>
+            Brightcove Player v6.48.x以降を使用している場合を除き、すべてのデバイスでのPlayReadyの同時実行制限
+          </li>
+        </ul>
+      </li>
+      <li>
+        ライセンスの手動更新は、定義された更新間隔よりも短い期間で要求する必要があります。
+      </li>
+    </ul>
+
+  </section>
+
+  <!-- <section class="bcls-section">
+<h2 id="Limitations">Limitations</h2>
+<p>
+  The following limitations apply to this feature:
+</p>
+
+<ul>
+  <li>
+    Concurrency limit is not yet supported in Safari due to the browser's limitations.
+  </li>
+</ul>
+</section> -->
+
+  <!-- <section class="bcls-section">
+    <h2 id="Related_topics">Related topics</h2>
+
+    <ul>
+      <li>
+        <a href="/playback-rights/getting-started/overview-epa.html">Overview: Managing Playback Rights</a>
+      </li>
+      <li>
+        <a href="/playback-rights/getting-started/implementing-epa.html">Implementing Playback Rights</a>
+      </li>
+      <li>
+        <a href="/playback-rights/guides/using-epa-with-bcp.html">Using Playback Rights with Brightcove Player</a>
+      </li>
+      <li>
+        <a href="/playback-rights/guides/using-epa-with-sdks.html">Using Playback Rights with the Native SDKs</a>
+      </li>
+    </ul>
+  </section> -->
+
+</article>

@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.0.3
 x-bc-implicit-head: true
 x-bc-implicit-options: true
 x-bc-upstream: 'http://backend_server'
@@ -14,14 +14,14 @@ info:
 
     For additional in-depth guides to features of the API, see the **[general documentation](/dynamic-ingest/)**.
 
-    **Base URL**: https://ingest.api.brightcove.com/v1
+    **Base URL**: https://ingest.api.brightcove.com
   version: 1.0.0
   x-bc-access: public
 servers:
-  - url: 'https://ingest.api.brightcove.com/v1'
+  - url: 'https://ingest.api.brightcove.com'
     variables: {}
 paths:
-  '/accounts/{account_id}/videos/{video_id}/ingest-requests':
+  '/v1/accounts/{account_id}/videos/{video_id}/ingest-requests':
     post:
       tags:
         - Ingest
@@ -110,7 +110,7 @@ paths:
         AllowDynamicQueryParameters: false
         AllowDynamicFormParameters: false
         IsMultiContentStreaming: false
-  '/accounts/{account_id}/videos/{video_id}/upload-urls/{source_name}':
+  '/v1/accounts/{account_id}/videos/{video_id}/upload-urls/{source_name}':
     get:
       tags:
         - Ingest
@@ -243,13 +243,13 @@ components:
           description: >-
             this is the URL you will include in your Dynamic Ingest POST request for the Master url or url for the image/text_tracks assets
       example: {
-        	"bucket": "ingestion-upload-production",
-        	"object_key": "57838016001/67909129001/c7e6f28b-9057-4616-a7aa-66a0eb836236/greatblueheron.mp4",
-        	"access_key_id": "ASIA25ESRNXKNDUXGJ",
-        	"secret_access_key": "lV1OPGGND6UCVWuv8SUT4/ZS1S+L2Z6BczCpN",
-        	"session_token": "FQoGZXIvYXdzED0aDOnOYmTbUrX3yXd0myKMA3IZ9c7JcbytrkUohtpgI79977txHHgVME4YQKvdUQ895uQu9JEHqU8QXGu+2b9QUx6C2X34t5Jg9n0E0OMVPDJDHy3wj7rARVM7Uc1ha/W8ikYFErZdqrxAh/dEpNqcAM/ZZ682cCXjfzNBZLq55cD/nHDKxWBPJquq1w1mDoech83y1jE1Sb2PparQT7kjc6w/unnqcIfW6nX3bCUW6STOsvvDkxYuyPliQnI+PiuPq3TCuiVS1giRK0sc80/VPn4dJLFNA2xopUoY86zhM/PCUPp3/MtKaWVeTVhk3/lsPoNdBPUAOLdRVO+JtUyxW8x/4vZd1DrXtdByGXdt6pBoMmLm6jFOOMl6HGjhSjl8t8vwPckvr+6z/kSaqw/NzvXz7yAMF5OKkZsa1KUQN9+SSTwHhy6Zm9AZED4mBNXPxwnxJDaeFp51idwiyo3KGZT0TpZdKGm5xrUPcpmWnoOd/G8tKAERO8j7BhkOPP3zOpDrmGW6u3xXmLn3KWBzhjs07oLaluBQkZaUVijrjrbcBQ==",
-        	"signed_url": "https://ingestion-upload-production.s3.amazonaws.com/57838016001/67909129001/c7e6f28b-9057-4616-a7aa-66a0eb836236/greatblueheron.mp4?AWSAccessKeyId=AKIAJZKRHWBFMCPPA&Expires=1536088299&Signature=GD2g7CTz2wLFYnaw33KbocDiXmA%3D",
-        	"api_request_url": "https://ingestion-upload-production.s3.amazonaws.com/57838016001/67909129001/c7e6f28b-9057-4616-a7aa-66a0eb836236/greatblueheron.mp4"
+          "bucket": "ingestion-upload-production",
+          "object_key": "57838016001/67909129001/c7e6f28b-9057-4616-a7aa-66a0eb836236/greatblueheron.mp4",
+          "access_key_id": "ASIA25ESRNXKNDUXGJ",
+          "secret_access_key": "lV1OPGGND6UCVWuv8SUT4/ZS1S+L2Z6BczCpN",
+          "session_token": "FQoGZXIvYXdzED0aDOnOYmTbUrX3yXd0myKMA3IZ9c7JcbytrkUohtpgI79977txHHgVME4YQKvdUQ895uQu9JEHqU8QXGu+2b9QUx6C2X34t5Jg9n0E0OMVPDJDHy3wj7rARVM7Uc1ha/W8ikYFErZdqrxAh/dEpNqcAM/ZZ682cCXjfzNBZLq55cD/nHDKxWBPJquq1w1mDoech83y1jE1Sb2PparQT7kjc6w/unnqcIfW6nX3bCUW6STOsvvDkxYuyPliQnI+PiuPq3TCuiVS1giRK0sc80/VPn4dJLFNA2xopUoY86zhM/PCUPp3/MtKaWVeTVhk3/lsPoNdBPUAOLdRVO+JtUyxW8x/4vZd1DrXtdByGXdt6pBoMmLm6jFOOMl6HGjhSjl8t8vwPckvr+6z/kSaqw/NzvXz7yAMF5OKkZsa1KUQN9+SSTwHhy6Zm9AZED4mBNXPxwnxJDaeFp51idwiyo3KGZT0TpZdKGm5xrUPcpmWnoOd/G8tKAERO8j7BhkOPP3zOpDrmGW6u3xXmLn3KWBzhjs07oLaluBQkZaUVijrjrbcBQ==",
+          "signed_url": "https://ingestion-upload-production.s3.amazonaws.com/57838016001/67909129001/c7e6f28b-9057-4616-a7aa-66a0eb836236/greatblueheron.mp4?AWSAccessKeyId=AKIAJZKRHWBFMCPPA&Expires=1536088299&Signature=GD2g7CTz2wLFYnaw33KbocDiXmA%3D",
+          "api_request_url": "https://ingestion-upload-production.s3.amazonaws.com/57838016001/67909129001/c7e6f28b-9057-4616-a7aa-66a0eb836236/greatblueheron.mp4"
         }
     IngestMediaAssetbody:
       title: Ingest Media Asset Body
@@ -257,6 +257,20 @@ components:
       properties:
         master:
           $ref: '#/components/schemas/IngestMediaAssetbody.master'
+        forensic_watermarking:
+          type: boolean
+          description: >-
+           Whether forensic watermarks should be added to video renditions - if you set it to `true` the account must be enabled for forensic watermarking, or the field will be ignored - see **[Overview: Forensic Watermarking](/general/overview-forensic-watermarking.html) for more details**
+          default: false
+          example: true
+        forensic_watermarking_stub_mode:
+          type: boolean
+          description: |-
+            Whether **visible** forensic watermarks should be added to video renditions - if you set it to `true` the account must be enabled for forensic watermarking, and the `forensic_watermarking` field must also be set to `true` - see **[Overview: Forensic Watermarking](/general/overview-forensic-watermarking.html) for more details**
+
+            Visible watermarks should be used only for testing integrations, to ensure that forensic watermarks have been successfully added to the video (use a video at least 10 minutes long). Once verification is complete, they must be removed by submitting a new ingest request to retranscode the video - `forensic_watermarking_stub_mode` must be set to `false` on the retranscode request.
+          default: false
+          example: true
         profile:
           type: string
           description: >-
@@ -277,13 +291,18 @@ components:
             5. Normal and Low priority jobs are treated the same for how many running jobs there can be. The total number of jobs processing, whatever their priority, is limited to 100 per account.
             6. There are separate quotas for how many normal and low priority jobs can be queued.
           enum:
-             - low
-             - normal
+            - low
+            - normal
         text_tracks:
           type: array
           items:
             $ref: '#/components/schemas/IngestMediaAssetbody.textTracks'
           description: array of text_track maps
+        transcriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngestMediaAssetbody.captions'
+          description: array of auto captions to be generated
         audio_tracks:
           type: array
           items:
@@ -360,16 +379,16 @@ components:
                   Language code for the muxed in audio from the subtags in
                   (http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry)
                   (default can be set for the account by contacting Brightcove Support) **Dynamic Delivery only**
-                variant:
-                  type: string
-                  description: >-
-                    the type of audio track for the muxed in audio - generally `main` **Dynamic Delivery only**
-                  enum:
-                    - main
-                    - alternate
-                    - commentary
-                    - dub
-                    - descriptive
+              variant:
+                type: string
+                description: >-
+                  the type of audio track for the muxed in audio - generally `main` **Dynamic Delivery only**
+                enum:
+                  - main
+                  - alternate
+                  - commentary
+                  - dub
+                  - descriptive
     IngestMediaAssetbody.textTracks:
       title: Ingest Media Asset Body.text_tracks
       description: >-
@@ -410,6 +429,136 @@ components:
             "default": true
           }
         ]
+    IngestMediaAssetbody.captions:
+      title: Ingest Media Asset Body.captions
+      description: >-
+        array of auto captions to be generated - see [Requesting Auto Captions](/dynamic-ingest/ingest-guides/requesting-auto-captions.html)
+      type: object
+      properties:
+        autodetect:
+          type: boolean
+          description: |-
+            `true` to auto-detect language from audio source.
+            `false`  to use srclang specifying the audio language.
+
+            **Note:**
+              - If `autodetect` is set to `true`, `srclang` must **not** be present
+              - If `autodetect` is set to `false`, and `srclang` is not present, the request will fail
+        default:
+          type: boolean
+          description: If true, srclang should be ignored and we will get captions for main audio, and the language will be determined from audio.
+          default: false
+        input_audio_track:
+          type: object
+          description: Defines the audio to extract the captions. Composed by language and variant (both required).
+          properties:
+            language:
+              type: string
+              description: BCP-47 style language code for the text tracks (en-US, fr-FR, es-ES, etc.)
+              enum:
+                - af-ZA
+                - ar-AE
+                - ar-SA
+                - cy-GB
+                - da-DK
+                - de-CH
+                - de-DE
+                - en-AB
+                - en-AU
+                - en-GB
+                - en-IE
+                - en-IN
+                - en-US
+                - en-WL
+                - es-ES
+                - es-US
+                - fa-IR
+                - fr-CA
+                - fr-FR
+                - ga-IE
+                - gd-GB
+                - he-IL
+                - hi-IN
+                - id-ID
+                - it-IT
+                - ja-JP
+                - ko-KR
+                - ms-MY
+                - nl-NL
+                - pt-BR
+                - pt-PT
+                - ru-RU
+                - ta-IN
+                - te-IN
+                - tr-TR
+                - zh-CN
+            variant:
+              type: string
+              description: Specifies the variant to use.
+              enum:
+                - main
+                - alternate
+                - dub
+                - commentary
+                - descriptive
+        kind:
+          type: string
+          description: The kind of output to generate - currently the only value allowed is `captions`
+          default: captions
+          enum:
+            - captions
+        label:
+          type: string
+          description: user-readable title - defaults to the BCP-47 style language code 
+        srclang:
+          type: string
+          description: BCP-47 style language code for the text tracks (en-US, fr-FR, es-ES, etc.)
+          enum:
+            - af-ZA
+            - ar-AE
+            - ar-SA
+            - cy-GB
+            - da-DK
+            - de-CH
+            - de-DE
+            - en-AB
+            - en-AU
+            - en-GB
+            - en-IE
+            - en-IN
+            - en-US
+            - en-WL
+            - es-ES
+            - es-US
+            - fa-IR
+            - fr-CA
+            - fr-FR
+            - ga-IE
+            - gd-GB
+            - he-IL
+            - hi-IN
+            - id-ID
+            - it-IT
+            - ja-JP
+            - ko-KR
+            - ms-MY
+            - nl-NL
+            - pt-BR
+            - pt-PT
+            - ru-RU
+            - ta-IN
+            - te-IN
+            - tr-TR
+            - zh-CN
+      example: [
+          {
+            "url": "https://learning-services-media.brightcove.com.s3.amazonaws.com/captions/bc_smart.vtt",
+            "srclang": "en",
+            "kind": "captions",
+            "label": "EN",
+            "default": true
+          }
+        ]
     IngestMediaAssetbody.audioTracks:
       title: Ingest Media Asset Body.audio_tracks
       type: object
@@ -418,7 +567,7 @@ components:
           type: boolean
           description: >-
             whether to replace existing audio tracks or add the new ones
-          default: false
+          default: true
         masters:
           type: array
           items:
@@ -510,25 +659,25 @@ components:
       title: Ingest Media Asset Body.image
       required:
         - url
-        # - variant
+        - variant
       type: object
       properties:
         url:
           type: string
           description: URL for the image
-        # language:
-        #   type: string
-        #   description: Language code for the image from the subtags in http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry (default can be set for the account by contacting Brightcove Support)
-        # variant:
-        #   type: string
-        #   description: the type of image
-        #   enum:
-        #     - poster
-        #     - thumbnail
-        #     - portrait
-        #     - square
-        #     - wide
-        #     - ultra-wide
+        language:
+          type: string
+          description: Language code for the image from the subtags in http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry (default can be set for the account by contacting Brightcove Support)
+        variant:
+          type: string
+          description: the type of image
+          enum:
+            - poster
+            - thumbnail
+            - portrait
+            - square
+            - wide
+            - ultra-wide
         label:
           type: string
           enum:
@@ -542,6 +691,7 @@ components:
           description: pixel width of the image
       example: {
             "media_type": "image",
+            "language": "es",
             "format": "jpg",
             "label": "poster",
             "width": 1280,
@@ -557,7 +707,7 @@ components:
           type: string
           description: job id for the request
       example: {
-        	"id": "1242d634-0447-45c0-a79d-2199df409b4f"
+          "id": "1242d634-0447-45c0-a79d-2199df409b4f"
         }
   securitySchemes:
     BC_OAuth2:

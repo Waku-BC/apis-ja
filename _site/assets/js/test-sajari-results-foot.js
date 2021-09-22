@@ -19,7 +19,7 @@
     lang = 'zh-tw';
     lang_prefix = 'zh-tw.'
   }
-  site_domain = lang_prefix + 'apis.support.brightcove.com';
+  site_domain = lang_prefix + 'ja.apis.support.brightcove.com';
   filter = "domain='" + site_domain + "'";
   console.log('filter', filter);
   var searchInterface = sajari.init({

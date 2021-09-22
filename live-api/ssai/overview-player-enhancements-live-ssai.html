@@ -1,0 +1,97 @@
+---
+title:  '概要：ライブSSAIのプレーヤーの機能強化' 
+description: このトピックでは、ユーザーエクスペリエンスを向上させるためにLiveSSAIのPlayerEnhancementsを利用するサーバーサイド広告でライブストリームを再生する方法を学習します。
+parent: SSAI 
+grandparent: Live API 
+---
+
+
+<!--
+  This content appears on:
+
+  https://ssai.support.brightcove.com/live/guides/overview-player-enhancements-live-ssai.html
+
+  If you update in one place, you MUST update it in all!
+ -->
+
+<h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+
+<section class="bcls-section">
+<h2 id="Introduction">入門</h2>
+
+<p>サーバーサイド広告では、コンテンツに縫い付けられた高品質の広告をシームレスなライブストリームとして配信することで、広告収益を最大化できます。広告はサーバー側で縫い付けられているため、ユーザーは広告ブロッカーを利用できず、1 つの実装は複数のプラットフォームやデバイスにまたがって機能します。デバイスごとにカスタムクライアントを作成する必要はありません。</p>
+
+<p>ライブSSAI 向けのBrightcoveのプレーヤー機能強化は、ユーザーエクスペリエンスを拡大し、クリックスルー収益を獲得することで、サーバーサイド広告に基づいて構築されています。このツールキットでは、広告数、広告カウントダウンタイマー、クリックスルー広告、コンパニオン広告など、クライアント側のコンポーネントをライブストリームに追加できます。</p>
+
+<figure class="bcls-figure"><img class="bcls-image--no-border" alt="Client-side ad components" src="//learning-services-media.brightcove.com/doc-assets/node/18946-sls-overview/client-components-sls.png" />
+<figcaption class="bcls-caption--image">クライアント側の広告コンポーネント</figcaption>
+</figure>
+
+<p>ツールキットには、トラッキングイベントを起動する別の方法もあります。トラッキングデータはクライアントに提示されるため、クライアントまたはサーバーからトラッキングイベントを柔軟に起動できます。広告ブロッカーは、クライアント側のトラッキングを妨げる可能性があることに注意してください。</p>
+
+<aside class="bcls-aside bcls-aside--information">現在、この機能はスキップ可能な広告をサポートしていません。</aside>
+<p>詳細については、以下を参照してください。</p>
+<ul>
+  <li>
+    <a href="https://ssai.support.brightcove.com/live/guides/implementing-player-enhancements-live-ssai.html">ライブ SSAI のプレーヤー機能拡張の実装</a>
+  </li>
+</ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="Account_setup">アカウント設定</h2>
+
+<p>アカウントマネージャーに連絡して、ライブストリーム、サーバーサイド広告挿入 (SSAI)、およびライブ SSAI のプレーヤー機能強化を有効にしてください。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Specifications">仕様</h2>
+
+<p>Brightcoveの Live SSAI のプレーヤー機能強化は、次の機能を提供することでエンドユーザーのエクスペリエンスを向上させます。</p>
+
+<h3>クライアントに対してイベントを追跡するサーフェス</h3>
+
+<p>インプレッション、四分位数、CreativeView、一時停止、ミュートなどのトラッキングデータがクライアントに表示されます。これにより、クライアントまたはサーバーからトラッキングイベントを柔軟に起動できます。クリック、一時停止、ミュートなどのクライアント固有のイベントは、常にクライアントから起動する必要があります。</p>
+
+<p>VAST <code translate="No">ExtendedMetadata</code>応答からのは、カスタマイズ可能で、クライアント用に含まれています。</p>
+
+<p>ストリームのDVRウィンドウで配信された広告ブレイクも同じアクションに従います。</p>
+
+<h3>広告区切り情報を提供します</h3>
+
+<p>広告休憩時間は、視聴者がストリームにエンゲージメントし続けるのに役立ちます。</p>
+
+<p>広告ブレーク情報はクライアントに渡されます。休憩内の各広告期間は、クライアントに提示されます。クライアントは、ブレイク内の広告数または広告数の設定可能なカウントダウン、およびそれぞれのカウントダウンタイマーを提供します。</p>
+
+<h3>クリックスルー広告を有効にする</h3>
+
+<p>クリックスルー広告では、収益を最大化し、広告売り上げを調整できます。</p>
+
+<p>広告サーバーからのクリックスルー URL が再生クライアントに渡されます。動画はクリック可能になり、ユーザーのクリック時にトラッキングイベントを送信します。クリックすると、クライアントはストリームを一時停止し、新しいブラウザータブまたは別のWebビューで宛先を開きます。</p>
+
+<aside class="bcls-aside bcls-aside--information">テレビはウェブブラウザをサポートしていないため、接続されたテレビではクリックスルー広告を利用できません。</aside>
+
+<h3>コンパニオン広告を有効にする</h3>
+
+<p>コンパニオン広告は、広告コンテンツを表示するための別の形式を提供します。通常、プレーヤーの外側に表示されるテキスト、ディスプレイ広告、またはリッチメディアです。これらの広告の利点は、動画の再生中も引き続き表示できることです。</p>
+
+<aside class="bcls-aside bcls-aside--information">コンパニオン広告は、インターネットテレビには表示されません。</aside>
+</section>
+
+<section class="bcls-section">
+<h2 id="Limitations">制約事項</h2>
+
+<p>現在、この機能は次の地域でのみご利用いただけます。</p> 
+  <ul>
+    <li>ap-southeast-1 (シンガポール)</li>
+    <li>ap-southeast-2 (シドニー)</li>
+    <li>ap-northeast-1 (東京)</li>
+    <li>eu-central-1（フランクフルト）</li>
+    <li>us-west-2（オレゴン）</li>
+  </ul>
+
+</section>
+
+</article>

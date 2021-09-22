@@ -1,0 +1,55 @@
+
+<h2 id="sample_app">動画を更新する</h2>
+
+<fieldset class="bcls-fieldset"><legend>アカウント情報</legend>
+
+<p>デフォルトでは、Brightcoveサンプルアカウントから結果を取得します。</p>
+
+<p><button class="bcls-button" id="use_my_account">代わりにマイアカウントを使用する</button></p>
+
+<div id="basic_info" style="display:none;">
+<table class="bcls-table">
+	<tbody class="bcls-table__body">
+		<tr>
+			<td>ビデオクラウドアカウント（パブリッシャーID）：</td>
+			<td><input id="account" type="text" size="55" /></td>
+		</tr>
+		<tr>
+			<td class="align-top no-wrap">クライアント ID:</td>
+			<td><input id="cid" type="text" size="100" value="" /> （次の権限を含める必要があります<code translate="No">video-cloud/video/update</code>そして<code translate="No">video-cloud/video/read</code>また<code translate="No">video-cloud/video/all</code>）</td>
+		</tr>
+		<tr>
+			<td class="align-top no-wrap">クライアントシークレット:</td>
+			<td><input id="secret" type="text" size="100" value="" /> （次の権限を含める必要があります<code translate="No">video-cloud/video/update</code>そして<code translate="No">video-cloud/video/read</code>また<code translate="No">video-cloud/video/all</code>）</td>
+		</tr>
+	</tbody>
+</table>
+
+<p><button id="get_videos" class="bcls-button">ビデオリストの更新新しいアカウント情報</button></p>
+</div>
+</fieldset>
+
+<fieldset class="bcls-fieldset"><legend>入力</legend>
+
+  <div class="item-list" id="video_list"></div>
+  <div class="item-list" id="field_list"></div>
+
+<p><button id="update_videos" class="bcls-button">動画を更新する</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id="get_next_videos" class="bcls-button">次の25本のビデオを入手</button></p>
+</fieldset>
+
+<h2 id="outputLog">結果</h2>
+
+<fieldset class="bcls-fieldset"><legend>出力</legend>
+
+<p>APIリクエスト：
+  <br>
+  <textarea id="api_request" class="bcls-code" style="min-height:2em;max-height: 2em;"></textarea></p>
+
+<p>APIリクエスト本文：
+  <br>
+  <textarea id="request_data" class="bcls-code"></textarea></p>
+
+<pre class="line-numbers">
+<code class="language-json" id="results">応答はここに表示されます...</code></pre>
+</fieldset>
+

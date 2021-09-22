@@ -1,0 +1,58 @@
+---
+title:  '概要：In-Page Experience API'
+description:  'このトピックでは、In-Page ExperiencesAPIの概要を説明します。'
+parent: Getting Started 
+grandparent: In-Page Experience API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  <section class="bcls-section">
+    <h2 id="Introduction">入門</h2>
+    <p>ページ内エクスペリエンスには 2 つの API が関連付けられていますが、それらは非常に異なる目的で使用されます。</p>
+    <dl>
+      <dt>In-Page Experience API (REST)</dt>
+      <dd>
+        <p>In-Page Experience API は、ページ内エクスペリエンスをプログラムで管理できる REST API です。これは、主に、Video Cloud プラットフォームと CMS アプリケーションを統合するためのものです。</p>
+        <p>利用可能なリクエストの詳細については、<a href="/ipx/references/reference.html"> API リファレンスの全文も参照してください</a>。</p>
+      </dd>
+      <dt>ページ内エクスペリエンスクライアント API</dt>
+      <dd>
+        <p>インページエクスペリエンスクライアント API は、実行時にページ内エクスペリエンスの動作を管理できる JavaScript ライブラリです。これは、Brightcove Player API を使用してプレーヤーの動作を制御する方法に似ています。この API は、1 つ以上の Brightcove 埋め込みエクスペリエンスを実行する任意のページで使用できます。<a href="https://gallery.support.brightcove.com/develop/overview-page-experience-client-api.html">概要を参照してください。詳細については、ページ内エクスペリエンスクライアント API </a>を参照してください。</p>
+      </dd>
+    </dl>
+    <p>この概要の残りの部分では、バックエンドでページ内エクスペリエンスを管理するための REST API について説明します。</p>
+    <p><a href="https://gallery.support.brightcove.com/experiences/inpage/overview-creating-editing-and-publishing-page-experiences.html">ページ内エクスペリエンスの概要については、「概要:ページ内エクスペリエンスの作成、編集、公開</a></p>
+    <p>以降のセクションでは、REST API リクエストの 4 つのグループの概要について説明します。</p>
+    <ul>
+      <li><a href="#experiences">体験談</a></li>
+      <li><a href="#templates">[ テンプレート] </a></li>
+      <li><a href="#themes">テーマ</a></li>
+      <li><a href="#fonts">フォント</a></li>
+    </ul>
+  </section>
+  <section class="bcls-section">
+    <h2 id="experiences">エクスペリエンス</h2>
+    <p>エクスペリエンスのリクエストは、次の 3 つのサブカテゴリに分類されます。</p>
+    <dl>
+      <dt>エクスペリエンスの管理</dt>
+      <dd>これらのリクエストにより、アカウントのすべてのエクスペリエンスのリストを取得できます。また、新しいエクスペリエンスを作成し、特定のエクスペリエンスを取得、更新、または削除することもできます。最後に、エクスペリエンスを複製して、新しいエクスペリエンスの開始点を作成できます。</dd>
+      <dt>エクスペリエンスの公開/非公開</dt>
+      <dd>これらはすべて、アカウントまたは特定のテンプレートのすべてのテンプレートのリストを取得するように要求します。</dd>
+      <dt>ライブエクスペリエンスのステータスを管理する</dt>
+      <dd>この 2 つのリクエストでは、ライブエクスペリエンスの現在のステータスを取得するか、<code translate="No">preEvent </code>そのステータスをからに変更できます（たとえば<code translate="No">live</code>、から）。</dd>
+    </dl>
+  </section>
+  <section class="bcls-section">
+    <h2 id="templates">[ テンプレート] </h2>
+    <p>テンプレートは、エクスペリエンスの全体的なルックアンドフィールを制御します。カスタムテンプレートを作成することはできませんが、いくつかの標準テンプレートがあり、時間の経過とともに追加される可能性があります。API を使用すると、アカウントで使用できるテンプレートのリストを取得したり、特定のテンプレートを取得したりできます。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="themes">テーマ</h2>
+    <p>テーマを使用すると、テンプレートをカスタマイズして、エクスペリエンスに必要なルックアンドフィールを作成できます。API は、テーマの作成、取得、更新、削除を完全に管理するメソッドを提供します。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="fonts">フォント</h2>
+    <p>独自のフォントを使用できます。これらのメソッドでは、フォントの追加、更新、取得、削除を行うことができます。これらは、CSSを介してロードされたWebフォントです。</p>
+  </section>
+</article>

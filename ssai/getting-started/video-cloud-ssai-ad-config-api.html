@@ -1,0 +1,670 @@
+---
+title:  'ビデオクラウドSSAI API' 
+description: このトピックでは、サーバー側の広告挿入（SSAI）APIを使用して広告構成を作成および管理する方法を学習します。
+parent: Getting Started 
+grandparent: SSAI API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+
+<section id="top" class="bcls-section">
+<p>広告設定は、広告コール、ビーコン、その他の設定オプションを含む、SSAI 再生のさまざまな側面を定義します。アカウントは複数の構成を持つことができ、現在の設定はアカウント間で共有できません。</p>
+
+<aside class="bcls-aside bcls-aside--tip">Video Cloud Studioから広告設定を簡単に作成、一覧表示、削除できます。詳細については、<a href="https://studio.support.brightcove.com/admin/configuring-server-side-ad-settings.html">サーバー側の広告設定の構成</a>資料。</aside><aside class="bcls-aside bcls-aside--information">注意:
+<ul>
+	<li>SSAI を使用するには、Video Cloud <a href="https://studio.support.brightcove.com/general/overview-dynamic-delivery.html">アカウントをダイナミック配信に設定し</a>、SSAI を有効にする必要があります。この機能の使用を開始するには、アカウントマネージャーにお問い合わせください。</li>
+	<li>SSAI はビデオオンデマンド (VOD) で動作し、ライブ再生をサポートしています。</li>
+	<li>制限事項のリストについては、「<a href="https://ssai.support.brightcove.com/getting-started/video-cloud-ssai-overview.html#Limitations"> SSAI の概要</a>」ドキュメントを参照してください。</li>
+</ul>
+</aside>
+</section>
+
+<section class="bcls-section">
+<h2 id="General_information">一般情報</h2>
+
+<p>以下の情報は、すべての SSAI API リクエストに関連します。</p>
+
+<h3>ベース URL</h3>
+
+<p>SSAI API のベース URL は次のとおりです。</p>
+
+<pre>
+<code class="language-http" translate="No">https://ssai.api.brightcove.com/v1</code></pre>
+
+<h4>アカウントパス</h4>
+
+<p>いずれの場合も、特定の Video Cloud アカウントに対してリクエストが行われます。したがって、<code translate="No">accounts</code>あなたは常にベースURLにアカウントIDが続く用語を追加します：</p>
+
+<pre>
+<code class="language-http" translate="No">https://ssai.api.brightcove.com/v1<strong>/accounts/</strong><span class="bcls-input">your account id</span></code></pre>
+
+<h3>認証</h3>
+
+<p>要求の認証には、Authorization ヘッダーが必要です。</p>
+
+<pre>
+<code class="language-http" translate="No">Authorization: Bearer <span class="bcls-input">your access token</span></code></pre>
+
+<p><code translate="No">access_token</code>は一時的な OAuth2 アクセストークンで、Brightcove OAuth サービスから取得する必要があります。クライアントの資格情報を取得し、それらを使用してアクセストークンを取得する方法の詳細については、<a href="/getting-started/authentication-brightcove-api-requests.html"> BrightcoveAPIリクエストの認証</a>。</p>
+
+<h3>オペレーション</h3>
+
+<p>クライアントの資格情報を要求するときは、必要なアカウントアクセスの種類または操作を指定する必要があります。以下は、SSAI API に対して現在サポートされている操作の一覧です。</p>
+
+<ul>
+	<li>SSAI データ:
+	<p><code translate="No">video-cloud/ssai/read</code><br />
+	<code translate="No">video-cloud/ssai/all</code></p>
+	</li>
+</ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="Manage_ad_configurations">広告設定の管理</h2>
+
+<p>API は、次の GET および PUT リクエストをサポートします。</p>
+
+<ul>
+	<li><a href="#List_ad_configurations">広告構成の一覧表示</a></li>
+	<li><a href="#Create_an_ad_configuration">広告設定を作成する</a></li>
+	<li><a href="#Get_ad_configuration_details">広告設定の詳細を取得する</a></li>
+	<li><a href="#Update_an_ad_configuration">広告設定の更新</a></li>
+</ul>
+
+<h3 id="List_ad_configurations">広告構成の一覧表示</h3>
+
+<p>アカウントに対して定義された広告設定を一覧表示します。</p>
+
+<table class="bcls-table">
+	<tbody class="bcls-table__body">
+		<tr>
+			<th>方法</th>
+			<td>取得する</td>
+		</tr>
+		<tr>
+			<th>URL</th>
+			<td>https://ssai.api.brightcove.com/v1/accounts/ <span class="bcls-input">あなたのアカウント ID </span> /ssai_configs</td>
+		</tr>
+		<tr>
+			<th rowspan="2">ヘッダー</th>
+			<td>認証：<span class="bcls-input">アクセストークンをベアラする</span></td>
+		</tr>
+		<tr>
+			<td>コンテンツタイプ:アプリケーション/JSON</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>レスポンスの例:</p>
+
+<pre class="line-numbers">
+<code class="language-json" translate="No">{% raw %}[
+  {
+    "name": "VMAP Ad Server",
+    "vmap_response_namespace": "bc",
+    "config_id": "2ecc6beb-d6a4-4deb-a78e-37ac27e0f883",
+    "account_id": "57838016001",
+    "created_timestamp": "2017-07-24T19:28:34.976878586Z",
+    "updated_timestamp": "2017-07-24T19:28:34.976878586Z",
+    "ad_config": {
+      "expected_ad_response": "dfp_ad_rules",
+      "disable_server_beacons": false,
+      "template_url": {
+          "template": "http://solutions.brightcove.com/bcls/ads/simple-ad-rules?ip={{ system.ip_address }}&amp;vid={{ metadata.video_id }}&amp;ppid={{ system.unique_user_id }}&amp;p_vmap={{ url.p_vmap }}"
+      }
+    }
+  }
+]{% endraw %}</code></pre>
+
+<h3 id="Create_an_ad_configuration">広告設定を作成する</h3>
+
+<p>アカウントの広告設定を作成します。</p>
+
+<table class="bcls-table">
+	<tbody class="bcls-table__body">
+		<tr>
+			<th>方法</th>
+			<td>役職</td>
+		</tr>
+		<tr>
+			<th>URL</th>
+			<td>https://ssai.api.brightcove.com/v1/accounts/ <span class="bcls-input">あなたのアカウント ID </span> /ssai_configs</td>
+		</tr>
+		<tr>
+			<th rowspan="2">ヘッダー</th>
+			<td>認証：<span class="bcls-input">アクセストークンをベアラする</span></td>
+		</tr>
+		<tr>
+			<td>コンテンツタイプ:アプリケーション/JSON</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>サンプル本文:</p>
+
+<pre class="line-numbers">
+<code class="language-json" translate="No">{% raw %}{
+  "name": "VMAP Ad Server",
+  "vmap_response_namespace": "bc",
+  "ad_config": {
+  	"expected_ad_response": "vast_3_0",
+  	"disable_server_beacons": false,
+    "round_up_cue_points": false,
+  	"template_url": {
+  		"template": "http://solutions.brightcove.com/bcls/ads/simple-ad-rules?ip={{ system.ip_address }}&amp;vid={{ metadata.video_id }}&amp;ppid={{ system.unique_user_id }}&amp;p_vmap={{ url.p_vmap }}"
+  	}
+  },
+  "discontinuities": {
+    "hls": [ "*" ]
+  }
+}{% endraw %}</code></pre>
+
+<h3 id="Get_ad_configuration_details">広告設定の詳細を取得する</h3>
+
+<p>アカウントの場合、設定 ID で広告設定の詳細を取得します。</p>
+
+<table class="bcls-table">
+	<tbody class="bcls-table__body">
+		<tr>
+			<th>方法</th>
+			<td>取得する</td>
+		</tr>
+		<tr>
+			<th>URL</th>
+			<td>https://ssai.api.brightcove.com/v1/accounts/ <span class="bcls-input">あなたのアカウント ID </span> /ssai_configs/ <span class="bcls-input">広告設定ID </span></td>
+		</tr>
+		<tr>
+			<th rowspan="2">ヘッダー</th>
+			<td>認証：<span class="bcls-input">アクセストークンをベアラする</span></td>
+		</tr>
+		<tr>
+			<td>コンテンツタイプ:アプリケーション/JSON</td>
+		</tr>
+	</tbody>
+</table>
+
+<details>
+	<summary>レスポンスの例:</summary>
+	
+	<pre class="line-numbers">
+	<code class="language-json" translate="No">{% raw %}{
+		"name": "VMAP Ad Server",
+		"vmap_response_namespace": "bc",
+		"config_id": "2ecc6beb-d6a4-4deb-a78e-37ac27e0f883",
+		"account_id": "57838016001",
+		"created_timestamp": "2017-07-24T19:28:34.976878586Z",
+		"updated_timestamp": "2017-07-24T19:28:34.976878586Z",
+		"ad_config": {
+			"expected_ad_response": "dfp_ad_rules",
+			"disable_server_beacons": false,
+			"template_url": {
+					"template": "http://solutions.brightcove.com/bcls/ads/simple-ad-rules?ip={{ system.ip_address }}&amp;vid={{ metadata.video_id }}&amp;ppid={{ system.unique_user_id }}&amp;p_vmap={{ url.p_vmap }}"
+			}
+		},
+		"beacon_templates": [
+				{
+					"type": "content_start",
+					"template_url": {
+						"template": "https://myserver.com/beaconRX/{{metadata.video_id}}/load?position=load&amp;sid={{system.xfp.unique_user_id}}&amp;jid={{metadata.video_id}}&amp;rnd32={{sytem.random_number_32}}&amp;bid={{system.uuid}}&amp;t={{system.timestamp_utc}}&amp;ua={{system.user_agent}}&amp;ip={{system.ip_address}}&amp;ref={{system.referer}}"
+					}
+				},
+				{
+					"type": "content_midpoint",
+					"template_url": {
+						"template": "https://myserver.com/beaconRX/{{metadata.video_id}}/load?position=load&amp;sid={{system.xfp.unique_user_id}}&amp;jid={{metadata.video_id}}&amp;rnd32={{sytem.random_number_32}}&amp;bid={{system.uuid}}&amp;t={{system.timestamp_utc}}&amp;ua={{system.user_agent}}&amp;ip={{system.ip_address}}&amp;ref={{system.referer}}"
+					}
+				},
+				{
+					"type": "ad_start",
+					"template_url": {
+						"template": "https://myserver.com/beaconRX/{{metadata.video_id}}/load?position=load&amp;sid={{system.xfp.unique_user_id}}&amp;jid={{metadata.video_id}}&amp;rnd32={{sytem.random_number_32}}&amp;bid={{system.uuid}}&amp;t={{system.timestamp_utc}}&amp;ua={{system.user_agent}}&amp;ip={{system.ip_address}}&amp;ref={{system.referer}}"
+					}
+				},
+				{
+					"type": "content_complete",
+					"template_url": {
+						"template": "https://myserver.com/beaconRX/{{metadata.video_id}}/load?position=load&amp;sid={{system.xfp.unique_user_id}}&amp;jid={{metadata.video_id}}&amp;rnd32={{sytem.random_number_32}}&amp;bid={{system.uuid}}&amp;t={{system.timestamp_utc}}&amp;ua={{system.user_agent}}&amp;ip={{system.ip_address}}&amp;ref={{system.referer}}"
+					}
+				}
+			],
+			"discontinuities": {
+				"dash": [
+					"*"
+				],
+				"hls": [
+					"*"
+				]
+			},
+			"extend_beacon_guard_ttl": true
+		}
+	}{% endraw %}</code></pre>
+</details>
+
+<h3 id="Update_an_ad_configuration">広告設定の更新</h3>
+
+<p>設定 ID で広告設定を更新します。</p>
+
+<table class="bcls-table">
+	<tbody class="bcls-table__body">
+		<tr>
+			<th>方法</th>
+			<td>置きます</td>
+		</tr>
+		<tr>
+			<th>URL</th>
+			<td>https://ssai.api.brightcove.com/v1/accounts/ <span class="bcls-input">あなたのアカウント ID </span> /ssai_configs/ <span class="bcls-input">広告設定ID </span></td>
+		</tr>
+		<tr>
+			<th rowspan="2">ヘッダー</th>
+			<td>認証：<span class="bcls-input">アクセストークンをベアラする</span></td>
+		</tr>
+		<tr>
+			<td>コンテンツタイプ:アプリケーション/JSON</td>
+		</tr>
+		<tr>
+			<th>サンプルボディ</th>
+			<td>
+			<pre>
+<code class="language-json" translate="No">{
+    "name": "VMAP Ad Server - updated"
+}</code></pre>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<details>
+	<summary>レスポンスの例:</summary>
+	
+	<pre class="line-numbers">
+	<code class="language-json" translate="No">{% raw %}{
+		"name": "VMAP Ad Server - updated",
+		"vmap_response_namespace": "bc",
+		"config_id": "2ecc6beb-d6a4-4deb-a78e-37ac27e0f883",
+		"account_id": "57838016001",
+		"created_timestamp": "2017-07-24T19:28:34.976878586Z",
+		"updated_timestamp": "2017-07-24T19:28:34.976878586Z",
+		"ad_config": {
+			"expected_ad_response": "dfp_ad_rules",
+			"disable_server_beacons": false,
+			"template_url": {
+				"template": "http://solutions.brightcove.com/bcls/ads/simple-ad-rules?ip={{ system.ip_address }}&amp;vid={{ metadata.video_id }}&amp;ppid={{ system.unique_user_id }}&amp;p_vmap={{ url.p_vmap }}"
+			}
+		}
+	}{% endraw %}</code></pre>
+</details>
+</section>
+
+<section class="bcls-section">
+<h2 id="Configuration_field_details">設定フィールドの詳細</h2>
+
+<p>この表は、リクエストの本文セクション内で使用される広告設定フィールドを定義します。</p>
+
+<table class="bcls-table">
+	<thead class="bcls-table__head">
+		<tr>
+			<th>フィールド</th>
+			<th>タイプ</th>
+			<th>説明</th>
+		</tr>
+	</thead>
+	<tbody class="bcls-table__body">
+		<tr>
+			<td><code translate="No">name</code></td>
+			<td>文字列</td>
+			<td>人間が読める名前</td>
+		</tr>
+		<tr>
+			<td><code translate="No">vmap_response_namespace</code></td>
+			<td>文字列</td>
+			<td>従来の Unicorn Once 名前空間形式を使用するか、新しい Brightcove 名前空間形式を使用するように VMAP 出力を調整します。<br />
+			<br />
+			値：<code translate="No">uo</code>、<code translate="No">bc</code>ディフォルト：<code translate="No">bc</code></td>
+		</tr>
+		<tr>
+			<td><code translate="No">description</code></td>
+			<td>文字列</td>
+			<td>人間が読める説明</td>
+		</tr>
+		<tr>
+			<td><code translate="No">ad_config.expected_ad_response</code></td>
+			<td>文字列</td>
+			<td>応答を解析するために使用する技術。 <sup><a href="#n1">[1]</a></sup><br />
+			<br />
+			値:
+			<ul>
+				<li><code translate="No">dfp_ad_rules</code></li>
+				<li><code translate="No">dfp_vmap</code></li>
+				<li><code translate="No">smart_xml</code></li>
+				<li><code translate="No">vast_3_0</code></li>
+			</ul>
+			</td>
+		</tr>
+		<tr>
+			<td><code translate="No">ad_config.disable_server_beacons</code></td>
+			<td>ブール値</td>
+			<td>広告インプレッション/ビーコンのサーバー側の起動を無効にするかどうかにフラグを立てます<br />
+			<br />
+			に設定した場合<code translate="No">true</code>、SSAIはサーバー側でビーコンを起動せず、VMAP出力にすべてのビーコンを含めます<br />
+			<br />
+			に設定した場合<code translate="No">false</code>、SSAIは、サーバー側で実行できるビーコンを起動し、VMAP出力に送信できないビーコンを含めます。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">ad_config.round_up_cue_points</code></td>
+			<td>ブール値</td>
+			<td>広告を挿入する近くの位置を選択するときに、次のキーフレームに切り上げるかどうかを設定します。<br />
+			<br />
+			ディフォルト：<code translate="No">false</code>、目的の広告位置に最も近いキーフレームを選択します。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">ad_config.template_url.template</code></td>
+			<td>文字列</td>
+			<td>広告タグテンプレート。使用可能な変数については、後のセクションで説明しています。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">ad_config.template_url.defaults</code></td>
+			<td>オブジェクト</td>
+			<td>URLパラメータが指定されていない場合に使用するデフォルトを定義する文字列への文字列へのマップ。<br />
+			<br />
+			文字通りにすることができます<code translate="No">{ "url.foo": "SomeString" }</code><br />
+			<br />
+			または別の変数を参照する<code translate="No">{% raw %}{ "url.foo": "{{ metadata.title_id }}" }{% endraw %}</code></td>
+		</tr>
+		<tr>
+			<td><code translate="No">discontinuities.dash</code> <sup><a href="#n2">[2]</a></sup></td>
+			<td>[] 文字列</td>
+			<td>複数ピリオド Dash マニフェストを提供するダッシュのバージョンを制御します。<br />
+			<br />
+			に設定<code translate="No">["*"]</code>すべてのバージョンに複数期間のダッシュを配信する<br />
+			<br />
+			決して空のリスト<br />
+			<br />
+			例：<code translate="No">["live-timeline"]</code>ライブタイムラインには配信しますが、hbbtvには配信しません</td>
+		</tr>
+		<tr>
+			<td><code translate="No">discontinuities.hls</code> <sup><a href="#n2">[2]</a></sup></td>
+			<td>[] 文字列</td>
+			<td>不連続性で配信する hl のバージョンを制御します。<br />
+			<br />
+			に設定<code translate="No">["*"]</code> HLSのすべてのバージョンで不連続性のある配信<br />
+			<br />
+			決して空のリスト<br />
+			<br />
+			例：<code translate="No">["v4","v5"]</code> v4とv5には配信されますが、v3には配信されません</td>
+		</tr>
+		<tr>
+			<td><code translate="No">beacon_templates</code></td>
+			<td>配列</td>
+			<td>起動するビーコンの配列（例:サードパーティビーコン）</td>
+		</tr>
+		<tr>
+			<td><code translate="No">beacon_templates[].type</code></td>
+			<td>文字列</td>
+			<td>
+			<p>発射するビーコンのタイプ。値:</p>
+
+			<ul>
+				<li><code translate="No">content_start</code></li>
+				<li><code translate="No">content_first_quartile</code></li>
+				<li><code translate="No">content_midpoint</code></li>
+				<li><code translate="No">content_third_quartile</code></li>
+				<li><code translate="No">content_complete</code></li>
+				<li><code translate="No">content_quartiles</code></li>
+				<li><code translate="No">content_interval</code></li>
+				<li><code translate="No">ad_start</code></li>
+				<li><code translate="No">ad_first_quartile</code></li>
+				<li><code translate="No">ad_midpoint</code></li>
+				<li><code translate="No">ad_third_quartile</code></li>
+				<li><code translate="No">ad_complete</code></li>
+				<li><code translate="No">ad_quartiles</code></li>
+				<li><code translate="No">ad_break_start</code></li>
+				<li><code translate="No">ad_break_end</code></li>
+				<li><code translate="No">segment_start</code></li>
+				<li><code translate="No">segment_end</code></li>
+				<li><code translate="No">on_load</code></li>
+			</ul>
+			</td>
+		</tr>
+		<tr>
+			<td><code translate="No">beacon_templates[].template_url.template</code></td>
+			<td>文字列</td>
+			<td>ビーコン URL テンプレート</td>
+		</tr>
+		<tr>
+			<td><code translate="No">extend_beacon_guard_ttl</code></td>
+			<td>ブール値</td>
+			<td>ビーコンガード TTL（存続時間）の長さを、コンテンツのセッション TTL の長さに設定します。それ以外の場合、デフォルトは 1 分です。</td>
+		</tr>
+	</tbody>
+</table>
+
+<aside class="bcls-aside bcls-aside--information">
+<p>次の注意事項は、上の表のフィールドを参照してください。</p>
+
+<p id="n1"><sup> [1]</sup> いつ<code translate="No">expected_ad_response</code>に設定されています<code translate="No">vast_3_0</code>、SSAIは、VideoCloudで定義されたアドキューポイントごとに1つのVAST呼び出しを行います。VMAP および広告ルールの場合、SSAI は最初の広告応答で定義された広告ブレークに基づいてリクエストを行います。</p>
+
+<p id="n2"><sup> [2]</sup> 不連続タグは、コンテンツビデオと広告セグメント間のフレームレートエンコーディングの変更を示します。レンダリングチェーンを再構築するようにシステムに指示します。スケーラブルなSSAIの場合、ビデオプレーヤーは、不連続タグと複数のピリオドを含む MPEG DASH で HLS を再生できる必要があります。</p>
+</aside>
+</section>
+
+<section class="bcls-section">
+<h2 id="Ad_variables">広告変数</h2>
+
+<p><strong>テンプレートURL内の変数は</strong>、変数パスの前と後にオプションの空白を含む二重中括弧（<code translate="No">{% raw %}{{ … }}{% endraw %}</code>）で識別されます。すべての変数には、次の 3 つの名前空間のうちの 1 つが付きます。</p>
+
+<ul>
+	<li><a href="#System_variables">システム</a></li>
+	<li><a href="#URL_variables">url </a></li>
+	<li><a href="#Metadata_variables">メタデータ</a></li>
+</ul>
+
+<h3 id="System_variables">システム変数</h3>
+
+<p>システム変数は SSAI システムによって提供され、エンドユーザーまたはランダム値を生成するためのヘルパー変数に関する情報です。値は、URL テンプレートに挿入する前に URI エンコードされている必要があります。</p>
+
+<p>システム変数は次のように識別されます。<code translate="No">{% raw %}{{system.*}}{% endraw %}</code></p>
+
+<table class="bcls-table">
+	<thead class="bcls-table__head">
+		<tr>
+			<th>フィールド</th>
+			<th>説明</th>
+		</tr>
+	</thead>
+	<tbody class="bcls-table__body">
+		<tr>
+			<td><code translate="No">ad.position_time</code></td>
+			<td>広告リクエストをトリガーしたキューポイントの秒単位の時間。 VAST広告応答タイプでのみ使用可能</td>
+		</tr>
+    <tr>
+			<td><code translate="No">ip_address</code></td>
+			<td>エンドユーザーのIPアドレス</td>
+		</tr>
+		<tr>
+			<td><code translate="No">random_number_32</code></td>
+			<td>ランダム32ビット整数</td>
+		</tr>
+		<tr>
+			<td><code translate="No">random_guid</code></td>
+			<td>ランダム UUID</td>
+		</tr>
+		<tr>
+			<td><code translate="No">referer</code></td>
+			<td>エンドユーザーのリファラーヘッダー値</td>
+		</tr>
+		<tr>
+			<td><code translate="No">timestamp_utc</code></td>
+			<td>Unixタイムスタンプとしての現在の時刻</td>
+		</tr>
+		<tr>
+			<td><code translate="No">unique_user_id</code></td>
+			<td>MD5 (IPアドレス+ユーザー_エージェント)</td>
+		</tr>
+		<tr>
+			<td><code translate="No">unix_timestamp</code></td>
+			<td>UNIXタイムスタンプ（秒）としての現在の時刻</td>
+		</tr>
+		<tr>
+			<td><code translate="No">user_agent</code></td>
+			<td>エンドユーザーのユーザーエージェントヘッダー値</td>
+		</tr>
+		<tr>
+			<td><code translate="No">uuid</code></td>
+			<td>ランダムUUID</td>
+		</tr>
+		<tr>
+			<td><code translate="No">x_forwarded_for</code></td>
+			<td>エンドユーザーのXフォワード For ヘッダー値</td>
+		</tr>
+		<tr>
+			<td><code translate="No">xfp.correlator</code></td>
+			<td>ランダム64ビット整数</td>
+		</tr>
+		<tr>
+			<td><code translate="No">xfp.ip_address</code></td>
+			<td>エンドユーザーのIPアドレス</td>
+		</tr>
+		<tr>
+			<td><code translate="No">xfp.unique_user_id</code></td>
+			<td>MD5 (IPアドレス+ユーザー_エージェント)</td>
+		</tr>
+		<tr>
+			<td><code translate="No">xfp.scor</code></td>
+			<td>ランダム64ビット整数</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3 id="URL_variables">URL 変数</h3>
+
+<p>エントリポイント VMAP/マニフェストで提供されるクエリパラメーターは、<code translate="No">url</code>名前空間の下で使用できます。他の名前空間の変数とは異なり、これらのパラメータはテンプレートに挿入するときにURLエンコードされません。変数値は、広告プロバイダに行くURLエンコードする必要がある場合は、エントリポイントURLで二重URLエンコードする必要があります。</p>
+
+<p>URL 変数は次のように識別されます。<code translate="No">{% raw %}{{url.*}}{% endraw %}</code></p>
+
+<h3 id="Metadata_variables">メタデータ変数</h3>
+
+<p>メタデータ変数は、Video Cloud データソースと動的配信データソースの両方から派生したコンテンツビデオを表す変数です。値は、URL テンプレートに挿入される前に URL エンコードされます。</p>
+
+<p>メタデータ変数は次のように識別されます。<code translate="No">{% raw %}{{metadata.*}}{% endraw %}</code></p>
+
+<table class="bcls-table">
+	<thead class="bcls-table__head">
+		<tr>
+			<th>フィールド</th>
+			<th>説明</th>
+		</tr>
+	</thead>
+	<tbody class="bcls-table__body">
+		<tr>
+			<td><code translate="No">ad_keys</code></td>
+			<td>Video Cloud Studio Media モジュールで追加および編集できる自由形式のテキスト文字列</td>
+		</tr>
+		<tr>
+			<td><code translate="No">{% raw %}custom_fields.{field_name}{% endraw %}</code></td>
+			<td>ビデオクラウドのカスタムフィールド</td>
+		</tr>
+		<tr>
+			<td><code translate="No">long_description</code></td>
+			<td>ビデオクラウドの詳細説明</td>
+		</tr>
+		<tr>
+			<td><code translate="No">name</code></td>
+			<td>ビデオクラウドの動画名</td>
+		</tr>
+		<tr>
+			<td><code translate="No">reference_id</code></td>
+			<td>ビデオクラウド参照 ID</td>
+		</tr>
+		<tr>
+			<td><code translate="No">tags</code></td>
+			<td>動画の Video Cloud タグのコンマ区切りのリスト</td>
+		</tr>
+		<tr>
+			<td><code translate="No">title.duration</code></td>
+			<td>コンテンツの継続時間 (秒)</td>
+		</tr>
+		<tr>
+			<td><code translate="No">title.id</code></td>
+			<td>動的配信タイトルID</td>
+		</tr>
+		<tr>
+			<td><code translate="No">title.name</code></td>
+			<td>動的配信のタイトル名</td>
+		</tr>
+		<tr>
+			<td><code translate="No">video_id</code></td>
+			<td>ビデオクラウド動画 ID</td>
+		</tr>
+		<tr>
+			<td colspan="2"><em>その他の Video Cloud キー/値のペアもここにあります</em></td>
+		</tr>
+	</tbody>
+</table>
+</section>
+
+<section class="bcls-section">
+<h2 id="Entrypoint_URL_parameters">エントリポイント URL パラメータ</h2>
+
+<p>いくつかの動作を調整するために、SSAI エントリポイント URL（VMAP またはマニフェスト）に追加できるクエリパラメーターがいくつかあります。</p>
+
+<table class="bcls-table">
+	<thead class="bcls-table__head">
+		<tr>
+			<th width="25%">パラメーター</th>
+			<th>説明</th>
+		</tr>
+	</thead>
+	<tbody class="bcls-table__body">
+		<tr>
+			<td><code translate="No">?rule=sd-only</code></td>
+			<td>アカウント設定で設定されたしきい値よりも低い高さのビデオレンディションをすべて除外します。</td>
+		</tr>
+		<tr>
+			<td><code translate="No">?rule=discos-enabled</code></td>
+			<td>Dash で HLS &amp; マルチピリオドで不連続で再生を有効にします。[再生設定] の [不連続性] 設定よりも優先されます</td>
+		</tr>
+		<tr>
+			<td><code translate="No">?rule=discos-disabled</code></td>
+			<td>DashのHLSとマルチピリオドで不連続での再生を無効にします。[再生設定] の [不連続性] 設定よりも優先されます</td>
+		</tr>
+	</tbody>
+</table>
+</section>
+
+<section class="bcls-section">
+<h2 id="Configuration_notes">構成に関する注意事項</h2>
+
+<ol>
+	<li>広告のプリロードはSSAIで行うべきではありません。この理由は、プレロードすると、プレーヤーが広告インプレッションを報告し、おそらく動画が再生される前の最初の四分位ビーコンを報告するからです。これにより、広告分析が不正確になる可能性があります。StudioでSSAIを構成すると、これは自動的に行われますが、SSAIを手動でセットアップする場合は、この問題に注意する必要があります。</li>
+	<li>ウェブプレーヤーが SSAI を使用していて、その動機の 1 つが広告ブロッカーを回避することである場合は、サーバー側のビーコンを使用する必要があります。クライアント側のビーコンはブロックされるため使用しないでください。</li>
+</ol>
+</section>
+
+<section class="bcls-section">
+<h2 id="Client_side_macros">クライアント側マクロ</h2>
+
+<p>クライアント側の広告マクロを使用する場合は、<code translate="No">page</code>プレフィックスを使用します。これらのマクロを使用すると、VMAP およびサーバーの URL で変数を使用できます。広告マクロの詳細については、「IMA3 プラグインによる広告」<a href="https://player.support.brightcove.com/plugins/advertising-ima3-plugin.html#Ad_macros_and_the_serverUrl">ドキュメントの「広告マクロ」および「ServerURL </a>」セクションを参照してください。</p>
+<!-- <p>
+              When you prefix an Ad variable with , then a client-side macro will be appended to the end of the VMAP and SRC fields in the catalog response, when SSAI is being used. Then, the Brightcove player will run those strings through the client-side macro replacement logic.
+            </p> -->
+
+<p>クライアント側マクロには、次の接頭辞が付けられます。<code translate="No">{% raw %}{{page.*}}{% endraw %}</code></p>
+
+<p>たとえば、<code translate="No">document.referrer</code>と<code translate="No">pageVariable</code> DOM ウィンドウ変数を追加するには、<code translate="No">page</code>広告テンプレートで次のように接頭辞を付けます。</p>
+
+<pre>
+<code class="language-html" translate="No">{% raw %}https://adserver.com/{{page.document.referrer}}/{{page.pageVariable.whateverIwant}}{% endraw %}</code></pre>
+
+<p>Playback API <code translate="No">document.referrer</code>が返され、VMAP および SRC URL <code translate="No">pageVariable.whateverIwant</code>に追加されます。次に、Brightcove Player は、リクエストを送信する前に、クライアント側マクロ置換ロジックを実行し、適切な値を置き換えます。</p>
+
+<pre>
+<code class="language-html" translate="No">{% raw %}https://bolt-prefix/blah.vmap?document.referrer={document.referrer}&amp;pageVariable.whateverIwant={pageVariable.whateverIwant}{% endraw %}</code></pre>
+</section>
+
+<section class="bcls-section">
+<h2 id="Ad_error_beacons">広告エラービーコン</h2>
+
+<p>SSAI を使用する際の VAST 広告エラービーコンは、広告ワークフローに関する問題をプロアクティブに検出して解決するのに役立ちます。詳細については、「<a href="https://ssai.support.brightcove.com/vod/guides/ad-error-beacons-ssai.html"> SSAI を使用した広告エラービーコン</a>」のドキュメントを参照してください。</p>
+</section>
+</article>

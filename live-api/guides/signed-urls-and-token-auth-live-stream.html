@@ -1,0 +1,102 @@
+---
+title: ライブストリームを使用した署名付きURLとトークン認証
+description:  'このトピックでは、署名付きURLとトークン認証を使用して、エンドユーザーが適切な承認なしにライブストリームを再生できないようにする方法について学習します。'
+parent: Guides 
+grandparent: Live API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+
+<section class="bcls-section">
+<h2 id="Overview">概要</h2>
+
+<p>プレミアムコンテンツや機密コンテンツを配信する場合は、そのコンテンツを安全に保つためのあらゆる方法を模索します。エンドユーザーが動画 URL をコピーしたり、適切な承認なしにコンテンツを再生したりすることは望ましくありません。Brightcoveは RTMP、HLS、DASH URL の署名をサポートしています。</p>
+
+<p>独自のトークンを生成する場合は、このプロセスに 1 つのステップがあります。ライブシステムでトークン化された URL を生成する場合は、ライブストリームのトークン認証を有効にするために、次のセクションで説明する 2 つのステップがあります。</p>
+
+<aside class="bcls-aside bcls-aside--information">現在、トークン認証はAkamai EdgeAuth2.0でのみサポートされています。</aside>
+</section>
+
+<section id="Implementation" class="bcls-section">
+<h2>実装</h2>
+
+<aside class="bcls-aside bcls-aside--information">注：独自のトークンを作成してURLに追加する場合は、手順1のみを完了する必要があります。</aside>
+
+<h3>ステップ1：ライブジョブの作成</h3>
+
+<p>トークン認証を有効にするには、<a href="/live-api/references/reference.html#api-Live_Jobs-Create_a_Live_Job">ジョブの作成時にリクエスト本文に以下を含めます</a>。</p>
+
+<pre class="line-numbers">
+  <code class="language-json" translate="No">"add_cdns": [{
+    "label": "My CDN",
+    "prepend": "mycdn-a.akamaihd.net",
+    "protocol": "https",
+    "vendor": "akamai",
+    "token_auth": {
+      "auth_type": "Akamai2.0",
+      "key": "AKAMAI_TOKEN_PASSWORD",
+      "token_name": "AKAMAI_TOKEN_NAME",
+      "media": {
+        "start_time": "now",
+        "end_time": 1495697388,
+        "ttl": 60
+      }
+    }
+  }]</code></pre>
+
+<p>次の表では、関連するフィールドについて説明します。</p>
+
+<table class="bcls-table">
+	<caption class="bcls-caption--table">ライブジョブの TTL フィールド</caption>
+	<thead class="bcls-table__head">
+		<tr>
+			<th>フィールド</th>
+			<th>値</th>
+		</tr>
+	</thead>
+	<tbody class="bcls-table__body">
+		<tr>
+			<td ><code translate="No">start_time</code></td>
+			<td ><code translate="No">now</code>またはUNIX/POSIX開始時刻のいずれか</td>
+		</tr>
+		<tr>
+			<td ><code translate="No">end_time</code></td>
+			<td >UNIX/POSIX 終了時間</td>
+		</tr>
+		<tr>
+			<td ><code translate="No">ttl</code></td>
+			<td >生存時間の秒数</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>ステップ2：ライブジョブの作成後</h3>
+
+<aside class="bcls-aside bcls-aside--information">次の場合にのみ、この手順を完了してください<strong>いいえ</strong>独自のトークンを作成し、代わりにLive APIでトークン化されたURLを生成する必要があります。</aside>
+
+<p>ライブジョブを作成したら、マスターマニフェスト URL を生成する別のリクエストを行う必要があります。これを行うには、<code translate="No">POST</code>次の宛先にリクエストを送信します。</p>
+
+<pre class="line-numbers">
+  <code class="language-http" translate="No">https://api.bcovlive.io/v1/jobs/<span class="bcls-input">JOB_ID</span>/authurls</code></pre>
+
+<p>リクエスト本文として次の JSON を含めます。</p>
+
+<pre class="line-numbers">
+  <code class="language-json" translate="No">{
+    "ttl": <span class="bcls-input">number in seconds for time to live</span>
+  }</code></pre>
+</section>
+
+<section id="Notes" class="bcls-section">
+<h2>注</h2>
+
+<ul>
+	<li><code translate="No">ttl</code>上記の両方のステップの値は、DVRウィンドウと同じかそれ以上にする必要があります。そうでない場合、<code translate="No">ttl</code> DVRウィンドウは値に制限されます</li>
+	<li>httpとhttpsの両方がサポートされています</li>
+	<li>は 5 ～ 12 文字で、Akamai で設定されているものと一致する必要があります<code translate="No">token_name</code></li>
+	<li><code translate="No">start_time</code> is optional and can be <code translate="No">"now"</code> (the default) or an epoch time value in seconds</li>
+	<li><code translate="No">end_time</code> is optional and can be an epoch time value in seconds - either <code translate="No">end_time</code> or <code translate="No">ttl</code> is required; if not specified, <code translate="No">ttl</code> is assumed to be the greater of <code translate="No">live_dvr_sliding_window_duration</code> and <code translate="No">vod_sliding_window_duration</code></li>
+</ul>
+</section>
+</article>

@@ -1,0 +1,132 @@
+---
+title: デバイス制限とストリーム同時実行でHLSeを使用する
+description: 「このトピックでは、HLSeとBrightcoveの再生制限を使用して、デバイス制限を有効にし、同時ストリームを制限する方法を学習します。」
+parent: Guides 
+grandparent: Playback Restrictions
+layout: staging
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  
+  <br/>
+  <aside class="bcls-aside bcls-aside--tip">この機能は、Brightcove再生制限の限定可用性フェーズにアクセスできる特定のお客様にご利用いただけます。</aside>
+  
+  <section class="bcls-section">
+    <h2 id="Introduction">入門</h2>
+    <p>ユーザーごとにコンテンツを制限したいが、DRMを統合する必要がない、または統合したくない場合は、HLSeを使用することが解決策になる可能性があります。</p>
+    <p>AES-128（HLSe）を使用した標準の暗号化により、インターネットを介してコンテンツを暗号化できます。公的にアクセス可能な復号化キーを使用するため、DRMを使用するほど安全ではありません。</p>
+    <p>でHLSeを使用する<a href="/playback-restrictions/getting-started/overview-playback-restrictions.html#License_Keys_Protection">Brightcoveのライセンスキー保護</a>は、ユーザーまたは高度な情報に基づいて再生要求を承認し、暗号化キーへのアクセスを許可または拒否し、標準暗号化のセキュリティを向上させることができます。</p>
+
+    <p>ライセンスキー保護は、DRMライセンス要求とAES-128復号化の保護に重点を置いています。JWTクレームにより、ライセンスキー保護がユーザーレベルでの制限をサポートできるようになります。これは、再生をユーザーエージェント、異なるIPアドレスの最大数、または各トークンのユーザーの最大数に制限できることを意味します。</p>
+
+    <p>この機能を初めて使用する場合は、<a href="/playback-restrictions/getting-started/overview-playback-restrictions.html">概要：Brightcoveの再生制限</a>資料。</p>
+
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Getting_started">入門編</h2>
+    <p>
+      アカウントを設定し、コンテンツを準備します。
+    </p>
+    <ol class="bcls-tasklist">
+      <li>アカウントマネージャーに連絡して、HLSeおよび再生制限のアカウントを有効にしてください。</li>
+      <li>
+        アカウントでHLSeを有効にしたら、保護する動画を取り込んだり、再トランスコードしたりします。
+      </li>
+    </ol>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Workflow">ワークフロー</h2>
+    <p>
+      HLSeでデバイス制限を設定したり、同時実行性をストリーミングしたりするには、次の手順に従います。
+    </p>
+    <ol class="bcls-tasklist-restart">
+      <li>
+        <p>を作成します<a href="https://general.support.brightcove.com/developer/create-json-web-token.html">JSON Web Token（JWT）</a>ユーザーごと。</p>
+        <p>ユーザーセッションごとに、JWTを作成する必要があります。これは、さまざまなクレームでの必要な制限に基づいて生成する必要があります。</p>
+        <ul>
+          <li><p>デバイスの制限については、<a href="#Setting_device_limits">デバイス制限の設定</a>セクション。</p></li>
+          <li>ストリームの同時実行性については、<a href="#Setting_stream_concurrency">ストリームの同時実行性の設定</a>セクション。</li>
+        </ul>
+      </li>
+      <li>
+        <p>ライセンスキー保護を使用するようにプレーヤーを構成します。</p>
+        詳細については、<a href="/playback-restrictions/getting-started/overview-playback-restrictions.html#License_Keys_Protection">ライセンスキー保護の使用</a>概要のセクション：Brightcoveの再生制限資料。
+      </li>
+    </ol>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Setting_device_limits">デバイス制限の設定</h2>
+    <p>ライセンスキー保護を使用すると、ユーザーごとに設定された数のデバイスに再生を制限できます。</p>
+    <h3>請求</h3>
+    <ul>
+      <li>
+        <p><code translate="No">maxip</code>:</p>
+        HLSeコンテンツの場合、<code translate="No">maxip</code>クレームは、同時にストリーミングできる異なるIPアドレスの数を定義します。
+      </li>
+    </ul>
+    <h3>例</h3>
+    <p>この例では、再生をユーザーごとに1つのIPアドレス（ユーザーごとに1つのデバイス）に制限するJWTを作成します。</p>
+    <ol class="bcls-tasklist-restart">
+      <li>
+        <p>公開鍵と秘密鍵のペアを生成します。</p>
+        詳細については、<a href="https://general.support.brightcove.com/developer/create-json-web-token.html#Generate_public_private_key_pair">公開鍵と秘密鍵のペアを生成する</a> JSON Web Token（JWT）ドキュメントの作成のセクション。
+      </li>
+      <li>
+        <p>公開鍵を登録します。</p>
+        詳細については、<a href="/playback-restrictions/guides/authentication-apis.html">認証APIの使用</a>資料。
+      </li>
+      <li>
+        <p>JSONWebトークンを作成します。</p>
+        <p>これはbashを使用した例です。必ず追加してください<code translate="No">"maxip":1</code>ユーザーごとに1つのIPアドレス（デバイス）に再生を制限することを主張します。</p>
+        <pre class="line-numbers">
+<code class="language-bash" translate="No">#! /usr/bin/env bash
+  # Static header fields.
+  HEADER='{
+    &quot;type&quot;: &quot;JWT&quot;,
+    &quot;alg&quot;: &quot;RS256&quot;
+  }'
+  
+  payload='{
+    &quot;pkid&quot;: &quot;<span class="bcls-input">your policy key</span>&quot;,
+    &quot;accid&quot;: &quot;<span class="bcls-input">your account id</span>&quot;,
+    <span class="bcls-highlight">&quot;maxip&quot;: 1</span>
+  }'
+  
+  # Use jq to set the dynamic `iat` and `exp`
+  # fields on the payload using the current time.
+  # `iat` is set to now, and `exp` is now + 1 second.
+  PAYLOAD=$(
+    echo &quot;${payload}&quot; | jq --arg time_str &quot;$(date +%s)&quot; \
+    '
+    ($time_str | tonumber) as $time_num
+    | .iat=$time_num
+    | .exp=($time_num + 60 * 60)
+    '
+  )
+  
+  function b64enc() { openssl enc -base64 -A | tr '+/' '-_' | tr -d '='; }
+  
+  function rs_sign() { openssl dgst -binary -sha256 -sign {your_private_key_path} ; }
+  
+  JWT_HDR_B64=&quot;$(echo -n &quot;$HEADER&quot; | b64enc)&quot;
+  JWT_PAY_B64=&quot;$(echo -n &quot;$PAYLOAD&quot; | b64enc)&quot;
+  UNSIGNED_JWT=&quot;$JWT_HDR_B64.$JWT_PAY_B64&quot;
+  SIGNATURE=$(echo -n &quot;$UNSIGNED_JWT&quot; | rs_sign | b64enc)
+  
+  echo &quot;$UNSIGNED_JWT.$SIGNATURE&quot;</code></pre>
+        
+      </li>
+    </ol>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Setting_stream_concurrency">ストリームの同時実行性の設定</h2>
+    <p>近日公開！</p>
+    
+  </section>
+
+</article>

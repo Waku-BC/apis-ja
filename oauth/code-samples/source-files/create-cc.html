@@ -1,0 +1,39 @@
+<section class="bcls-section">
+  <h2 id="app">クライアント認証情報の作成</h2>
+
+  <fieldset>
+    <legend>入力</legend>
+
+    <p>資格情報の名前（特殊文字なし）： <input id="credentialsName" type="text" size="50" /></p>
+
+    <p>BC_TOKEN： <input id="bcToken" type="text" size="50" /></p>
+
+    <p>（カンマ区切りリスト）のクレデンシャルを作成するアカウント： <input id="accountIds" type="text" size="50" placeholder="57838016001,1752604059001,921483702001" /></p>
+
+    <p>アカウントの種類： <select name="accountTypeSelector" id="accountTypeSelector"><option value="video-cloud-account">Video Cloud</option><option value="video-cloud-account">ブライトコーブプレーヤー</option> </select></p>
+
+    <p>有効にするAPI操作（を参照）<a href="https://support.brightcove.com/api-operations-client-credentials-requests" target="_blank">クライアントクレデンシャルのAPI操作</a>詳細については）：</p>
+
+    <div id="operationsList">&nbsp;</div>
+
+    <p><button id="submitButton" class="bcls-button">クライアント資格情報を取得する</button></p>
+
+    <p>完全なAPIリクエスト本文：</p>
+    <textarea name="apiRequest" id="apiRequest" class="bcls-code"></textarea></fieldset>
+
+  <fieldset>
+    <legend>出力</legend>
+
+    <h3>クライアントID</h3>
+    <textarea name="clientId" id="clientId" class="bcls-code">クライアントIDがここに表示されます...</textarea>
+
+    <h3>クライアントの秘密</h3>
+    <textarea name="clientSecret" id="clientSecret" class="bcls-code">クライアントシークレットがここに表示されます...</textarea>
+
+    <h3>フルレスポンス</h3>
+
+    <pre class="line-numbers">
+<code id="apiResponse" class="language-json">完全なAPI応答がここに表示されます...</code></pre>
+  </fieldset>
+</section>
+

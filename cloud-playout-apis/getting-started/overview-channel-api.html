@@ -1,0 +1,373 @@
+---
+title:  '概要：Channels API'
+description:  ' Channel Managerエンドポイントを使用すると、Cloud Playoutチャネルを作成し、アセットとライブイベントをプレイリストに追加してから、チャネルをアクティブ化、開始、停止、および削除できます。'
+parent: Getting Started 
+grandparent: Cloud Playout APIs
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  <section class="bcls-section">
+    <h2 id="requirements">要件</h2>
+    <ul>
+      <li>ビデオクラウドでCloudPlayoutAPI認証スコープが有効になっている登録済みアプリケーション。（（<code>スタジオUI-&gt;管理者-&gt; API認証</code>）</li>
+    </ul>
+    <aside class="bcls-aside bcls-aside--information language-editable">Cloud Playout Channel Operationsに加えて、そのコンテンツを管理するためにもCMS APIを使用する必要があることに注意してください。そのため、クライアントの資格情報に必要なすべての権限を取得することをお勧めします。
+      <figure class="bcls-figure">
+        <img class="bcls-image" src="/assets/images/cloud-playout/permissions-channel-api.png" alt="Cloud Player and CMS API Permissions">
+        <figcaption class="bcls-caption--image">CloudPlayerとCMS APIの権限</figcaption>
+      </figure>
+      <p>見る<a href="/getting-started/authentication-brightcove-api-requests.html">詳細については、BrightcoveAPIの認証。</a></p>
+    </aside>
+  </section>
+  <section class="bcls-section">
+    <h2 id="creating-a-cloudplayoutchannelmanager-workflow">CloudPlayoutChannelManagerワークフローの作成</h2>
+    <p>以下は、典型的なCloudPlayoutチャネル管理ワークフローです。</p>
+    <ul>
+    <li>チャネルを作成する</li>
+    <li>アセットとライブイベントをプレイリストに追加します</li>
+    <li>チャネルをアクティブ化する</li>
+    <li>チャネルを開始します</li>
+    <li>チャネルを停止します</li>
+    <li>チャネルを削除します</li>
+    </ul>
+    <p>これらとは別に、<strong>チャンネルを取得</strong>チャネル情報とチャネルの状態を確認するのに役立ちます。</p>
+    </section>
+    <section class="bcls-section">
+      <h2 id="create-channel">チャネルを作成する</h2>
+      <p>チャネルを作成するには、チャネルの名前、開始時間、入力および出力グループ、リージョン、live_profileなどの必須属性が必要です。DateTime値は、ISO 8601日付形式（UTCまたはタイムオフセット付き）で推奨されます。</p>
+    <h3>リクエストの例</h3>
+    <h4>要求</h4>
+    <p>作る<code translate="No">POST</code>リクエスト先：</p>
+<pre><code class="language-http" translate="No">https://cm.cloudplayout.brightcove.com/accounts/<span class="bc-input">{account_id}</span>/cp_channels</code></pre>
+    <h4>ヘッダー</h4>
+<pre class="line-numbers"><code class="language-bash" translate="No">Content-Type: application/json
+Authorization: Bearer <span class="bc-input">{token}</span></code></pre>
+    <h4>リクエスト本文</h4>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "name": "channel name",
+  "start_time": "2021-06-29T08:30:50.344Z",
+  "input_group": [
+    {
+      "input_type": "playlist or rtmp or slate",
+      "input_id": "dummy",
+      "loop_on_completion": false
+    }
+  ],
+  "live_profile": "your live profile",
+  "output_group": [
+    {
+      "type": "rtmp or rtp",
+      "ingest_locations": [
+        {
+          "pipeline_id": 1,
+          "location": "bc_live or any live channel from your account"
+        }
+      ]
+    },
+    {
+      "type": "s3",
+      "ingest_locations": [
+        {
+          "pipeline_id": 1,
+          "location": "s3 credential id"
+        }
+      ]
+    }
+  ],
+  "region": "aws region"
+}</code></pre>
+<details>
+  <summary>レスポンスの例</summary>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "public_id": "79f0e7503fd64af3b7d2b0f825100f28",
+  "name": "channel name",
+  "description": "",
+  "account_id": "Your account id",
+  "state": "DRAFT",
+  "status": null,
+  "start_time": "2021-06-29 08:30:50 UTC",
+  "stop_time": null,
+  "input_groups": "playlist",
+  "output_groups": "rtmp:s3",
+  "loop_playlist": false,
+  "playlist_id": "1703814612527248093",
+  "channel_class": "single-pipeline",
+  "ssai_enabled": true,
+  "aws_region": "aws region",
+  "message": null,
+  "created_at": "2021-06-28 12:43:55 UTC",
+  "updated_at": "2021-06-28 12:43:55 UTC",
+  "image_url": "https://bc-cloudplayout-prod.s3.amazonaws.com/default_channel_image.png",
+  "output_destinations": [
+    "Brightcove Live"
+  ],
+  "channel_created_at": "2021-06-28 12:43:55 UTC",
+  "channel_updated_at": "2021-06-28 12:43:55 UTC",
+  "channel_created_by": "username@brightcove.com",
+  "channel_updated_by": "username@brightcove.com"
+}</code></pre>
+</details>
+<p>必須フィールドに加えて、次のように設定できるフィールドがあります。<code translate="No">description</code>、<code translate="No">stop_time</code>、<code translate="No">ssai_enabled</code>、<code translate="No">image_id</code>、<code translate="No">mid_roll_import_enabled</code>、<code translate="No">mid_roll_slot_time</code>、 NS。からの例を参照してください<a href="/cloud-playout-apis/references/reference-channels.html">Channels APIリファレンス</a>さまざまな構成のチャネルを作成するため。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Add_content">プレイリストにコンテンツを追加する</h2>
+    <p>次のステップは、チャンネルコンテンツにコンテンツを追加することです。このためにあなたは使用します<a href="/cloud-playout-apis/references/reference-cms-interactions.html">CMS API</a>（これは全体の短縮版であることに注意してください<a href="/cms/references/reference.html">CMS APIリファレンス</a> Cloud Playoutに関連する操作のみを含み、Cloud Playoutにより適切な説明を含みます）。</p>
+    <p>チャネルのplaylist_idを取得します（チャネルの作成要求への応答から、またはチャネルの取得要求から）。これは、CloudPlayoutチャネルのアセットを管理するプレイリストです。</p>
+    <h3>リクエストの例</h3>
+    <h4>要求</h4>
+    <p>動画の更新リクエストは、コンテンツを追加するために使用されます。以下のサンプルでは、手動プレイリストを作成するためにビデオIDのコレクションが追加されていますが、ビデオタグなどに基づいてスマートプレイリストを作成することもできることに注意してください。</p>
+    <p>作る<code translate="No">PATCH</code>リクエスト先：</p>
+<pre><code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/<span class="bc-input">{account_id}</span>/playlists/<span class="bc-input">{playlist_id}</span></code></pre>
+    <h4>ヘッダー</h4>
+<pre class="line-numbers"><code class="language-bash" translate="No">Content-Type: application/json
+Authorization: Bearer <span class="bc-input">{token}</span></code></pre>
+    <h4>リクエスト本文</h4>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "video_ids": [
+    "70702887566202",
+    "70702887586202",
+    "70702260704202",
+    "70702260706202"
+  ]
+}</code></pre>
+    <details>
+      <summary>レスポンスの例</summary>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "id": "1701632459864392160",
+  "account_id": "Your account id",
+  "created_at": "2021-06-04T10:39:32.934Z",
+  "updated_at": "2021-06-04T12:29:06.793Z",
+  "description": "cloudplayout",
+  "favorite": false,
+  "name": "cloudplayout_dvfdb",
+  "reference_id": null,
+  "type": "EXPLICIT",
+  "video_ids": [
+    "70702887566202",
+    "70702887586202",
+    "70702260704202",
+    "70702260706202"
+  ],
+  "state": "READY"
+}</code></pre>
+    </details>
+  </section>
+  <section class="bcls-section">
+    <h2 id="add_live_event">ライブイベントを追加する</h2>
+    <p>ライブイベントをチャンネルに追加するには、<strong>ビデオを作ろう</strong> CMS APIにリクエストし、CloudPlayoutライブイベントとして識別する特別なタグを含めるように注意してください。</p>
+    <h3>リクエストの例</h3>
+    <h4>要求</h4>
+    <p>作る<code translate="No">POST</code>リクエスト先：</p>
+<pre><code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/<span class="bc-input">{account_id}</span>/videos</code></pre>
+    <h4>ヘッダー</h4>
+<pre class="line-numbers"><code class="language-bash" translate="No">Content-Type: application/json
+Authorization: Bearer <span class="bc-input">{token}</span></code></pre>
+    <h4>リクエスト本文</h4>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "name": "Name of the event",
+  <span class="bc-highlight">
+    "tags": [
+      "cp-live-placeholder",
+      "duration-00:40:00"
+    ]
+  </span>,
+  "description": "Description of the event"
+}</code></pre>
+    <details>
+      <summary>レスポンスの例</summary>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "id": "70702834583294",
+  "account_id": "Your account id",
+  "ad_keys": null,
+  "clip_source_video_id": null,
+  "complete": false,
+  "created_at": "2021-06-04T11:00:48.551Z",
+  "created_by": {
+    "type": "user",
+    "id": "76072843583",
+    "email": "username@brightcove.com"
+  },
+  "cue_points": [
+  ],
+  "custom_fields": {
+  },
+  "delivery_type": "unknown",
+  "description": "test description",
+  "digital_master_id": null,
+  "duration": null,
+  "economics": "AD_SUPPORTED",
+  "folder_id": null,
+  "geo": null,
+  "has_digital_master": false,
+  "images": {
+  },
+  "link": null,
+  "long_description": null,
+  "name": "test live event",
+  "original_filename": null,
+  "projection": null,
+  "published_at": "2021-06-04T11:00:48.565Z",
+  "reference_id": null,
+  "schedule": null,
+  "sharing": null,
+  "state": "ACTIVE",
+  "tags": [
+    "cp-live-placeholder",
+    "duration-00:05:00"
+  ],
+  "text_tracks": [
+  ],
+  "updated_at": "2021-06-04T11:00:48.572Z",
+  "updated_by": {
+    "type": "user",
+    "id": "76076294383",
+    "email": "username@brightcove.com"
+  },
+  "playback_rights_id": "primary"
+}</code></pre>
+</details>
+    <p>を参照してください<a href="/cloud-playout-apis/references/reference-cms-interactions.html">クラウドプレイアウトのCMS APIリファレンス</a> CloudPlayoutでのアセットの管理に関連するその他の例については。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="get-channel">チャンネルを取得</h2>
+    <p>このエンドポイントを使用して、チャネルの詳細とチャネルの状態を確認できます。</p>
+    <h3>リクエストの例</h3>
+    <h4>要求</h4>
+    <p>作る<code translate="No">GET</code>リクエスト先：</p>
+<pre><code class="language-http" translate="No">https://cm.cloudplayout.brightcove.com/accounts/<span class="bc-input">{account_id}</span>/cp_channels/<span class="bc-input">{channel_id}</span></code></pre>
+    <h4>ヘッダー</h4>
+<pre class="line-numbers"><code class="language-bash" translate="No">Content-Type: application/json
+Authorization: Bearer <span class="bc-input">{token}</span></code></pre>
+    <details>
+      <summary>レスポンスの例</summary>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "public_id": "channel id",
+  "name": "channel name",
+  "description": "Channel created for testing Cloud Playout",
+  "account_id": "Your account id",
+  "state": "DRAFT",
+  "status": null,
+  "start_time": "2020-12-17 06:00:00 UTC",
+  "stop_time": "2020-12-17 07:00:00 UTC",
+  "input_groups": "playlist",
+  "output_groups": "rtmp",
+  "loop_playlist": true,
+  "playlist_id": "1686204667297382886",
+  "channel_class": "single-pipeline",
+  "ssai_enabled": false,
+  "aws_region": "us-east-1",
+  "message": null,
+  "created_at": "2020-12-16 03:41:22 UTC",
+  "updated_at": "2020-12-17 04:53:30 UTC",
+  "image_url": "https://bc-cloudplayout-prod.s3.amazonaws.com/default_channel_image.png",
+  "output_destinations": [
+    "Brightcove Live"
+  ],
+  "channel_created_at": "2020-12-16 03:41:22 UTC",
+  "channel_updated_at": "2020-12-17 04:53:30 UTC",
+  "channel_created_by": "username@brightcove.com",
+  "channel_updated_by": "username@brightcove.com",
+  "live_profile": {
+    "display_name": "Standard Live HD 720p - Tier 1",
+    "name": "standard-live-hd-720p-tier-1",
+    "date_created": "2018-06-04 18:16:44 UTC",
+    "date_modified": "2018-06-04 18:16:44 UTC"
+  },
+  "channel_data": {
+    "input_group": [
+      {
+        "input_type": "playlist",
+        "value": "cloudplayout_testChannel",
+        "description": "Playlist created for Cloud Playout",
+        "public_id": "1686204667297382886"
+      }
+    ],
+    "output_groups": [
+      {
+        "type": "rtmp",
+        "location": "bc_live",
+        "destination": "Brightcove Live"
+      }
+    ]
+  }
+}</code></pre>
+    </details>
+  </section>
+  <section class="bcls-section">
+    <h2 id="activate-channel">チャネルをアクティブ化する</h2>
+      <aside class="bcls-aside bcls-aside--warning language-editable">注：チャンネルをアクティブ化する前に、チャンネルの再生リストに少なくとも1つのコンテンツアセットが追加されていることを確認してください。</aside>
+      <p>以下のリクエストを行って、チャンネルをアクティブにします。リクエスト本文は必要ありません。</p>
+      <h3>リクエストの例</h3>
+      <h4>要求</h4>
+      <p>作る<code translate="No">POST</code>リクエスト先：</p>
+  <pre><code class="language-http" translate="No">https://cm.cloudplayout.brightcove.com/accounts/<span class="bc-input">{account_id}</span>/cp_channels/<span class="bc-input">{channel_id}</span>/create</code></pre>
+      <h4>ヘッダー</h4>
+  <pre class="line-numbers"><code class="language-bash" translate="No">Content-Type: application/json
+  Authorization: Bearer <span class="bc-input">{token}</span></code></pre>
+      <details>
+        <summary>レスポンスの例</summary>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "message":"Channel activation initiated"
+}</code></pre>
+      </details>
+      <p>チャネルの状態を確認するには、を参照してください。<a href="#get-channel">チャンネルセクションを取得</a>その上。</p>
+    </section>
+  <section class="bcls-section">
+    <h2 id="start-channel">チャネルを開始します</h2>
+      <aside class="bcls-aside bcls-aside--warning language-editable">注：チャネルが<strong>すでにアクティブ化されています</strong>にあります<strong>スケジュール</strong>チャネルを開始する前の状態！</aside>
+      <p>以下のリクエストを行ってチャンネルを開始してください。リクエスト本文は必要ありません。</p>
+      <h3>リクエストの例</h3>
+      <h4>要求</h4>
+      <p>作る<code translate="No">POST</code>リクエスト先：</p>
+  <pre><code class="language-http" translate="No">https://cm.cloudplayout.brightcove.com/accounts/<span class="bc-input">{account_id}</span>/cp_channels/<span class="bc-input">{channel_id}</span>/start</code></pre>
+      <h4>ヘッダー</h4>
+  <pre class="line-numbers"><code class="language-bash" translate="No">Content-Type: application/json
+  Authorization: Bearer <span class="bc-input">{token}</span></code></pre>
+      <details>
+        <summary>レスポンスの例</summary>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "message":"Channel start initiated"
+}</code></pre>
+      </details>
+      <p>チャネルの状態を確認するには、を参照してください。<a href="#get-channel">チャンネルセクションを取得</a>その上。</p>
+    </section>
+  <section class="bcls-section">
+    <h2 id="stop-channel">チャネルを停止します</h2>
+      <aside class="bcls-aside bcls-aside--warning language-editable">注：チャネルがにあることを確認してください<strong>ランニング</strong>チャネルを停止する前の状態！</aside>
+      <p>以下のリクエストを行ってチャンネルを停止してください。リクエスト本文は必要ありません。</p>
+      <h3>リクエストの例</h3>
+      <h4>要求</h4>
+      <p>作る<code translate="No">POST</code>リクエスト先：</p>
+  <pre><code class="language-http" translate="No">https://cm.cloudplayout.brightcove.com/accounts/<span class="bc-input">{account_id}</span>/cp_channels/<span class="bc-input">{channel_id}</span>/stop</code></pre>
+      <h4>ヘッダー</h4>
+  <pre class="line-numbers"><code class="language-bash" translate="No">Content-Type: application/json
+  Authorization: Bearer <span class="bc-input">{token}</span></code></pre>
+      <details>
+        <summary>レスポンスの例</summary>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "message":"Channel stop initiated"
+}</code></pre>
+      </details>
+      <p>チャネルの状態を確認するには、を参照してください。<a href="#get-channel">チャンネルセクションを取得</a>その上。停止すると、チャネルはドラフト状態になります。</p>
+    </section>
+  <section class="bcls-section">
+    <h2 id="delete-channel">チャネルを削除する</h2>
+      <aside class="bcls-aside bcls-aside--warning language-editable">注：チャネルがどちらにも含まれていないことを確認してください<strong>作成/開始</strong>チャンネルを削除する前の状態！</aside>
+      <p>以下のリクエストでチャンネルを削除してください。リクエスト本文は必要ありません。</p>
+      <h3>リクエストの例</h3>
+      <h4>要求</h4>
+      <p>作る<code translate="No">DELETE</code>リクエスト先：</p>
+  <pre><code class="language-http" translate="No">https://cm.cloudplayout.brightcove.com/accounts/<span class="bc-input">{account_id}</span>/cp_channels/<span class="bc-input">{channel_id}</span></code></pre>
+      <h4>ヘッダー</h4>
+  <pre class="line-numbers"><code class="language-bash" translate="No">Content-Type: application/json
+  Authorization: Bearer <span class="bc-input">{token}</span></code></pre>
+      <details>
+        <summary>レスポンスの例</summary>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "message":"Delete initiated"
+}</code></pre>
+      </details>
+      <p>チャネルの状態を確認するには、を参照してください。<a href="#get-channel">チャンネルセクションを取得</a>その上。チャネルが削除されると、ID要求によるチャネルの取得からのチャネル情報は表示されなくなります。</p>
+    </section>
+</article>

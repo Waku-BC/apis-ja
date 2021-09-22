@@ -1,0 +1,208 @@
+---
+title: デバイス制限の実装
+description: 「このトピックでは、Brightcoveの再生制限を使用してビデオ再生のデバイス制限を有効にする方法を学習します。」
+parent: Guides 
+grandparent: Playback Restrictions
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  
+  <!-- <br/>
+  <aside class="bcls-aside bcls-aside--tip">This feature is available for a specific set of customers with access to the Limited Availability phase of Brightcove Playback Restrictions.</aside> -->
+  
+  <section class="bcls-section">
+    <h2 id="Introduction">入門</h2>
+
+    <p>Brightcove再生制限を使用すると、ビデオ再生のデバイス制限を設定できます。DRM ライセンス要求が行われると、各ユーザーのデバイスは一意の ID で登録されます。ユーザーごとのデバイスの数を制御します。</p>
+    <p>
+      デバイス制限は、ライセンス要求ごとにチェックされ、適用されます。この制限を使用するには、<a href="https://general.support.brightcove.com/developer/create-jwt.html"> JSON Web Token（JWT）</a>現在のユーザーIDで<code translate="No">uid</code>Playback APIに。
+    </p>
+
+    <p>この機能を初めて使用する場合は、<a href="/playback-restrictions/getting-started/overview-playback-restrictions.html">概要：Brightcoveの再生制限</a>資料。</p>
+
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Device_registration">デバイス登録</h2>
+    <p>
+      デバイスは、以下を含む有効な再生要求時にBrightcoveに登録されます。<a href="https://general.support.brightcove.com/developer/create-jwt.html"> JSON Web Token（JWT）</a>と<code translate="No">uid</code>そして<code translate="No">dlimit</code>クレームを受け取ります。その瞬間から、このデバイスは1つのスロットを占有します。
+    </p>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="JWT_claims">JWTの主張</h2>
+    <p>デバイスの制限については、一般的に必要なクレームとともに次のクレームを使用できます。</p>
+    <ul>
+      <li>
+        <p><code translate="No">uid</code>:</p>
+        <p>エンドビューアのユーザー ID。このフィールドは、デバイスの登録に必要です。</p>
+      </li>
+      <li>
+        <p><code translate="No">dlimit</code>:</p>
+        <p>DRMコンテンツの場合、<code translate="No">dlimit</code>クレームは、ユーザーがストリーミングできるデバイスの数を示します。ストリームを要求する各ユーザーのすべてのデバイスが登録されます。ストリーム制限に達すると、それ以上のデバイスはストリーミングできなくなります。</p>
+        <p>
+          ザ・<code translate="No">dlimit</code>クレームを使用すると、指定したユーザーに関連付けることができるデバイスの数を制御できます<code translate="No">uid</code>。値は&gt;でなければなりません<code translate="No">0</code>。
+        </p>
+        <p>の場合<code translate="No">dlimit</code>クレーム値は後のリクエストで削除され、以前に許可されたデバイスは引き続き動作します。
+        </p>
+        <p>
+          <strong>例</strong><br />
+          の場合<code translate="No">dlimit</code>値はに設定されます<code translate="No">3</code>、ユーザーはデバイスA、B、およびCでプレイできます（すべて許可されます）。デバイス D で再生しようとすると拒否されます。<br />
+          の場合<code translate="No">dlimit</code>値がに変更されます<code translate="No">1</code>、Devices APIを使用してデバイスを管理することでデバイスを手動で取り消さない限り、ユーザーは3つのデバイスA、B、Cすべてで引き続きプレイできます。これを行うには、を参照してください<a href="#Manage_devices">デバイスを管理する</a>セクション。
+        </p>
+      </li>
+      <!-- <li>
+        <p><code translate="No">maxip</code>:</p>
+        For HLSe content, the <code translate="No">maxip</code> claim defines how many different IP addresses can stream at the same time.
+      </li> -->
+    </ul>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Implementation">実装</h2>
+    <p>
+      デバイス制限を使用するには、次の手順に従います。
+    </p>
+    <ol class="bcls-tasklist">
+      <li>
+        <p>
+          作成する<a href="https://general.support.brightcove.com/developer/create-json-web-token.html">JSON Web Token（JWT）</a>一般的に必要なクレームと<code translate="No">uid</code>そして<code translate="No">dlimit</code>請求。
+        </p>
+        <p>
+          DRM ライセンス要求が行われると、各ユーザーのデバイスは一意の ID で登録されます。
+        </p>
+      </li>
+      <li>
+        <p>
+          <a href="#Manage_devices">ユーザーデバイスを管理する</a>デバイスAPIを使用します。このAPIを使用すると、ユーザーのデバイスを取得したり、デバイスを削除したり、デバイスの名前を更新したりできます。
+        </p>
+        <p>
+          デバイスが登録されると、IDとニックネームで識別されます。Devices APIを使用すると、デバイスのニックネームを編集できるため、デバイスのリストを簡単に管理できます。
+        </p>
+      </li>
+      <li>
+        <a href="/playback-restrictions/getting-started/implementing-playback-rights.html#Configure_your_player">プレーヤーを構成する</a>を使用するには<span translate="No">JSONWebトークン</span>（JWT）前のステップで作成されました。
+      </li>
+    </ol>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Manage_devices">デバイスを管理する</h2>
+
+    <p>あなたはでユーザーデバイスを管理することができます<a href="/playback-restrictions/references/devices-api/reference.html">デバイスAPI</a>。</p>
+
+    <h3 id="Playback_Rights_API">デバイスAPI</h3>
+    <p>
+      Devices APIを使用すると、ユーザーデバイスを取得および削除できます。
+    </p>
+
+    <h3>ベース URL</h3>
+    <p>
+      API のベース URL は次のとおりです。
+    </p>
+    <pre><code class="language-http" translate="No">https://playback-auth.api.brightcove.com/v1</code></pre>
+
+    <h3>アカウントパス</h3>
+    <p>
+      いずれの場合も、特定の Video Cloud アカウントに対してリクエストが行われます。したがって、あなたは常にベースURLにアカウントIDが続く用語アカウントを追加します。
+    </p>
+    <pre><code class="language-http" translate="No">https://playback-auth.api.brightcove.com/v1/accounts/{accountID}</code></pre>
+
+    <h3>認証</h3>
+    <p>
+      リクエストのアクセストークンが必要で、Authorization ヘッダーに存在する必要があります。
+    </p>
+    <pre><code class="language-http" translate="No">Authorization: Bearer {access_token}</code></pre>
+    <p>
+      アクセストークンは、一時的な OAuth2 アクセストークンで、Brightcove OAuth サービスから取得する必要があります。クライアントクレデンシャルを取得してアクセストークンを取得する方法の詳細については、「<a href="/oauth/getting-started/overview-oauth-api-v4.html"> Brightcove OAuth の概要</a>」を参照してください。
+    </p>
+
+    <h3>権限</h3>
+    <p>
+      デバイスAPIへのリクエストは、<a href="/oauth/index.html">クライアントの資格情報</a>次の権限を持つ：
+    </p>
+    <ul>
+      <li>
+        <code translate="No">video-cloud/playback-auth/devices/read</code>
+      </li>
+      <li>
+        <code translate="No">video-cloud/playback-auth/devices/write</code>
+      </li>
+    </ul>
+
+    <h3>API メソッド</h3>
+    <p>
+      Devices APIは、次のリクエストをサポートしています。詳細については、<a href="/playback-restrictions/references/devices-api/reference.html">デバイスAPIリファレンス</a>。
+    </p>
+
+    <h4>すべてのユーザーデバイスを取得する</h4>
+    <pre><code class="language-http" translate="No">GET /v1/accounts/{accountID}/users/{userID}/devices</code></pre>
+    <h5>レスポンスボディ</h5>
+    <p>
+      応答本文にはデバイスの配列が含まれており、次のようになります。
+    </p>
+    <pre class="line-numbers"><code class="language-json" translate="No">[
+    {
+        &quot;id&quot;: &quot;12e12345-11e1-1bd1-d123-1234567890&quot;,
+        &quot;created_at&quot;: 1612646018,
+        &quot;updated_at&quot;: 1612646018,
+        &quot;name&quot;: &quot;my device1&quot;,
+        &quot;user_agent&quot;: &quot;PlayReadyClient&quot;
+    },
+    {
+        &quot;id&quot;: &quot;WVCf123456789abcdefghijkl1234567890abcdefg&quot;,
+        &quot;created_at&quot;: 1612385697,
+        &quot;updated_at&quot;: 1612385697,
+        &quot;name&quot;: &quot;my device2&quot;,
+        &quot;user_agent&quot;: &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0&quot;
+    }
+]</code></pre>
+    <br />
+
+    <h4>デバイス名を更新する</h4>
+    <p>
+      ザ・<code translate="No">PATCH</code> requestを使用すると、デバイスのわかりやすい名前を設定できます。
+    </p>
+    <pre><code class="language-http" translate="No">PATCH  /v1/accounts/{accountID}/users/{userID}/devices/{deviceID}
+  Content-Type: application/json
+  Body: {devices object}</code></pre>
+    <h5>リクエスト本文</h5>
+    <p>
+      リクエストの本文にはデバイス名が含まれています。
+    </p>
+    <pre class="line-numbers"><code class="language-json" translate="No">{
+    &quot;name&quot;: &quot;my device1&quot;
+}</code></pre>
+
+    <p>
+      フィールドの詳細は次のとおりです。
+    </p>
+    <table class="bcls-table">
+      <thead class="bcls-table__head">
+        <tr>
+          <th>フィールド</th>
+          <th>タイプ</th>
+          <th>説明</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">name</code></td>
+          <td>文字列</td>
+          <td>デバイスの識別に役立つわかりやすいニックネーム</td>
+        </tr>
+      </tbody>
+    </table>
+    <br />
+
+    <h4>すべてのユーザーデバイスを削除します</h4>
+    <pre><code class="language-http" translate="No">DELETE /v1/accounts/{accountID}/users/{userID}/devices</code></pre>
+    <br />
+
+    <h4>特定のユーザーデバイスを削除する</h4>
+    <pre><code class="language-http" translate="No">DELETE /v1/accounts/{accountID}/users/{userID}/devices/{deviceID}</code></pre>
+    <br />
+  </section>
+
+</article>

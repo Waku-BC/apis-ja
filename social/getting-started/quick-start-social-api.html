@@ -1,0 +1,51 @@
+---
+title:  'クイックスタート：Social API'
+description:  'このトピックでは、SocialAPIの使用を簡単に開始できます。'
+parent: Getting Started 
+grandparent: Social API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  <section class="bcls-section">
+    <h2 id="Introduction">入門</h2>
+    <p>Social API を使用すると、ソーシャルメディアプラットフォームに動画を共有するステータスと履歴を取得できます。このクイックスタートでは、独自のアカウントまたは Brightcove ラーニングサービスのサンプルアカウントを使用して、利用可能なリクエストとその応答を確認できます。</p>
+    <h3>サンプルアプリに関する注意事項</h3>
+    <ul>
+      <li>これはクイックスタートで、Social API を中心にアプリを構築するためのモデルを提供することを目的としています。これにより、基本的なリクエストをテストできますが、これらのリクエストで使用できるパラメータは使用しません。これらを確認するには、<a href="/social/references/reference.html"> API リファレンスを参照してください</a>。</li>
+      <li>アプリはまた、いくつかのリクエストを行います<span translate="No">CMS API</span>ビデオソーシャルシェアリングのステータスの最初のリクエストによって返されたビデオの名前を取得します。Social API はビデオIDのみを返し、名前を返さないため、これは他のリクエストのビデオセレクタを設定するためだけです。</li>
+    </ul>
+    <aside class="bcls-aside bcls-aside--information">このサンプルと関連コードは、製品開発のガイドとして提供されています。このコードは、実稼働での使用が認定されておらず、正式にサポートされていません。</aside>
+  </section>
+  <section class="bcls-section">
+    <h2 id="getCredentials" class="bcls-expander-head">資格情報を取得する</h2>
+    <div class="bcls-expander-content">
+      <p>Social API を使用するには、適切な資格情報が必要です。</p>
+      <p>それらを取得する最も簡単な方法は、<strong> Studioの管理/ API認証セクションを使用し</strong>、[ <strong>新しいアプリケーションの登録</strong> ] をクリックし、認証情報の [ソーシャル権限] を選択することです。</p>
+      <figure class="bcls-figure"><img class="bcls-image" alt="Social API Permissions" src="/assets/images/social/social-api-permissions.png" />
+        <figcaption class="bcls-caption--image">Social API アクセス許可</figcaption>
+      </figure>
+    </div>
+  </section>
+  <section class="bcls-section" id="workingSample">
+    <h2>クイックスタートアプリ</h2>
+    <p>このサンプルに関連付けられているすべてのコードを、この<a href="https://github.com/BrightcoveLearning/18731-quick-start-social-api"> GitHub リポジトリで検索します</a>。</p>
+    <p class="codepen" data-height="1100" data-theme-id="34967" data-default-tab="result" data-user="rcrooks1969" data-slug-hash="QYVmRP" style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Social API Quick Start"><span>ペンを見る<a href="https://codepen.io/team/rcrooks1969/pen/QYVmRP/">Social APIクイックスタート</a> Brightcove Learning Services（<a href="https://codepen.io/rcrooks1969"> @ rcrooks1969</a>） オン<a href="https://codepen.io">CodePen</a>。</span></p>
+    <script async src="https://static.codepen.io/assets/embed/ei.js"></script></section>
+  <section class="bcls-section">
+    <h2 id="Using_the_CodePen" class="bcls-expander-head">CodePen を使用する</h2>
+    <div class="bcls-expander-content">
+      <p>上記のCodePenを効果的に使用するためのヒントは次のとおりです。</p>
+      <ul>
+        <li>[ <strong>結果</strong> ] ボタンをクリックして、プレーヤーの実際の表示を切り替えます。</li>
+        <li><strong>HTML/CSS/JS </strong>ボタンをクリックして、コードタイプの 1 つを表示します。</li>
+        <li><strong>右上隅にある CodePen の編集をクリックして</strong>、この CodePen を自分のアカウントにフォークします。</li>
+        <li>このサンプルに関連付けられているすべてのコードを、この<a href="https://github.com/BrightcoveLearning/18729-cms-api-sample-report-audio-only-content"> GitHub リポジトリで検索します</a>。</li>
+      </ul>
+    </div>
+  </section>
+  <section class="bcls-section">
+    <h2 id="proxy">プロキシコード</h2>
+    <p>このページのサンプルアプリを独自のバージョンで作成するには、独自のプロキシを作成してホストする必要があります。（Brightcoveラーニングサービスで使用されるプロキシは、Brightcoveのドメインからのリクエストのみを受け付けます）。サンプルプロキシは、私たちが使用しているものと非常に似ていますが、BrightCove 以外のドメインからのリクエストをブロックするチェックがないサンプルプロキシは、<a href="https://github.com/BrightcoveLearning/sample-proxy-apps">この GitHub リポジトリにあります</a>。また、そこで使用するための基本的な手順と、<a href="/getting-started/learning-guide-using-rest-apis.html"> REST API </a>の使用で説明されているプロキシの周りにアプリを構築するためのより精巧なガイドがあります。</p>
+  </section>
+</article>

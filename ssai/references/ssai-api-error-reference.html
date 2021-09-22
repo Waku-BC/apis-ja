@@ -1,0 +1,87 @@
+---
+title:  'SSAI APIエラーリファレンス' 
+description: このトピックでは、SSAI APIのエラーリファレンスを提供します。
+parent: References 
+grandparent: SSAI API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+
+<section class="bcls-section">
+<h2 id="errorMessages">一般的なエラーメッセージ</h2>
+
+<table class="bcls-table">
+	<thead class="bcls-table__head">
+		<tr>
+			<th>ステータス</th>
+			<th style="width: 20%;">名前</th>
+			<th>メッセージ</th>
+			<th>原因</th>
+		</tr>
+	</thead>
+	<tbody class="bcls-table__body">
+		<tr>
+			<td>400</td>
+			<td><code translate="No">BAD_REQUEST</code></td>
+			<td><code translate="No">Invalid JSON body on request</code></td>
+			<td>リクエスト本文の JSON にエラーがあります。基本的な JSON の問題か、フィールド値の型が正しくない可能性があります。</td>
+		</tr>
+		<tr>
+			<td>400</td>
+			<td><code translate="No">BAD_REQUEST</code></td>
+			<td><code translate="No">"error": "{<span class="bcls-highlight">fieldname</span>} field is required</code></td>
+			<td>リクエスト本文に、指定された必須フィールドがありません</td>
+		</tr>
+		<tr>
+			<td>400</td>
+			<td><code translate="No">AD_CONFIG_NOT_FOUND</code></td>
+			<td><code translate="No">Ad config not found</code></td>
+			<td>SSAI リクエストで指定された広告設定が見つかりませんでした</td>
+		</tr>
+		<tr>
+			<td>400</td>
+			<td><code translate="No">AD_CONFIG_INACTIVE</code></td>
+			<td><code translate="No">Ad config is inactive</code></td>
+			<td>SSAI リクエストで指定された広告構成は非アクティブです</td>
+		</tr>
+		<tr>
+			<td>401</td>
+			<td><code translate="No">UNAUTHORIZED</code></td>
+			<td><code translate="No">Permission denied.</code></td>
+			<td>OAuth アクセストークンがないか無効です。アクセストークンを指定した場合は、このリクエストに適切なスコープがない可能性があります</td>
+		</tr>
+		<tr>
+			<td>403</td>
+			<td><code translate="No">NOT_AVAILABLE</code></td>
+			<td><code translate="No">Resource is not available.</code></td>
+			<td>要求しているリソースは一時的に利用できません。これは、ビデオの処理が進行中の一時的な状態である可能性がありますが、メッセージが続く場合は、サポートに連絡してください。</td>
+		</tr>
+		<tr>
+			<td>404</td>
+			<td><code translate="No">NOT_FOUND</code></td>
+			<td><code translate="No">Resource does not exist.</code></td>
+			<td>存在しないリソースを要求した-広告設定を更新しようとしているか、存在しないセッションで広告トレースを取得しようとしている可能性があります。このエラーは、エンドポイントで HTTP メソッドを使用できない場合にも返されます。</td>
+		</tr>
+		<tr>
+			<td>500</td>
+			<td><code translate="No">UNKNOWN</code></td>
+			<td><code translate="No">an unknown internal error occurred</code></td>
+			<td>Brightcoveシステムの問題-後でもう一度お試しください。</td>
+		</tr>
+		<tr>
+			<td>503</td>
+			<td><code translate="No">SERVICE_UNAVAILABLE</code></td>
+			<td><code translate="No">The API is temporarily unavailable</code></td>
+			<td>バックエンドの問題-後でもう一度試してください。</td>
+		</tr>
+		<tr>
+			<td>504</td>
+			<td><code translate="No">TIMEOUT</code></td>
+			<td><code translate="No">something took too long</code></td>
+			<td>サーバーがビジー状態である可能性があります-後でもう一度試してください。</td>
+		</tr>
+	</tbody>
+</table>
+</section>
+</article>

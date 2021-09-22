@@ -1,0 +1,129 @@
+---
+title: ライブストリームのレイテンシーの削減
+description:  'このトピックでは、Brightcoveライブストリームのレイテンシーを削減する方法について説明します。'
+parent: Guides 
+grandparent: Live API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  <section class="bcls-section">
+
+
+<h2 id="Introduction">入門</h2>
+
+<p>レイテンシーとは、実生活で何かが記録されてからビデオプレーヤーで表示されるまでのタイムラグです。もちろん、ソースからの信号をインターネット経由で視聴者のプレーヤーに送信するために必要なリアルタイムがあります。レイテンシーは、オンラインビデオがセグメントと呼ばれる控えめなチャンクで送信されるという事実によって悪化します。</p>
+
+<p>ビデオセグメントの長さを短くすることでレイテンシーを短縮できます。以下のセクションでは、これを行う方法について詳しく説明します。ただし、トレードオフがあることに注意してください。中断のない再生を保証するために、プレーヤーは現在の再生位置（これをバッファリングと呼びます）より先にいくつかのビデオセグメントをダウンロードして、必要に応じて準備が整います。セグメントの長さを短くすると、プレーヤーがプリフェッチするビデオデータが少なくなり、プレーヤーが追加のセグメントをバッファしている間に再生が一時停止する可能性が高くなります。</p>
+
+<h3>その他の制限事項</h3>
+
+<p>レイテンシーを短縮したライブストリームには、次の制限が適用されます。</p>
+
+<ul>
+	<li>SSAI <strong>はサポートされていません</strong></li>
+	<li>DRM <strong>はサポートされていません</strong></li>
+	<li>DVR ウィンドウは<strong> 5 分未満である必要があります</strong></li>
+	<li><strong>レンディションは4つ以下です</strong></li>
+</ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="Creating_Reduced_Latency_Live_Profile">レイテンシー短縮ライブプロファイルの作成</h2>
+
+<p>レイテンシーを減らすには、カスタムライブプロファイルを作成する必要があります。以下の手順に従います。</p>
+
+<ol class="bcls-tasklist-restart">
+	<li>スタジオにログインする</li>
+	<li><strong>管理者</strong>&gt;<strong>プロファイルの取り込み</strong>に移動します。
+	<figure class="bcls-figure"><img class="bcls-image" alt="Go to Ingest Profiles" src="/assets/images/general/18954/go-to-ingest-profiles.png" />
+	<figcaption class="bcls-caption--image">プロファイルの取り込みに移動</figcaption>
+	</figure>
+	</li>
+	<li>レンディションが<strong> 4 </strong><strong>つ以下のライブインジェストプロファイルの</strong> 1 つを選択します。
+	<figure class="bcls-figure"><img class="bcls-image" alt="Select a Live Profile" src="/assets/images/general/18954/select_ingest_profile.png" />
+	<figcaption class="bcls-caption--image">ライブプロファイルの選択</figcaption>
+	</figure>
+	</li>
+	<li>リンクをクリックしてプロフィールを開きます</li>
+	<li>[ <strong>複製</strong> ] ボタンをクリックして、このプロファイルに基づいて新しいプロファイルを作成します</li>
+	<li>新しいプロファイルで、<code translate="No">name</code>を「低遅延プロファイル」（またはコールしたいもの）に変更します。</li>
+	<li>それぞれについて<code translate="No">renditions</code>、<code translate="No">segment_seconds</code><code translate="No">2</code>をに変更して、セグメントの長さを 2 秒に短縮します。</li>
+	<li>あなたのプロフィール全体は次のようになります：
+	<pre class="line-numbers">
+<code class="language-json" translate="No">{
+  "model_version": 1,
+  "name": "<span class="bcls-highlight">Low Latency Profile</span>",
+  "description": "Deliver high-quality renditions to maximize quality for desktop and OTT.",
+  "account_id": "57838016001",
+  "renditions": [
+    {
+      "media_type": "video",
+      "format": "ts",
+      <span class="bcls-highlight">"segment_seconds": 2,</span>
+      "label": "hls1080p",
+      "live_stream": true,
+      "video_codec": "h264",
+      "video_bitrate": 4000,
+      "keyframe_interval": 60,
+      "width": 1920,
+      "height": 1080,
+      "h264_profile": "high"
+    },
+    {
+      "media_type": "video",
+      "format": "ts",
+      <span class="bcls-highlight">"segment_seconds": 2,</span>
+      "label": "hls720p",
+      "live_stream": true,
+      "video_codec": "h264",
+      "video_bitrate": 2400,
+      "keyframe_interval": 60,
+      "width": 1280,
+      "height": 720,
+      "h264_profile": "high"
+    },
+    {
+      "media_type": "video",
+      "format": "ts",
+      <span class="bcls-highlight">"segment_seconds": 2,</span>
+      "label": "hls540p",
+      "live_stream": true,
+      "video_codec": "h264",
+      "video_bitrate": 1700,
+      "keyframe_interval": 60,
+      "width": 960,
+      "height": 540,
+      "h264_profile": "main"
+    },
+    {
+      "media_type": "video",
+      "format": "ts",
+      <span class="bcls-highlight">"segment_seconds": 2,</span>
+      "label": "hls360p",
+      "live_stream": true,
+      "video_codec": "h264",
+      "video_bitrate": 900,
+      "keyframe_interval": 60,
+      "width": 640,
+      "height": 360,
+      "h264_profile": "main"
+    }
+  ],
+  "packages": []
+}</code></pre>
+	</li>
+	<li>このプロファイルを使用するには、ライブモジュールで新しいライブイベントを作成するタイミングを選択します。
+	<figure class="bcls-figure"><img class="bcls-image" alt="Create Live Event" src="/assets/images/general/18954/create-live-event.png" />
+	<figcaption class="bcls-caption--image">ライブイベントの作成</figcaption>
+	</figure>
+	</li>
+</ol>
+</section>
+
+<section class="bcls-section">
+<h2 id="Using_the_Live_API">Live API の使用</h2>
+
+<p>レイテンシーを減らし、Live API を使用してライブジョブを作成する場合は、通常どおりにジョブを作成し、<strong> 4 つ以下のレンディションを含めて</strong>、<code translate="No">segment_seconds</code>各レンディションに対して<code translate="No">2</code>。また、「<a href="#Introduction">入門</a>」に記載されているその他の制限事項も守ってください。</p>
+</section>
+</article>

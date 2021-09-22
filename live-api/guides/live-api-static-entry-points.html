@@ -1,0 +1,165 @@
+---
+title:  'ライブAPI：静的エントリポイント'
+description:  'このトピックでは、静的エントリポイントと、Live APIを使用してそれらを実装する方法について説明します。'
+parent: Guides 
+grandparent: Live API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+ <summary>{{ page.description }}</summary>
+<section class="bcls-section">
+<h2 id="Introduction">入門</h2>
+
+<p>静的エントリポイント (SEP) 機能を使用すると、エントリポイント URL と再生 URL を静的に保ち、再利用可能な状態で、長時間実行されるライブジョブをアクティブ化および非アクティブ化できます。この機能により、お客様は施設または現場でエンコーダを設定し、ライブチャネルまたはプログラム用に独自のスケジューリングロジックを作成できます。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="dvr_and_sep">DVRとSEP</h2>
+
+<p>DVR 機能は、スタティックエントリポイントで使用できますが、SEP <strong>がアクティブになっている間だけ使用できます</strong>。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Creating_a_static_entry_point">静的エントリポイントの作成</h2>
+
+<p>標準の「<a href="/live-api/references/reference.html#api-Live_Jobs-Create_a_Live_Job">ジョブの作成</a>」操作が使用されますが、静的エントリポイントを追加するには、プロパティをジョブ要求に追加する必要があります。</p>
+
+<pre>
+<code class="language-json" translate="No">"static": true</code></pre>
+
+<p>このジョブからの応答する RTMP URL は静的であり、以下のセクションで説明する操作を使用してジョブをアクティブ/非アクティブ化することで再利用できます。このドキュメントの最後に記載されている制限事項を読み、理解してください。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="max_waiting_time">最大待ち時間</h2>
+
+<p>SEP ジョブがアクティブになった後、エンコーダが開始されていないと、しばらくすると自動的に非アクティブ化されます。ルールは次のとおりです。</p>
+
+<ul>
+	<li><code translate="No">event_length</code>この値が30分を超える場合、ジョブはデフォルトで30分後に自動的に終了します。待機時間を変更する場合は、サポートに連絡する必要があります。自動非アクティブ化を無効にすることはできません。</li>
+	<li><code translate="No">event_length&nbsp;</code>値がより小さい場合<code translate="No">reconnect_time</code>、ジョブはに設定された時間内に終了します<code translate="No">event_length</code>。</li>
+</ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="Activate_static_entry_point_stream">SEP ライブストリームをアクティベート</h2>
+
+<p>静的エントリポイントのライブストリームを有効にするには、次のリクエストを Live API に送信します。</p>
+
+<aside class="bcls-aside bcls-aside--information">静的エントリポイントに取り込むことができるようにするには、<code translate="No">activate</code> APIリクエスト。</aside>
+
+<table class="bcls-table">
+	<caption class="bcls-caption--table">アクティブな SEP ストリーム</caption>
+	<tbody class="bcls-table__body">
+		<tr>
+			<th>方法</th>
+			<td><code translate="No">PUT</code></td>
+		</tr>
+		<tr>
+			<th>終点</th>
+			<td>
+			<pre>
+<code class="language-http" translate="No">https://api.bcovlive.io/v1/jobs/<span class="bcls-input">{jobID}</span>/<strong>activate</strong></code></pre>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>リクエスト本文は必要ありません。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Deactivate_static_entry_point_stream">SEP ライブストリームを無効にする</h2>
+
+<aside class="bcls-aside bcls-aside--warning">ストリームを非アクティブ化する前に、必ずエンコーダを停止してください。非アクティブ化はすぐには行われない可能性があるため、視聴者がコンテンツの受信を停止するタイミングを正確に制御できます。</aside>
+
+<p>静的エントリポイントのライブストリームを無効にするには、次のリクエストを Live API に送信します。</p>
+
+<table class="bcls-table">
+	<caption class="bcls-caption--table">アクティブな SEP ストリーム</caption>
+	<tbody class="bcls-table__body">
+		<tr>
+			<th>方法</th>
+			<td><code translate="No">PUT</code></td>
+		</tr>
+		<tr>
+			<th>終点</th>
+			<td>
+			<pre>
+<code class="language-http" translate="No">https://api.bcovlive.io/v1/jobs/<span class="bcls-input">{jobID}</span>/<strong>deactivate</strong></code></pre>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<aside class="bcls-aside bcls-aside--information">静的エントリポイントを非アクティブ化すると、ストリームの最後の数秒間は再生可能なままになります。</aside>
+
+<p>リクエスト本文は必要ありません。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Cancel_sep_job">SEP ジョブをキャンセルする</h2>
+
+<p>静的エントリポイントジョブを永続的に停止するには、<code translate="No">PUT</code>エンドポイントにリクエストを送信することで、ライブジョブと同様にジョブをキャンセルできます<code translate="No">/jobs/{job_id}/cancel</code>。詳細については、<a href="/live-api/references/reference.html#operation/CancelLiveJob"> API リファレンスを参照してください</a>。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Limitations">制約事項</h2>
+
+<ul>
+	<li>VOD へのライブは、完了時にストリームをアーカイブするように設定することはできません。
+	<p style="font-weight:bold;">選択肢:</p>
+
+	<ul>
+		<li><a href="/live-api/guides/live-api-creating-vod-clips.html">クリップを使用して</a>、ライブイベント全体を VOD としてアーカイブします。クリッピングのウィンドウは、イベントの後、または SEP の次のアクティブ化 (どちらか短い方) まで、標準期間使用できます。</li>
+	</ul>
+	</li>
+	<li>ジョブ設定は変更できません。これらの設定は、現在、最初に SEP を作成した設定に関連付けられています。</li>
+	<li>ストリームのアクティブ化には、エントリポイントが使用可能になるまでに最大 60 秒かかります。
+	<p style="font-weight:bold;">ベストプラクティス：</p>
+
+	<p>ジョブの状態の変更に関するライブプラットフォームからの通知を実装して、SEP ジョブが実際に準備できたときのリアルタイムの更新を取得します。</p>
+
+	<p style="font-weight:bold;">選択肢:</p>
+
+	<ol>
+		<li>エンコーダを起動する最低 60 秒前にストリームをアクティブにします。</li>
+		<li>エンコーダに組み込みの再試行（Wirecast、Elemental など）がある場合は、ストリームを直ちに接続でき（エラーが発生する場合もあります）、エントリポイントが使用可能になるとすぐにエンコーダが再接続されます。</li>
+	</ol>
+	</li>
+	<li>reconnect_Time は、エンコーダの切断時の SEP ジョブにも適用されます。再接続時間に達すると、SEP ジョブは非アクティブ状態に戻ります。
+	<p style="font-weight:bold;">ベストプラクティス：</p>
+
+	<p>ジョブが完了したら常に API 経由でストリームを無効にし、切断時に再接続時間を待機できる時間に設定します（入力時間のコストはこの待機期間中に発生します）。</p>
+	</li>
+	<li>各アカウントには、3つの利用可能なSEPジョブのみが割り当てられます <em>地域ごと</em>。上限に達した場合、新しい SEP ジョブを作成する前に、いずれかの SEP <a href="/live-api/references/reference.html#operation/CancelLiveJob">ジョブをキャンセルする必要があります</a>。
+	<p>SEP ジョブの最大数に達して、別の SEP ジョブを作成しようとすると、次のエラーが返されます。</p>
+
+	<pre class="line-numbers">
+<code class="language-json" translate="No">{
+  "error": "You've reached the number of static entry points jobs you can create for your account"
+}</code></pre>
+      </li>
+      <li>一度に5つを超えるSEPジョブをアクティブ化しようとすると、次のようなエラーが発生します。
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  “message”:“Allocating additional streaming capacity to the region. Please retry your request.: no_streaming_capacity_in_region”,
+  “statusCode”:500,
+  “name”:“ApiError”,
+  “isApiError”:true
+}</code></pre>
+        <p>リクエストを再試行する前に、一部のジョブのアクティブ化が完了するまで待つ必要があります。</p>
+      </li>
+    </ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="Notes">注</h2>
+
+<dl>
+	<dt>非アクティブ化後の SEP ジョブのクリッピング</dt>
+	<dd>ユーザーは、ストリームの次のアクティブ化まで、または 7 日間のうち短い方のクリップを作成できます。ストリームが再びアクティブになると、以前の録画セッションはサーバーから削除され、クリップできなくなります。</dd>
+	<dt>SEP が使用されたときの stream_start_time フィールドのタイミングは何ですか？</dt>
+	<dd>SEP がアクティブになると、開始時刻と見なされます。</dd>
+</dl>
+</section>
+</article>

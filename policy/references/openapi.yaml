@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.0.3
 x-bc-implicit-head: true
 x-bc-implicit-options: true
 x-bc-upstream: 'http://backend_server'
@@ -31,7 +31,7 @@ paths:
         - Policy
       summary: Create a Policy Key
       description: |-
-        'Create a new policy key to access the Playback API '
+        'Create a new policy key to access the Playback API'
       operationId: CreateAPolicyKey
       security:
         - BC_OAuth2:

@@ -1,0 +1,714 @@
+---
+title: "概要:Brightcoveの再生制限"
+description: 「このトピックでは、Brightcove再生制限を使用してビデオ再生を管理するためのさまざまな戦略について学習します。」
+parent: Getting Started 
+grandparent: Playback Restrictions
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+
+  <!-- <br/>
+  <aside class="bcls-aside bcls-aside--tip">This feature is available for a specific set of customers with access to the Limited Availability phase of Brightcove Playback Restrictions.</aside> -->
+
+  <section class="bcls-section">
+    <h2 id="Introduction">入門</h2>
+    <p>ブライトコーブの再生制限は、コンテンツが内部または外部の視聴者向けであるか、無料または現金化されているかにかかわらず、視聴者がどこからでも、どのデバイスからでもコンテンツにアクセスできるようにしながら、ユースケースに合わせて適切なレベルのコンテンツセキュリティを提供します。</p>
+    <p>この機能を使用すると、コンテンツをストリーミングするためのさまざまなシナリオを定義できます。</p>
+    <ul>
+      <li>あなたのコンテンツが利用できる場所</li>
+      <li>コンテンツのストリーミング方法</li>
+      <li>コンテンツを閲覧できる場合</li>
+      <li>誰があなたのコンテンツを見ることができますか</li>
+    </ul>
+    <p>ブログ投稿をチェックしてください：<a href="https://www.brightcove.com/en/blog/more-than-just-security/">それは単なるセキュリティ以上のものです–それはブランドの完全性とあなたの顧客のコミットメントについてです</a></p>
+
+    <h3>特徴</h3>
+    <p>この機能の柔軟性により、さまざまなユースケースに適応することができます。</p>
+
+    <table class="bcls-table">
+      <caption class="bcls-caption--table">再生制限の主な機能</caption>
+      <thead class="bcls-table__head">
+        <tr>
+          <th>機能</th>
+          <!-- <th>VOD</th>
+                <th>Live</th> -->
+          <th>DRMが必要</th>
+          <th>JWTが必要</th>
+          <th>再生権が必要です</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td>IP制限</td>
+          <!-- <td>Yes</td>
+              <td>Yes</td> -->
+          <td style="text-align: center;">いいえ</td>
+          <td style="background-color:#ededed;"></td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <tr>
+          <td>国の制限</td>
+          <!-- <td>Yes</td>
+                <td>Yes</td> -->
+          <td style="text-align: center;">いいえ</td>
+          <td style="background-color:#ededed;"></td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <tr>
+          <td>郵便番号の制限</td>
+          <!-- <td>Yes</td>
+                <td>Yes</td> -->
+          <td style="text-align: center;">いいえ</td>
+          <td style="background-color:#ededed;"></td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <tr>
+          <td>指定マーケットエリア（DMA）</td>
+          <!-- <td>Yes</td>
+                <td>Yes</td> -->
+          <td style="text-align: center;">いいえ</td>
+          <td style="background-color:#ededed;"></td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <tr>
+          <td>ドメイン制限</td>
+          <!-- <td>Yes</td>
+              <td>Yes</td> -->
+          <td style="text-align: center;">いいえ</td>
+          <td style="background-color:#ededed;"></td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <tr>
+          <td>日付/時刻のスケジュール</td>
+          <!-- <td>Yes</td>
+                <td>Yes</td> -->
+          <td style="text-align: center;">いいえ</td>
+          <td style="background-color:#ededed;"></td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <tr>
+          <td>定期的なスケジュール</td>
+          <!-- <td>Yes</td>
+                <td>Yes</td> -->
+          <td style="text-align: center;">いいえ</td>
+          <td style="background-color:#ededed;"></td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <tr>
+          <td>プロキシの制限</td>
+          <!-- <td>Yes</td>
+              <td>Yes</td> -->
+          <td style="text-align: center;">いいえ</td>
+          <td style="background-color:#ededed;"></td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <!-- <tr>
+                <td>Token TTL</td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td style="background-color:#ededed;"></td>
+                <td>No</td>
+            </tr> -->
+        <tr>
+          <td>資格チェック</td>
+          <!-- <td>Yes</td>
+                <td>Yes</td> -->
+          <td style="text-align: center;">いいえ</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color:#ededed;"></td>
+        </tr>
+        <tr>
+          <td>ライセンスキーの保護</td>
+          <!-- <td>Yes</td>
+                <td>Yes</td> -->
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color:#ededed;"></td>
+        </tr>
+        <tr>
+          <td>ストリームの並行性</td>
+          <!-- <td>Yes</td>
+                <td>Yes</td> -->
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color:#ededed;"></td>
+        </tr>
+        <tr>
+          <td>デバイス登録</td>
+          <!-- <td>Yes</td>
+                <td>Yes</td> -->
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color:#ededed;"></td>
+        </tr>
+        <tr>
+          <td>ミッドストリーム制限チェック</td>
+          <!-- <td>Yes</td>
+              <td>Yes</td> -->
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color:#ededed;"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>パッケージ</h3>
+    <p>再生制限には、いくつかのセキュリティパッケージが用意されています。</p>
+    <table class="bcls-table">
+      <caption class="bcls-caption--table">再生制限機能パッケージ</caption>
+      <thead class="bcls-table__head">
+        <tr>
+          <th colspan="2">機能</th>
+          <th>セキュリティティア1</th>
+          <th>セキュリティティア2</th>
+          <th>セキュリティTier3</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td rowspan="4">地理的制限</td>
+          <td>IP制限</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <tr>
+          <td>国</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <tr>
+          <td>米国の郵便番号</td>
+          <td style="text-align: center;">いいえ</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <tr>
+          <td>US DMA</td>
+          <td style="text-align: center;">いいえ</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <tr>
+          <td colspan="2">ドメイン制限</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <tr>
+          <td rowspan="2">日付/時刻のスケジュール</td>
+          <td>基本（開始終了日）</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <tr>
+          <td>繰り返し</td>
+          <td style="text-align: center;">いいえ</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <tr>
+          <td colspan="2">プロキシの制限</td>
+          <td style="text-align: center;">いいえ</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <tr>
+          <td colspan="2">資格チェック</td>
+          <td style="text-align: center;">いいえ</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <tr>
+          <td colspan="2">ライセンスキーの保護</td>
+          <td style="text-align: center;">いいえ</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <!-- <tr>
+              <td colspan="2">Basic encryption (HLSe)</td>
+              <td style="text-align: center;">No</td>
+              <td style="background-color: #D7F6E6;text-align: center;">Yes</td>
+              <td style="background-color: #D7F6E6;text-align: center;">Yes</td>
+            </tr>
+            <tr>
+              <td colspan="2">DRM platform access</td>
+              <td style="text-align: center;">No</td>
+              <td style="background-color: #D7F6E6;text-align: center;">Yes</td>
+              <td style="background-color: #D7F6E6;text-align: center;">Yes</td>
+            </tr> -->
+        <tr>
+          <td colspan="2">ストリームの並行性</td>
+          <td style="text-align: center;">いいえ</td>
+          <td style="text-align: center;">いいえ</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <tr>
+          <td colspan="2">デバイス登録</td>
+          <td style="text-align: center;">いいえ</td>
+          <td style="text-align: center;">いいえ</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+        <tr>
+          <td colspan="2">ミッドストリーム制限チェック</td>
+          <td style="text-align: center;">いいえ</td>
+          <td style="text-align: center;">いいえ</td>
+          <td style="background-color: #D7F6E6;text-align: center;">はい</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Which_products_support_Playback_Restrictions">再生制限をサポートしている製品はどれですか？</h2>
+    <p>次のBrightcove製品は、再生制限をサポートしています。</p>
+    <ul>
+      <!-- <li><strong>Brightcove Beacon</strong> - Full Playback Restrictions support and Viewer Entitlements are coming (roll-out date TBD)</li> -->
+      <li><strong>ビデオクラウド：VODとライブ</strong></li>
+      <li><strong>仮想イベント</strong></li>
+      <li><strong>運動</strong></li>
+      <li><strong>従事する</strong></li>
+      <li><strong>ギャラリー</strong></li>
+    </ul>
+    <aside class="bcls-aside bcls-aside--information">現在、Brightcoveビーコンでは再生制限を利用できません。</aside>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="How_are_Playback_Restrictions_applied">再生制限はどのように適用されますか？</h2>
+    <p>再生制限は次のように適用できます。</p>
+    <ul>
+      <li><a href="#Asset_level_restrictions">資産レベルの制限</a></li>
+      <li><a href="#Runtime_restrictions">実行時の制限</a></li>
+      <li><a href="#License_Keys_Protection">ライセンスキーの保護</a></li>
+    </ul>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Asset_level_restrictions">資産レベルの制限</h2>
+    <p>アセットレベルの制限は、再生権で定義されています。</p>
+
+    <p>次のストリーミングを制限する場合は、アセットレベルで再生制限を使用できます。</p>
+    <ul>
+      <li>地域（地域制限）</li>
+      <li>時間（スケジュール）</li>
+      <li>ドメイン</li>
+      <li>プロキシタイプ</li>
+    </ul>
+    <aside class="bcls-aside bcls-aside--information">デフォルトでは、新しく取り込まれたすべてのアセットには、いつでも、どこでも、誰にでもストリーミングできる再生権があります。</aside>
+
+    <h3>地域</h3>
+    <p>地理的制限により、ストリームコンテンツを世界中で表示できる場所が制限されます。オプションは以下のとおりです。</p>
+    <ul>
+      <li>IPアドレス</li>
+      <li>CIDR</li>
+      <li>郵便番号（米国の郵便番号でのみ使用可能）</li>
+      <li>DMA（米国のDMAでのみ使用可能）</li>
+      <li>国</li>
+    </ul>
+    <p>未定-地域制限には、全体的な動作を次のように定義するグローバルルールがあります。</p>
+    <ul>
+      <li>グローバルルールがに設定されている場合<strong>すべて許可</strong>、すべての再生が可能になり、リージョンをブラックリストに登録できます。</li>
+      <li>グローバルルールがに設定されている場合<strong>すべてブロックする</strong>、すべての再生をブロックし、リージョンをホワイトリストに登録できます。</li>
+    </ul>
+
+    <h3>時間</h3>
+    <p>スケジューリングでは、次の2つのオプションを使用して、コンテンツをストリーミングするための可用性ウィンドウを設定できます。</p>
+    <ul>
+      <li>特定の日付</li>
+      <li>特定の曜日と時間に繰り返される</li>
+    </ul>
+
+    <h3>ドメイン</h3>
+    <p>ドメイン制限を使用すると、ストリーミングを許可またはブロックするドメインを設定できます。</p>
+
+    <h3>プロキシー</h3>
+    <p>プロキシの制限により、プロキシが設定されている場合はコンテンツのストリーミングが妨げられます。使用可能なプロキシタイプは5つあります。</p>
+    <ul>
+      <li>匿名-クライアントのIPアドレスは利用できません</li>
+      <li>パブリック-パブリックインターネットアクセスを許可する場所からプロキシされた複数のユーザー</li>
+      <li>企業-複数のユーザーが1つまたは複数の中央の場所を介してプロキシされ、単一のネットワークで見かけのIPアドレスを共有できるかどうかを識別します</li>
+      <li>透過的-クライアントのIPアドレスはHTTPヘッダーを介して利用できますが、値は必ずしも信頼できるとは限りません。</li>
+      <li>ホスティング</li>
+    </ul>
+    <aside class="bcls-aside bcls-aside--information">VPNプロバイダーがサービスを改善し続けると、IPアドレスの解決は、ブロックされたIPアドレスに対して定義したものから変更される可能性があります。このため、プロキシブロッキングは100％保証されていません。</aside>
+
+    <h3>資産レベルのユースケース</h3>
+    <details>
+      <summary>
+        <h3 id="Use_cases1">ユースケース</h3>
+      </summary>
+      <p>考えられる使用例は次のとおりです。</p>
+      <h4>郵便番号でコンテンツを制限する</h4>
+      <ul>
+        <li>
+          <p>ゴール</p>
+          <p>Shari（Sports LeagueのWebプロデューサー）は、スポーツイベントの郵便番号内の視聴者がイベントをストリーミングできないように、郵便番号によるコンテンツアクセスを制限したいと考えています。</p>
+        </li>
+        <li>
+          <p>ソリューション</p>
+          <p>Shariは、米国の地域ごとに郵便番号をブラックリストに登録する再生権を定義できます。コンテンツは公開されているため（ミドルウェアアプリケーションの処理権限がないため）、再生権限を安全でないものとして設定する必要があります。再生権が定義されると、Shariはこれらを各メディアアセットに割り当てます。</p>
+        </li>
+      </ul>
+
+      <h4>国/ IPアドレスでコンテンツを制限する</h4>
+      <ul>
+        <li>
+          <p>ゴール</p>
+          <p>Dylan（CMO）は、視聴者がウクライナと韓国以外のどこからでもストリーミングできるように、国ごとにコンテンツアクセスを制限したいと考えています。開発チームは韓国にあるため、Dylanは韓国内の特定のIPアドレスからのストリーミングを許可する必要があります。</p>
+        </li>
+        <li>
+          <p>ソリューション</p>
+          <p>ディランは、ウクライナと韓国をブロックする再生権を定義し、韓国からのIPアドレスを許可するように追加できます。Dylanのコンテンツは公開されているため、すべての再生権は安全でないアクセスを許可する必要があります。再生権が定義されると、Dylanはこれらを各メディアアセットに割り当てます。</p>
+        </li>
+      </ul>
+    </details>
+
+    <h3>資産レベルの制限の設定</h3>
+    <p>
+      [再生権限] では、ビデオPlayback Restrictionsを指定できます。これらの権利はに保存されます<a href="/playback-restrictions/references/playback-rights/reference.html">再生権API</a>各セットには一意のIDが割り当てられます（<code translate="No">playback_right_id</code>）。権限のセットは、ゼロ個以上の動画に関連付けることができます。
+    </p>
+    <p>
+      動画に<code translate="No">playback_right_id</code>、Playback Rightsオブジェクトで指定された制限は、その動画のすべてのリクエストに適用されます。
+    </p>
+    <p>
+      この図は、ユーザーのビデオおよびライセンス要求から再生までの流れを示しています。
+    </p>
+    <figure class="bcls-figure">
+      <img class="bcls-image--no-border" src="/assets/images/playback-restrictions/overview/overview.png" alt="Playback Rights">
+      <figcaption class="bcls-caption--image">再生権限</figcaption>
+    </figure>
+
+    <p>資産レベルの制限は、次のいずれかを使用して定義できます。</p>
+    <ul>
+      <li><a href="#Using_Brightcove_APIs">BrightcoveAPIの使用</a></li>
+      <li><a href="#Using_Video_Cloud_Studio">Video CloudStudioの使用</a></li>
+    </ul>
+
+    <h4 id="Using_Brightcove_APIs">BrightcoveAPIの使用</h4>
+    <p>BrightcoveのAPIを使用して、アセットレベルの制限を定義できます。これらの手順は、Brightcove Player、ネイティブSDK、または独自のプレーヤーで使用できます。</p>
+    <ol class="bcls-tasklist-restart">
+      <li>
+        <p>まず、<a href="/playback-restrictions/references/playback-rights/reference.html">再生権API</a>制限を作成します。</p>
+      </li>
+      <li>
+        <p>次に、<a href="/cms/index.html"> CMS API</a>制限をビデオアセットに関連付けます。</p>
+      </li>
+      <li>
+        <p>詳細については、<a href="/playback-restrictions/getting-started/implementing-playback-rights.html">再生権の実装</a>資料。</p>
+      </li>
+    </ol>
+
+    <h4 id="Using_Video_Cloud_Studio">Video CloudStudioの使用</h4>
+    <p>Video Cloud Studioを使用して、アセットレベルの制限を定義することもできます。これらの手順は、BrightcovePlayerまたはネイティブSDKで使用できます。</p>
+    <ol class="bcls-tasklist-restart">
+      <li>
+        <p>を展開します<strong>管理者</strong>ドロップダウンメニューをクリックして、<strong>再生権</strong>。</p>
+        <figure class="bcls-figure">
+          <img class="bcls-image--no-border" src="/assets/images/playback-restrictions/overview/admin.png" alt="Video Cloud Studio Admin" />
+          <figcaption class="bcls-caption--image">ビデオクラウドスタジオ管理者</figcaption>
+        </figure>
+      </li>
+      <li>
+        <p>詳細については、<a href="https://studio.support.brightcove.com/admin/managing-playback-rights.html">再生権の管理</a>資料。</p>
+      </li>
+      <li>
+        <p>に移動します<strong>メディア</strong>モジュールを選択し、<strong>名前</strong>詳細を表示するには、ビデオへのリンクを参照してください。</p>
+      </li>
+      <li>
+        <p>下にスクロールして<strong>Playback Restrictions</strong>セクションをクリックし、<strong>編集</strong>ボタン。</p>
+      </li>
+      <li>
+        <p>ドロップダウンメニューを展開し、このビデオに関連付ける制限を選択します。</p>
+        <figure class="bcls-figure">
+          <img class="bcls-image--no-border" src="/assets/images/playback-restrictions/overview/media-module-restrictions.png" alt="Media module restriction assignment" />
+          <figcaption class="bcls-caption--image">メディアモジュール制限の割り当て</figcaption>
+        </figure>
+      </li>
+      <li>[ <strong>保存</strong> ] を選択します。</li>
+      <li>
+        <p>再生制限を定義し、それらをビデオに関連付けると、プレーヤーを構成する準備が整います。</p>
+        <p> 詳細については、<a href="/playback-restrictions/getting-started/implementing-playback-rights.html#Configure_your_player">プレーヤーを構成する</a>再生権の実装ドキュメントのセクション。</p>
+      </li>
+    </ol>
+
+    <h3>注</h3>
+    <ul>
+      <li>再生権を使用すると、コンテンツを暗号化する必要がありません</li>
+      <li>デフォルトでは、再生権限を持つアセットをストリーミングするには、有効なトークンが必要です。ただし、トークンを要求しないように再生権限を設定できます。 </li>
+      <li>デフォルトでは、すべてのアセットに再生権があり、いつでもどこでも誰にでもストリーミングできます</li>
+      <li>各VideoCloudアカウントには、最大100の再生権があります</li>
+      <li>再生権は、Video Cloud / CMS APIの制限（国とスケジュール）で機能します。アセットのCMS制限は、再生権の前に検証されます</li>
+      <li>再生権は、ポリシーキーの制限（ドメインと地域）では機能しません。WebプレーヤーまたはネイティブSDKで再生権限を使用すると、ポリシーキーが削除されます。これは、ポリシーキーで設定された制限が無視されることを意味します。</li>
+      <li>再生権は削除できません。有効または無効のみ</li>
+    </ul>
+
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Runtime_restrictions">実行時の制限</h2>
+    <p>実行時のストリーミングを制限するには、特定の権限（クレーム）を持つJSON Web Token（JWT）が必要です。このトークンは、すべてのストリームリクエストで送信されます。</p>
+    <p>この機能を使用するには、ユーザー管理システム（UMS）とBrightcoveの再生サービスの間にミドルウェアソリューションを実装する必要があります。</p>
+
+    <p>実行時に次の制限を設定できます。</p>
+    <ul>
+      <li>再生権限</li>
+      <li>タグ</li>
+      <li>コンテンツのリスト</li>
+      <li>特定のユーザーエージェント</li>
+      <li>同時ストリーム制限</li>
+      <li>デバイス制限</li>
+    </ul>
+
+    <h3>再生権限</h3>
+    <p>アセットに再生権を割り当てることができます（を参照）<a href="#Asset_level_restrictions">資産レベルの制限</a>）、またはを使用して実行時にそれらを設定できます<code translate="No">prid</code>請求。</p>
+    <aside class="bcls-aside bcls-aside--information">ランタイム制限は、アセットレベルの再生権を上書きします。</aside>
+
+    <h3>タグ</h3>
+    <p>実行時に、ストリーミングを許可する特定のタグ値を持つアセットを識別できます。これらのタグは、<code translate="No">tags</code>請求。タグを使用して動画をグループ化できます<strong>メディアモジュール</strong>Brightcoveのビデオクラウドスタジオで。</p>
+    <p>
+      再生制限サービスは、各ビデオに関連付けられているタグをチェックします。タグの少なくとも1つがJWTトークンのリストと一致する場合、ビデオは表示可能です。
+    </p>
+    <p>
+      JWTトークン内のタグは、タグの配列としてリストされます。
+    </p>
+    <aside class="bcls-aside bcls-aside--information">JWTトークンには40個のタグの配列に制限されています。</aside>
+
+    <h3>コンテンツのリスト</h3>
+    <p>を使用して<code translate="No">vids</code>クレームでは、実行時に、ストリーミングを許可するアセットのリストを指定できます。</p>
+
+    <h3>資格チェック</h3>
+    <p>エンタイトルメントチェックは、ビデオIDやタグに基づいて実行時にエンドユーザーのアクセス権を設定します。これには、JWTで次のクレームを設定することが含まれます。</p>
+    <ul>
+      <li><code translate="No">prid</code></li>
+      <li><code translate="No">vids</code></li>
+      <li><code translate="No">tags</code></li>
+    </ul>
+    <p>もし<code translate="No">prid</code>（再生権ID）がJWTに設定されている場合、アセットの再生権が上書きされます。</p>
+
+    <h3>特定のユーザーエージェント</h3>
+    <p>特定のユーザーエージェントからのストリーミングを許可するには、<code translate="No">ua</code>請求。これを使用するには、コンテンツを暗号化する必要があり、ライセンスにJWTを必要とするアカウントフラグを設定する必要があります。このアカウントフラグを有効にするには、アカウントマネージャーに連絡してください。</p>
+    <aside class="bcls-aside bcls-aside--information">特定のユーザーエージェントを使用する場合は、ライセンスキー保護を有効にする必要があります。</aside>
+
+    <h3>同時ストリーム制限</h3>
+    <p>ユーザーごとに同時配信を制限すると、視聴者はアカウントを持っていない友人と資格情報を共有できなくなります。同時ストリーム制限では、特定のユーザーがいつでも視聴できるビデオストリームの数を定義します。</p>
+    <p>この機能を使用するには、コンテンツを暗号化されたDRMまたはHLSeにする必要があります。</p>
+    <p>詳細については、<a href="/playback-restrictions/guides/stream-concurrency.html">視聴者ごとの同時ストリームの制限</a>資料。</p>
+    <aside class="bcls-aside bcls-aside--information">HLSeで同時ストリーム制限を使用する場合は、ライセンスキー保護を有効にする必要があります。</aside>
+
+    <h3>デバイス制限</h3>
+    <p>実行時に、ユーザーのストリーミングデバイスの数を制限することができます。このため、コンテンツは暗号化されたDRMまたはHLSeである必要があります。</p>
+    <p>デバイスの登録は、DRMライセンス要求が行われたときに発生し、その時点で一意のIDが各デバイスに割り当てられます。ライセンス要求ごとに、デバイスの制限がチェックされ、適用されます。</p>
+    <p>たとえば、発行者がコンテンツ所有者の要件に準拠して、1つのビューアに関連付けられているデバイスの数を2つのデバイスに制限する必要がある場合があります。その制限に達した後、視聴者が接続されたテレビなどの3番目のデバイスでコンテンツをストリーミングしようとすると、再生は拒否されます。この機能により、コンテンツ発行者は収益化の目的を達成し、不正アクセスを最小限に抑えることができます。</p>
+
+    <p>詳細については、<a href="/playback-restrictions/guides/device-limits.html">デバイス制限の実装</a>資料。</p>
+    <aside class="bcls-aside bcls-aside--information">HLSeでデバイス制限を使用する場合は、ライセンスキー保護を有効にする必要があります。</aside>
+
+    <h3>ランタイムのユースケース</h3>
+    <details>
+      <summary>
+        <h3 id="Use_cases1">ユースケース</h3>
+      </summary>
+      <p>考えられる使用例は次のとおりです。</p>
+      <h4>有料アクセスを許可する</h4>
+      <ul>
+        <li>
+          <p>ゴール</p>
+          <p>Liz（Event Planner）は、有料ユーザーにイベントのライブコンテンツとVODコンテンツへのアクセスのみを許可したいと考えています。彼女はまた、リンク共有を防ぎたいと思っています。</p>
+        </li>
+        <li>
+          <p>ソリューション</p>
+          <p>このユースケースでは、プラットフォームからコンテンツを要求するすべてのログに記録されたユーザーは、次のクレームを持つトークンを持っている必要があります。</p>
+          <ul>
+            <li><code translate="No">uid</code> = <code translate="No">"{unique user-id}"</code></li>
+            <li><code translate="No">climit</code> = <code translate="No">1</code></li>
+            <li><code translate="No">cbeh</code> = <code translate="No">“BLOCK_NEW_USER”</code></li>
+          </ul>
+          <p>すべてのコンテンツ（ライブまたはVOD）はDRMで暗号化する必要があります。</p>
+          <p>これらの権限があれば、ログに記録されたすべてのユーザーは、同じデバイスとネットワーク上にいる限り、ライブコンテンツまたはVODコンテンツをストリーミングできます。トークンが有効である時間枠内にユーザーがプラットフォームのクレデンシャルを共有する場合、コンテンツをストリーミングしようとしている別のユーザーはそれを行うことができません。この機能のミッドストリームチェックにより、Lizはコンテンツストリーム全体でこの動作を保証できます。</p>
+        </li>
+      </ul>
+
+      <h4>新しいストリームをブロックする</h4>
+      <ul>
+        <li>
+          <p>ゴール</p>
+          <p>ハリー（OTTの顧客）は、プラットフォームユーザーがコンテンツを表示できるようにしたいと考えていますが、一度に1つのアセットしか表示できません。</p>
+        </li>
+        <li>
+          <p>ソリューション</p>
+          <p>ハリーのユースケースでは、プラットフォームからコンテンツをリクエストするすべてのログユーザーは、次のクレームを持つ有効なトークンを持っている必要があります</p>
+          <ul>
+            <li><code translate="No">uid</code> = <code translate="No">"{unique user-id}"</code></li>
+            <li><code translate="No">climit</code> = <code translate="No">1</code></li>
+            <li><code translate="No">cbeh</code> = <code translate="No">“BLOCK_NEW”</code></li>
+          </ul>
+          <p>すべてのコンテンツ（ライブまたはVOD）はDRMで暗号化する必要があります。</p>
+          <p>この場合の動作は、Lizのユースケースと似ています。主な違いは、トークンが有効である間、ハリーのユーザーは異なるアセットを同時に視聴できないことです。この機能の5分ごとのミッドストリームチェックにより、ハリーはこの動作を保証できます。</p>
+        </li>
+      </ul>
+
+      <h4>同時ストリームを制限する</h4>
+      <ul>
+        <li>
+          <p>ゴール</p>
+          <p>Shari（Sports LeagueのWebプロデューサー）は、特定のコンテンツの同時ストリームを1に制限したいと考えています。</p>
+        </li>
+        <li>
+          <p>ソリューション</p>
+          <p>この場合、ログに記録されたすべてのユーザーは、次のクレームを持つトークンを持っている必要があります。</p>
+          <ul>
+            <li><code translate="No">uid</code> = <code translate="No">"{unique user-id}"</code></li>
+            <li><code translate="No">vids</code> = <code translate="No">["asset 1","asset 2","asset 3"]</code></li>
+            <li><code translate="No">climit</code> = <code translate="No">1</code></li>
+            <li><code translate="No">cbeh</code> = <code translate="No">“BLOCK_NEW”</code></li>
+          </ul>
+        </li>
+      </ul>
+    </details>
+
+    <h3>実行時制限の設定</h3>
+    <p>ランタイム制限を使用するには、次の手順を実行します。</p>
+    <ol class="bcls-tasklist-restart">
+      <li>
+        <p>ミドルウェアを実装する</p>
+        <p>この機能を使用するには、ユーザー管理システム（UMS）とBrightcoveの再生サービスの間にミドルウェアソリューションを実装する必要があります。</p>
+      </li>
+      <li>
+        <p>JWTを作成する</p>
+        <p>特定の権限（クレーム）を使用して、有効なJSON Webトークン（秘密鍵で署名されたJWT）を作成します。詳細については、<a href="https://general.support.brightcove.com/developer/create-json-web-token.html">の作成<span translate="No">JSONWebトークン</span>（JWT）</a>資料。</p>
+      </li>
+      <li>
+        <p>プレーヤーを設定する</p>
+        <p>トークンは、再生要求とともに渡されます。トークンが無効または期限切れの場合、コンテンツへのアクセスは制限されます。プレイヤーは、トークンを使用するように構成する必要があります。</p>
+
+        <strong>ウェブプレーヤー</strong>
+        <p>
+          Brightcove Webプレーヤーの構成の詳細については、<a href="https://player.support.brightcove.com/playback/license-protection-with-bcp.html"> Brightcoveプレーヤーによるキー/ライセンス保護</a>資料。
+        </p>
+        <strong>ネイティブAndroidまたはiOSプレーヤー</strong>
+        <p>
+          AndroidまたはiOS用のネイティブプレーヤーの構成の詳細については、を参照してください。<a href="https://sdks.support.brightcove.com/features/license-protection-with-sdks.html">ネイティブSDKによるキー/ライセンス保護</a>資料。
+        </p>
+        <strong>あなた自身のプレーヤー</strong>
+        <p>
+          プレーヤーでJWTのみを使用している場合は、追加の構成は必要ありません。プレーヤーで再生権を使用している場合は、<a href="/playback-restrictions/getting-started/implementing-playback-rights.html#Configure_your_player">プレーヤーを構成する</a>再生権の実装ドキュメントのセクション。
+        </p>
+      </li>
+    </ol>
+
+    <h3>注</h3>
+    <ul>
+      <li>を使用するには<code translate="No">ua</code>、<code translate="No">maxip</code>そして<code translate="No">maxu</code>クレーム、あなたは以下が必要です：
+        <ul>
+          <li>コンテンツは暗号化する必要があります</li>
+          <li>アカウントには、ライセンスリクエストで必要なJWTが必要です（ライセンスキー保護が有効になっています）。詳細はアカウントマネージャーにお問い合わせください。</li>
+        </ul>
+      </li>
+      <li>を使用するには<code translate="No">climit</code>そして<code translate="No">dlimit</code>クレーム、あなたは以下が必要です：
+        <ul>
+          <li>コンテンツはDRMで暗号化する必要があります</li>
+          <li>アカウントでCSLを有効にし、[権利の確認]フラグを有効にする必要があります。詳細はアカウントマネージャーにお問い合わせください。</li>
+        </ul>
+      </li>
+      <li>各トークンには有効期限があり、作成時に設定する必要があります。統合は、更新プロセスを維持する責任があります。</li>
+      <li>デフォルトでは、ミッドストリームチェックは5分ごとに行われます。</li>
+    </ul>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="License_Keys_Protection">ライセンスキーの保護</h2>
+    <p>ライセンスキー保護は、動的配信でDRM保護されたコンテンツを配信するときに追加レベルのセキュリティを提供します。これは、コンテンツへのアクセスを制御し、コンテンツの不正な共有を防止したいお客様に特に役立ちます。</p>
+    <p>DRMまたはHLSeコンテンツ保護は、JSON Web Token（JWT）を使用して、すべてのストリーム要求を保護できるライセンス/キー要求を使用します。</p>
+
+    <h3>使用事例</h3>
+    <p>この機能は、コンテンツを公開する必要があるが、信頼できるリクエストからのものである場合に使用できます。たとえば、HLSeで暗号化された排他的なコンテンツを持つ地域の放送局は、プラットフォームからの要求のみがコンテンツにアクセスするようにしたいと考えています。つまり、視聴者はプラットフォームからのみコンテンツをストリーミングできます。ストリームURLを使用しても、プラットフォームの外部にストリーミングすることはできません。</p>
+
+    <aside class="bcls-aside bcls-aside--information">DRMまたはHLSe保護、あるいはその両方を備えたビデオの再生権を実装すると、Studioのメディアモジュールのプレビュープレーヤーでビデオが再生されなくなることに注意してください。プレビューを有効にするために、Brightcoveは実装しています<a href="/cms/references/reference.html#tag/Clear-Sources">明確な情報源</a> CMS APIのエンドポイント。
+
+    <p>これらのエンドポイントを使用して、保護されていないURLを取得するための有効なAPIクレデンシャルがある場合、内部ユーザーまたはサードパーティユーザーがビデオをプレビューできるようにすることもできます。ただし、次の点に注意してください。</p>
+    <ul>
+    <li>保護されていないURLが利用可能になると、Brightcoveとクライアントは、コンテンツにアクセスできるユーザーやコンテンツの使用方法を制御できなくなります。</li>
+    <li>ソースにアクセスすると、アカウントに出力帯域幅料金が発生します。</li>
+    </ul>
+    </aside>
+
+    <h3>ライセンスキー保護の有効化</h3>
+    <p>ライセンスキー保護用にアカウントを構成するには、アカウントマネージャーに連絡して、ライセンスキー保護フラグを有効にします。</p>
+
+    <h3>ライセンスキー保護の使用</h3>
+    <p>ライセンスキー保護を使用するには、次の手順を実行します。</p>
+    <ol class="bcls-tasklist-restart">
+      <li>
+        <p>ミドルウェアを実装する</p>
+        <p>この機能を使用するには、ユーザー管理システム（UMS）とBrightcoveの再生サービスの間にミドルウェアソリューションを実装する必要があります。</p>
+      </li>
+      <li>
+        <p>JWTを作成する</p>
+        <p>この機能を有効にすると、コンテンツを復号化するためのすべてのキーまたはライセンスリクエストには、有効なJSON Webトークン（秘密キーで署名されたJWT）が必要です。詳細については、<a href="https://general.support.brightcove.com/developer/create-json-web-token.html">の作成<span translate="No">JSONWebトークン</span>（JWT）</a>資料。</p>
+      </li>
+      <li>
+        <p>プレーヤーを設定する</p>
+        <p>トークンは、再生要求とともに渡されます。トークンが無効または期限切れの場合、コンテンツへのアクセスは制限されます。プレイヤーは、トークンを使用するように構成する必要があります。</p>
+
+        <strong>ウェブプレーヤー</strong>
+        <p>
+          Brightcove Webプレーヤーの構成の詳細については、<a href="https://player.support.brightcove.com/playback/license-protection-with-bcp.html"> Brightcoveプレーヤーによるキー/ライセンス保護</a>資料。
+        </p>
+        <strong>ネイティブAndroidまたはiOSプレーヤー</strong>
+        <p>
+          AndroidまたはiOS用のネイティブプレーヤーの構成の詳細については、を参照してください。<a href="https://sdks.support.brightcove.com/features/license-protection-with-sdks.html">ネイティブSDKによるキー/ライセンス保護</a>資料。
+        </p>
+        <strong>あなた自身のプレーヤー</strong>
+        <p>
+          プレーヤーでJWTを使用するために、追加の構成は必要ありません。
+        </p>
+      </li>
+    </ol>
+
+    <h3>注</h3>
+    <ul>
+      <li>この機能は、再生権を使用せずに使用できます。</li>
+      <li>JWTトークンには、特定のアクセス許可（クレーム）は必要ありません。顧客の秘密鍵で署名する必要があります。</li>
+      <li>コンテンツは暗号化されたHLSeまたはDRMである必要があります。</li>
+    </ul>
+
+    <h3 id="Limitations">制約事項</h3>
+    <p>この機能には、次の制限が適用されます。</p>
+    <ul>
+      <li>
+        HLSE (AES-128) の場合、トークンはマスターマニフェスト要求に追加され、暗号化キー URL に伝播されます。これらの URL はマスターマニフェストに追加されるため、コンテンツの公開を最小限に抑えるために、使用回数を制限することを検討する必要があります。
+      </li>
+      <li>
+        HLSe（AES-128）の場合、プレーヤーはビデオの再生時に複数の要求を行います。通常、レンディションごとに1つです。ザ・<a href="https://general.support.brightcove.com/developer/create-json-web-token.html#Claims_for_Playback_Restrictions">maxuクレーム</a>これらの要求を説明するのに十分な高さに設定する必要があります。コンテンツの露出を最小限に抑えるために、追加の申し立てを検討する必要があります。レンディションを切り替えると、新しいライセンスが要求されます。
+      </li>
+      <li>
+        の追跡<a href="https://general.support.brightcove.com/developer/create-json-web-token.html#Claims_for_Playback_Restrictions">maxuおよびmaxipクレーム</a>結果整合性があります。つまり、これらの要求を使用するトークンが連続して何度も再利用されると、そのトークンが宣言した回数よりも多くの回数受け入れられることがわかります。追跡は数秒以内に一貫性があり、そのウィンドウの後、トークンは期待どおりにブロックされます。
+      </li>
+    </ul>
+  </section>
+
+  <!-- <section class="bcls-section">
+    <h2 id="Related_topics">Related topics</h2>
+    <ul>
+      <li>
+        <a href="/playback-rights/getting-started/implementing-epa.html">Implementing Playback Rights Management Service</a>
+      </li>
+      <li>
+        <a href="/playback-rights/guides/using-epa-with-bcp.html">Using Playback Rights with Brightcove Player</a>
+      </li>
+      <li>
+        <a href="/playback-rights/guides/using-epa-with-sdks.html">Using Playback Rights with the Native SDKs</a>
+      </li>
+      <li>
+        <a href="/playback-authorization/guides/stream-concurrency.html">Implementing Stream Concurrency</a>
+      </li>
+      <li>
+        <a href="https://general.support.brightcove.com/developer/create-jwt-stage.html">Creating a JSON Web Token (JWT)</a>
+      </li>
+    </ul>
+  </section> -->
+</article>

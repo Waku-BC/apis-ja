@@ -1,0 +1,463 @@
+---
+title:  '概要：Brightcove Live API'
+description:  'この概要では、Live APIの目的と使用方法を学習します。このドキュメントに含まれるトピックには、サポートされているAWSリージョンとCDN、ライブチャネルとイベント、およびID3タイミングメタデータのライブストリームへの挿入が含まれます。'
+parent: Getting Started 
+grandparent: Live API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+ <summary>{{ page.description }}</summary>
+
+    <section class="bcls-section">
+      <h2 id="introduction">入門</h2>
+
+      <p>NS <span translate="No">ライブAPI</span>は、ライブストリーミングイベントを作成および管理できるRESTベースのAPIです。オプション機能は次のとおりです。</p>
+
+      <ul>
+        <li>サーバー側の広告挿入（<span translate="No"> SSAI</span>）</li>
+        <li><span translate="No">AES-128</span>暗号化</li>
+        <li>ライブストリームから取得したクリップからビデオオンデマンドアセットを作成する</li>
+        <li><span translate="No">DVR</span>容量</li>
+        <li>多数<span translate="No">CDN</span></li>
+      </ul>
+
+      <p>「<a href="/live-api/references/reference.html"> API リファレンス</a>」も参照してください。</p>
+    </section>
+
+    <section class="bcls-section">
+      <h2 id="baseURL">ベース URL</h2>
+
+      <p>のベースURL <span translate="No">ライブAPI</span>は：</p>
+
+      <pre>
+      <code class="language-http" translate="No">https://api.bcovlive.io
+      </code>
+      </pre>
+    </section>
+
+    <section class="bcls-section">
+      <h2 id="authentication">ヘッダー</h2>
+
+      <p>すべてのリクエストは、アカウントのセットアップ時に提供される API キーを使用して認証されます。<code translate="No">X-API-KEY </code>キーはヘッダーで渡されます。<code translate="No">Content-Type </code>ヘッダーも必要です。</p>
+
+      <pre>
+      <code class="language-bash" translate="No">X-API-KEY : <span class="bcls-input" translate="No">YOUR_APIKey</span>
+      Content-Type: application/json
+      </code>
+      </pre>
+    </section>
+
+    <section class="bcls-section">
+      <h2 id="Support_aws_regions">サポートされている AWS リージョン</h2>
+
+      <p>次の AWS リージョンがサポートされています。</p>
+
+      <table class="bcls-table">
+        <caption class="bcls-caption--table">サポートされている AWS リージョン</caption>
+        <thead class="bcls-table__head">
+          <tr>
+            <th>場所</th>
+            <th>AWS 名</th>
+            <th>SSAI サポート</th>
+          </tr>
+        </thead>
+        <tbody class="bcls-table__body">
+          <tr>
+            <td >オレゴン</td>
+            <td >us-west-2<span translate="No"></span></td>
+            <td style="text-align: center;"><img alt="Yes" src="//learning-services-media.brightcove.com/doc-assets/general/images/check16.png" /></td>
+          </tr>
+          <tr>
+            <td >ヴァージニア</td>
+            <td >us-east-1<span translate="No"></span></td>
+            <td style="text-align: center;"><img alt="Yes" src="//learning-services-media.brightcove.com/doc-assets/general/images/check16.png" /></td>
+          </tr>
+          <tr>
+            <td >東京</td>
+            <td >ap-northeast-1<span translate="No"></span></td>
+            <td style="text-align: center;"><img alt="Yes" src="//learning-services-media.brightcove.com/doc-assets/general/images/check16.png" /></td>
+          </tr>
+          <tr>
+            <td >シンガポール</td>
+            <td >ap-southeast-1<span translate="No"></span></td>
+            <td style="text-align: center;"><img alt="Yes" src="//learning-services-media.brightcove.com/doc-assets/general/images/check16.png" /></td>
+          </tr>
+          <tr>
+            <td >シドニー</td>
+            <td >ap-southeast-2<span translate="No"></span></td>
+            <td style="text-align: center;"><img alt="Yes" src="//learning-services-media.brightcove.com/doc-assets/general/images/check16.png" /></td>
+          </tr>
+          <tr>
+            <td >ムンバイ</td>
+            <td >ap-south-1<span translate="No"></span></td>
+            <td style="text-align: center;"><img alt="Yes" src="//learning-services-media.brightcove.com/doc-assets/general/images/x16.png" /></td>
+          </tr>
+          <tr>
+            <td >フランクフルト</td>
+            <td >eu-central-1<span translate="No"></span></td>
+            <td style="text-align: center;"><img alt="Yes" src="//learning-services-media.brightcove.com/doc-assets/general/images/check16.png" /></td>
+          </tr>
+          <tr>
+            <td >アイルランド</td>
+            <td >eu-west-1<span translate="No"></span></td>
+            <td style="text-align: center;"><img alt="No" src="//learning-services-media.brightcove.com/doc-assets/general/images/x16.png" /></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>SEP ジョブは、標準制限が 3 のアカウントによって制限されます。ただし、<strong> us-west-2 </strong>の制限は最大 10 です。すべての制限は、地域ごとではなく、アカウントによって設定されます。</p>
+    </section>
+
+    <section class="bcls-section">
+      <h2 id="Supported_cdns">サポートされるCDN</h2>
+
+      <p>ライブストリーミングでは、次の CDN がサポートされています。</p>
+
+      <ul>
+        <li><span translate="No">アカマイ</span></li>
+        <li>Cloudfront<span translate="No"></span></li>
+      </ul>
+
+      <p>他のファイルベースの CDN は機能するはずですが、テストされておらず、アクティブにはサポートされていません。</p>
+    </section>
+
+    <section class="bcls-section">
+      <h2 id="Channels_and_hours">チャンネルとイベント時間</h2>
+
+      <p>ライブ購入には、次の 2 つのオプションがあります。</p>
+
+      <ul>
+        <li>ストリーミング時間のイベント時間を購入する</li>
+        <li>ストリーミングチャンネルの購入</li>
+      </ul>
+
+      <p>また、イベントのストリーミング時間とチャンネルの両方を購入することもできます。オファリングの詳細については、担当のアカウントマネージャにお問い合わせください。</p>
+
+      <aside class="bcls-aside bcls-aside--information"><strong>イベントストリーミング時間とチャンネルの両方を購入した場合</strong>、次の点に注意する必要があります。
+
+        <ul>
+          <li>デフォルトでは、ライブジョブはイベントストリーミング時間に対して課金されます。</li>
+          <li>代わりにジョブをチャネルジョブとして請求する場合は、<strong>ライブジョブの作成時にリクエスト本文に次のフィールドを含める必要があります</strong>。
+            <p><code translate="No">"channel_type": "24x7"</code></p>
+          </li>
+          <li>ライブジョブを作成するときに、チャネルのみの顧客は、要求本文に常に次のフィールドを含める必要があります。
+            <p><code translate="No">"channel_type": "24x7"</code></p>
+          </li>
+          <li>ストリーミング時間のイベント時間のみを購入したお客様は、リクエストに<strong></strong><code translate="No">"channel_type": "24x7"</code>を含めないでください。</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="bcls-section">
+      <h2 id="token_authentication">トークン認証</h2>
+
+      <p>Brightcoveでは、ライブ動画ストリームの再生 URL にトークン認証を追加するオプションを提供しています。トークン認証を追加する場合は、<a href="https://supportportal.brightcove.com/s/login/?language=en_US">Brightcoveサポートにお問い合わせください</a>。トークン認証の設定には、最大 3 日かかる場合があります。</p>
+
+      <p>トークンの TTL (存続可能時間) は、1 時間から 365 日の任意の値に設定できます。TTL を設定する期間は、デプロイするライブストリームの種類によって異なります。ただし、TTL はアカウント全体の設定であり、すべてのライブストリームに適用されます。</p>
+    </section>
+
+    <section class="bcls-section">
+      <h2 id="dvr_capability"><span translate="No">DVR</span>容量</h2>
+
+      <p>ブライトコーブのライブストリームには<span translate="No">DVR</span>容量。この機能を使用するには、次のことが必要です。</p>
+
+      <ul>
+        <li>再生に<code translate="No">playback_url_dvr</code> URL を使用する</li>
+        <li>持っているプレーヤーを使用してください<a href="https://player.support.brightcove.com/general/playing-live-streams.html">DVR</span>容量</a></li>
+      </ul>
+
+      <p>DVR 機能は 86,400 秒に制限されています。</p>
+
+      <p>NS <span translate="No"> DVR</span>ストリームは、ライブストリームが完了してから7日間利用できます。</p>
+    </section>
+
+    <section class="bcls-section">
+      <h2 id="endpoints">エンドポイントとオペレーション</h2>
+
+      <p>の主な操作<span translate="No">ライブAPI</span>ライブストリームを作成および管理し、ライブストリームからVODクリップを生成しています。これらの操作は、ドキュメントの残りの部分で詳しく説明されている次のエンドポイントへの要求を介して実行されます。</p>
+
+      <aside class="bcls-aside bcls-aside--information">Brightcove Liveには、他のアカウントIDとは別に、独自のアカウントIDがあることに注意してください。APIオペレーションでは、<code translate="No">account_id</code>あなたの<strong>ライブアカウントID</strong>。</aside>
+
+      <h3><a href="#Creating_and_managing_jobs">ジョブの作成と管理</a></h3>
+
+      <ul>
+        <li><a href="#Create_a_Live_Job">ライブジョブの作成</a></li>
+        <li><a href="#List_Live_Jobs">ライブジョブをリストする</a></li>
+        <li><a href="#Get_Live_Job_Details">ライブジョブの詳細を取得</a></li>
+        <li><a href="#Manual_Ad_Cue_Point_Insertion">広告キューポイントの手動挿入</a></li>
+        <li><a href="#Stop_a_Live_Job">ライブジョブの停止</a></li>
+      </ul>
+
+      <h3><a href="#Creating_clips">クリップを作成する</a></h3>
+
+      <ul>
+        <li><a href="#Create_VOD_Clip">VOD クリップの作成</a></li>
+      </ul>
+
+      <h3><a href="#Managing_SSAI">SSAIの管理</a></h3>
+
+      <ul>
+        <li><a href="#Get_Account_Ad_Configurations">アカウント広告設定の取得</a></li>
+        <li><a href="#Create_Ad_Configuration">広告設定の作成</a></li>
+        <li><a href="#Get_Ad_Configuration">広告設定の取得</a></li>
+        <li><a href="#Update_Ad_Configuration">広告設定の更新</a></li>
+        <li><a href="#Get_Slate_Media_Source_Assets">スレートメディアソースアセットを入手する</a></li>
+        <li><a href="#Ingest_Slate_Media_Source_Asset">スレートメディアソースアセットを取り込み</a></li>
+        <li><a href="#Delete_Slate_Media_Source_Asset">スレートメディアソースアセットを削除</a></li>
+      </ul>
+    </section>
+
+    <section class="bcls-section">
+      <h2 id="Creating_and_managing_jobs">ジョブの作成と管理</h2>
+
+      <p>これらの操作では、ライブジョブを作成し、その詳細を取得し、停止することができます。また、広告休憩のキューポイントを作成するエンドポイントもあります。</p>
+
+      <h3 id="Create_a_Live_Job">ライブジョブの作成</h3>
+
+      <pre>
+      <code translate="No"><span class="bcls-highlight">POST</span> https://api.bcovlive.io/v1/jobs
+        </code></pre>
+
+      <p>このエンドポイントは、<code translate="No">POST </code>リクエストを介してライブストリームを作成するために使用されます。リクエストは、ライブストリーム自体のプロパティを指定するだけでなく、ライブストリームから生成する VOD クリップを指定することもできます（<a href="#vod">これは後でエンドポイント経由でも実行できます</a>）。リクエスト本文に含めることができるフィールドの詳細は、<a href="/live-api/references/reference.html#operation/CreateALiveJob"> API リファレンスに記載されています</a>。</p>
+
+      <section class="bcls-subsection">
+        <h4 id="input_protocol">入力プロトコル</h4>
+
+        <p>Brightcoveライブは、複数の入力プロトコルをサポートしています。ジョブを作成するときに、<code translate="No">protocol</code>リクエストボディのフィールドを使用して、使用するジョブを指定します。サポートされている値は、次のとおりです。</p>
+
+        <ul>
+          <li><code translate="No">rtmp</code> ( デフォルト)</li>
+          <li><code translate="No">rtp</code></li>
+          <li><code translate="No">rtp-fec</code></li>
+          <li><code translate="No">srt</code></li>
+        </ul>
+
+        <p>RTMP プロトコルは、FLV 形式でストリームを配信するためのプロトコルです。その他のプロトコルは、MPEG2-TS を配信するためのプロトコルです。</p>
+
+        <p>使用する場合<code translate="No">rtp</code>、<code translate="No">rtp-fec</code>また<code translate="No">srt</code>、も指定する必要があります<code translate="No">cidr_whitelist</code>（見る<a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">クラスレスドメイン間ルーティング</a>）。</p>
+
+        <p>を使用する場合は<code translate="No">rtmp</code>、<code translate="No">ip_whitelist</code>代わりに入力にを指定できますが、これは必須ではありません。</p>
+
+        <p>RTP+FEC ジョブのリクエストボディの例:</p>
+
+<pre class="line-numbers">
+<code class="language-json" translate="No">{
+    "live_stream":true,
+    "region":"us-west-2",
+    "reconnect_time":300,
+    "outputs":[
+      {
+        "label": "hls720p",
+        "live_stream": true,
+        "height": 720,
+        "video_bitrate": 800,
+        "segment_seconds": 6,
+        "keyframe_interval": 90
+      }
+    ],
+    "protocol": "rtp-fec",
+    "cidr_whitelist": ["127.0.0.1/32"]
+}</code></pre>
+      </section>
+
+      <p>NS <a href="/live-api/getting-started/quick-start-create-live-stream-using-brightcove-live-api.html"><span translate="No">ライブAPI</span>クイックスタート</a>ライブストリームジョブの作成と、それを再生するためのBrightcoveプレーヤーの設定について説明します。</p>
+
+      <h3 id="List_Live_Jobs">ライブジョブの一覧表示</h3>
+
+      <pre>
+      <code translate="No"><span class="bcls-highlight">GET</span> https://api.bcovlive.io/v1/jobs
+        </code></pre>
+
+      <p>このエンドポイントは、<code translate="No">GET </code>リクエストを介してライブストリームを一覧表示するために使用されます。エンドポイントは、ページネーション、ソート、検索フィルタリングをサポートしています。リクエスト本文に含めることができるフィールドの詳細は<a href="/live-api/references/reference.html#/Live_Jobs/ListLiveJobs"> API リファレンスに記載されています</a>。追加情報の一部は、<a href="/live-api/guides/getting-list-live-or-vod-jobs.html">ライブジョブまたは VOD ジョブのリストの取得を参照してください</a>。</p>
+
+      <h3 id="Get_Live_Job_Details">ライブジョブの詳細を取得</h3>
+
+      <pre>
+      <code translate="No"><span class="bcls-highlight">GET</span> https://api.bcovlive.io/v1/jobs/<span class="bcls-input" translate="No">:jobId</span>
+        </code></pre>
+
+      <p>このエンドポイントを使用すると、ライブストリームに関する詳細情報を取得できます。ライブストリームは、ジョブを最初に作成したときにも返されます。レスポンスフィールドの詳細については、<a href="/live-api/references/reference.html#/Live_Jobs/GetLiveJobDetails"> API リファレンスを参照してください</a>。</p>
+
+      <h3 id="Manual_Ad_Cue_Point_Insertion">広告キューポイントの手動挿入</h3>
+
+      <pre>
+      <code translate="No"><span class="bcls-highlight">POST</span> https://api.bcovlive.io/v1/jobs/<span class="bcls-input" translate="No">:jobId</span>/cuepoint
+        </code></pre>
+
+      <p>通常、エンコーダーは広告ブレイク用のキューポイントを送信しますが、このエンドポイントにリクエストを送信することで、すぐに広告ブレイクを作成することもできます。詳細については、<a href="/live-api/references/reference.html#/Live_Jobs/ManualAdCuePointInsertion"> API リファレンスを参照してください</a>。</p>
+
+      <p><code translate="No">timecode</code>キューポイントには<code translate="No">DD:HH:MM:SS</code>、フォームの「」が必要です。</p>
+
+      <h3 id="Stop_a_Live_Job">ライブジョブの停止</h3>
+
+      <pre>
+      <code translate="No"><span class="bcls-highlight">PUT</span> https://api.bcovlive.io/v1/jobs/<span class="bcls-input" translate="No">:jobId</span>/cancel
+        </code></pre>
+
+      <p>このエンドポイントを使用して、ライブストリームを直ちに停止します。一度キャンセルすると、ライブストリームを再開できなくなります。詳細については、<a href="/live-api/references/reference.html#/Live_Jobs/CancelLiveJob"> API リファレンスを参照してください</a>。</p>
+    </section>
+
+    <section class="bcls-section">
+      <h2 id="Creating_clips">クリップを作成する</h2>
+
+      <p>ライブストリームからビデオオンデマンドクリップを作成し、Video Cloud アカウントに保存したり、S3 バケットまたは FTP アドレスに送信したりできます。ライブストリームの作成時にクリップを定義することも、後述するエンドポイントを使用して後で作成することもできます。また、『<a href="/live-api/guides/live-api-creating-vod-clips.html">クリップを作成する</a>』マニュアルも参照してください。</p>
+
+      <h3 id="Create_VOD_Clip">VOD クリップの作成</h3>
+
+      <pre>
+      <code translate="No"><span class="bcls-highlight">POST</span> https://api.bcovlive.io/v1/vods
+        </code></pre>
+
+      <p>クリップの開始点と終了点は、ストリームの開始点または UNIX タイムスタンプからのオフセットで定義できます。リクエスト本文フィールドの詳細は、<a href="/live-api/references/reference.html#/Clips/CreateVodClip"> API リファレンスに記載されています</a>。</p>
+
+      <aside class="bcls-aside bcls-aside--information">ライブストリームからのクリップは、<strong>最大7日</strong>イベント終了後。</aside>
+
+      <h3>VOD（クリップ）ジョブのリストを取得する</h3>
+
+      <p>クリップの VOD ジョブのリストを取得するには、「<a href="/live-api/guides/getting-list-live-or-vod-jobs.html">ライブジョブまたは VOD ジョブのリストの取得</a>」および「<a href="/live-api/references/reference.html#/Clips/ListVodClips"> API リファレンス</a>」を参照してください。</p>
+    </section>
+
+    <section class="bcls-section">
+      <h2 id="Managing_SSAI">管理します<span translate="No">SSAI</span></h2>
+
+      <p>サーバー側の広告挿入を使用する（<span translate="No"> SSAI</span>）、ライブストリームに好きなだけ広告休憩を挿入できます。また、スレートアセット（VOD クリップ）を取り込んで未使用の広告時間に、右バックメッセージや好きなものを埋め込むこともできます。</p>
+      <aside class="bcls-aside bcls-aside--information">現在、<strong> SRT + SSAI</strong> BrightcoveLiveでは構成はサポートされていません。ただし、SSAIをSRTストリームに挿入することは可能です。<strong> SCTE-35</strong>エンコーダーから送信されたマーカー。追加する方法を学ぶには<strong>SCTE-35</strong>マーカーについては、エンコーダのドキュメントを確認してください。</aside>
+      <p>設定の詳細<span translate="No">SSAI</span>で見つけることができます<a href="/live-api/ssai/live-api-server-side-ad-insertion-ssai.html">Brightcoveを使用したサーバー側の広告挿入<span translate="No">ライブAPI</span></a>そしてその<a href="/live-api/references/reference.html#api-SSAI">APIリファレンス</a>。</p>
+
+      <h3 id="Get_Account_Ad_Configurations">アカウント広告設定の取得</h3>
+
+      <pre>
+      <code translate="No"><span class="bcls-highlight">GET</span> https://api.bcovlive.io/v1/ssai/applications/<span class="bcls-input" translate="No">:account_id</span>
+        </code></pre>
+
+      <p>このエンドポイントでは、アカウントに設定されているすべての広告設定を取得できます。レスポンスフィールドの詳細は、<a href="/live-api/references/reference.html#api-SSAI-Get_Account_Ad_Configurations"> API リファレンスに記載されています</a>。</p>
+
+      <h3 id="Create_Ad_Configuration">広告設定の作成</h3>
+
+      <pre>
+      <code translate="No"><span class="bcls-highlight">POST</span> https://api.bcovlive.io/v1/ssai/application
+        </code></pre>
+
+      <p>広告の取得方法を定義する広告構成を作成します<span translate="No">SSAI</span>。リクエスト本文フィールドの詳細は、<a href="/live-api/references/reference.html#/SSAI/CreateAdConfiguration"> API リファレンスに記載されています。</a></p>
+
+      <h3 id="Get_Ad_Configuration">広告設定の取得</h3>
+
+      <pre>
+      <code translate="No"><span class="bcls-highlight">GET</span> https://api.bcovlive.io/v1/ssai/application/<span class="bcls-input" translate="No">:application_id</span></code>
+      </pre>
+
+      <p>このエンドポイントを使用して、作成した広告設定の詳細を取得します。レスポンスフィールドの詳細は、<a href="/live-api/references/reference.html#/SSAI/GetuserAdConfigurations"> API リファレンスに記載されています</a>。</p>
+
+      <h3 id="Update_Ad_Configuration">広告設定の更新</h3>
+
+      <pre>
+      <code translate="No"><span class="bcls-highlight">PUT</span> https://api.bcovlive.io/v1/ssai/application/account/<span class="bcls-input" translate="No">:application_id</span></code>
+      </pre>
+
+      <p>広告設定の詳細を更新します。リクエスト本文フィールドの詳細は、<a href="/live-api/references/reference.html#/SSAI/UpdateAdConfiguration"> API リファレンスに記載されています</a>。</p>
+
+      <h3 id="Get_Slate_Media_Source_Assets">スレートメディアソースアセットを入手する</h3>
+
+      <pre>
+      <code translate="No"><span class="bcls-highlight">GET</span> https://api.bcovlive.io/v1/ssai/slates/<span class="bcls-input" translate="No">:ACCOUNT_ID</span></code>
+      </pre>
+
+      <p>アカウントに対して定義されたスレートメディアアセットを取得します。スレートメディアアセットは、広告によって埋められない広告休憩時間を埋めるために使用されます。レスポンスフィールドの詳細は、<a href="/live-api/references/reference.html#/SSAI/GetUserSlateMediaSourceAssets"> API リファレンスに記載されています</a>。</p>
+
+      <h3 id="Ingest_Slate_Media_Source_Asset">スレートメディアソースアセットを取り込み</h3>
+
+      <pre>
+      <code translate="No"><span class="bcls-highlight">POST</span> https://api.bcovlive.io/v1/ssai/slates
+        </code></pre>
+
+      <p>スラートのメディアアセットを追加して、広告休憩時間を埋めます。リクエスト本文フィールドの詳細は、<a href="/live-api/references/reference.html#/SSAI/IngestSlateMediaSourceAsset"> API リファレンスに記載されています</a>。</p>
+
+      <h3 id="Delete_Slate_Media_Source_Asset">スレートメディアソースアセットを削除</h3>
+
+      <pre>
+      <code translate="No"><span class="bcls-highlight">DELETE</span> https://api.bcovlive.io/v1/ssai/slates/<span class="bcls-input" translate="No">:SLATE_MSA_ID</span>
+        </code></pre>
+
+      <p>スレートメディアアセットを削除します。</p>
+    </section>
+
+    <section class="bcls-section">
+      <h2 id="Static_entry_points">静的エントリポイント</h2>
+
+      <p>静的エントリポイント (SEP) 機能を使用すると、エントリポイント URL と再生 URL を静的に保ち、再利用可能な状態で、長時間実行されるライブジョブをアクティブ化および非アクティブ化できます。この機能により、お客様は施設または現場でエンコーダを設定し、ライブチャネルまたはプログラム用に独自のスケジューリングロジックを作成できます。詳細については、<a href="/live-api/guides/live-api-static-entry-points.html">静的エントリポイントを参照してください</a>。</p>
+    </section>
+
+    <section class="bcls-section">
+      <h2 id="captions">キャプション</h2>
+
+      <p>キャプションが h264 入力信号 (user_data パケットで正しくシグナル) 内にある場合、これらのキャプションは h264 出力に渡されます。</p>
+
+      <p>ブロードキャストElemental ライブエンコーダーを使用している場合は、SDI (EIA-608/CEA-608) またはその他のソース (SCTE-20、SCC、文字放送、DVB-Sub、付属、ARB、TTML、SCTE-27、STL、SRT、SMI) からキャプションを取得して、送信する h264 ストリームに入れることができます。他の放送グレードのエンコーダでも同じことができるかもしれませんが、正式にテストされていません。</p>
+
+      <aside class="bcls-aside bcls-aside--information">現在の制限として、表示するキャプションがない場合でも、SafariはライブストリームのCCコントロールを表示します。</aside>
+
+    </section>
+
+    <section class="bcls-section">
+      <h2 id="Insert_ID3_timed_metadata">ID3 時限メタデータの挿入</h2>
+
+      <p>この情報は、<a href="/live-api/guides/live-api-insert-id3-timed-metadata.html"> [ID3 時限メタデータを挿入] </a>に移動されました。</p>
+    </section>
+
+    <section class="bcls-section">
+      <h2 id="Limitations">制約事項</h2>
+
+      <ul>
+        <li>
+          API <a href="https://live.support.brightcove.com/live-module/creating-and-managing-live-events-using-live-module.html">を使用して作成されたライブジョブを表示してライブモジュールで使用できないようにするには</a>、<code translate="No">videocloud</code>ジョブの作成時にリクエストボディにオブジェクトを含める必要があります。
+          <p>例は次のとおりです。</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "live_stream": true,
+  "region": "eu-central-1",
+  "reconnect_time": 1800,
+  "live_sliding_window_duration_ms": 0,
+  "outputs": [
+    { "label": "hls720p", "live_stream": true, "width": 1280, "height": 720, "video_codec": "h264", "h264_profile": "high", "video_bitrate": 2100, "segment_seconds": 4, "keyframe_interval": 60 }
+    ,
+    { "label": "hls540p", "live_stream": true, "width": 960, "height": 540, "video_codec": "h264", "h264_profile": "main", "video_bitrate": 1500, "segment_seconds": 4, "keyframe_interval": 60 }
+    ,
+    { "label": "hls360p", "live_stream": true, "width": 640, "height": 360, "video_codec": "h264", "h264_profile": "main", "video_bitrate": 800, "segment_seconds": 4, "keyframe_interval": 60 }
+  ],
+  "<span class="bcls-highlight">videocloud</span>": {
+    "video":
+      { "name": "live event UI", "description": "live event UI", "long_description": "", "tags": [], "reference_id": "", "state": "ACTIVE" }
+    }
+  }</code></pre>
+        </li>
+        <li>エンコーダからの最初の接続は、ライブプレイリストを使用して作成される帯域幅情報を提供します。最初の接続が低い場合、ジョブ構成に高い出力があった場合でも、次の処理が行われるまで、プレイリストは同じ情報を再生リスト上で維持します。
+          <ul>
+            <li>エンコーダが再起動される</li>
+            <li>CDNキャッシュもクリアする必要があるかもしれません</li>
+          </ul>
+        </li>
+        <li>現在、入力ストリームのフレームレートは 30 FPS に制限されています。より高いフレームレートの使用に興味がある場合は、サポートにお問い合わせください。</li>
+        <li>デフォルトでは、入力ストリームの分解能は1080pに制限されています。</li>
+        <li>切断および再接続時には、同じストリーム設定にしておく必要があります。音声チャンネル数、解像度またはコーデック設定などを変更すると、予測できない動作の原因となります。</li>
+        <li>Video CloudビデオのリモートソースにDASHとMP4を追加できますが、Liveは現在サポートしています<strong translate="No">HLS</strong>それだけ。</li>
+        <li>入力ストリームでは AAC オーディオのみがサポートされます。</li>
+        <li><strong>アクティブな待機中の未開始ジョブは、</strong>いつでも 5 つまで許可されます。
+          <p>同時ジョブの追加制限:</p>
+
+          <ul>
+            <li><code translate="No">channel</code>（24x7）ジョブの数は、リージョンごとに0または低い数に制限されます（アカウントの種類によって異なります）。</li>
+            <li>同時に<strong>「実行中」</strong><code translate="No">event</code>ジョブの数は、地域によって制限されており、通常は100に制限されています。</li>
+            <li><strong></strong><code translate="No">event</code>同時に接続するジョブの数は5に制限されています 。</li>
+            <li>リージョンごとの SEP ジョブ数は 3 または 10 に制限されています（「<a href="#Support_aws_regions">サポートされている AWS リージョン</a>」を参照）。</li>
+          </ul>
+
+          <p>これらの制限は、サポートがアカウントレベルで調整できます。追加の容量が必要な場合は、アカウントマネージャーにお問い合わせください。</p>
+        </li>
+        <li><code translate="No">stream_url</code>ライブジョブ用にとして返される「RTMP」アドレスは Akamai HD ライブストリームであり、レガシー FMS RTMP ストリームではありません。Internet Explorer の古いバージョンではサポートされていません。</li>
+        <li>ライブストリームは HTTPS 経由で配信されます。Brightcoveアカウントで HTTPS が有効になっていない場合、Brightcoveプレーヤーはライブストリームの読み込みに失敗します。アカウントでオリジンサービスの HTTPS サポートが有効になっていない場合は、<a href="https://supportportal.brightcove.com/s/login/?language=en_US">Brightcoveサポートに連絡して</a>、オリジンサービスの HTTPS サポートを有効にして、再生の問題を回避してください。</li>
+        <li>マルチビットレート HLS 出力内で変換されたレンディションを使用する場合、<code translate="No">segment_size</code>変換時にを含めることができますが、<code translate="No">GOP</code>入力ストリームのサイズの倍数になるように設定する必要があります。したがって、入力が 30 fps で 60 フレームごとにキーフレームが設定されている場合、<code translate="No">GOP</code>サイズは 2 秒で、セグメントサイズは 2 の倍数にする必要があります。これを行わないと、ストリームセグメントのサイズは変化します。
+          <p>また、<code translate="No">keyframe_interval</code><strong>はどの出力にも指定しないでください</strong>。</p>
+        </li>
+        <li>独自の FTP または S3 オリジンロケーションを使用する場合は、オリジンロケーションにフォールバックするように CDN を設定する必要があります。Brightcove Live システムは、ジョブリクエストで指定された CDN のオリジンロケーションを検証しません。</li>
+      </ul>
+    </section>
+</article>

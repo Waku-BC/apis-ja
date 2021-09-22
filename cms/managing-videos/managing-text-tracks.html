@@ -1,0 +1,201 @@
+---
+title: CMS APIを使用したテキストトラックの管理
+description:  'このトピックでは、CMS APIを使用してビデオのWebVTTテキストトラックを更新する方法を学習します。'
+parent: Managing Videos/Assets 
+grandparent: CMS API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+    <section class="bcls-section">
+    <h2 id="Introduction">入門</h2>
+    
+    <p>テキストトラックが取り込まれるか（静的または動的）、リモートであるかに関係なく、<code translate="no">パッチ</code>テキストトラックに関連付けられたメタデータを更新するように要求します。</p>
+    <h3>注</h3>
+    <ul>
+      <li>このドキュメントで説明されている方法は、ビデオに追加されたWebVTTファイルを更新するためのものです。を使用してWebVTTファイルをVideoCloudに取り込むことができます<a href="/dynamic-ingest/ingest-guides/ingesting-webvtt-files-text-trackscaptions.html">Dynamic Ingest API</a>また<a href="/cms/managing-videos/using-cms-api-add-webvtt-captions-text-tracks.html">リモートWebVTTファイルを追加する</a> CMS APIを使用して動画に追加します。</li>
+    </ul>
+    
+    </section>
+    
+    <section class="section">
+    <h2 id="authorization">認証</h2>
+    
+		<p>CMS APIへのリクエストには、アクセストークンを含む認証ヘッダーが必要です。クライアントクレデンシャルを取得してアクセストークンを取得する方法の詳細については、「<a href="/oauth/getting-started/overview-oauth-api-v4.html"> Brightcove OAuth の概要</a>」を参照してください。</p>
+    
+    <p>ビデオメタデータを更新するために必要な操作は次のとおりです。<code translate="No">video-cloud/video/update</code>または<code translate="No">video-cloud/video/all</code>。</p>
+    </section>
+    
+    <section class="section">
+    <h2 id="syntax">構文</h2>
+
+		<aside class="bcls-aside bcls-aside--warning">NS <strong>アレイ全体にパッチを適用する必要があります</strong>、変化しているトラックやフィールドだけではありません。</aside>
+
+		<p>完全な配列を取得するには、最初に次のリクエストを行うことをお勧めします。</p>
+<pre><code class="language-http" translate="No">GET
+https://cms.api.brightcove.com/v1/accounts/{account_id}/videos/{video_ID}
+</code></pre>
+    <h3>テキストトラックの更新</h3>
+		<p>テキストトラックを更新する場合、<a href="/cms/references/cms-api-video-fields-reference-stage.html#text_tracks">テキストトラックフィールド</a>タイプに応じて異なる方法で扱うことができます。</p>
+
+		<table class="bcls-table">
+			<caption class="bcls-caption--table">テキストトラックフィールド</caption>
+			<thead class="bcls-table__head">
+					<tr>
+							<th>フィールド</th>
+							<th>タイプ</th>
+							<th>リモートテキストトラック</th>
+							<th>静的に取り込まれたテキストトラック</th>
+							<th>動的に取り込まれたテキストトラック</th>
+					</tr>
+			</thead>
+			<tbody class="bcls-table__body">
+					<tr>
+							<td>id<code translate="no"></code></td>
+							<td>文字列</td>
+							<td colspan="3">読み取り専用の値。更新が必要なTTを特定するために必要です。</td>
+					</tr>
+					<tr>
+							<td><code translate="no">account_id </code></td>
+							<td>文字列</td>
+							<td colspan="3">このフィールドの更新は無視されます。</td>
+					</tr>
+					<tr>
+							<td>src<code translate="no"></code></td>
+							<td>文字列</td>
+							<td>必須で、255文字に制限されています。</td>
+							<td colspan="2">このフィールドの更新は無視されます。</td>
+					</tr>
+					<tr>
+							<td>srclang<code translate="no"></code></td>
+							<td>文字列</td>
+							<td colspan="3">32文字に制限されています。</td>
+					</tr>
+					<tr>
+							<td><code translate="no">ラベル</code></td>
+							<td>文字列</td>
+							<td colspan="3">255文字に制限されています。</td>
+					</tr>
+					<tr>
+							<td><code translate="no">親切</code></td>
+							<td>列挙型</td>
+							<td colspan="3">有効な値は次のとおりです<code translate="no">字幕</code>、<code translate="no">キャプション</code>、<code translate="no">説明</code>、<code translate="no">章</code>、<code translate="no">メタデータ</code>。大文字と小文字を区別。</td>
+					</tr>
+					<tr>
+							<td>mime_type<code translate="no"></code></td>
+							<td>文字列</td>
+							<td colspan="2">32文字に制限されています。</td>
+							<td>このフィールドの更新は無視されます。</td>
+					</tr>
+					<tr>
+							<td><code translate="no">Asset_id</code></td>
+							<td>文字列</td>
+							<td colspan="2">読み取り専用の値。</td>
+							<td>このタイプには適用されないフィールド。このフィールドの更新は無視されます。</td>
+					</tr>
+					<tr>
+							<td>in_band_metadata_track_dispatch_type<code translate="no"></code></td>
+							<td>文字列</td>
+							<td colspan="2">このタイプには適用されないフィールド。 </td>
+							<td>このフィールドの更新は無視されます。</td>
+					</tr>
+					<tr>
+							<td><code translate="no">ソース</code></td>
+							<td>配列</td>
+							<td colspan="3">読み取り専用の値。</td>
+					</tr>
+					<tr>
+							<td><code translate="no">ディフォルト</code></td>
+							<td>ブール値</td>
+							<td colspan="2"><code translate="no">NS</code>また<code translate="no">NS</code>。複数追加することはできません<code translate="no">default = true</code>異なるテキストトラックに<code translate="no">srclang</code>。</td>
+							<td>このフィールドの更新は無視されます。</td>
+					</tr>
+			</tbody>
+	</table>
+    <h3>要求</h3>
+    <p>リモート、静的、動的テキストトラックに適用できます。</p>
+    <pre class="line-numbers">
+<code class="language-http" translate="No">PATCH
+https://cms.api.brightcove.com/v1/accounts/{account_id}/videos/{video_ID}</code></pre>
+    
+    <h3>リクエスト本文の例</h3>
+    <details>
+			<summary>リモートテキストトラック</summary>
+			<p>リクエストの本文は、テキストトラックの配列を含むJSONオブジェクトになります。</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+	"text_tracks" : 
+	[ 
+		{ 
+			"id" : "1234-1234-1234"
+			"src" :     "http://learning-services-media.brightcove.com/captions/bc_smart_ja.   vtt",
+			"srclang" : "ja", 
+			"label" : "日本人", 
+			"kind" : "captions", 
+			"mime_type" : null, 
+			"default" : true 
+		}, 
+		{ 
+			"id" : "5678-5678-5678"
+			"src" : "http://learning-services-media.brightcove.com/captions/bc_smart_es.   vtt",  
+			"srclang" : "es", 
+			"label" : "español", 
+			"kind" : "descriptions",
+			"mime_type" : null,
+			"default" : false 
+		} 
+	] 
+}</code></pre>
+		</details>
+    <details>
+			<summary>静的テキストトラック</summary>
+			<p>リクエストの本文は、テキストトラックの配列を含むJSONオブジェクトになります。</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+	"text_tracks" : 
+	[ 
+		{ 
+			"id" : "1234-1234-1234"
+			"srclang" : "ja", 
+			"label" : "日本人", 
+			"kind" : "captions", 
+			"mime_type" : null, 
+			"default" : true 
+		}, 
+		{ 
+			"id" : "5678-5678-5678"  
+			"srclang" : "es", 
+			"label" : "español", 
+			"kind" : "descriptions",
+			"mime_type" : null,
+			"default" : false 
+		} 
+	] 
+}</code></pre>
+		</details>
+    <details>
+			<summary>動的テキストトラック</summary>
+			<p>リクエストの本文は、テキストトラックの配列を含むJSONオブジェクトになります。</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+	"text_tracks" : 
+	[ 
+		{ 
+			"id" : "1234-1234-1234"
+			"srclang" : "ja", 
+			"label" : "日本人", 
+			"kind" : "captions", 
+			"mime_type" : null, 
+			"default" : true 
+		}, 
+		{ 
+			"id" : "5678-5678-5678"  
+			"srclang" : "es", 
+			"label" : "español", 
+			"kind" : "descriptions",
+			"mime_type" : null,
+			"default" : false 
+		} 
+	] 
+}</code></pre>
+		</details>
+  </section>
+</article>
+  

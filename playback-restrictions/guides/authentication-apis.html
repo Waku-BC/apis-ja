@@ -1,0 +1,542 @@
+---
+title:  '認証APIの使用' 
+description: 「このトピックでは、Brightcove再生制限を使用するときにキー/ライセンス保護を管理するために使用されるAPIについて学習します。」
+parent: Guides 
+grandparent: Playback Restrictions
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+
+  <!-- <br />
+  <aside class="bcls-aside  bcls-aside--tip">
+    This feature is available for a specific set of customers with access to the
+    Limited Availability phase of the Playback Restrictions.
+  </aside> -->
+
+  <section class="bcls-section">
+    <h2 id="Introduction">入門</h2>
+
+    <p>
+      Brightcove再生制限は、DRM保護またはHTTPライブストリーミング暗号化（HLSe）コンテンツで動的配信を使用する場合に追加レベルのセキュリティを提供します。
+    </p>
+    <p>この機能に慣れていない場合は、「<a href="/playback-restrictions/getting-started/overview-playback-restrictions.html">概要」を参照してください。Brightcoveの再生制限</a>資料。</p>
+
+    <p>
+      キー/ライセンス保護の管理に使用できるAPIは次のとおりです。
+    </p>
+    <ul>
+      <li>
+        <a href="#Register_public_key">公開鍵を登録する</a>
+      </li>
+      <li>
+        <a href="#Blacklist_tokens">ブラックリストトークン</a>
+      </li>
+      <li>
+        <a href="#Audit_an_account">アカウントを監査する</a>
+      </li>
+    </ul>
+    <aside class="bcls-aside  bcls-aside--information">これらのAPIは、再生制限を使用してDRMを管理する場合にのみサポートされます。</aside>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Register_public_key">公開鍵を登録する</h2>
+    <p>あなたは秘密鍵を所有しており、それを使用して署名付きトークンを生成します。公開鍵をBrightcoveと共有して、トークンを確認します。キーAPIを使用すると、公開キーをBrightcoveに登録できます。</p>
+    <h3>キーAPI</h3>
+    <p>
+      Key API は、Brightcoveで公開キーを管理するために使用されます。
+    </p>
+
+    <h3>ベース URL</h3>
+    <p>
+      API のベース URL は次のとおりです。
+    </p>
+    <pre><code class="language-http" translate="No">https://playback-auth.api.brightcove.com</code></pre>
+
+    <h3>アカウントパス</h3>
+    <p>
+      いずれの場合も、特定の Video Cloud アカウントに対してリクエストが行われます。したがって、あなたは常にベースURLにアカウントIDが続く用語アカウントを追加します。
+    </p>
+    <pre><code class="language-http" translate="No">https://playback-auth.api.brightcove.com/v1/accounts/{accountID}</code></pre>
+
+    <h3>認証</h3>
+    <p>
+      リクエストのアクセストークンが必要であり、Authorizationヘッダに存在する必要があります።
+    </p>
+    <pre><code class="language-http" translate="No">Authorization: Bearer {access_token}</code></pre>
+    <p>
+      アクセストークンは、一時的な OAuth2 アクセストークンで、Brightcove OAuth サービスから取得する必要があります。クライアントクレデンシャルを取得してアクセストークンを取得する方法の詳細については、「<a href="/oauth/getting-started/overview-oauth-api-v4.html"> Brightcove OAuth の概要</a>」を参照してください。
+    </p>
+
+    <h3>権限</h3>
+    <p>
+      Key API へのリクエストは、<a href="/oauth/getting-started/overview-oauth-api-v4.html#Get_Client_Credentials">次のアクセス許可を持つクライアント認証情報から行う必要があります</a>。
+    </p>
+    <ul>
+      <li>
+        <code translate="No">video-cloud/playback-auth/key/read</code>
+      </li>
+      <li>
+        <code translate="No">video-cloud/playback-auth/key/write</code>
+      </li>
+    </ul>
+
+    <h3>キーを管理する</h3>
+    <p>
+      キー API は、次のリクエストをサポートします。
+    </p>
+    <aside class="bcls-aside bcls-aside--information">
+      <p>
+        注意:
+      </p>
+      <ul>
+        <li>
+          既存のキーを編集することはできませんが、新しいキーを削除して作成することはできます。
+        </li>
+        <li>
+          一度に最大 3 つのキーを登録でき、キーローテーションをサポートするためにキーを削除できます。実際には、キーを 1 つだけ持つことが最善です。
+        </li>
+      </ul>
+    </aside>
+
+    <h3>新しいキーを登録します。</h3>
+    <p>
+      API リクエスト本文に公開鍵の値を入力します。キーは<strong> public_key.txt </strong>ファイルにあります。
+    </p>
+    <h4>APIリクエスト</h4>
+    <pre class="line-numbers"><code class="language-http" translate="No">POST /v1/accounts/{accountID}/keys
+    Content-Type: application/json
+    Body: {"value": "MFkwEwYHKoZIzj0CAQYIKoZIzj...MyeQviqploA=="}
+</code></pre>
+<details>
+  <summary>
+    <p id="Using_Curl">カールの使用</p>
+  </summary>
+    <pre class="line-numbers"><code class="language-curl">curl -X POST \\ -H "Content-Type：application / json" \\ -H "認証：ベアラー{access_token} " \\ -NS ' {"value": "{your_public_key_value} "}'  \\ https://playback-auth.api.brightcove.com/v1/accounts/ {accountID} / keys</code></pre>
+  </details>
+
+    <h4>API レスポンス</h4>
+  <pre class="line-numbers"><code class="language-json" translate="No">{
+    &quot;id&quot;: &quot;{your_public_key_id}&quot;,
+    &quot;type&quot;: &quot;public&quot;,
+    &quot;algorithm&quot;: &quot;rsa&quot;,
+    &quot;value&quot;: &quot;{your_public_key_value}&quot;,
+    &quot;createdAt&quot;: &quot;2020-01-03T20:30:36.488Z&quot;
+  }</code></pre>
+  
+    <h3>キーをリストする:</h3>
+    <p>
+      アカウント内の公開鍵のリストを取得します。
+    </p>
+    <pre><code class="language-http" translate="No">GET /v1/accounts/{accountID}/keys</code></pre>
+
+    <h3>キーを 1 つ取得する:</h3>
+    <p>
+      アカウントの公開鍵の詳細を取得します。
+    </p>
+    <pre><code class="language-http" translate="No">GET /v1/accounts/{accountID}/keys/{key_Id}</code></pre>
+
+    <h3>キーを 1 つ削除する:</h3>
+    <p>
+      アカウントの公開鍵を削除します。
+    </p>
+    <pre><code class="language-http" translate="No">DELETE /v1/accounts/{accountID}/keys/{key_Id}</code></pre>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Blacklist_tokens">ブラックリストトークン</h2>
+
+    <p>
+      ブラックリストに登録されたトークンは、他の方法で承認されたとしても、ライセンス要求に対して有効であるとは見なされません。顧客は最大100個のトークンをブラックリストに登録できます。100個のトークンがすでにブラックリストに登録されている場合、顧客は1つ以上のトークンを削除して、追加のエントリ用のスペースを確保する必要があります。
+    </p>
+
+    <h3>ブラックリストAPI</h3>
+    <p>
+      ブラックリストAPIは、ブラックリストに登録され、ライセンス要求には無効と見なされるトークンを管理するために使用されます。
+    </p>
+
+    <h3>ベース URL</h3>
+    <p>
+      ブラックリストAPIのベースURLは次のとおりです。
+    </p>
+    <pre><code class="language-http" translate="No">https://playback-auth.api.brightcove.com</code></pre>
+
+    <h3>アカウントパス</h3>
+    <p>
+      いずれの場合も、特定の Video Cloud アカウントに対してリクエストが行われます。したがって、あなたは常にベースURLにアカウントIDが続く用語アカウントを追加します。
+    </p>
+    <pre><code class="language-http" translate="No">https://playback-auth.api.brightcove.com/v1/accounts/{accountID}/blacklist
+</code></pre>
+
+    <h3>認証</h3>
+    <p>
+      リクエストのアクセストークンが必要であり、Authorizationヘッダに存在する必要があります።
+    </p>
+    <pre><code class="language-http" translate="No">Authorization:  Bearer  {access_token}</code></pre>
+    <p>
+      アクセストークンは、一時的な OAuth2 アクセストークンで、Brightcove OAuth サービスから取得する必要があります。クライアントクレデンシャルを取得してアクセストークンを取得する方法の詳細については、「<a href="/oauth/getting-started/overview-oauth-api-v4.html"> Brightcove OAuth の概要</a>」を参照してください。
+    </p>
+
+    <h3>権限</h3>
+    <p>
+      ブラックリストAPIへのリクエストは、<a href="/oauth/index.html">クライアントの資格情報</a>次の権限を持つ：
+    </p>
+    <ul>
+      <li>
+        <code translate="No">video-cloud/playback-auth/blacklist</code>
+      </li>
+    </ul>
+
+    <h3>ブラックリストに登録されたトークンを管理する</h3>
+    <p>
+      ブラックリストの更新は、システム全体に反映されるまでに最大1分かかる場合があります。ブラックリストAPIは、次のリクエストをサポートしています。
+    </p>
+
+    <h4>ブラックリストにトークンを追加します。</h4>
+    <pre><code class="language-http" translate="No">PUT  (no  req  body)/v1/accounts/{accountID}/blacklist/tokens/{token}
+</code></pre>
+    <p>
+      エンコードされた JWT 文字列全体がパスに含まれます。
+    </p>
+
+    <h4>現在のブラックリストを表示する：</h4>
+    <pre><code class="language-http" translate="No">GET  /v1/accounts/{accountId}/blacklist
+</code></pre>
+    <br />
+
+    <h4>トークンがブラックリストにあるかどうかを確認します。</h4>
+    <pre><code class="language-http" translate="No">GET  /v1/accounts/{accountID}/blacklist/tokens/{token}
+</code></pre>
+    <p>
+      エンコードされた JWT 文字列全体がパスに含まれます。
+    </p>
+    <p>
+      反応：
+    </p>
+    <ul>
+      <li>
+        204-トークンはブラックリストに登録されています
+      </li>
+      <li>
+        404-トークンはブラックリストに登録されていません
+      </li>
+    </ul>
+
+    <h4>ブラックリストからトークンを削除します。</h4>
+    <pre><code class="language-http" translate="No">DELETE  /v1/accounts/{accountID}/blacklist/tokens/{token}
+</code></pre>
+    <p>
+      エンコードされた JWT 文字列全体がパスに含まれます。
+    </p>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Audit_an_account">アカウントを監査する</h2>
+
+    <p>
+      Audit APIを使用すると、アカウントの再生認証サービスの使用状況に関する毎日のアクセスレポートを生成できます。このレポートには、各セッションの承認応答とともに詳細が含まれています。
+    </p>
+
+    <h3>監査API</h3>
+    <p>
+      AuditAPIの詳細は次のとおりです。
+    </p>
+
+    <h3>ベース URL</h3>
+    <p>
+      AuditAPIのベースURLは次のとおりです。
+    </p>
+    <pre><code class="language-http" translate="No">https://playback-auth.api.brightcove.com
+</code></pre>
+
+    <h3>アカウントパス</h3>
+    <p>
+      いずれの場合も、特定のVideoCloudアカウントに対してリクエストが行われます。したがって、あなたは常にベースURLにアカウントIDが続く用語アカウントを追加します。
+    </p>
+    <pre><code class="language-http" translate="No">https://playback-auth.api.brightcove.com/v1/audit/accounts/{accountID}
+</code></pre>
+
+    <h3>認証</h3>
+    <p>
+      リクエストのアクセストークンが必要であり、Authorizationヘッダに存在する必要があります።
+    </p>
+    <pre><code class="language-http" translate="No">Authorization:  Bearer  {access_token}
+</code></pre>
+    <p>
+      アクセストークンは、一時的な OAuth2 アクセストークンで、Brightcove OAuth サービスから取得する必要があります。クライアントクレデンシャルを取得してアクセストークンを取得する方法の詳細については、「<a href="/oauth/getting-started/overview-oauth-api-v4.html"> Brightcove OAuth の概要</a>」を参照してください。
+    </p>
+
+    <h3>権限</h3>
+    <p>
+      Audit APIへのリクエストは、<a href="/oauth/index.html">クライアントの資格情報</a>次の権限を持つ：
+    </p>
+    <ul>
+      <li>
+        <code translate="No">video-cloud/playback-auth/audit</code>
+      </li>
+    </ul>
+
+    <h3>レポートを生成する</h3>
+    <p>
+      Audit APIを使用して、次の手順に従って、セッションの詳細を含む日次アクセスレポートを生成します。
+    </p>
+    <aside class="bcls-aside  bcls-aside--information">
+      <p>
+        注意:
+      </p>
+      <ul>
+        <li>
+          <p>
+            Brightcoveのすべての認証アクセスログはUTCタイムゾーンにあります。リクエストがレポートに表示されない場合は、タイムゾーンを考慮することを忘れないでください。
+          </p>
+        </li>
+        <li>
+          <p>
+            Brightcoveは、すべてのリージョンからの処理を行うために、深夜0時から6時間後にAudit APIクエリレポートを実行して、前日のすべての認証データを完了することをお勧めします。特定のアカウントおよび特定の日の監査API呼び出しは、API側でキャッシュされます。提案された深夜+6時間前にレポートを実行すると、レポートが正しくないか、不完全であることがわかる場合があります。
+          </p>
+        </li>
+      </ul>
+    </aside>
+
+    <ol class="bcls-tasklist__restart">
+      <li>
+        <p>
+          毎日の使用状況レポートをリクエストする
+        </p>
+
+        <h4>パラメーター</h4>
+        <table class="bcls-table">
+          <thead class="bcls-table__head">
+            <tr>
+              <th>フィールド</th>
+              <th>タイプ</th>
+              <th>説明</th>
+            </tr>
+          </thead>
+          <tbody class="bcls-table__body">
+            <tr>
+              <td><code translate="No">accountID</code></td>
+              <td>文字列</td>
+              <td>ビデオクラウドアカウントID</td>
+            </tr>
+            <tr>
+              <td><code translate="No">date</code></td>
+              <td>文字列</td>
+              <td>
+                検証：
+                <ul>
+                  <li>
+                    フォーマットYYYY-MM-DD
+                  </li>
+                  <li>
+                    日付を今日にすることはできません（UTC時間）
+                  </li>
+                  <li>
+                    日付は過去30日を超えることはできません
+                  </li>
+                  <li>
+                    Brightcoveは、GDPRに準拠するために、30日後に承認サービスの使用状況レポートを保持しません
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>要求</h4>
+        <table class="bcls-table">
+          <tbody class="bcls-table__body">
+            <tr>
+              <th>方法</th>
+              <td>役職</td>
+            </tr>
+            <tr>
+              <th>URL</th>
+              <td>
+                https://playback-auth.api.brightcove.com/v1/audit/accounts/ <span class="bcls-input">{accountID}</span> / query / <span class="bcls-input">{date}</span>
+              </td>
+            </tr>
+            <tr>
+              <th rowspan="2">ヘッダー</th>
+              <td>
+                認証：<span class="bcls-input">アクセストークンをベアラする</span>
+              </td>
+            </tr>
+            <tr>
+              <td>コンテンツタイプ:アプリケーション/JSON</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>応答</h4>
+        <p>応答の例 (200 OK):</p>
+
+        <pre class="line-numbers">
+<code class="language-json" translate="No">{
+	&quot;executionID&quot;:  &quot;abcdef-asfdag-dvsbcd&quot;
+}</code></pre>
+
+        <p>
+          詳細：
+        </p>
+        <table class="bcls-table">
+          <thead class="bcls-table__head">
+            <tr>
+              <th>フィールド</th>
+              <th>タイプ</th>
+              <th>説明</th>
+            </tr>
+          </thead>
+          <tbody class="bcls-table__body">
+            <tr>
+              <td><code translate="No">executionID</code></td>
+              <td>文字列</td>
+              <td>
+                指定された使用状況レポートに関連付けられた一意のID <code translate="No">accountID</code>そして<code translate="No">date</code>。このIDは、以下の他のエンドポイントに渡されます。
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+      <li>
+        <p>
+          レポートのステータスを確認してください
+        </p>
+
+        <h4>要求</h4>
+        <table class="bcls-table">
+          <tbody class="bcls-table__body">
+            <tr>
+              <th>方法</th>
+              <td>取得する</td>
+            </tr>
+            <tr>
+              <th>URL</th>
+              <td>
+                https://playback-auth.api.brightcove.com/v1/audit/accounts/ <span class="bcls-input">{accountID}</span> /実行/ <span class="bcls-input">{executionID}</span> /状態
+              </td>
+            </tr>
+            <tr>
+              <th rowspan="2">ヘッダー</th>
+              <td>
+                認証：<span class="bcls-input">アクセストークンをベアラする</span>
+              </td>
+            </tr>
+            <tr>
+              <td>コンテンツタイプ:アプリケーション/JSON</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>応答</h4>
+        <p>応答の例 (200 OK):</p>
+
+        <pre class="line-numbers">
+<code class="language-json" translate="No">{
+	&quot;status&quot;:  &quot;completed&quot;
+}
+</code></pre>
+
+        <p>
+          詳細：
+        </p>
+        <table class="bcls-table">
+          <thead class="bcls-table__head">
+            <tr>
+              <th>フィールド</th>
+              <th>タイプ</th>
+              <th>説明</th>
+            </tr>
+          </thead>
+          <tbody class="bcls-table__body">
+            <tr>
+              <td><code translate="No">status</code></td>
+              <td>文字列</td>
+              <td>値：「完了」、「処理中」、「失敗」</td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+      <li>
+        <p>
+          レポートを取得する
+        </p>
+        <h4>要求</h4>
+        <table class="bcls-table">
+          <tbody class="bcls-table__body">
+            <tr>
+              <th>方法</th>
+              <td>取得する</td>
+            </tr>
+            <tr>
+              <th>URL</th>
+              <td>
+                https://playback-auth.api.brightcove.com/v1/audit/accounts/ <span class="bcls-input">{accountID}</span> /実行/ <span class="bcls-input">{executionID}</span> /報告
+              </td>
+            </tr>
+            <tr>
+              <th rowspan="2">ヘッダー</th>
+              <td>
+                認証：<span class="bcls-input">アクセストークンをベアラする</span>
+              </td>
+            </tr>
+            <tr>
+              <td>コンテンツタイプ:アプリケーション/JSON</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>応答</h4>
+        <p>応答の例 (200 OK):</p>
+
+        <pre class="line-numbers">
+<code class="language-json" translate="No">{
+    &quot;signedURL&quot;:  &quot;http://signed-url&quot;,
+    &quot;expirationTime&quot;:  1569219842
+}
+</code></pre>
+
+        <p>
+          詳細：
+        </p>
+        <table class="bcls-table">
+          <thead class="bcls-table__head">
+            <tr>
+              <th>フィールド</th>
+              <th>タイプ</th>
+              <th>説明</th>
+            </tr>
+          </thead>
+          <tbody class="bcls-table__body">
+            <tr>
+              <td><code translate="No">SignedURL</code></td>
+              <td>文字列</td>
+              <td>
+                結果は、ダウンロード可能なS3URLとして返されます
+              </td>
+            </tr>
+            <tr>
+              <td><code translate="No">expirationTime</code></td>
+              <td>エポックタイムスタンプ</td>
+              <td>署名されたS3URLは15分間有効です</td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+    </ol>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Limitations">制約事項</h2>
+
+    <p>
+      この機能の初期リリースには、次の制限が適用されます。
+    </p>
+    <ul>
+      <li>
+        ブラックリストに登録されたトークンは100個に制限されています。その後、エラーがスローされます。
+      </li>
+    </ul>
+  </section>
+
+</article>

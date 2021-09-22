@@ -1,0 +1,207 @@
+---
+title: 再生制限エラーリファレンス
+description:  'このトピックでは、Brightcoveの再生制限に関するエラーリファレンスを提供します。'
+parent: References 
+grandparent: Player Authorization API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  <!-- <br>
+  <aside class="bcls-aside bcls-aside--tip">This feature is available for a specific set of customers with access to the Limited Availability phase of the Playback Restrictions.</aside> -->
+
+<section class="bcls-section">
+<h2 id="Error_Reference">エラーリファレンス</h2>
+<p>
+  次のステータスリストとエラーコードは、Brightcoveの再生制限を操作する際の問題のデバッグに役立ちます。
+</p>
+<table class="bcls-table">
+	<thead class="bcls-table__head">
+		<tr>
+			<th>ステータス</th>
+			<th>エラーコード</th>
+			<th>エラーサブコード</th>
+			<th>説明</th>
+		</tr>
+	</thead>
+	<tbody class="bcls-table__body">
+		<tr>
+			<td>400</td>
+			<td><code translate="No">BAD_REQUEST</code></td>
+			<td><code translate="No">DUPLICATE_PARAMETERS</code></td>
+			<td>同じパラメータ名がリクエストで複数回指定されました</td>
+		</tr>
+		<tr>
+			<td>401</td>
+			<td><code translate="No">ACCESS_DENIED</code></td>
+			<td><code translate="No">TOKEN_REQUIRED</code></td>
+			<td>NS <span translate="No"> JSONWebトークン</span>（JWT）は再生権で必要ですが、提供されませんでした</td>
+		</tr>
+    <tr>
+			<td>401</td>
+			<td><code translate="No">ACCESS_DENIED</code></td>
+			<td><code translate="No">TOKEN_VALIDATION</code></td>
+			<td>NS <span translate="No"> JSONWebトークン</span>（JWT）提供されたものは検証に合格しませんでした</td>
+		</tr>
+    <tr>
+			<td>403</td>
+			<td><code translate="No">FORBIDDEN</code></td>
+			<td><code translate="No">ACCOUNT_ID</code></td>
+			<td>ポリシーキーのアカウントIDがAPIリクエストのアカウントと一致しません</td>
+		</tr>
+    <tr>
+			<td>403</td>
+			<td><code translate="No">FORBIDDEN</code></td>
+			<td><code translate="No">CLIENT_GEO</code></td>
+			<td>ビデオは現在の地理的地域での再生が制限されています。メッセージには、特定の問題に関する追加情報が含まれます</td>
+		</tr>
+    <tr>
+			<td>403</td>
+			<td><code translate="No">FORBIDDEN</code></td>
+			<td><code translate="No">CLIENT_IP</code></td>
+			<td>ビデオは現在のIPアドレスで制限されています</td>
+		</tr>
+    <tr>
+			<td>403</td>
+			<td><code translate="No">FORBIDDEN</code></td>
+			<td><code translate="No">DOMAIN</code></td>
+			<td>ビデオは現在のドメインでの再生が制限されています</td>
+		</tr>
+    <tr>
+			<td>403</td>
+			<td><code translate="No">FORBIDDEN</code></td>
+			<td><code translate="No">OFFERS</code></td>
+			<td>NS <span translate="No"> JSONWebトークン</span>（JWT）は、ビデオで利用可能なオファーに基づく再生を許可しません</td>
+		</tr>
+    <tr>
+			<td>403</td>
+			<td><code translate="No">FORBIDDEN</code></td>
+			<td><code translate="No">TAGS</code></td>
+			<td>NS <span translate="No"> JSONWebトークン</span>（JWT）は、ビデオで使用可能なタグに基づく再生を許可していません</td>
+		</tr>
+    <tr>
+			<td>403</td>
+			<td><code translate="No">FORBIDDEN</code></td>
+			<td><code translate="No">VIDEO_NOT_PLAYABLE</code></td>
+			<td>単一の動画リクエストの場合、動画は存在しますが、現在再生することはできません</td>
+		</tr>
+    <tr>
+			<td>403</td>
+			<td><code translate="No">FORBIDDEN</code></td>
+			<td><code translate="No">Denied by stream limiting (create)</code></td>
+			<td>限られたストリームが視聴者の最大数に達しました</td>
+		</tr>
+    <tr>
+			<td>403</td>
+			<td><code translate="No">FORBIDDEN</code></td>
+			<td><code translate="No">Denied by stream limiting (renew)</code></td>
+			<td>限られたストリームはすでに最大数の視聴者によって視聴されています</td>
+		</tr>
+    <tr>
+			<td>403</td>
+			<td><code translate="No">FORBIDDEN</code></td>
+			<td><code translate="No">Denied by stream limiting</code></td>
+			<td>限られたストリームが視聴者の最大数に達しました</td>
+		</tr>
+    <tr>
+			<td>403</td>
+			<td><code translate="No">FORBIDDEN</code></td>
+			<td><code translate="No">Denied by device limiting</code></td>
+			<td>限られたストリームが、個別に登録されたデバイスの最大数に達しました</td>
+		</tr>
+    <tr>
+			<td>404</td>
+			<td><code translate="No">NOT_FOUND</code></td>
+			<td><code translate="No">VIDEO_NOT_FOUND</code></td>
+			<td>リクエストされたビデオは利用できません</td>
+		</tr>
+    <tr>
+			<td>404</td>
+			<td><code translate="No">NOT_FOUND</code></td>
+			<td><code translate="No">PLAYLIST_NOT_FOUND</code></td>
+			<td>リクエストされたプレイリストは利用できません</td>
+		</tr>
+    <tr>
+			<td>405</td>
+			<td><code translate="No">METHOD_NOT_ALLOWED</code></td>
+			<td><code translate="No">METHOD_NOT_ALLOWED</code></td>
+			<td>このAPIでは、GET、HEAD、およびOPTIONSのみが許可されています</td>
+		</tr>
+    <tr>
+			<td>500</td>
+			<td><code translate="No">SERVER_ERROR</code></td>
+			<td><code translate="No">SERVER_ERROR</code></td>
+			<td>内部サーバーエラー</td>
+		</tr>
+    <tr>
+			<td>502</td>
+			<td><code translate="No">SERVER_ERROR</code></td>
+			<td><code translate="No">ACCOUNT_RETRIEVE_FAILURE</code></td>
+			<td>バックエンドサーバーから不正な応答を受信しました</td>
+		</tr>
+    <tr>
+			<td>502</td>
+			<td><code translate="No">SERVER_ERROR</code></td>
+			<td><code translate="No">VIDEO_RETRIEVE_FAILURE</code></td>
+			<td>ビデオは利用できません</td>
+		</tr>
+    <tr>
+			<td>502</td>
+			<td><code translate="No">SERVER_ERROR</code></td>
+			<td><code translate="No">VIDEO_URLS_RETRIEVE_FAILURE</code></td>
+			<td>ストリームURLは利用できません</td>
+		</tr>
+    <tr>
+			<td>502</td>
+			<td><code translate="No">SERVER_ERROR</code></td>
+			<td><code translate="No">PLAYLIST_RETRIEVE_FAILURE</code></td>
+			<td>ビデオプレイリストは利用できません</td>
+		</tr>
+    <tr>
+			<td>502</td>
+			<td><code translate="No">SERVER_ERROR</code></td>
+			<td><code translate="No">PLAYBACK_RIGHT_RETRIEVE_FAILURE</code></td>
+			<td>CDNから直接再生を取得できません</td>
+		</tr>
+    <tr>
+			<td>502</td>
+			<td><code translate="No">SERVER_ERROR</code></td>
+			<td><code translate="No">PLAYLIST_VIDEOS_RETRIEVE_FAILURE</code></td>
+			<td>再生リストの動画は利用できません</td>
+		</tr>
+    <tr>
+			<td>502</td>
+			<td><code translate="No">SERVER_ERROR</code></td>
+			<td><code translate="No">LICENSE_RETRIEVE_FAILURE</code></td>
+			<td>このビデオのライセンスサーバーからライセンスを取得できませんでした</td>
+		</tr>
+    <tr>
+			<td>502</td>
+			<td><code translate="No">SERVER_ERROR</code></td>
+			<td><code translate="No">OFFERS_RETRIEVE_FAILURE</code></td>
+			<td>このビデオのAPIからオファーを取得できませんでした</td>
+		</tr>
+    <tr>
+			<td>502</td>
+			<td><code translate="No">SERVER_ERROR</code></td>
+			<td><code translate="No">RIGHTS_RETRIEVE_FAILURE</code></td>
+			<td>この動画の再生権を取得できませんでした</td>
+		</tr>
+    <tr>
+			<td>503</td>
+			<td><code translate="No">SERVICE_UNAVAILABLE</code></td>
+			<td><code translate="No"></code></td>
+			<td>バックエンドサーバーからこの応答を返しました</td>
+		</tr>
+    <tr>
+			<td>504</td>
+			<td><code translate="No">SERVER_TIMEOUT</code></td>
+			<td><code translate="No"></code></td>
+			<td>バックエンドサーバーまたはそれらが依存するサーバーの1つがタイムアウトしました</td>
+		</tr>
+
+	</tbody>
+</table>
+</section>
+
+</article>

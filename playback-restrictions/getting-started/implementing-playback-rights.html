@@ -1,0 +1,647 @@
+---
+title: 再生権の実装
+description: 「このトピックでは、Brightcove再生権を使用してビデオ再生を管理する方法を学習します。」
+parent: Getting Started 
+grandparent: Playback Rights
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+
+  <!-- <br/>
+  <aside class="bcls-aside bcls-aside--tip">This feature is available for a specific set of customers with access to the Limited Availability phase of Playback Restrictions.</aside> -->
+
+<section class="bcls-section">
+<h2 id="Introduction">入門</h2>
+
+<p>Brightcoveの再生権限管理サービスは、動画再生を管理するスケーラブルで表現力豊かな方法を提供します。</p>
+
+<p>この機能に慣れていない場合は、「<a href="/playback-restrictions/getting-started/overview-playback-restrictions.html">概要」を参照してください。Brightcoveの再生制限</a>資料。</p>
+
+<aside class="bcls-aside bcls-aside--information">
+  <p>注意:</p>
+  <ul>
+    <li>動画を取り込むと、デフォルトの再生権が作成され、いつでも、どこでも、誰にでもストリーミングできます。</li>
+    <li>既存の動画に再生権がない場合、動画を再エンコードしてもデフォルトの再生権は作成されません。</li>
+    <li>デフォルトの再生権には、次のフィールドがあります。<code translate="No">is_default</code>に設定<code translate="No">true</code>。取り込み後、デフォルトを再割り当てできます。</li>
+  </ul>
+</aside>
+
+</section>
+
+<section class="bcls-section">
+<h2 id="Validation_process">検証プロセス</h2>
+<p>
+  再生権は、特異性と一致の順に適用されます。許可ルールは、ルールを許可するルールよりも具体性が低いため、残りのルールを無効にします。
+</p>
+<p>
+  特定のIPを許可して、そのIPの国のルールを回避することができます。また、国の制限によって通常許可される別のIPをブロックすることもできます。したがって、両方を持つことは理にかなっています<code translate="No">block-ips</code>そして<code translate="No">allow-ips</code>同じ再生権の定義で。同じことが他のルールにも当てはまります。
+</p>
+<p>
+  ほとんどの権利について、許可ルールとブロックルールを設定できます。両方を持つことが意味をなさないかもしれない国は唯一の国です。
+</p>
+
+<p>次のフロー図は、検証プロセスがどのように機能するかを示しています。</p>
+<ol class="bcls-tasklist-restart">
+  <li>地理的チェック</li>
+  <li>スケジュールチェック</li>
+  <li>プロキシチェック</li>
+  <li>ドメインチェック</li> 
+</ol>
+<figure class="bcls-figure">
+  <img class="bcls-image--no-border" src="/assets/images/playback-restrictions/implementation/Playback-Rights-Overview.svg" alt="Playback Rights validation">
+  <figcaption class="bcls-caption--image">再生権限の検証</figcaption>
+</figure>
+
+<h3>地理的チェック</h3>
+<p>
+  地理的制限のフローは、の値に基づいて、次の図のいずれかになります。<code translate="No">geo_global_rule</code>分野：
+</p>
+<ul>
+  <li><code translate="No">geo_global_rule</code>に設定されています<code translate="No">allow_all</code></li>
+  <li><code translate="No">geo_global_rule</code>に設定されています<code translate="No">block_all</code></li>
+  <li><code translate="No">geo_global_rule</code>に設定されています<code translate="No">null</code></li>
+</ul>
+<figure class="bcls-figure">
+  <img class="bcls-image--no-border" src="/assets/images/playback-restrictions/implementation/Geo-Global-Playback-Rights.svg" alt="Geographic restrictions">
+  <figcaption class="bcls-caption--image">地理的制限</figcaption>
+</figure>
+<p>地理的チェックに合格した場合は、次の図の追加のチェックに進みます。</p>
+
+<h3>追加の検証チェック</h3>
+<p>地理的チェックに合格すると、次のチェックが順番に処理されます。</p>
+<ol>
+  <li>スケジュールチェック</li>
+  <li>プロキシチェック</li>
+  <li>ドメインチェック</li>
+</ol>
+<figure class="bcls-figure">
+  <img class="bcls-image--no-border" src="/assets/images/playback-restrictions/implementation/Additional-Playback-Rights.svg" alt="Additional validation checks">
+  <figcaption class="bcls-caption--image">追加の検証チェック</figcaption>
+</figure>
+</section>
+
+<section class="bcls-section">
+<h2 id="Workflow">ワークフロー</h2>
+
+<p>再生制限を管理するには、次の手順に従います。</p>
+<ol class="bcls-tasklist-restart">
+  <li>
+    <a href="#Set_up_your_account">アカウントを設定する</a>
+  </li>
+  <li>
+    <a href="#Define_restrictions">制限を定義する</a>
+  </li>
+  <li>
+    <a href="#Associate_restrictions_with_a_video">制限を動画に関連付ける</a>
+  </li>
+  <!-- <li>
+    <p>
+      Optional: <a href="#Define_user_level_restrictions">Define user-level restrictions</a>
+    </p>
+  </li> -->
+  <li>
+    <a href="#Configure_your_player">プレーヤーを構成する</a>
+  </li>
+</ol>
+</section>
+
+<section class="bcls-section">
+<h2 id="Set_up_your_account">アカウントを設定する</h2>
+
+<p>この機能は、Playback Rights Management サービスの制限付き可用性フェーズにアクセスできる特定のお客様を対象としています。詳細はアカウントマネージャーにお問い合わせください。</p>
+<h3>OAuth認証情報を生成する</h3>
+<p>
+  あなたの<code translate="No">BC_TOKEN</code>と口座番号。
+</p>
+<ol class="bcls-tasklist-restart">
+  <li>
+    ビデオクラウドスタジオにログインします。の中に<strong>管理者</strong>ドロップダウン、選択<strong>口座情報</strong>。あなたのコピー<strong>アカウントID</strong>。
+  </li>
+  <li>
+    <p>
+      Studioの任意のページを開いた状態で、ブラウザの開発ツールを開き、コンソールに移動して、次のコードに貼り付けます。
+    </p>
+    <pre class="line-numbers"><code class="language-javascript" translate="No">var cookiesArray = document.cookie.split(";;";), cookiesObj = {}, i, tmpArray = [];
+for (i = 0; i &lt; cookiesArray.length; i++) {
+    tmpArray = cookiesArray[i].split(";=";);
+    if (tmpArray[0].indexOf('BC_TOKEN') &gt; -1) {
+        cookiesObj.BC_TOKEN = tmpArray[1];
+    }
+}
+window.prompt(";BC_TOKEN:", cookiesObj.BC_TOKEN);</code></pre>
+    <p>
+      キーを押して return キーを押します
+    </p>
+  </li>
+  <li>
+    あなたを含むプロンプトが表示されるはずです<code translate="No">BC_TOKEN</code>
+  </li>
+</ol>
+
+<h3>クライアントの資格情報を要求する</h3>
+<p>
+  Playback RightsAPIのアカウント権限を追加します。
+</p>
+<ol class="bcls-tasklist">
+  <li>
+    Playplay Rights APIのクライアント資格情報を作成する最も簡単な方法は、<a href="/oauth/code-samples/oauth-api-sample-create-client-credentials.html">このオンラインアプリ</a>資格情報を作成するときに、次の権限が含まれていることを確認してください。
+    <figure class="bcls-figure">
+      <img class="bcls-image" src="/assets/images/playback-rights/getting-started/playback-rights-permissions.png" alt="Playback Rights Permissions">
+      <figcaption class="bcls-caption--image">再生権限の権限</figcaption>
+    </figure>
+  </li>
+  <li>OAuth APIを直接使用して認証情報を生成する場合は、次の手順に進みます。</li>
+  <li>
+    <p>
+  これは、必要な権限を持つOAuthクライアントリクエストの例です。見る<a href="/oauth/guides/get-your-bc-token.html">BC_TOKENを取得する</a> BC_TOKENの取得についての情報。
+</p>
+<pre class="line-numbers"><code class="language-curl">curl \\ --include \\ --header ";認証：BC_TOKEN <span class="bcls-input">あなたのBC_TOKEN</span> "; \\ --data {name = demo＆maximum_scope = [{"; identity ";：{"; type ";："; video-cloud-account "、"; account-id ";：<span class="bcls-input">あなたのアカウントID</span> }、 "; operations";：["video-cloud / playback-auth / playback-rights / read"、 "video-cloud / playback-auth / playback-rights / write"、 "video-cloud / video / read" 、 "video-cloud / video / create"、 "video-cloud / video / update"、 "video-cloud / video / delete"、 "video-cloud / playback-auth / key / read"、 "video-cloud /再生-認証/キー/書き込み "; ]}]} \\ https://oauth.brightcove.com/v4/client_credentials</code></pre>
+
+<aside class="bcls-aside bcls-aside--information">すべてのポリシーを使用して単一のクライアントを生成することは、ベストプラクティスではない場合があります。</aside>
+  </li>
+  <li>
+    API応答から、<code translate="No">client_id</code>そして<code translate="No">client_secret</code>。これらを使用して、Playback RightsAPIにリクエストを送信するときにアクセストークンを生成します。
+  </li>
+</ol>
+</section>
+
+<section class="bcls-section">
+<h2 id="Define_restrictions">制限を定義する</h2>
+
+<p>再生権利APIを使用して、ビデオ再生制限を定義します。</p>
+
+<h3 id="Playback_Rights_API">再生権API</h3>
+<p>
+  各再生権限制限オブジェクトは、1 つまたは複数のビデオで使用できます。
+</p>
+
+<h3>ベース URL</h3>
+<p>
+  API のベース URL は次のとおりです。
+</p>
+<pre><code class="language-http" translate="No">https://playback-rights.api.brightcove.com/v1</code></pre>
+
+<h3>アカウントパス</h3>
+<p>
+  いずれの場合も、特定の Video Cloud アカウントに対してリクエストが行われます。したがって、あなたは常にベースURLにアカウントIDが続く用語アカウントを追加します。
+</p>
+<pre><code class="language-http" translate="No">https://playback-rights.api.brightcove.com/v1/accounts/{accountID}</code></pre>
+
+<h3>認証</h3>
+<p>
+  リクエストのアクセストークンが必要であり、Authorizationヘッダに存在する必要があります።
+</p>
+<pre><code class="language-http" translate="No">Authorization: Bearer {access_token}</code></pre>
+<p>
+  アクセストークンは、一時的な OAuth2 アクセストークンで、Brightcove OAuth サービスから取得する必要があります。クライアントクレデンシャルを取得してアクセストークンを取得する方法の詳細については、「<a href="/oauth/getting-started/overview-oauth-api-v4.html"> Brightcove OAuth の概要</a>」を参照してください。
+</p>
+
+<h3>権限</h3>
+<p>
+  Playback Rights API へのリクエストは、<a href="/oauth/index.html">次のアクセス許可を持つクライアント認証情報から行う必要があります</a>。
+</p>
+<ul>
+  <li>
+    <code translate="No">video-cloud/playback-auth/playback-rights/read</code> 
+  </li>
+  <li>
+    <code translate="No">video-cloud/playback-auth/playback-rights/write</code>
+  </li>
+</ul>
+
+<h3>制限の管理</h3>
+<p>
+  Playback Rights APIは、次のリクエストをサポートしています。APIの詳細については、<a href="/playback-restrictions/references/playback-rights/reference.html">再生権利APIリファレンス</a>。
+</p>
+
+<h4>新しい再生権を作成する</h4>
+<pre class="line-numbers"><code class="language-http" translate="No">POST /v1/accounts/{accountID}/playback_rights
+  Content-Type: application/json
+  Body: {playback rights object}
+</code></pre>
+<p>
+  有効なフィールドのリストについては、<a href="#Request_body">リクエスト本文のセクションを参照してください</a>。
+</p>
+
+<details>
+<summary>
+  <h3 id="Curl_example2">カールの例</h3>
+</summary>
+  <p>
+    オーストラリアでのみ有効な再生権を作成します。
+  </p>
+  <pre class="line-numbers"><code class="language-curl">curl -X POST \\ https://playback-rights.api.brightcove.com/v1/accounts/ {your_account_id} / playback_rights \\ -H '認証：ベアラー{access_token}'  \\ -H 'コンテンツタイプ：application / json'  \\ -NS ' { ";geo";: { ";allowed_countries";: [ ";AU"; ] } } '</code></pre>
+</details>
+
+<h4>API レスポンス</h4>
+<p>
+  を助けて<code translate="No">playback_rights_id</code>後で使用するための値。この値はAPI応答で見つけることができます。どちらか：
+</p>
+<ul>
+  <li>
+    <p>
+      <strong>応答ヘッダー</strong>：
+    </p>
+    <p>
+      ザ・<code translate="No">playback_rights_id</code>値はで見つけることができます<code translate="No">Location</code>ヘッダー応答のフィールド。これはこれに似ているはずです：
+    </p>
+    <pre><code class="language-http" translate="No">Location: /v1/accounts/<span class="bcls-highlight">your account_id</span>/playback_rights/<span class="bcls-highlight">your playback_rights_id</span>
+    </code></pre>
+  </li>
+  <li>
+    <p>
+      <strong>レスポンスボディ</strong>
+    </p>
+    <p>
+      ザ・<code translate="No">playback_rights_id</code>値は、応答本文に次のように表示されます。<code translate="No">id</code>フィールド。これはこれに似ているはずです：
+    </p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  ";id";: ";<span class="bcls-highlight">your playback_rights_id</span>",
+  ";geo";: {
+  ";allowed_countries";: [
+    ";MX",
+    ";US";]
+}</code></pre>
+  </li>
+</ul>
+
+<h4>アカウントのすべての再生権を取得する</h4>
+<pre><code class="language-http" translate="No">GET /v1/accounts/{accountID}/playback_rights</code></pre>
+<br />
+
+<h4>アカウントの特定の再生権を取得する</h4>
+<pre><code class="language-http" translate="No">GET /v1/accounts/{accountID}/playback_rights/{playbackRightsID}</code></pre>
+<br />
+
+<h4>特定の再生権を更新します。</h4>
+<pre class="line-numbers"><code class="language-http" translate="No">PUT /v1/accounts/{accountID}/playback_rights/{playbackRightsID}
+  Content-Type: application/json
+  Body: {playback rights object}</code></pre>
+  <p>
+    有効なフィールドのリストについては、<a href="#Request_body">リクエスト本文のセクションを参照してください</a>。
+  </p>
+
+<h4>特定の再生権を削除します。</h4>
+<pre><code class="language-http" translate="No">DELETE /v1/accounts/{accountID}/playback_rights/{playbackRightsID}</code></pre>
+<br />
+
+<h4 id="Request_body">リクエスト本文</h4>
+<p>
+  リクエスト本文に含めることができるすべてのフィールドの例を次に示します。
+</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  ";geo";: {
+  ";allowed_countries";: [
+    ";MX",
+    ";US";
+  ],
+  ";blocked_countries";: [
+    ";JP",
+    ";CN";
+  ],
+  ";allowed_zip_codes";: [
+    ";US-90210";
+  ],
+  ";blocked_zip_codes";: [
+    ";US-72810";
+  ],
+  ";allowed_dmas";: [
+    501
+  ],
+  ";blocked_dmas";: [
+    803
+  ]
+},
+";blocked_proxies";: {
+  ";anonymous";: true,
+  ";public";: true,
+  ";corporate";: true,
+  ";transparent";: true,
+  ";hosting";: true
+},
+";allowed_domains";: [
+  ";www.google.com",
+  ";www.brightcove.com";
+],
+";blocked_domains";: [
+  ";www.ooyala.com";
+],
+";start_time";: 1572905011,
+";end_time";: 1672905011,
+";allowed_ips";: [
+  ";192.168.1.1";
+],
+";blocked_ips";: [
+  ";192.168.1.1";
+],
+";allowed_days";: [
+  ";mon",
+  ";tue";
+],
+";allowed_hours";: [
+  ";5-6";
+],
+";allow_insecure";: true,
+";disabled";: false,
+";geo_global_rule";: ";allow_all",
+";is_default";: true,
+";name";: ";Optional playback right name";
+}</code></pre>
+
+<p>
+  フィールドの詳細は次のとおりです。
+</p>
+<table class="bcls-table">
+  <thead class="bcls-table__head">
+    <tr>
+      <th style="width:25%;">フィールド</th>
+      <th>タイプ</th>
+      <th>説明</th>
+    </tr>
+  </thead>
+  <tbody class="bcls-table__body">
+    <tr>
+      <td><code translate="No">allowed_days</code></td>
+      <td>文字列</td>
+      <td>リソースの取得が許可されている日の3文字の小文字の配列。1つ以上：<code translate="No">mon, tue, wed, thu, fri, sat, sun</code></td>
+    </tr>
+    <tr>
+      <td><code translate="No">allowed_domains</code>, <code translate="No">blocked_domains</code></td>
+      <td>文字列</td>
+      <td>ドメイン名の配列</td>
+    </tr>
+    <tr>
+      <td><code translate="No">allowed_hours</code></td>
+      <td>整数</td>
+      <td>リソースの取得が許可されている24時間制（0から47まで）からの時間の配列。当日は0〜23、翌日の終了日は24〜47。許可された時間のブロックが前日に始まり、翌日に終わる場合は、24以上の表記が必要です。
+      <br /><br />
+      例：の値<code translate="No">3-4</code>このヘッダー内は、リソースがUTC午前3時から午前3時59分まで利用可能であることを意味します。</td>
+    </tr>
+    <tr>
+      <td><code translate="No">allow_insecure</code></td>
+      <td>ブール値</td>
+      <td>デフォルト：<code translate="No">false</code>
+        <br />
+         これをに設定する<code translate="No">true</code> JWTトークンをオプションにします。</td>
+    </tr>
+    <tr>
+      <td><code translate="No">allowed_ips</code>, <code translate="No">blocked_ips</code></td>
+      <td>整数</td>
+      <td>
+          ipv4 / ipv6アドレスまたはCIDRブロックの配列。
+      </td>
+    </tr>
+    <tr>
+      <td><code translate="No">blocked_proxies</code></td>
+      <td>オブジェクト</td>
+      <td>代理権に関連するプロパティ</td>
+    </tr>
+    <tr>
+      <td>&emsp;<code translate="No">blocked_proxies.anonymous</code></td>
+      <td>ブール値</td>
+      <td>クライアントのIPアドレスは利用できません。DRM、TORポイント、一時プロキシ、およびその他のマスキングサービスに勝つために場所を変更するサービスが含まれます。</code></td>
+    </tr>
+    <tr>
+      <td>&emsp;<code translate="No">blocked_proxies.corporate</code></td>
+      <td>ブール値</td>
+      <td>一般的に無害と見なされますが、場所が問題になる可能性があります。複数のユーザーが1つまたは複数の中央の場所を介してプロキシされ、単一のネットワークから見かけのIPアドレスを共有できるかどうかを識別します。</code></td>
+    </tr>
+    <tr>
+      <td>&emsp;<code translate="No">blocked_proxies.public</code></td>
+      <td>ブール値</td>
+      <td>パブリックインターネットアクセスを許可する場所からプロキシされた複数のユーザー。</code></td>
+    </tr>
+    <tr>
+      <td>&emsp;<code translate="No">blocked_proxies.transparent</code></td>
+      <td>ブール値</td>
+      <td>クライアントのIPアドレスはHTTPヘッダーを介して利用できますが、値は必ずしも信頼できるとは限りません（たとえば、なりすましの可能性があります）。</code></td>
+    </tr>
+    <tr>
+      <td>&emsp;<code translate="No">blocked_proxies.hosting</code></td>
+      <td>ブール値</td>
+      <td>IPアドレスはホスティング施設に属しており、エンドユーザーは通常ホスティング施設にいないため、プロキシになる可能性があります。</code></td>
+    </tr>
+    <tr>
+      <td><code translate="No">disabled</code></td>
+      <td>ブール値</td>
+      <td>デフォルト：<code translate="No">false</code>
+        <br />
+          これをに設定する<code translate="No">true</code>再生権を無効にして、すべての人が再生できるようにします。</td>
+    </tr>
+    <tr>
+      <td><code translate="No">geo</code></td>
+      <td>オブジェクト</td>
+      <td>地理的権利に関連するプロパティ</td>
+    </tr>
+    <tr>
+      <td>&emsp;<code translate="No">geo.allowed_countries</code>、
+        <br>&emsp;<code translate="No">geo.blocked_countries</code>
+      </td>
+      <td>文字列</td>
+      <td>ISO 3166-1alpha-2標準に準拠した2文字の国コードの配列。値のリストについては、を参照してください。<a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements">正式に割り当てられたコード要素</a>。</td>
+    </tr>
+    <tr>
+      <td>&emsp;<code translate="No">geo.allowed_dmas</code>、 
+        <br>&emsp;<code translate="No">geo.blocked_dmas</code></td>
+      <td>整数</td>
+      <td>ニールセン指定マーケットエリア（DMA）番号の配列。値のリストについては、を参照してください。<a href="https://help.ooyala.com/video-platform/reference/dma_codes.html"> DMAコード</a>資料。</td>
+    </tr>
+    <tr>
+      <td>&emsp;<code translate="No">geo.allowed_zip_codes</code>、 
+        <br>&emsp;<code translate="No">geo.blocked_zip_codes</code></td>
+      <td>文字列</td>
+      <td>2文字の国とハイフンが前に付いた郵便番号の配列。例えば<code translate="No">[";US-90045";]</code>。 <br/>
+      2文字の国コードは大文字で、ISO 3166-1alpha-2標準に準拠している必要があります。<a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements">正式に割り当てられたコード要素</a>。</td>
+    </tr>
+    <tr>
+      <td><code translate="No">geo_global_rule</code></td>
+      <td>文字列</td>
+      <td>デフォルト: <code translate="No">""</code>
+        <br />
+        値: 
+        <ul>
+          <li><code translate="No">""</code> -グローバルな地理的ルールはありません（つまり、地理プロパティの通常のフローに従います）</li>
+          <li><code translate="No">"allow_all"</code> -ブラックリストに登録された場所を除き、世界中のどこからでも再生できます。<code translate="No">blocked_*</code>プロパティ</li>
+          <li> <code translate="No">"block_all"</code> -ホワイトリストに登録された場所を除き、世界中のどこからでも再生をブロックします。<code translate="No">allow_*</code>プロパティ</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><code translate="No">is_default</code></td>
+      <td>ブール値</td>
+      <td>デフォルト：<code translate="No">false</code>
+        <br />
+        これをに設定する<code translate="No">true</code>現在のPlaybackRightをデフォルトにします。詳細については、<a href="#Introduction">序章</a>セクション。</td>
+    </tr>
+    <tr>
+      <td><code translate="No">name</code></td>
+      <td>文字列</td>
+      <td>オプションの再生権名</td>
+    </tr>
+    <tr>
+      <td><code translate="No">start_time</code>, <code translate="No">end_time</code></td>
+      <td>整数</td>
+      <td>エポックタイム</td>
+    </tr>
+  </tbody>
+</table>
+
+</section>
+
+<section class="bcls-section">
+<h2 id="Associate_restrictions_with_a_video">制限を動画に関連付ける</h2>
+
+<p>使用<span translate="No">CMS API</span>再生権IDを動画に関連付ける。前の手順で作成した再生権限IDを使用します。</p>
+
+<aside class="bcls-aside bcls-aside--information">制限がユーザーレベルでない場合、JWTは不要であり、次のコマンドで無効にできることに注意してください。<code translate="No">allow_insecure</code>正しい再生設定。</aside>
+
+<h3 id="CMS_API">CMS API </h3>
+<p>
+  各再生権限制限オブジェクトは、1 つまたは複数のビデオで使用できます。
+</p>
+
+<h3>ベース URL</h3>
+<p>
+  API のベース URL は次のとおりです。
+</p>
+<pre><code class="language-http" translate="No">https://cms.api.brightcove.com/v1</code></pre>
+
+<h3>アカウントパス</h3>
+<p>
+  いずれの場合も、特定の Video Cloud アカウントに対してリクエストが行われます。したがって、あなたは常にベースURLにアカウントIDが続く用語アカウントを追加します。
+</p>
+<pre><code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/{accountId}</code></pre>
+
+<h3>認証</h3>
+<p>
+  リクエストのアクセストークンが必要であり、Authorizationヘッダに存在する必要があります።
+</p>
+<pre><code class="language-http" translate="No">Authorization: Bearer {access_token}</code></pre>
+<p>
+  アクセストークンは、一時的な OAuth2 アクセストークンで、Brightcove OAuth サービスから取得する必要があります。クライアントクレデンシャルを取得してアクセストークンを取得する方法の詳細については、「<a href="/oauth/getting-started/overview-oauth-api-v4.html"> Brightcove OAuth の概要</a>」を参照してください。
+</p>
+
+<h3>権限</h3>
+<p>
+  Playback Rights API へのリクエストは、<a href="/oauth/index.html">次のアクセス許可を持つクライアント認証情報から行う必要があります</a>。
+</p>
+<ul>
+  <li>
+    <code translate="No">video-cloud/video/read</code>
+  </li>
+  <li>
+    <code translate="No">video-cloud/video/update</code>
+  </li>
+</ul>
+
+<h3>制限の管理</h3>
+<p>
+  NS <span translate="No"> CMS API</span>多くのリクエストタイプをサポートします。ビデオを更新するには、以下を使用します。
+</p>
+
+  <h4>ビデオを更新する：</h4>
+  <p>
+    アソシエイト<code translate="No">playback_rights_id</code>ビデオ付き。このIDは、前の手順で作成したPlayback RightsAPIに存在する必要があります。
+  </p>
+<pre class="line-numbers"><code class="language-http" translate="No">PATCH /v1/accounts/{account_id}/videos/{video_id}
+  Content-Type: application/json
+  Body: {<a href="/cms/references/reference.html#operation/UpdateVideo">video object</a>}
+</code></pre>
+
+<details>
+<summary>
+  <h3 id="Curl_example1">カールの例</h3>
+</summary>
+  <p>
+    動画にplayback_rights_idを追加します。
+  </p>
+  <pre class="line-numbers"><code class="language-curl">curl -X PATCH \\ https://cms.api.brightcove.com/v1/accounts/ <span class="bcls-input">あなたのaccount_id</span> / videos / <span class="bcls-input">あなたのvideo_id</span> \\ -H '認証：ベアラー<span class="bcls-input">あなたのaccess_token</span>'  \\ -H 'コンテンツタイプ：application / json'  \\ -d '{"; playback_rights_id";： "; <span class="bcls-input">あなたのplayback_rights_id</span> ";} '</code></pre>
+</details>
+<br />
+
+  <h4>特定のビデオを入手する：</h4>
+<pre><code class="language-http" translate="No">GET /v1/accounts/{account_id}/videos/{video_ids}</code></pre>
+
+<p>
+  APIの使用の詳細については、<a href="/cms/references/reference.html"> CMS APIリファレンス</a>。
+</p>
+</section>
+
+<!-- <section class="bcls-section">
+<h2 id="Define_user_level_restrictions">Define user-level restrictions</h2>
+<p>
+  If you want user-level restrictions, you will need a <span translate="No">JSON Web Token</span> (JWT) configured with claims associated with your restrictions.
+</p>
+<h3>Steps</h3>
+<p>
+  To create a <span translate="No">JSON Web Token</span> (JWT) to pass to your player, follow these steps:
+<ol class="bcls-tasklist-restart">
+  <li>
+    <h3 id="Determine_restrictions">Determine restrictions</h3>
+    <p>Determine the type of user-level restrictions you want to use from the list below. Include the necessary JWT claims when you create your <span translate="No">JSON Web Token</span> (JWT).</p>
+  <h4>Device limits</h4>
+  <p>
+    When a DRM license request is made, the user's device is registered and a unique id is assigned. The device limit is checked and enforced with each license request. To use this restriction, generate a JWT with the current user id (uid).
+  </p>
+  <p>
+    For details, see the <a href="/playback-restrictions/guides/device-limits.html">Implementing Device Limits</a> document.
+  </p>
+
+  <h4>Concurrent stream limits</h4>
+  <p>
+    When a DRM license request is made, the user's device is registered and a unique id is assigned. With each license request, the device id is checked to ensure it is only watching a specified number of video streams at the same time.
+  </p>
+  <p>
+    For details, see the <a href="/playback-authorization/guides/stream-concurrency.html">Limiting Concurrent Streams per Viewer</a> document.
+  </p>
+
+  <h4>Tags</h4>
+  <p>
+    Based on the <code translate="No">tags</code> claim, the <span translate="No">JSON Web Token</span> (JWT) will specify the group of videos that the user is entitled to watch. You can group videos with tags using the <strong>Media Module</strong> in Brightcove's Video Cloud Studio.
+  </p>
+  <p>
+    The Playback Authorization Service will check the tags associated with each video. If at least one of the tags matches the list in the JWT token, then the video is viewable.
+  </p>
+  <p>
+    Tags in the JWT token will be listed as an array of tags.
+  </p>
+  <aside class="bcls-aside bcls-aside--information">You are limited to an array of 40 tags in the JWT token.</aside>
+  </li>
+  <li>
+    <h3 id="Create_a_JSON_Web_Token">Create a <span translate="No">JSON Web Token</span></h3>
+    <p>To create a token to use when communicating with Brightcove's Playback API, see the <a href="https://general.support.brightcove.com/developer/create-jwt.html">Creating a <span translate="No">JSON Web Token</span> (JWT)</a> document.</p>
+  </li>
+</ol>
+</section> -->
+
+<section class="bcls-section">
+<h2 id="Configure_your_player">プレーヤーを構成する</h2>
+<p>
+  デフォルトでは、BrightcovePlayerはBrightcovePlayback API（PAPI）と通信します。再生制限を管理するための新しいシステムは、PlaybackAPIの前にあります。プレーヤーを構成するには、以下を参照してください。
+</p>
+<h3>ウェブプレーヤー</h3>
+<p>
+  Brightcove Webプレーヤーを構成するには、以下を参照してください。<a href="https://player.support.brightcove.com/playback/playback-restrictions-with-bcp.html"> BrightcovePlayerでの再生制限</a>資料。
+</p>
+<h3>ネイティブAndroidまたはiOSプレーヤー</h3>
+<p>
+  AndroidまたはiOS用のネイティブプレーヤーを構成するには、を参照してください。<a href="https://sdks.support.brightcove.com/features/playback-restrictions-with-sdks.html">ネイティブSDKでの再生制限</a>資料。
+</p>
+
+<h3>あなた自身のプレーヤー</h3>
+<p>
+  コンテンツがVideoCloudライブラリにあるが、独自のプレーヤーを使用している場合は、に示すようにPlaybackAPIを呼び出すことができます。<a href="/playback/getting-started/overview-playback-api.html">概要：Playback API </a>ドキュメント。ベースURLを次のように置き換えます。
+</p>
+<pre ><code class="language-http" translate="No">https://edge-auth.api.brigthcove.com</code></pre>
+<p>
+  ポリシーキーを使用する代わりに、認証にJSON Web Token（JWT）を使用します。
+</p>
+<pre ><code class="language-http" translate="No">Authorization: Bearer {JWT}</code></pre>
+<p>
+  Curlの例を次に示します。
+</p>
+<pre class="line-numbers"><code class="language-curl">curl -X GET \\ -H '認証：ベアラー{JWT}'  \\ https://edge-auth.api.brightcove.com/playback/v1/accounts/ {your_account_id} / videos / {your_video_id}</code></pre>
+</section>
+
+</article>

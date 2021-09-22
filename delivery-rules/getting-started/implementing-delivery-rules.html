@@ -1,0 +1,701 @@
+---
+title:  '配信ルールの実装' 
+description: 「このトピックでは、Brightcoveの配信ルールを実装する方法を学習します。これにより、ビジネス目標に合わせてメディアの配信方法をカスタマイズできます。」
+parent: Getting started 
+grandparent: Delivery Rules API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+
+<section class="bcls-section">
+<h2 id="Overview">概要</h2>
+
+<p>パブリッシャーは、多くの場合、技術的およびビジネス上の理由の両方で、メディアマニフェストのコンテンツ特性を変更する必要があります。これらのニーズを満たすために、Brightcoveは Dynamic Delivery から返されたマニフェストの内容を変更するルールを適用できるフレームワークを作成しました。</p>
+
+<p>配信ルールは、条件とアクションで構成されています。</p>
+<ul>
+  <li>
+    <strong>条件</strong> -特定のアクションをトリガーする「If」条件
+  </li>
+  <li>
+    <strong>行動</strong> -マニフェストの変更方法を定義する「Then」パラメータ
+  </li>
+</ul>
+<p>配信ルールの詳細については、以下を参照してください。</p>
+<ul>
+  <li>
+    <a href="/delivery-rules/getting-started/overview-delivery-rules.html">概要:配信ルール</a>
+  </li>
+  <li>
+    <a href="https://player.support.brightcove.com/playback/using-delivery-rules-with-bcp.html">Brightcoveプレーヤーで配信ルールを使用する</a>
+  </li>
+  <li>
+    <a href="https://sdks.support.brightcove.com/features/using-delivery-rules-with-sdks.html">ネイティブ SDK での配信ルールの使用</a>
+  </li>
+</ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="Account_setup">アカウント設定</h2>
+
+<p>料金の詳細については、アカウントマネージャーにお問い合わせください。また、アカウントでこの機能を有効にすることもできます。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Applying_rules">ルールの適用</h2>
+
+<p>次のフロー図は、配信ルールがどのように適用されるかを示しています。</p>
+<figure class="bcls-figure">
+  <img class="bcls-image--no-border" src="//learning-services-media.brightcove.com/doc-assets/delivery-rules/rules-diagram.png" alt="Delivery rules applied">
+  <figcaption class="bcls-caption--image">配信ルールが適用されました</figcaption>
+</figure>
+</section>
+
+<section class="bcls-section">
+<h2 id="Conditions">条件</h2>
+
+<p>最初のフェーズでサポートされる「if」条件には、次のものがあります。</p>
+
+<ul>
+  <li>
+    <p>
+      <strong>明示的なリクエスト</strong> -構成IDは、作成したアクションのIDです。このIDを使用して、実行時にPlaybackAPIに渡します。このIDは、基になるサービスがPlaybackAPIによって利用される決定を行って適切な応答データを返すことを可能にする構成値にマップされます。
+    </p>
+  </li>
+  <li>
+    <strong>Device Group </strong>：ユーザーエージェントの解析によって検出されたデバイスタイプ。現在サポートされているグループは次のとおりです。
+    <ul>
+      <li>
+        Android
+      </li>
+      <li>
+        アップルトV
+      </li>
+      <li>
+        Chromecast
+      </li>
+      <li>
+        iPad
+      </li>
+      <li>
+        iPhone
+      </li>
+      <li>
+        デスクトップクロム
+      </li>
+      <li>
+        デスクトップFirefox
+      </li>
+      <li>
+        デスクトップサファリ
+      </li>
+      <li>
+        fetchTV
+      </li>
+      <li>
+        ios-その他
+      </li>
+      <li>
+        ろく-7/8
+      </li>
+      <li>
+        スマートフォン汎用
+      </li>
+      <li>
+        タブレットアンドロイド
+      </li>
+      <li>
+        table-kindle
+      </li>
+      <li>
+        不明
+      </li>
+    </ul>
+    &nbsp;
+  </li>
+  <li>
+    <strong>Geography </strong> -要求元のデバイスの物理的な場所：
+    <ul>
+      <li>
+        大陸
+      </li>
+      <li>
+        国
+      </li>
+    </ul>
+  </li>
+</ul>
+
+</section>
+
+<section class="bcls-section">
+<h2 id="Actions">行動</h2>
+
+<p>最初のフェーズでサポートされるアクション、つまり「then」パラメーターには、次のものがあります。</p>
+
+<ul>
+  <li>
+    <p>
+        <strong>メディア配信 CDN </strong> -特定の動的配信アカウント内で使用するように構成された CDN から、メディアセグメントの配信に使用する CDN。
+    </p>
+  </li>
+  <li>
+    <strong>レンディション特性</strong> -基盤となるメディアレンディションの特性に基づいてフィルタリングします。たとえば、次のような事項が挙げられます。
+    <ul>
+      <li>
+        最小ビデオビットレート
+      </li>
+      <li>
+        最大ビデオビットレート
+      </li>
+      <li>
+        最小ビデオ解像度
+      </li>
+      <li>
+        最大ビデオ解像度
+      </li>
+      <li>
+        オーディオレンディションの最大数
+      </li>
+      <li>
+        ビデオレンディションの最大数
+      </li>
+      <li>
+        最初のビデオビットレート
+      </li>
+      <li>
+        不連続性
+      </li>
+    </ul>
+  </li>
+</ul>
+
+</section>
+
+<section class="bcls-section">
+<h2 id="Scope">スコープ</h2>
+
+<p>アクションは、次の2つのレベルで適用できます。</p>
+<ul>
+  <li>
+    <strong>アカウント</strong> -特定の顧客のアカウントに対して行われたすべてのリクエストに適用されるアクション
+  </li>
+  <li>
+    <strong>特定のリクエスト</strong> -特定のリクエストで呼び出されるアクション
+  </li>
+</ul>
+
+<p>
+  アクションは上記の順序で適用されます。後のアクションは前のアクションをオーバーライドします。
+</p>
+
+</section>
+
+<section class="bcls-section">
+<h2 id="Defining_rules">ルールの定義</h2>
+
+<p>Delivery Rules APIを使用して、メディア配信をカスタマイズします。</p>
+
+<h3 id="Delivery_Rules_API">配信ルール API </h3>
+<p>
+  ザ・<a href="https://apis.support.brightcove.com/delivery-rules/references/reference.html">Delivery Rules API</a>メディア配信を制御するための条件とアクションを定義できます。
+</p>
+<p>NS <a href="#API_Response">応答</a> Delivery Rules APIから、<code translate="No">conditions</code>配列。この配列を使用すると、複数を作成できます<code translate="No">if</code> / <code translate="No">then</code>それぞれが<code translate="No">then</code> 1つ以上を指す<a href="#Response_body_for_actions">アクションID</a>。</p>
+<p>追加または削除する方法はありませんが<code translate="No">conditions</code>、あなたは更新することによってこれを行うことができます<code translate="No">conditions</code>配列。</p>
+
+<!-- <aside class="bcls-aside bcls-aside--tip">Since each account has one conditions block, you will update the block to add or remove conditions.</aside> -->
+
+<h3>ベース URL</h3>
+<p>
+  API のベース URL は次のとおりです。
+</p>
+<pre><code class="language-http" translate="No">https://delivery-rules.api.brightcove.com</code></pre>
+
+<h3>アカウントパス</h3>
+<p>
+  いずれの場合も、特定の Video Cloud アカウントに対してリクエストが行われます。したがって、あなたは常にベースURLにアカウントIDが続く用語アカウントを追加します。
+</p>
+<pre><code class="language-http" translate="No">https://delivery-rules.api.brightcove.com/accounts/{accountID}</code></pre>
+
+<h3>認証</h3>
+<p>
+  リクエストのアクセストークンが必要であり、Authorizationヘッダに存在する必要があります።
+</p>
+<pre><code class="language-http" translate="No">Authorization: Bearer {access_token}</code></pre>
+<p>
+  アクセストークンは、一時的な OAuth2 アクセストークンで、Brightcove OAuth サービスから取得する必要があります。クライアントクレデンシャルを取得してアクセストークンを取得する方法の詳細については、「<a href="/oauth/getting-started/overview-oauth-api-v4.html"> Brightcove OAuth の概要</a>」を参照してください。
+</p>
+
+<h3>権限</h3>
+<p>
+  Playback Rights API へのリクエストは、<a href="/oauth/getting-started/overview-oauth-api-v4.html">次のアクセス許可を持つクライアント認証情報から行う必要があります</a>。
+</p>
+<ul>
+  <li>
+    <code translate="No">video-cloud/delivery-rules/read</code>
+  </li>
+  <li>
+    <code translate="No">video-cloud/delivery-rules/all</code>
+  </li>
+</ul>
+
+<h3>ルールを管理する</h3>
+<p>
+  Delivery Rules APIは、次のリクエストをサポートしています。APIの詳細については、<a href="https://apis.support.brightcove.com/delivery-rules/references/reference.html">Delivery Rules APIリファレンス</a>。
+</p>
+
+<h4>配信ルールを取得する</h4>
+<p>
+  次のGETリクエストを使用して、アカウントの最新バージョンの配信ルールを取得します。
+</p>
+<pre><code class="language-http" translate="No">GET /accounts/{accountID}</code></pre>
+
+<h5 id="API_Response">API レスポンス</h5>
+<p>
+  ここにレスポンス本文があります。配信ルールには、一連の条件と一連のアクションが含まれていることに注意してください。
+</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  &quot;conditions&quot;: [
+    {
+      &quot;name&quot;: &quot;MyCondition1&quot;,
+      &quot;if&quot;: {
+        &quot;device_group&quot;: [
+          &quot;ipad&quot;
+        ],
+        &quot;request_country&quot;: [
+          &quot;string&quot;
+        ],
+        &quot;request_continent&quot;: [
+          &quot;AF&quot;
+        ]
+      },
+      &quot;then&quot;: [
+        &quot;MyAction1&quot;
+      ]
+    }
+  ],
+  &quot;actions&quot;: [
+    {
+      &quot;id&quot;: &quot;44c91a1d-71f1-40b4-b9cf-3abcd12345&quot;,
+      &quot;properties&quot;: {
+        &quot;min_video_bitrate&quot;: 0,
+        &quot;max_video_bitrate&quot;: 0,
+        &quot;first_video_bitrate&quot;: 0,
+        &quot;min_video_resolution&quot;: &quot;string&quot;,
+        &quot;max_video_resolution&quot;: &quot;string&quot;,
+        &quot;max_video_renditions&quot;: 0,
+        &quot;max_audio_renditions&quot;: 0,
+        &quot;preferred_cdn_provider&quot;: &quot;string&quot;,
+        &quot;preferred_cdn_domain&quot;: &quot;string&quot;,
+      &quot;video_codecs&quot;: [
+        &quot;string&quot;
+      ],
+      &quot;audio_codecs&quot;: [
+        &quot;string&quot;
+      ]
+    }
+    }
+  ]
+}</code></pre>
+<br />
+
+<h4>条件を取得する</h4>
+<p>
+  次のGETリクエストを使用して、アカウントの条件を取得します。
+</p>
+<pre><code class="language-http" translate="No">GET /accounts/{accountID}/conditions</code></pre>
+<h5>API レスポンス</h5>
+<p>
+  ここにレスポンス本文があります。
+</p>
+<pre class="line-numbers"><code class="language-json" translate="No">[
+  {
+    &quot;name&quot;: &quot;MyCondition1&quot;,
+    &quot;if&quot;: {
+      &quot;device_group&quot;: [
+        &quot;ipad&quot;
+      ],
+      &quot;request_country&quot;: [
+        &quot;string&quot;
+      ],
+      &quot;request_continent&quot;: [
+        &quot;AF&quot;
+      ]
+    },
+    &quot;then&quot;: [
+      &quot;44c91a1d-71f1-40b4-b9cf-3abcd12345&quot;
+    ]
+  }
+]</code></pre>
+<br />
+
+<h4>更新条件</h4>
+<p>
+  次のPUTリクエストを使用して、アカウントの条件を更新します。
+</p>
+<pre class="line-numbers"><code class="language-http" translate="No">PUT /accounts/{accountID}/conditions
+  Content-Type: application/json
+  Authorization: Bearer {access_token}
+  Body: {conditions object}
+</code></pre>
+<!-- <p>
+  For a list of valid fields, see the <a href="#Request_body_for_conditions">Request body for conditions</a> section.
+</p> -->
+<h4 id="Request_body_for_conditions">条件の要求本文</h4>
+<p>
+  条件のリクエスト本文は次のとおりです。これは条件オブジェクトの配列であることに注意してください。
+</p>
+<pre class="line-numbers"><code class="language-json" translate="No">[
+  {
+    &quot;name&quot;: &quot;MyCondition1&quot;,
+    &quot;if&quot;: {
+      &quot;device_group&quot;: [
+        &quot;ipad&quot;
+      ],
+      &quot;request_country&quot;: [
+        &quot;string&quot;
+      ],
+      &quot;request_continent&quot;: [
+        &quot;AF&quot;
+      ]
+    },
+    &quot;then&quot;: [
+      &quot;44c91a1d-71f1-40b4-b9cf-3abcd12345&quot;
+    ]
+  }
+]</code></pre>
+<br />
+<p>
+  条件のフィールドの詳細は次のとおりです。
+</p>
+<table class="bcls-table">
+  <thead class="bcls-table__head">
+    <tr>
+      <th>フィールド</th>
+      <th>タイプ</th>
+      <th>説明</th>
+    </tr>
+  </thead>
+  <tbody class="bcls-table__body">
+    <tr>
+      <td><code translate="No">name</code></td>
+      <td>文字列</td>
+      <td>状態の一意の識別子</td>
+    </tr>
+    <tr>
+      <td><code translate="No">device_group</code></td>
+      <td>文字列</td>
+      <td>ユーザーエージェントの解析によって検出されたデバイスタイプの配列</td>
+    </tr>
+    <tr>
+      <td><code translate="No">request_country</code></td>
+      <td>文字列</td>
+      <td>2文字の国コードの配列</td>
+    </tr>
+    <tr>
+      <td><code translate="No">request_continent</code></td>
+      <td>文字列</td>
+      <td>2文字の大陸コードの配列</td>
+    </tr>
+    <tr>
+      <td><code translate="No">then</code></td>
+      <td>文字列</td>
+      <td>関連するアクションの一意の識別子</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>アクションを作成する</h4>
+<p>
+  次のPOSTリクエストを使用して、アカウントのアクションを作成します。
+</p>
+<pre class="line-numbers"><code class="language-http" translate="No">POST /accounts/{accountID}/actions
+  Content-Type: application/json
+  Authorization: Bearer {access_token}
+  Body: {actions object}
+</code></pre>
+<!-- <p>
+  For a list of valid fields, see the <a href="#Request_body_for_actions">Request body for actions</a> section.
+</p> -->
+<h4 id="Request_body_for_actions">アクションのリクエストボディ</h4>
+<p>
+  アクションのリクエストボディを次に示します。
+</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+    &quot;properties&quot;: {
+      &quot;min_video_bitrate&quot;: 0,
+      &quot;max_video_bitrate&quot;: 0,
+      &quot;first_video_bitrate&quot;: 0,
+      &quot;min_video_resolution&quot;: &quot;string&quot;,
+      &quot;max_video_resolution&quot;: &quot;string&quot;,
+      &quot;max_video_renditions&quot;: 0,
+      &quot;max_audio_renditions&quot;: 0,
+      &quot;preferred_cdn_provider&quot;: &quot;string&quot;,
+      &quot;preferred_cdn_domain&quot;: &quot;string&quot;,
+      &quot;video_codecs&quot;: [
+        &quot;string&quot;
+      ],
+      &quot;audio_codecs&quot;: [
+        &quot;string&quot;
+      ]
+  }
+}</code></pre>
+
+<p>
+  アクションのフィールドの詳細は次のとおりです。
+</p>
+<table class="bcls-table">
+  <thead class="bcls-table__head">
+    <tr>
+      <th>フィールド</th>
+      <th>タイプ</th>
+      <th>説明</th>
+    </tr>
+  </thead>
+  <tbody class="bcls-table__body">
+    <tr>
+      <td><code translate="No">properties</code></td>
+      <td>オブジェクト</td>
+      <td>特定のアクションに対して定義されたプロパティのオブジェクト</td>
+    </tr>
+    <tr>
+      <td><code translate="No">min_video_bitrate</code>、 <br/>
+      <code translate="No">max_video_bitrate</code></td>
+      <td>整数</td>
+      <td>許可される最小または最大のビデオビットレート（kbps）を設定します</td>
+    </tr>
+    <tr>
+      <td><code translate="No">first_video_bitrate</code></td>
+      <td>整数</td>
+      <td>最初のビデオのビットレートを設定します（kbps）</td>
+    </tr>
+    <tr>
+      <td><code translate="No">min_video_resolution</code>、 <br/><code translate="No">max_video_resolution</code></td>
+      <td>文字列</td>
+      <td>最小または最大の許容ビデオ解像度（WxH）を設定します</td>
+    </tr>
+    <tr>
+      <td><code translate="No">max_video_renditions</code></td>
+      <td>整数</td>
+      <td>ビデオレンディションの最大数を設定します</td>
+    </tr>
+    <tr>
+      <td><code translate="No">max_audio_renditions</code></td>
+      <td>整数</td>
+      <td>オーディオレンディションの最大数を設定します</td>
+    </tr>
+    <tr>
+      <td><code translate="No">preferred_cdn_provider</code></td>
+      <td>文字列</td>
+      <td>優先CDNプロバイダーを設定する</td>
+    </tr>
+    <tr>
+      <td><code translate="No">preferred_cdn_domain</code></td>
+      <td>文字列</td>
+      <td>優先CDNドメインを設定する</td>
+    </tr>
+    <tr>
+      <td><code translate="No">video_codecs</code></td>
+      <td>文字列</td>
+      <td>ビデオコーデックの配列</td>
+    </tr>
+    <tr>
+      <td><code translate="No">audio_codecs</code></td>
+      <td>文字列</td>
+      <td>オーディオコーデックの配列</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="Response_body_for_actions">アクションに対するAPI応答</h4>
+<p>
+  アクションのリクエストボディを次に示します。
+</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+    &quot;id&quot;: &quot;44c91a1d-71f1-40b4-b9cf-3abcd12345&quot;,
+    &quot;properties&quot;: {
+      &quot;min_video_bitrate&quot;: 0,
+      &quot;max_video_bitrate&quot;: 0,
+      &quot;first_video_bitrate&quot;: 0,
+      &quot;min_video_resolution&quot;: &quot;string&quot;,
+      &quot;max_video_resolution&quot;: &quot;string&quot;,
+      &quot;max_video_renditions&quot;: 0,
+      &quot;max_audio_renditions&quot;: 0,
+      &quot;preferred_cdn_provider&quot;: &quot;string&quot;,
+      &quot;preferred_cdn_domain&quot;: &quot;string&quot;,
+      &quot;video_codecs&quot;: [
+       &quot;string&quot;
+      ],
+      &quot;audio_codecs&quot;: [
+       &quot;string&quot;
+      ]
+  }
+}</code></pre>
+
+<p>
+  リクエストのアクションフィールドに加えて、APIレスポンスには次の生成されたフィールドが含まれます。
+</p>
+<table class="bcls-table">
+  <thead class="bcls-table__head">
+    <tr>
+      <th>フィールド</th>
+      <th>タイプ</th>
+      <th>説明</th>
+    </tr>
+  </thead>
+  <tbody class="bcls-table__body">
+    <tr>
+      <td><code translate="No">id</code></td>
+      <td>文字列</td>
+       <td>システムは、アクションの一意の識別子を生成しました。これは<code translate="No">actionID</code> updateメソッドとdeleteメソッドで使用されます。</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>アクションを取得</h4>
+<p>
+  次のGETリクエストを使用して、アカウントのアクションをフェッチします。
+</p>
+<pre><code class="language-http" translate="No">GET /accounts/{accountID}/actions</code></pre>
+<h5>API レスポンス</h5>
+<p>
+  <a href="#Response_body_for_actions">アクションについては、API レスポンスを参照してください</a>。
+</p>
+
+<h4>アクションを取得する</h4>
+<p>
+  次のGETリクエストを使用して、アカウントの特定のアクションをフェッチします。
+</p>
+<pre><code class="language-http" translate="No">GET /accounts/{accountID}/actions/{actionID}</code></pre>
+<h5>API レスポンス</h5>
+<p>
+  <a href="#Response_body_for_actions">アクションについては、API レスポンスを参照してください</a>。
+</p>
+
+<h4>アクションを更新する</h4>
+<p>
+  次のPUTリクエストを使用して、アカウントのアクションを更新します。
+</p>
+<pre class="line-numbers"><code class="language-http" translate="No">PUT /accounts/{accountID}/actions/{actionID}
+  Content-Type: application/json
+  Authorization: Bearer {access_token}
+  Body: {actions object}
+</code></pre>
+<h5>APIリクエスト</h5>
+<p>
+  これは、アクションを更新するためのサンプルリクエスト本文です。
+</p>
+<aside class="bcls-aside bcls-aside--information">NS <code translate="No">id</code>以下のJSONの例では、アクションIDです。これは、パスのアクションIDと一致する必要があります。</aside>
+
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  &quot;id&quot;: &quot;44c91a1d-71f1-40b4-b9cf-3edb94645943&quot;,
+  &quot;properties&quot;: {
+   &quot;custom_properties&quot;: {
+    &quot;generate_thumbnails&quot;: false,
+    &quot;hls_iframes&quot;: true
+   }
+  }
+ }</code></pre>
+<h5>API レスポンス</h5>
+<p>
+  更新されたアクションの応答例を次に示します。
+</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  &quot;id&quot;: &quot;44c91a1d-71f1-40b4-b9cf-3edb94645943&quot;,
+  &quot;properties&quot;: {
+   &quot;custom_properties&quot;: {
+    &quot;generate_thumbnails&quot;: false,
+    &quot;hls_iframes&quot;: true
+   }
+  }
+ }</code></pre>
+
+
+<h4>アクションを削除する</h4>
+<p>
+  アカウントのアクションを削除するには、次のDELETEリクエストを使用します。
+</p>
+<pre class="line-numbers"><code class="language-http" translate="No">DELETE /accounts/{accountID}/actions/{actionID}</code></pre>
+
+
+<!-- <p>
+  Here is an example of all of the fields you can include in the request body:
+</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  &quot;geo&quot;: {
+  &quot;allowed_countries&quot;: [
+    &quot;MX&quot;,
+    &quot;US&quot;
+  ],
+  &quot;blocked_countries&quot;: [
+    &quot;JP&quot;,
+    &quot;CN&quot;
+  ],
+  &quot;allowed_zip_codes&quot;: [
+    &quot;US-90210&quot;
+  ],
+  &quot;blocked_zip_codes&quot;: [
+    &quot;US-72810&quot;
+  ],
+  &quot;allowed_dmas&quot;: [
+    501
+  ],
+  &quot;blocked_dmas&quot;: [
+    803
+  ]
+},
+&quot;allowed_domains&quot;: [
+  &quot;www.google.com&quot;,
+  &quot;www.brightcove.com&quot;
+],
+&quot;blocked_domains&quot;: [
+  &quot;www.ooyala.com&quot;
+],
+&quot;start_time&quot;: 1572905011,
+&quot;end_time&quot;: 1672905011,
+&quot;allowed_ips&quot;: [
+  &quot;192.168.1.1&quot;
+],
+&quot;blocked_ips&quot;: [
+  &quot;192.168.1.1&quot;
+],
+&quot;allowed_days&quot;: [
+  &quot;mon&quot;,
+  &quot;tue&quot;
+],
+&quot;allowed_hours&quot;: [
+  &quot;5-6&quot;
+],
+&quot;allow_insecure&quot;: true,
+&quot;disabled&quot;: false,
+&quot;name&quot;: &quot;Optional playback right name&quot;
+}
+</code></pre> -->
+
+
+
+</section>
+
+<section class="bcls-section">
+<h2 id="Limitations">制約事項</h2>
+
+<p>配信ルールを使用するときは、いくつかの既知の制限があります。</p>
+<ul>
+  <!-- <li>
+    <strong>CDN Providers</strong> - A customer may only have one CDN configuration from a given provider. For instance, it will be possible to switch between Akamai and Cloudfront, but not between two separate Akamai configurations.
+  </li> -->
+  <li>
+    <strong>メディアコンテンツ</strong> -配信ルールは、スムーズ動画または PMP4 動画では機能しません。
+  </li>
+  <li>
+    <strong>メディアコンテンツ</strong> -配信ルールはライブ動画では機能しません。
+  </li>
+  <li>
+    <strong>音声のみ</strong> -サーバーサイド広告（SSAI）を有効にした配信ルールでは、動画コンテンツと音声コンテンツの両方が必要です。これはSSAIの制限です。
+  </li>
+</ul>
+
+</section>
+
+</article>

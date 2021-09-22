@@ -1,1146 +1,9 @@
-﻿<!doctype html>
-<html lang="ja">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="このトピックでは、プレーヤーの設定を表示および変更する方法について説明します。JSON 構文も文書化されています。">
-  
-  <title>プレーヤー設定ガイド</title>
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="manifest" href="/site.webmanifest">  
-  <link data-react-helmet="true" rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500&amp;display=swap">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/prism.css">
-  <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/styles.css">
-  <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/landing-page.css">
-  <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/tabs.css">
-  <link rel="stylesheet" href="/assets/css/local.css">
-  <link data-react-helmet="true" rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500&display=swap">
-  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/381443caa8.js" crossorigin="anonymous"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/google-analytics.js"></script>
-  <script src="/assets/js/sajari-head.js"></script>
-</head>
-
-<body class="body">
-
-<header>
-  <div class="div-header">
-    <a href="/"><img class="product-logo" src="https://support.brightcove.com/site-assets/images/site/product-logos/Video_Cloud_Logo.svg" alt="製品ロゴ" style="max-height: 100px;max-width: 232px;"/></a>
-<!-- GTranslate: https://gtranslate.io/ -->
-<select onchange="doGTranslate(this);"><option value="">言語の選択</option><option value="en|en" translate="No">English</option><option value="en|zh-TW" translate="No">繁體中文</option><option value="en|fr" translate="No">Français</option><option value="en|de" translate="No">Deutsche</option><option value="en|ja" translate="No">日本語</option><option value="en|ko" translate="No">한국어</option><option value="en|es" translate="No">Español</option></select>
-
-<script>
-/* <![CDATA[ */
-function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;if(lang_pair=='')return;var lang=lang_pair.split('|')[1];var plang=location.hostname.split('.')[0];if(plang.length !=2 && plang.toLowerCase() != 'zh-cn' && plang.toLowerCase() != 'zh-tw')plang='en';location.href=location.protocol+'//'+(lang == 'en' ? '' : lang+'.')+location.hostname.replace('www.', '').replace(RegExp('^' + plang + '\\.'), '')+location.pathname+location.search;}
-/* ]]> */
-</script>
-
-
-
-    <span class="secondary-nav"><a href="https://supportportal.brightcove.com/s/login/?"><img src="https://support.brightcove.com/site-assets/images/site/support.png" alt="サポート"/> サポートへのお問い合わせ</a> <span style="vertical-align: top;margin-left:1em;margin-right:1em;">|</span> <a href="https://status.brightcove.com/"><img src="https://support.brightcove.com/site-assets/images/site/status.png" alt="システムステータス"/> システムステータス</a></span> <br/>
-    
-  </div>
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb arr-right">
-      
-      <li class="breadcrumb-item"><a href="/">ホーム</a></li>
-      
-      
-      
-      <li class="breadcrumb-item"><a href="/player-management/guides/">ガイド</a></li>
-      
-      <li class="breadcrumb-item active" aria-current="page">プレーヤー設定ガイド</li>
-    </ol>
-  </nav>
-</header>
-<div class="container">
-    <div class="row">
-            <div class="col-sm-3 left-side-bar">
-        <select id="site_select" class="bcls-select" style="margin-right: 1rem;">
-          <option value="">Brightcove のその他のドキュメント</option>
-          
-            
-              <option value="https://support.brightcove.com">ドキュメントホーム</option>
-            
-          
-            
-              <option value="https://audience.support.brightcove.com">Brightcove Audience</option>
-            
-          
-            
-              <option value="https://beacon.support.brightcove.com">Brightcove ビーコン</option>
-            
-          
-            
-              <option value="https://campaign.support.brightcove.com">Brightcove キャンペーン</option>
-            
-          
-            
-              <option value="https://engage.support.brightcove.com">Brightcove Engage</option>
-            
-          
-            
-              <option value="https://live.support.brightcove.com">Brightcove ・ライブ</option>
-            
-          
-            
-              <option value="https://gallery.support.brightcove.com">Brightcove ギャラリー</option>
-            
-          
-            
-              <option value="https://ssai.support.brightcove.com">Brightcove SSAI</option>
-            
-          
-            
-              <option value="https://social.support.brightcove.com">Brightcove ソーシャル</option>
-            
-          
-            
-              <option value="https://studio.support.brightcove.com">Video Cloud Studio</option>
-            
-          
-            
-              <option value="https://player.support.brightcove.com">Brightcove のプレーヤー開発</option>
-            
-          
-            
-              <option value="https://apis.support.brightcove.com">Video CloudプラットフォームAPI</option>
-            
-          
-            
-              <option value="https://sdks.support.brightcove.com">ビデオクラウドデバイス SDK</option>
-            
-          
-            
-              <option value="https://integrations.support.brightcove.com">統合および CMS コネクタ</option>
-            
-          
-            
-              <option value="https://general.support.brightcove.com">ビデオクラウドの一般情報</option>
-            
-          
-            
-              <option value="https://zencoder.support.brightcove.com">Zencoder</option>
-            
-          
-        </select>
-
-        <nav class="sidenav" id="side_nav">
-          
-            
-            <h5><a href="/index.html">ホーム</a></h5>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/getting-started/index.html">はじめに<strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li><a href="/getting-started/getting-started-brightcove-apis.html">概要:プラットフォーム API </a></li>
-                  
-                
-                  
-                    <li><a href="/getting-started/authentication-brightcove-api-requests.html">API リクエストの認証</a></li>
-                  
-                
-                  
-                    <li><a href="/getting-started/concepts-testing-tools-brightcove-apis.html">Brightcove  API のテストツール</a></li>
-                  
-                
-                  
-                    <li><a href="/getting-started/learning-guide-using-rest-apis.html">学習ガイド:REST API を使用する</a></li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/general/index.html">一般情報<strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li><a href="/general/all-api-references.html">すべての API リファレンス</a></li>
-                  
-                
-                  
-                    <li><a href="/general/overview-context-aware-encoding.html">コンテキスト認識エンコーディングの概要</a></li>
-                  
-                
-                  
-                    <li><a href="/general/managing-api-authentication-credentials.html">API 認証資格情報の管理</a></li>
-                  
-                
-                  
-                    <li><a href="/general/integrating-your-cms-video-cloud.html">CMSとビデオクラウドの統合</a></li>
-                  
-                
-                  
-                    <li><a href="/general/platform-api-code-samples.html">プラットフォーム API コードサンプル</a></li>
-                  
-                
-                  
-                    <li><a href="/general/video-cloud-api-training-videos.html">プラットフォーム API トレーニングビデオ</a></li>
-                  
-                
-                  
-                    <li><a href="/general/concepts-api-tester.html">オンラインAPIテスター</a></li>
-                  
-                
-                  
-                    <li><a href="/general/use-insomnia-api-requests.html">API リクエストにインソムニアを使用する</a></li>
-                  
-                
-                  
-                    <li><a href="/general/use-postman-api-requests.html">API リクエストに郵便配達を使用する</a></li>
-                  
-                
-                  
-                    <li><a href="/general/audio-content.html">オーディオコンテンツ</a></li>
-                  
-                
-                  
-                    <li><a href="/general/known-issues.html">プラットフォーム API の既知の問題</a></li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/analytics/index.html">分析 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/analytics/getting-started/index.html">はじめに<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/analytics/getting-started/overview-analytics-api-v1.html">概要:アナリティクス API </a></li>
-                        
-                        <li><a href="/analytics/getting-started/analytics-api-explorer.html">分析 API エクスプローラー</a></li>
-                        
-                        <li><a href="/analytics/getting-started/overview-video-data-endpoint.html">概要:ビデオデータエンドポイント</a></li>
-                        
-                        <li><a href="/analytics/getting-started/analytics-api-overview-dimensions-fields-and-parameters.html">概要:ディメンション、フィールド、パラメータ</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/analytics/general/index.html">一般情報<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/analytics/general/faq-analytics-api.html">よくある質問:アナリティクス API </a></li>
-                        
-                        <li><a href="/analytics/general/analytics-api-glossary.html">分析 API 用語集</a></li>
-                        
-                        <li><a href="/analytics/general/analytics-api-unique-users.html">ユニークユーザー</a></li>
-                        
-                        <li><a href="/analytics/general/live-metrics.html">ライブメトリック</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/analytics/references/index.html">参考文献<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/analytics/references/reference.html">分析 API リファレンス</a></li>
-                        
-                        <li><a href="/analytics/references/analytics-api-release-notes.html">リリースノート</a></li>
-                        
-                        <li><a href="/analytics/references/known-issues.html">既知の問題</a></li>
-                        
-                        <li><a href="/analytics/references/analytics-api-error-reference.html">エラーリファレンス</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/analytics/dimension-guides/index.html">寸法ガイド<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-account.html">ディメンション: <code>勘定科目</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-browsertype.html">次元: <code>ブラウザタイプ</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-date.html">ディメンション: <code>日付</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-datehour.html">ディメンション: <code>日付_時間</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-destinationdomain.html">ディメンション: <code> destination_domain </code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-destinationpath.html">ディメンション: <code> destination_path </code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-devicemanufacturer.html">寸法: <code>デバイス_メーカー</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-devicetype.html">ディメンション: <code> device_type </code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-deviceos.html">ディメンション: <code> device_os </code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-city.html">ディメンション: <code>都市</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-country.html">寸法: <code>国</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-region.html">寸法: <code>リージョン</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-livestream.html">次元: <code> live_stream </code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-referrerdomain.html">ディメンション: <code> referrer_domain </code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-sourcetype.html">ディメンション: <code> source_type </code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-searchterms.html">ディメンション: <code> search_terms </code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-socialplatform.html">寸法: <code> social_platform </code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-player.html">寸法: <code>プレイヤー</code></a></li>
-                        
-                        <li><a href="/analytics/dimension-guides/dimension-video.html">寸法: <code>ビデオ</code></a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/analytics/code-samples/index.html">コードサンプル<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-concurrent-viewers-live-events.html">ライブイベントの同時閲覧者</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-daily-analytics-report-generator.html">日次分析レポートジェネレータ</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-destinations-report.html">宛先レポート</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-geographical-analytics-report.html">地理分析レポート</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-unique-users-day.html">日別ユニークユーザー</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-video-engagement-graph.html">ビデオエンゲージメントグラフ</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-video-report-player-and-day.html">プレイヤーと日別のビデオレポート</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-video-report-reference-id.html">参照ID別ビデオレポート</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analytics-api-sample-video-report-tags.html">タグ別ビデオレポート</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analyticscms-apis-sample-analytics-playlists.html">プレイリスト別分析</a></li>
-                        
-                        <li><a href="/analytics/code-samples/analyticscms-apis-sample-recently-added-videos.html">最近追加された動画</a></li>
-                        
-                        <li><a href="/analytics/code-samples/code-sample-video-analytics-report-country-and-day.html">国と曜日別の動画分析レポート</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/cms/index.html">CMS API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/cms/getting-started/index.html">はじめに<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/cms/getting-started/overview-cms-api.html">概要:CMS API </a></li>
-                        
-                        <li><a href="/cms/getting-started/practice-area-cms-api.html">練習領域:CMS API </a></li>
-                        
-                        <li><a href="/cms/getting-started/best-practices-cms-and-playback-apis.html">ベストプラクティス：CMS と再生 API </a></li>
-                        
-                        <li><a href="/cms/getting-started/cms-api-notifications.html">CMS API 通知</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/cms/references/index.html">参考文献<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/cms/references/reference.html">CMS API リファレンス</a></li>
-                        
-                        <li><a href="/cms/references/catalog-apis-cms-api-and-playback-api-release-notes.html">CMS /再生 API リリースノート</a></li>
-                        
-                        <li><a href="/cms/references/known-issues.html">既知の問題</a></li>
-                        
-                        <li><a href="/cms/references/cms-api-video-fields-reference.html">CMS API ビデオフィールドリファレンス</a></li>
-                        
-                        <li><a href="/cms/references/cms-api-playlist-fields-reference.html">CMS API プレイリストのフィールドリファレンス</a></li>
-                        
-                        <li><a href="/cms/references/cms-api-custom-fields-reference.html">CMS API カスタムフィールドリファレンス</a></li>
-                        
-                        <li><a href="/cms/references/cms-api-folder-fields-reference.html">CMS API フォルダフィールドリファレンス</a></li>
-                        
-                        <li><a href="/cms/references/cms-api-error-message-reference.html">CMS API エラーメッセージリファレンス</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/cms/searching/index.html">検索中<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/cms/searching/cms-and-playback-apis-video-search-v2.html">CMS API:ビデオ検索 v2 </a></li>
-                        
-                        <li><a href="/cms/searching/cms-api-playlists-search.html">CMS API:プレイリストの検索</a></li>
-                        
-                        <li><a href="/cms/searching/using-cms-api-page-search-results.html">ページ検索結果</a></li>
-                        
-                        <li><a href="/cms/searching/cmsplayback-api-videos-search.html">CMS と再生 API:ビデオ検索 v1 </a></li>
-                        
-                        <li><a href="/playback/guides/catalog-search-architecture.html">カタログ検索アーキテクチャ</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/cms/managing-videos/index.html">ビデオ/アセットの管理<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/cms/managing-videos/using-cms-api-add-geo-filtering.html">地理フィルタリングを追加</a></li>
-                        
-                        <li><a href="/cms/managing-videos/digital-master-delete-api.html">デジタルマスター削除 API </a></li>
-                        
-                        <li><a href="/cms/managing-videos/deleting-videos.html">動画の削除</a></li>
-                        
-                        <li><a href="/cms/managing-videos/getting-counts-videos-and-playlists.html">動画と再生リストのカウントを取得する</a></li>
-                        
-                        <li><a href="/cms/managing-videos/managing-playlists-using-cms-api.html">CMS API を使用したプレイリストの管理</a></li>
-                        
-                        <li><a href="/cms/managing-videos/using-cms-api-managing-clips.html">クリップを管理する</a></li>
-                        
-                        <li><a href="/cms/managing-videos/media-sharing-cms-api.html">メディア共有</a></li>
-                        
-                        <li><a href="/cms/managing-videos/multilingual-metadata.html">多言語メタデータ</a></li>
-                        
-                        <li><a href="/cms/managing-videos/using-cms-api-retrieve-video-data.html">ビデオデータの取得</a></li>
-                        
-                        <li><a href="/cms/managing-videos/setting-360-degree-video-properties-cms-api.html">360 度ビデオプロパティの設定</a></li>
-                        
-                        <li><a href="/cms/managing-videos/using-cms-api-remote-assets.html">リモート資産</a></li>
-                        
-                        <li><a href="/cms/managing-videos/using-cms-api-add-webvtt-captions-text-tracks.html">WebVTT キャプションの追加 (テキストトラック) </a></li>
-                        
-                        <li><a href="/cms/managing-videos/generate-video-sitemaps.html">ビデオサイトマップの生成</a></li>
-                        
-                        <li><a href="/cms/managing-videos/identifying-low-performing-content.html">パフォーマンスの低いコンテンツの識別</a></li>
-                        
-                        <li><a href="/cms/managing-videos/cms-api-working-folders.html">フォルダの操作</a></li>
-                        
-                        <li><a href="/cms/managing-videos/working-with-labels.html">ラベルの操作</a></li>
-                        
-                        <li><a href="/cms/managing-videos/linking-zencoder-and-video-cloud-video-demand.html">Zencoder と Video Cloud のリンク</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/cms/code-samples/index.html">コードサンプル<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-add-multiple-affiliate-accounts-media-sharing.html">複数のアフィリエイトアカウントを追加する</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-share-multiple-videos.html">複数の動画を共有する</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-media-sharing-report.html">メディア共有レポート</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-shared-media-report.html">共有メディアレポート</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-update-videos.html">動画を更新する</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-add-custom-field-multiple-videos.html">複数の動画にカスタムフィールドを追加する</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-update-geo-properties.html">図形プロパティの更新</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-add-cue-points.html">キューポイントの追加</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-video-report-generator.html">ビデオレポートジェネレータ</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-videos-delivery-type.html">配信タイプ別の動画</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-download-links.html">ダウンロードリンク</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-video-sitemap-generator.html">動画サイトマップジェネレータ</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-mrss-generator.html">MRSS ジェネレータ</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-mrss-feed-playlist.html">プレイリストからの MRSS フィード</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-generate-rss-podcast-feed-itunes.html">iTunes用のRSSポッドキャストフィード</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-video-renditions-inspector.html">ビデオレンディションインスペクタ</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-report-audio-only-content.html">音声のみのコンテンツに関するレポート</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-video-schema-builder.html">ビデオスキーマビルダー</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-python-code-get-request.html">GETリクエストのPythonコード</a></li>
-                        
-                        <li><a href="/cms/code-samples/cms-api-sample-video-search-app.html">動画検索アプリ</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/xdr/index.html">クロスデバイス再開 (XDR) API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/xdr/getting-started/index.html">はじめに<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/xdr/getting-started/xdr-overview.html">概要:クロスデバイス再開</a></li>
-                        
-                        <li><a href="/xdr/getting-started/get-playback-position.html">XDR API からの再生位置の取得</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/xdr/index.html">ガイド<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="https://player.support.brightcove.com/playback/xdr-with-bcplayer.html">Brightcove プレーヤーでのクロスデバイス再開</a></li>
-                        
-                        <li><a href="https://sdks.support.brightcove.com/features/cross-device-resume-sdks.html">ネイティブ SDK を使用したクロスデバイス再開</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/xdr/references/index.html">参考文献<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/xdr/getting-started/xdr-overview.html">クロスデバイス再開 API リファレンス</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/data-collection/index.html">データ収集 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li><a href="/data-collection/overview-data-collection-api-v2.html">概要:データ収集API </a></li>
-                  
-                
-                  
-                    <li><a href="/data-collection/data-collection-api-sample.html">データ収集 API のサンプル</a></li>
-                  
-                
-                  
-                    <li><a href="/data-collection/references/reference.html">データ収集 API リファレンス</a></li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/delivery-system/index.html">配信システム API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li><a href="/delivery-system/overview-delivery-system-api.html">概要:デリバリーシステム API </a></li>
-                  
-                
-                  
-                    <li><a href="/delivery-system/step-step-delivery-system-api.html">ステップバイステップ:デリバリーシステム API </a></li>
-                  
-                
-                  
-                    <li><a href="/delivery-system/delivery-system-api-git-overview.html">Gitの概要</a></li>
-                  
-                
-                  
-                    <li><a href="/delivery-system/references/reference.html">配信システム API リファレンス</a></li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/dynamic-ingest/index.html">動的取り込み API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest/getting-started/index.html">はじめに<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/getting-started/overview-dynamic-ingest-api-dynamic-delivery.html">概要:動的取り込み API </a></li>
-                        
-                        <li><a href="/dynamic-ingest/getting-started/quick-start-dynamic-ingest-api.html">「クイックスタート:動的取り込み API </a></li>
-                        
-                        <li><a href="/dynamic-ingest/getting-started/source-file-upload-api-dynamic-ingest.html">動的取り込み用のソースファイルのアップロード API </a></li>
-                        
-                        <li><a href="/dynamic-ingest/getting-started/overview-dynamic-delivery.html">動的配信の概要</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest/general/index.html">一般情報<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/general/dynamic-ingest-api-best-practices.html">動的取り込み API:ベストプラクティス</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/notifications-dynamic-delivery-video-cloud.html">動的取り込みの通知</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/get-status-dynamic-ingest-requests-dynamic-delivery.html">動的取り込み要求のステータスを取得する</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/fallback-retry-strategy.html">フォールバック/リトライ戦略</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/using-dynamic-ingest-s3.html">S3 での動的取り込みの使用</a></li>
-                        
-                        <li><a href="/dynamic-ingest/general/ugc-strategies.html">UGC戦略</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest/references/index.html">参考文献<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/references/reference.html">動的取り込み API リファレンス</a></li>
-                        
-                        <li><a href="/dynamic-ingest/references/dynamic-ingest-api-release-notes.html">動的取り込み API リリースノート</a></li>
-                        
-                        <li><a href="/dynamic-ingest/references/known-issues.html">既知の問題</a></li>
-                        
-                        <li><a href="/dynamic-ingest/references/dynamic-ingest-ingest-fields.html">取り込みフィールドのリファレンス</a></li>
-                        
-                        <li><a href="/dynamic-ingest/references/dynamic-ingest-error-message-reference.html">動的取り込みエラーメッセージリファレンス</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest/ingest-guides/index.html">ガイドの取り込み<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/context-aware-encoding.html">コンテキスト認識エンコーディングの使用</a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/dynamic-delivery-ingest-priority-queueing.html">動的配信インジェストプライオリティキューイング</a></li>
-                        
-                        <li><a href="/ingest-profiles/guides/archiving-masters.html">アーカイブマスター</a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/implementing-multiple-audio-tracks-using-apis.html">複数のオーディオトラックの実装</a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/images-and-dynamic-ingest-api.html">イメージと動的取り込み API </a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/dynamic-ingest-media-sharing.html">メディア共有による動的取り込み</a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/ingesting-content-drm.html">DRM によるコンテンツの取り込み</a></li>
-                        
-                        <li><a href="/dynamic-ingest/ingest-guides/ingesting-webvtt-files-text-trackscaptions.html">WebVTT ファイルの取り込み</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/dynamic-ingest/code-samples/index.html">コードサンプル<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-tester-dynamic-delivery.html">動的取り込み API テスター</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-ingesting-videos-dynamic-delivery.html">ビデオの取り込み</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-re-transcoding-videos-dynamic-delivery.html">動画の再トランスコード</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-replacing-videos-dynamic-delivery.html">ビデオの置換</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-add-scheduled-videos-dynamic-delivery.html">スケジュールされた動画を追加</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-adding-text-tracks.html">テキストトラックの追加</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-ingesting-low-priority-videos-dynamic-delivery.html">優先度の低いビデオの取り込み</a></li>
-                        
-                        <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-python-code.html">Pythonコード</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/ingest-profiles/index.html">プロファイルの取り込み API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles/getting-started/index.html">はじめに<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles/getting-started/overview-ingest-profiles-api-dynamic-delivery-context-aware-encoding.html">概要:プロファイルの取り込み API </a></li>
-                        
-                        <li><a href="/ingest-profiles/getting-started/practice-area-ingest-profiles-api-dynamic-delivery.html">練習領域:プロファイルの取り込み API </a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles/guides/index.html">ガイド<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles/guides/archiving-masters.html">アーカイブマスター</a></li>
-                        
-                        <li><a href="/ingest-profiles/guides/hevc-video.html">HEVCビデオ</a></li>
-                        
-                        <li><a href="/ingest-profiles/guides/cae-fast-publish.html">CAE 高速パブリッシュ</a></li>
-                        
-                        <li><a href="/general/audio-content.html">オーディオコンテンツ</a></li>
-                        
-                        <li><a href="/ingest-profiles/guides/mp4s-dynamic-delivery.html">動的配信におけるMP4 </a></li>
-                        
-                        <li><a href="https://studio.support.brightcove.com/admin/ingest-profiles-best-practices.html">ベストプラクティス</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles/references/index.html">参考文献<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles/references/reference.html">プロファイルの取り込み API リファレンス</a></li>
-                        
-                        <li><a href="/ingest-profiles/references/ingest-profiles-api-fields-reference-dynamic-delivery-and-context-aware-encoding.html">[ 取り込みプロファイル] フィールドのリファレンス</a></li>
-                        
-                        <li><a href="/ingest-profiles/references/standard-ingest-profiles-dynamic-delivery-and-context-aware-encoding.html">標準取り込みプロファイル</a></li>
-                        
-                        <li><a href="/ingest-profiles/references/standard-live-ingest-profiles.html">標準ライブインジェストプロファイル</a></li>
-                        
-                        <li><a href="/ingest-profiles/references/fields-custom-live-ingest-profiles.html">カスタムライブインジェストプロファイルのフィールド</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/ingest-profiles/code-samples/index.html">コードサンプル<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-create-custom-dynamic-delivery-profile.html">カスタム動的配信プロファイルの作成</a></li>
-                        
-                        <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-create-custom-context-aware-encoding-profile.html">カスタム CAE プロファイルの作成</a></li>
-                        
-                        <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-add-profile-multiple-accounts.html">複数のアカウントへのプロファイルの追加</a></li>
-                        
-                        <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-get-all-profiles-account.html">アカウントのすべてのプロファイルの取得</a></li>
-                        
-                        <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-set-default-profile-dynamic-delivery.html">既定のプロファイルを設定</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/oauth/index.html">OAuth API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/oauth/getting-started/index.html">はじめに<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/oauth/getting-started/overview-oauth-api-v4.html">概要:OAuth API </a></li>
-                        
-                        <li><a href="/oauth/getting-started/quick-start-oauth.html">「クイックスタート:OAuth API </a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/oauth/guides/index.html">ガイド<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">クライアント認証情報の作成:cURL </a></li>
-                        
-                        <li><a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">クライアント認証情報の作成:郵便配達人</a></li>
-                        
-                        <li><a href="/oauth/guides/getting-access-tokens.html">アクセストークンの取得</a></li>
-                        
-                        <li><a href="/oauth/guides/api-operations-client-credentials-requests.html">クライアント認証情報リクエストの API オペレーション</a></li>
-                        
-                        <li><a href="/oauth/guides/get-your-bc-token.html">BC_TOKENを入手する</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/oauth/references/index.html">参考文献<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/oauth/references/reference.html">OAuth API リファレンス</a></li>
-                        
-                        <li><a href="/oauth/references/oauth-api-error-message-reference.html">OAuth API エラーメッセージリファレンス</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/oauth/code-samples/index.html">コードサンプル<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/oauth/code-samples/oauth-api-sample-create-client-credentials.html">クライアント認証情報の作成</a></li>
-                        
-                        <li><a href="/oauth/code-samples/oauth-api-sample-get-access-token.html">アクセストークンの取得</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/playback/index.html">再生 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/playback/getting-started/index.html">はじめに<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/playback/getting-started/overview-playback-api.html">概要:再生 API </a></li>
-                        
-                        <li><a href="/playback/getting-started/quick-start-playback-api.html">「クイックスタート:再生 API </a></li>
-                        
-                        <li><a href="/cms/getting-started/best-practices-cms-and-playback-apis.html">ベストプラクティス：CMS と再生 API </a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/playback/guides/index.html">ガイド<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/cms/searching/cmsplayback-api-videos-search.html">CMS と再生 API:動画検索</a></li>
-                        
-                        <li><a href="/cms/getting-started/best-practices-cms-and-playback-apis.html">カタログ検索アーキテクチャ</a></li>
-                        
-                        <li><a href="/playback/guides/static-url-delivery.html">静的 URL 配信</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/playback/references/index.html">参考文献<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/playback/references/reference_v1.html">再生 API リファレンス</a></li>
-                        
-                        <li><a href="/playback/references/playback-api-video-fields-reference.html">ビデオフィールドリファレンス</a></li>
-                        
-                        <li><a href="/playback/references/playback-api-playlist-fields-reference.html">プレイリストフィールドのリファレンス</a></li>
-                        
-                        <li><a href="/playback/references/playback-api-error-reference.html">エラーリファレンス</a></li>
-                        
-                        <li><a href="/cms/references/catalog-apis-cms-api-and-playback-api-release-notes.html">CMS /再生 API リリースノート</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/playback/code-samples/index.html">コードサンプル<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/playback/code-samples/thumbnail-grid.html">ビデオサムネールグリッド</a></li>
-                        
-                        <li><a href="/playback/code-samples/playback-api-sample-mrss-generator.html">MRSS ジェネレータ</a></li>
-                        
-                        <li><a href="/playback/code-samples/playback-api-sample-jsonmrss-feed-playlist.html">プレイリストからのJSON/MRSS フィード</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/player-management/index.html">プレーヤー管理 API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/player-management/getting-started/index.html">はじめに<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/player-management/getting-started/overview-player-management-api.html">概要:プレーヤー管理 API </a></li>
-                        
-                        <li><a href="/player-management/getting-started/step-step-player-management.html">ステップバイステップ:プレーヤー管理</a></li>
-                        
-                        <li><a href="/player-management/getting-started/training-demand-quick-start-player-management.html">オンデマンドトレーニング:プレーヤー管理へのクイックスタート</a></li>
-                        
-                        <li><a href="/player-management/getting-started/oauth-guide.html">OAuth ガイド</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/player-management/guides/index.html">ガイド<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/player-management/guides/player-configuration-guide.html">プレーヤー設定ガイド</a></li>
-                        
-                        <li><a href="/player-management/guides/plugin-registry.html">プラグインレジストリ</a></li>
-                        
-                        <li><a href="/player-management/guides/pre-release-player.html">プレリリースプレーヤー</a></li>
-                        
-                        <li><a href="/player-management/guides/player-repositories.html">プレーヤーリポジトリ</a></li>
-                        
-                        <li><a href="/player-management/guides/guide-embed-apis.html">API を埋め込む</a></li>
-                        
-                        <li><a href="/player-management/guides/opting-out-automatic-player-updates.html">プレーヤーの自動更新をオプトアウト</a></li>
-                        
-                        <li><a href="/player-management/guides/embedding-brightcove-players-cms.html">CMS へのBrightcove プレーヤーの埋め込み</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/player-management/references/index.html">参考文献<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/player-management/references/reference.html">プレーヤー管理 API リファレンス</a></li>
-                        
-                        <li><a href="/player-management/references/player-management-api-release-notes.html">リリースノート</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/player-management/code-samples/index.html">コードサンプル<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/player-management/code-samples/setup-player-management-samples.html">プレイヤー管理サンプルの設定</a></li>
-                        
-                        <li><a href="/player-management/code-samples/bulk-updating-brightcove-default-player.html">デフォルトプレイヤーの一括更新</a></li>
-                        
-                        <li><a href="/player-management/code-samples/player-management-api-sample-create-player.html">プレーヤーを作成する</a></li>
-                        
-                        <li><a href="/player-management/code-samples/player-management-api-sample-display-players.html">プレーヤーを表示</a></li>
-                        
-                        <li><a href="/player-management/code-samples/player-management-api-sample-delete-players.html">プレイヤーを削除</a></li>
-                        
-                        <li><a href="/player-management/code-samples/player-management-api-sample-using-lastviewed-data.html">最後に表示したデータの使用</a></li>
-                        
-                        <li><a href="/player-management/code-samples/player-management-api-sample-programmatically-update-players.html">プログラムによるプレーヤーの更新</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/policy/index.html">ポリシー API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/policy/getting-started/index.html">はじめに<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/policy/getting-started/overview-policy-api.html">概要:ポリシー API </a></li>
-                        
-                        <li><a href="/policy/getting-started/quick-start-policy-api.html">コードサンプル:ポリシーキーの生成</a></li>
-                        
-                        <li><a href="/policy/getting-started/policy-keys.html">プレーヤーからのポリシーキー</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/policy/references/index.html">参考文献<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/policy/references/reference.html">ポリシー API リファレンス</a></li>
-                        
-                        <li><a href="/policy/references/policy-api-release-notes.html">リリースノート</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-              <h5 class="submenu-header"><a href="/social-syndication/index.html">ソーシャルシンジケーション API <strong> + </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/social-syndication/getting-started/index.html">はじめに<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/social-syndication/getting-started/public-syndication-api-overview.html">概要:シンジケーション設定 API </a></li>
-                        
-                        <li><a href="/social-syndication/getting-started/feed-syndication-api-overview.html">概要:シンジケーションフィード API </a></li>
-                        
-                        <li><a href="/social-syndication/getting-started/sample-templates-universal-syndication.html">ユニバーサル・シンジケーションのテンプレート</a></li>
-                        
-                        <li><a href="/cms/searching/cms-and-playback-apis-video-search-v2.html">CMS と再生 API:ビデオ検索 v2 </a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-                  
-                    <li class="submenu-header">
-                      <a href="/social-syndication/references/index.html">参考文献<strong> + </strong></a>
-                      <ul class="sidenav-subsubmenu" style="display:none;">
-                        
-                        <li><a href="/social-syndication/references/configuration-reference.html">シンジケーション設定 API リファレンス</a></li>
-                        
-                        <li><a href="/social-syndication/references/feed-reference.html">シンジケーションフィード API リファレンス</a></li>
-                        
-                        <li><a href="/policy/references/policy-api-release-notes.html">リリースノート</a></li>
-                        
-                      </ul>
-                    </li>
-                  
-                
-              </ul>
-            
-          
-            
-            
-          
-            
-            
-          
-            
-              <h5 class="submenu-header"><a href="/training/index.html"><strong>トレーニング+ </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                  
-                    <li><a href="/training/online-training-courses.html">オンライン・トレーニング・コース</a></li>
-                  
-                
-                  
-                    <li><a href="/training/register-training.html">インストラクター主導トレーニングへの登録</a></li>
-                  
-                
-                  
-                    <li><a href="/training/brightcove-university.html">Brightcove Universityトレーニングコース</a></li>
-                  
-                
-              </ul>
-            
-          
-            
-                            <h5 class="submenu-header"><a href="/support/index.html"><strong>サポート+ </strong></a></h5>
-              <ul class="sidenav-submenu" style="display:none;">
-                
-                <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcove のシステムステータスページの表示</a></li>
-                  
-                
-                  
-                <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
-              
-                <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
-                  
-                
-              </ul>
-            
-          
-      </nav>
-    </div>
-    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
-  <!-- bootstrap layout -->
-
-<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="ナビゲーションメニュー"/></p>
-
-<!-- search bar -->
-<div id="nav-search-box" style="margin-top: 1rem;"></div>
-<!-- in-page navigation for narrow screens -->
-<details class="centered-inpage-nav" id="centered_inpage_nav">
-  <summary><h6 class="toc">ページコンテンツ</h6></summary>
-  <nav id="centered_toc"></nav>
-  <ul id="centered_in_page_toc" class="list-none"></ul>
-</details>
-<!-- open in new tab/window -->
-<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="新しいタブで開く" style="margin-top:4em;width: 1.5em;"/></a>
-
-
-
-
+---
+title:  'プレーヤー構成ガイド'
+description:  'このトピックでは、プレーヤーの構成を表示および変更する方法について説明します。JSON構文も文書化されています。'
+parent: Guides 
+grandparent: Player Management API 
+---
 
 
 <!--
@@ -1153,15 +16,15 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
   If you update in one place, you MUST update it in all!
  -->
 
- <h1>プレーヤー設定ガイド</h1>
+ <h1>{{ page.title }}</h1>
  <article class="bcls-article">
-  <summary>このトピックでは、プレーヤーの設定を表示および変更する方法について説明します。JSON 構文も文書化されています。</summary>
+  <summary>{{ page.description }}</summary>
   <section class="bcls-section">
-    <h2 id="introduction">はじめに</h2>
+    <h2 id="introduction">入門</h2>
 
     <p>プレーヤーの設定で設定できるプロパティは、<a href="#account_id"> account_id </a>で始まる以下のとおりです (左側のナビゲーションにリストされています)。また、このマニュアルでは、プロパティ値を表示および構成する方法についても説明します。</p>
 
-    <aside class="bcls-aside bcls-aside--warning"><code translate="No">data-setup</code> をBrightcove Playerと使用「しない」でください。APIドキュメントには <code translate="No">data-setup</code> の使用が記載されているかもしれませんが、それはそのドキュメントがVideo.jsプレーヤーソースコードから直接生成されているためです。また、その属性を純粋なVideo.jsの <code translate="No">video</code> タグと使用することはできます。この属性はプレーヤーに設定情報を送信しますが、Brightcove Playerは別の方法を使ってこのタスクを行い、<code translate="No">data-setup</code> の信頼性が低くなります。</aside>
+    <aside class="bcls-aside bcls-aside--warning">使用しないでください<code translate="No">data-setup</code>ブライトコーブプレーヤーで。APIドキュメントには <code translate="No">data-setup</code> の使用が記載されているかもしれませんが、それはそのドキュメントがVideo.jsプレーヤーソースコードから直接生成されているためです。また、その属性を純粋なVideo.jsの <code translate="No">video</code> タグと使用することはできます。属性は構成情報をプレーヤーに送信しますが、Brightcoveプレーヤーはこのタスクを実行するために別の方法を使用します。<code translate="No">data-setup</code>信頼できない。</aside>
     </section>
 
     <section class="bcls-section">
@@ -1178,11 +41,11 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       <li>プレーヤーのリンクをクリックして、プレイヤーのプロパティを開きます。</li>
       <li>左側のナビゲーションメニューで [ <strong> JSON エディタ</strong> ] をクリックします。</li>
       <li>プレイヤーの設定は、次のようになります。
-      <figure class="bcls-figure"><img class="bcls-image" alt="JSON エディタ" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/json-editor.png"/></figure>
+      <figure class="bcls-figure"><img class="bcls-image" alt="JSON editor" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/json-editor.png" /></figure>
       </li>
     </ol>
 
-    <aside class="bcls-aside bcls-aside--warning">変更を加えて設定を保存する場合は、非常に注意してください。</aside>
+    <aside class="bcls-aside bcls-aside--warning">変更を加えて構成を保存する場合は、十分に注意してください。</aside>
 
     <h3>を使用してブラウジング<code translate="No">config.json</code></h3>
 
@@ -1272,18 +135,18 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
         }]
     }</code></pre>
 
-    <aside class="bcls-aside bcls-aside--warning">注：このドキュメントでは、curl ステートメントを使用して、プレーヤー管理 API を使用して操作を実行します。curlステートメントでは、次の値が表示されます。<strong> $ EMAIL</strong>、<strong> $ ACCOUNT_ID</strong>そして<strong>$ PLAYER_ID</strong>。これらの名前で環境変数を作成し、対応する値を割り当てるか、または変数のリテラル値を指定する必要があります。</aside>
+    <aside class="bcls-aside bcls-aside--warning">注:このドキュメントでは、curl ステートメントを使用して、Player Management API を使用して操作を実行します。curlステートメントでは、次の値が表示されます。<strong> $ EMAIL</strong>、<strong>{account_id}</strong>と<strong>{player_id}</strong>。これらの名前で環境変数を作成して対応する値を割り当てるか、変数のリテラル値を指定する必要があります。</aside>
 
-    <h3><code translate="No">$PLAYER_ID/configuration</code>エンドポイントでGET</h3>
+    <h3><code translate="No">{player_id}/configuration</code>エンドポイントでGET</h3>
 
-    <p>HTTP <code translate="No">GET</code>メソッドを使用して、表示されている同じ情報を取得できます。使用する<code translate="No">GET</code>とともに<code translate="No">/$PLAYER_ID/configuration</code>取得できるエンドポイント<em>公開されたプレーヤーの</em>構成情報。curl ステートメントの例と、取得された JSON を以下に示します。</p>
+    <p>HTTP <code translate="No">GET</code>メソッドを使用して、表示されている同じ情報を取得できます。使用する<code translate="No">GET</code>とともに<code translate="No">/{player_id}/configuration</code>取得できるエンドポイント <em>公開されたプレーヤーの</em> 構成情報。curl ステートメントの例と、取得された JSON を以下に示します。</p>
 
     <pre class="line-numbers">
     <code class="language-bash" translate="No">curl \
     --header "Content-Type: application/json" \
     --user $EMAIL \
     --request GET \
-    https://players.api.brightcove.com/v2/accounts/$ACCOUNT_ID/players/$PLAYER_ID/configuration</code></pre>
+    https://players.api.brightcove.com/v2/accounts/{account_id}/players/{player_id}/configuration</code></pre>
 
     <pre class="line-numbers player-only">
     <code class="language-json" translate="No">{
@@ -1343,16 +206,16 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
         }]
     }</code></pre>
 
-    <h3><code translate="No">$PLAYER_ID</code>メソッドエンドポイントの取得</h3>
+    <h3><code translate="No">{player_id}</code>メソッドエンドポイントの取得</h3>
 
-    <p><code translate="No">/$PLAYER_ID</code>エンドポイントで使用される HTTP <code translate="No">GET</code>メソッドは、完全なプレーヤー情報を取得する方法です。このアプローチは、あなたが見たばかりのプレーヤー構成のスーパーセットを提供します。このエンドポイントは、設定情報を「1 レベルアップ」で表示し、プレビュー版と公開済みのプレーヤーバージョンの両方の現在の設定情報を含むと考えることができます。curl ステートメントの例と、取得された JSON を以下に示します。</p>
+    <p>HTTP <code translate="No">GET</code>で使用される方法<code translate="No">/{player_id}</code>エンドポイントは、完全なプレーヤー情報を取得する方法です。このアプローチは、あなたが見たばかりのプレーヤー構成のスーパーセットを提供します。このエンドポイントは、設定情報を「1 レベルアップ」で表示し、プレビュー版と公開済みのプレーヤーバージョンの両方の現在の設定情報を含むと考えることができます。curl ステートメントの例と、取得された JSON を以下に示します。</p>
 
     <pre class="line-numbers">
     <code class="language-bash" translate="No">curl \
     --header "Content-Type: application/json" \
     --user $EMAIL \
     --request GET \
-    https://players.api.brightcove.com/v2/accounts/$ACCOUNT_ID/players/$PLAYER_ID</code></pre>
+    https://players.api.brightcove.com/v2/accounts/{account_id}/players/{player_id}</code></pre>
     <!-- <p><code data-gist-id="9629223" data-gist-hide-footer="true" data-gist-line="57-61"></code></p> -->
 
     <pre class="line-numbers player-only">
@@ -1517,9 +380,9 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h2 id="Set_name">名前/説明を設定する</h2>
 
-    <p>プレーヤーの設定を変更するには、<code translate="No">/$ACCOUNT_ID/players/$PLAYER_ID/configuration</code>エンドポイントを使用します。これはこのドキュメントで強調されています。ただし、<code translate="No">/$ACCOUNT_ID/players/$PLAYER_ID</code>エンドポイントのみを使用して変更する 2 つのプロパティがあります。これらの2つのプロパティは<code translate="No">name</code>そして<code translate="No">description</code>。</p>
+    <p>プレーヤーの設定を変更するには、<code translate="No">/{account_id}/players/{player_id}/configuration</code>エンドポイントを使用します。これはこのドキュメントで強調されています。ただし、<code translate="No">/{account_id}/players/{player_id}</code>エンドポイントのみを使用して変更する 2 つのプロパティがあります。これらの2つのプロパティは<code translate="No">name</code>そして<code translate="No">description</code>。</p>
 
-    <p>注: <code translate="No">name</code>プレーヤーのために入力したは、<code translate="No">player_name<code translate="No">config.json</code></code>プレーヤーのプレビューURLの最後に置くことによって構成を取得したときと同じように返されます ( <code translate="No">name</code>プレーヤー管理 API を使用して設定を取得するとき。しかし、<code translate="No">name</code>プレーヤーを作成または更新するときに使用する必要があります。</p>
+    <p>注: <code translate="No">name</code>プレイヤーに入力した値は、<code translate="No">player_name</code>設定を取得したときと同じように返されます。<code translate="No">config.json</code>プレイヤープレビュー URL の最後に (プレイヤー管理 API <code translate="No">name</code>を使用して設定を取得したときと同じように返されます)。しかし、<code translate="No">name</code>プレーヤーを作成または更新するときに使用する必要があります。</p>
 
     <p>最初のコードブロックは、<code translate="No">name</code>プレイヤーのとを変更するcurlステートメントの例を示しています<code translate="No">description</code>。JSON 応答では、プレイヤのプレビューバージョンが PATCH メソッドによって生成されたことが示されるため、最適化されたバージョンを取得するにはプレーヤーを公開する必要があります。</p>
 
@@ -1532,7 +395,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       "name": "My New Player Name",
       "description": "My new player description"
     }' \
-    https://players.api.brightcove.com/v2/accounts/$ACCOUNT_ID/players/$PLAYER_ID/configuration</code></pre>
+    https://players.api.brightcove.com/v2/accounts/{account_id}/players/{player_id}/configuration</code></pre>
 
     <pre class="line-numbers player-only">
     <code class="language-json" translate="No">{
@@ -1545,11 +408,11 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h2 id="settingvalues">値の設定</h2>
 
-    <p><strong>プレーヤーの設定値は、HTTP メソッド呼び出しを発行する任意のツールを使用するか、Studio の PLAYERS モジュールの一部である<strong> JSON エディタを使用して設定できます</strong>。</strong>カールツールを使用し、<a href="https://apis.support.brightcove.com/player-management/getting-started/step-step-player-management.html">ステップバイステップで示すステートメントの例も使用できます。プレイヤー管理</a>およびAJAXの使用は多くの<a href="/getting-started/learning-guide-using-rest-apis.html">Brightcoveプレーヤーの例</a>。</p>
+    <p>HTTPメソッド呼び出しを発行する任意のツールを使用するか、またはを使用して、プレーヤー構成値を設定できます。<strong> JSONエディター</strong>スタジオの一部です<strong>プレイヤー</strong>モジュール。カールツールを使用し、<a href="https://apis.support.brightcove.com/player-management/getting-started/step-step-player-management.html">ステップバイステップで示すステートメントの例も使用できます。プレイヤー管理</a>およびAJAXの使用は多くの<a href="/getting-started/learning-guide-using-rest-apis.html">Brightcoveプレーヤーの例</a>。</p>
 
     <p><strong>JSON エディタを使用した変更の例を次に示します</strong>。</p>
 
-    <figure class="bcls-figure"><img class="bcls-image" alt="JSON エディタでBrightcove プレーヤーのブランディングがない" src="//learning-services-media.brightcove.com/doc-assets/player-development/playback/player-info-modal/json-editor-no-bc-branding.png"/></figure>
+    <figure class="bcls-figure"><img class="bcls-image" alt="JSON Editor no Brightcove Player branding" src="//learning-services-media.brightcove.com/doc-assets/player-development/playback/player-info-modal/json-editor-no-bc-branding.png" /></figure>
 
     <p>プレイヤーの JSON 設定を編集したら、必ず変更を保存してください。</p>
     </section>
@@ -1562,7 +425,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <ul>
       <li>account_id</li>
       <li>player_id</li>
-      <li>embed_id</li>
+      <li>embed_id </li>
     </ul>
 
     <p>以下に詳述する他のすべてのプロパティは変更可能です。</p>
@@ -1630,9 +493,9 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     </section>
 
     <section class="bcls-section">
-    <h3 id="ad_config_id">config_id</h3>
+    <h3 id="ad_config_id">config_id </h3>
 
-    <p><code translate="No">ad_config_id</code>情報:</p>
+    <p><code translate="No">ad_config_id</code> information:</p>
 
     <ul>
       <li>データ型:文字列</li>
@@ -1644,7 +507,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="ad_failover">failover</h3>
 
-    <p><code translate="No">ad_failover</code>情報:</p>
+    <p><code translate="No">ad_failover</code> information:</p>
 
     <ul>
       <li>データ型:ブール値</li>
@@ -1661,7 +524,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="application_id">application_id</h3>
 
-    <p><code translate="No">application_id</code>情報:</p>
+    <p><code translate="No">application_id</code> information:</p>
 
     <ul>
       <li>データ型:文字列</li>
@@ -1673,11 +536,11 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="autoadvance">オートアドバンス</h3>
 
-    <p><code translate="No">autoadvance</code>情報:</p>
+    <p><code translate="No">autoadvance</code> information:</p>
 
     <ul>
       <li>データ型:文字列</li>
-      <li>デフォルト:最初は有効になっていない</li>
+      <li>デフォルト：最初は有効になっていない</li>
       <li>プレイリストで使用し、プレイリストの自動アドバンスの動作を設定します。</li>
     </ul>
 
@@ -1687,20 +550,20 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="autoplay">自動再生</h3>
 
-    <p><code translate="No">autoplay</code>情報:</p>
+    <p><code translate="No">autoplay</code> information:</p>
 
     <ul>
       <li>データ型:ブールまたは文字列</li>
-      <li>デフォルト: <code translate="No">false</code></li>
+      <li>デフォルト：<code translate="No">false</code></li>
       <li>これが許可されているプラットフォームで、プレーヤーがすぐに再生を開始する必要があることを示します。</li>
     </ul>
 
     <p><code translate="No">autoplay</code>がブール値に設定されている場合、ブラウザーのネイティブの自動再生動作が使用されます。次の 3 つの有効な文字列値のいずれかに設定されている場合、次のようになります。</p>
 
     <ul>
-      <li><code translate="No">play</code> :プレイヤーは手動でプレイを呼び出そうとします。</li>
-      <li><code translate="No">muted</code> :プレイヤーは手動でプレイヤーをミュートし、プレイを呼び出します。</li>
-      <li><code translate="No">any</code> :プレイヤーは最初にプレイを呼び出そうとします。失敗した場合は、プレイヤーをミュートしてプレイを呼び出します。</li>
+      <li><code translate="No">play</code>:プレイヤーは手動でプレイを呼び出そうとします。</li>
+      <li><code translate="No">muted</code>:プレイヤーは手動でプレイヤーをミュートし、プレイを呼び出します。</li>
+      <li><code translate="No">any</code>:プレイヤーは最初にプレイを呼び出そうとします。失敗した場合は、プレイヤーをミュートしてプレイを呼び出します。</li>
     </ul>
 
     <p>上記のいずれかが失敗した場合、自動再生が false に設定されているかのように「ビッグプレイボタン」が表示されます。</p>
@@ -1717,7 +580,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       --data '{
         "autoplay": true
         }' \
-    https://players.api.brightcove.com/v2/accounts/$ACCOUNT_ID/players/$PLAYER_ID/configuration</code></pre>
+    https://players.api.brightcove.com/v2/accounts/{account_id}/players/{player_id}/configuration</code></pre>
 
     <h4>文字列値の使用例</h4>
 
@@ -1729,11 +592,11 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       --data '{
         "autoplay": "muted"
         }' \
-    https://players.api.brightcove.com/v2/accounts/$ACCOUNT_ID/players/$PLAYER_ID/configuration</code></pre>
+    https://players.api.brightcove.com/v2/accounts/{account_id}/players/{player_id}/configuration</code></pre>
 
     <p>ビデオを自動再生するには、複雑な状況になる可能性があります。詳細については、「<a href="https://player.support.brightcove.com/playback/autoplay-considerations.html">自動再生に関する考慮事項</a>」を参照してください。</p>
 
-    <aside class="bcls-aside bcls-aside--information">注：Android で Chrome を使用し、<a href="https://support.google.com/chrome/answer/2392284?co=GENIE.Platform%3DAndroid&amp;hl=en-GB"> Chrome のデータセーバーを使用すると</a>、自動再生が正しく機能しません。</aside>
+    <aside class="bcls-aside bcls-aside--information">注:AndroidでChromeを使用している場合、<a href="https://support.google.com/chrome/answer/2392284?co=GENIE.Platform%3DAndroid&amp;hl=en-GB"> Chromeのデータセーバー</a>、自動再生は正しく機能しません。</aside>
     </section>
 
     <section class="bcls-section">
@@ -1750,9 +613,9 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
 
     <p>この問題を解決するには、代替エッジエンドポイント<strong> edge-elb.api.brightcove.com </strong>を使用するようにプレーヤーを構成できます。この変更は、北米以外から IP 制限付きアカウントにアクセスする必要があるすべてのプレイヤーに対して行う必要があります。</p>
 
-    <aside class="bcls-aside bcls-aside--information">このアプローチには欠点があります。カタログリクエストは、ローカルサーバーを持つ Cloudfront のグローバルネットワークを経由するのではなく、バージニアに送信されるため、米国外からのキャッシュコンテンツの取得にわずかな遅延が生じます。これはほとんど目立たない可能性が高いです。</aside>
+    <aside class="bcls-aside bcls-aside--information">このアプローチには欠点があります。カタログリクエストは、ローカルサーバーを持つ Cloudfront のグローバルネットワークを経由するのではなく、バージニアに送信されるため、米国外からのキャッシュコンテンツの取得にわずかな遅延が生じます。これはほとんど目立たない可能性があります。</aside>
 
-    <p>実際の設定変更には、Video Cloud の値を設定します<code translate="No">base_url</code>。これは、北米以外の Brightcove プレーヤーで IP 制限が使用されている場合にのみ変更してください。既存のプレーヤーの場合は、<code translate="No">PATCH</code> HTTP メソッドを使用する次の curl コマンドを使用します (環境変数<code translate="No">$EMAIL</code>、<code translate="No">$ACCOUNT_ID</code>と<code translate="No">$PLAYER_ID</code> ):</p>
+    <p>実際の設定変更には、Video Cloud の値を設定します<code translate="No">base_url</code>。これは、北米以外の Brightcove プレーヤーで IP 制限が使用されている場合にのみ変更してください。既存のプレーヤーの場合は、<code translate="No">PATCH</code> HTTP メソッドを使用する次の curl コマンドを使用します (環境変数<code translate="No">$EMAIL</code>、<code translate="No">{account_id}</code>と<code translate="No">{player_id}</code> ):</p>
 
     <pre class="line-numbers">
     <code class="language-bash" translate="No">curl
@@ -1764,25 +627,25 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       "base_url": "https://edge-elb.api.brightcove.com/playback/v1/"
         }
       }'
-    https://players.api.brightcove.com/v2/accounts/$ACCOUNT_ID/players/$PLAYER_ID/configuration</code></pre>
+    https://players.api.brightcove.com/v2/accounts/{account_id}/players/{player_id}/configuration</code></pre>
 
     <p>カールするのが初めての場合は、次の文書が役立ちます。</p>
 
     <ul>
       <li><a href="https://apis.support.brightcove.com/player-management/getting-started/step-step-player-management.html">ステップバイステップ:プレーヤー管理</a></li>
       <li><a href="https://general.support.brightcove.com/developer/concepts-cors.html">cURL を設定する</a></li>
-      <li><a href="https://apis.support.brightcove.com/general/use-postman-api-requests.html">HTTPリクエストに郵便配達を使用する</a></li>
+      <li><a href="https://apis.support.brightcove.com/general/use-postman-api-requests.html">HTTPリクエストにPostmanを使用する</a></li>
     </ul>
     </section>
 
     <section class="bcls-section">
     <h3 id="breakpoints">ブレークポイント</h3>
 
-    <p><code translate="No">breakpoints</code>情報:</p>
+    <p><code translate="No">breakpoints</code> information:</p>
 
     <ul>
       <li>データタイプ:オブジェクト</li>
-      <li>デフォルト:デフォルトのブレークポイントは次のとおりです。</li>
+      <li>デフォルト：デフォルトのブレークポイントは次のとおりです。</li>
       <li><a href="#responsive">レスポンシブオプションと一緒に使用すると</a>、プレーヤーのディメンションに基づいて UI を調整するために、プレーヤーでクラス名を切り替える方法を設定するブレークポイントを設定します。
       <table class="bcls-table">
         <thead class="bcls-table__head">
@@ -1850,13 +713,12 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="crossorigin">クロスオリジン</h3>
 
-    <p><code translate="No">crossorigin</code>情報:</p>
+    <p><code translate="No">crossorigin</code> information:</p>
 
     <ul>
       <li>データ型:ブール値</li>
-      <li>デフォルト:false</li>
-      <li><strong>true </strong>の場合、<strong> &lt; &gt; 基礎となるビデオ要素は</strong><strong> crossorigin =「anonymous」</strong>になります。つまり、プレーヤーに取り込まれたビデオやテキストトラックには、CORSヘッダーが必要です。
-      <aside class="bcls-aside bcls-aside--information">注：この機能は、すべてのコンテンツ（ビデオおよびテキストトラック）に CORS ヘッダーが適用されていることがわかっている場合にのみ使用してください。</aside>
+      <li>デフォルト： false</li>
+      <li><strong>true </strong>の場合、<strong> &lt; &gt; 基礎となるビデオ要素は</strong><strong> crossorigin =「anonymous」</strong>になります。つまり、プレーヤーに取り込まれたビデオやテキストトラックには、CORSヘッダーが必要です。<aside class="bcls-aside bcls-aside--information">注:この機能は、すべてのコンテンツ（ビデオおよびテキストトラック）にCORSヘッダーが適用されていることがわかっている場合にのみ使用してください。</aside>
       </li>
     </ul>
     </section>
@@ -1867,9 +729,9 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <p>プレーヤーの色をオーバーライドするために使用できる3つのプロパティがあります。非対応形式:</p>
 
     <ul>
-      <li><code translate="No">controlColor</code> :ボタンとテキストの色（再生ヘッドの位置やビデオ再生時間など）</li>
-      <li><code translate="No">controlBarColor</code> :コントロールバーと大きな再生ボタンの背景色</li>
-      <li><code translate="No">progressColor</code> :プログレスバーの色</li>
+      <li><code translate="No">controlColor</code>:ボタンとテキストの色（再生ヘッドの位置やビデオ再生時間など）</li>
+      <li><code translate="No">controlBarColor</code>:コントロールバーと大きな再生ボタンの背景色</li>
+      <li><code translate="No">progressColor</code>:プログレスバーの色</li>
     </ul>
 
     <p>これらのプロパティには、有効な CSS カラー (16 進色など) が許容される値です。</p>
@@ -1888,15 +750,15 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
           "progressColor": "green"
         }
     }' \</span>
-    https://players.api.brightcove.com/v2/accounts/$ACCOUNT_ID/players/$PLAYER_ID/configuration</code></pre>
+    https://players.api.brightcove.com/v2/accounts/{account_id}/players/{player_id}/configuration</code></pre>
 
-    <figure class="bcls-figure"><img class="bcls-image" alt="CSS オーバーライドを持つプレーヤー" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/config-css-green.png"/>
+    <figure class="bcls-figure"><img class="bcls-image" alt="Player with CSS Overrides" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/config-css-green.png" />
     <figcaption class="bcls-caption--image">CSS オーバーライドを持つプレーヤー</figcaption>
     </figure>
     </section>
 
     <section class="bcls-section">
-    <h3 id="debugger">デバッガー</h3>
+    <h3 id="debugger">デバッガ</h3>
 
     <p>デバッガーは、モーダルウィンドウにプレーヤー情報を表示します。詳細については、<a href="https://player.support.brightcove.com/troubleshooting/brightcove-player-information-modal.html">プレイヤー情報モーダルドキュメントを参照してください</a>。</p>
     </section>
@@ -1904,7 +766,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="dock">ドック</h3>
 
-    <p><code translate="No">dock</code>情報:</p>
+    <p><code translate="No">dock</code> information:</p>
 
     <ul>
       <li>データ型:ブール値</li>
@@ -1916,7 +778,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="embed_id">embed_id </h3>
 
-    <p><code translate="No">embed_id</code>情報:</p>
+    <p><code translate="No">embed_id</code> information:</p>
 
     <ul>
       <li>データ型:文字列</li>
@@ -1928,7 +790,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="errors">エラー</h3>
 
-    <p><code translate="No">errors</code>情報:</p>
+    <p><code translate="No">errors</code> information:</p>
 
     <ul>
       <li>データタイプ:オブジェクトまたはブール演算</li>
@@ -1940,7 +802,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="flash">flash</h3>
 
-    <p><code translate="No">flash</code>情報:</p>
+    <p><code translate="No">flash</code> information:</p>
 
     <ul>
       <li>データタイプ:オブジェクト</li>
@@ -1950,9 +812,9 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     </section>
 
     <section class="bcls-section">
-    <h3 id="fullscreenControl">fullScreenControl</h3>
+    <h3 id="fullscreenControl">fullScreenControl </h3>
 
-    <p><code translate="No">fullscreenControl</code>情報:</p>
+    <p><code translate="No">fullscreenControl</code> information:</p>
 
     <ul>
       <li>データ型:ブール値</li>
@@ -1971,24 +833,24 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       "autoplay": true,
       "fullscreenControl": false
       }' \
-    https://players.api.brightcove.com/v2/accounts/$ACCOUNT_ID/players/$PLAYER_ID/configuration</code></pre>
+    https://players.api.brightcove.com/v2/accounts/{account_id}/players/{player_id}/configuration</code></pre>
     <!-- <p><code data-gist-id="9629223" data-gist-hide-footer="true" data-gist-line="171-179" data-gist-highlight-line="177"></code></p> -->
 
     <p>次の 2 つのスクリーンショットは、フルスクリーンコントロールの有無にかかわらず、プレーヤーを示しています。</p>
 
-    <figure class="bcls-figure"><img class="bcls-image" alt="フルスクリーンコントロール付きプレーヤー" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/config-with-fullscreencontrol.png"/>
+    <figure class="bcls-figure"><img class="bcls-image" alt="Player with Fullscreen Control" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/config-with-fullscreencontrol.png" />
     <figcaption class="bcls-caption--image">フルスクリーンコントロール付きプレーヤー</figcaption>
     </figure>
 
-    <figure class="bcls-figure"><img class="bcls-image" alt="フルスクリーンコントロールのないプレイヤー" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/config-no-fullscreencontrol.png"/>
+    <figure class="bcls-figure"><img class="bcls-image" alt="Player with No Fullscreen Control" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/config-no-fullscreencontrol.png" />
     <figcaption class="bcls-caption--image">フルスクリーンコントロールのないプレイヤー</figcaption>
     </figure>
     </section>
 
     <section class="bcls-section">
-    <h3 id="hls">hls</h3>
+    <h3 id="hls">hls </h3>
 
-    <p><code translate="No">hls</code>情報:</p>
+    <p><code translate="No">hls</code> information:</p>
 
     <ul>
       <li>データタイプ:オブジェクトまたはブール演算</li>
@@ -2002,7 +864,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
 
     <p>プレイヤーを非アクティブにすることは可能です。これは、プレーヤーがコンテンツの提供を停止し、削除されたプレーヤーが閲覧された場合に 404 エラーが表示されないようにしたい場合があります。</p>
 
-    <p>プレイヤーを無効にするには<code translate="No">true</code>、<code translate="No">player<code translate="No">inactive</code></code>次のようにフィールドのプロパティをに設定します。</p>
+    <p>プレイヤーを無効にするには、<code translate="No">player</code><code translate="No">inactive</code>フィールドのプロパティをに設定します。<code translate="No">true</code>とすると、次のようになります。</p>
 
     <pre class="line-numbers">
     <code class="language-bash" translate="No">curl \
@@ -2014,23 +876,23 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
           "inactive": true
       }</span>
     }' \
-    https://players.api.brightcove.com/v2/accounts/$ACCOUNT_ID/players/$PLAYER_ID/configuration</code></pre>
+    https://players.api.brightcove.com/v2/accounts/{account_id}/players/{player_id}/configuration</code></pre>
 
     <p>もちろん、プレーヤーを有効にしたい場合は、<code translate="No">inactive</code>プロパティをに設定することができます<code translate="No">false</code>。</p>
 
     <p>プレーヤーを無効にすると、ユーザーがプレーヤーを参照すると、次のメッセージが表示されます。</p>
 
-    <figure class="bcls-figure"><img class="bcls-image" alt="非アクティブ化されたプレーヤー" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/deactivated.png"/>
+    <figure class="bcls-figure"><img class="bcls-image" alt="Deactivated Player" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/deactivated.png" />
     <figcaption class="bcls-caption--image">非アクティブ化されたプレーヤー</figcaption>
     </figure>
 
-    <aside class="bcls-aside bcls-aside--information">これは非アクティブなプレイヤーのスクリーンショットです。エラーを表示しているはずです。</aside>
+    <aside class="bcls-aside bcls-aside--information">これは、非アクティブなプレーヤーのスクリーンショットです。エラーが表示されているはずです。</aside>
     </section>
 
     <section class="bcls-section">
-    <h3 id="language">language</h3>
+    <h3 id="language">言語</h3>
 
-    <p><code translate="No">language</code>情報:</p>
+    <p><code translate="No">language</code> information:</p>
 
     <ul>
       <li>データ型:文字列</li>
@@ -2042,7 +904,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="languages">言語</h3>
 
-    <p><code translate="No">languages</code>情報:</p>
+    <p><code translate="No">languages</code> information:</p>
 
     <ul>
       <li>データタイプ:文字列の配列</li>
@@ -2054,7 +916,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="loop">ループ</h3>
 
-    <p><code translate="No">loop</code>情報:</p>
+    <p><code translate="No">loop</code> information:</p>
 
     <ul>
       <li>動画が終了するとすぐに最初からやり直します。</li>
@@ -2091,7 +953,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
           <ul>
             <li>優先順にソースオブジェクトの配列</li>
             <li>この配列の要素は、に直接変換されます<code translate="No">source</code>要素</li>
-            <li>A <em>ソース</em>オブジェクトには2つのプロパティが必要です。<code translate="No">src</code>そして<code translate="No">type</code></li>
+            <li>A <em>出典</em> オブジェクトには2つのプロパティが必要です。<code translate="No">src</code>と<code translate="No">type</code></li>
             <li>ザ・<code translate="No">type</code>属性は、HTML5標準で指定されているビデオのMIMEタイプです。</li>
           </ul>
           </td>
@@ -2151,7 +1013,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <p>次のJSONでは、<code translate="No">media</code>含むプロパティ：</p>
 
     <ul>
-      <li>A <em>ポスター.highres</em>プロパティ</li>
+      <li>A <em>ポスター.highres</em> プロパティ</li>
       <li>A <em>ソース</em> 2つのソースオブジェクトを含むプロパティ。1つはHLSビデオ用、もう1つはMP4ビデオ用です。</li>
     </ul>
 
@@ -2176,7 +1038,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
 
     <p>を使用して、どのソースが再生されているかを確認できます。<code translate="No">currentSrc()</code>関数。次のスクリーンショットは、ブラウザコンソールでの関数の使用を示しています。</p>
 
-    <figure class="bcls-figure"><img class="bcls-image" alt="現在のソース" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/player-config-currentsrc.png"/>
+    <figure class="bcls-figure"><img class="bcls-image" alt="Current Source" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/player-config-currentsrc.png" />
     <figcaption class="bcls-caption--image">現在のソース</figcaption>
     </figure>
 
@@ -2184,13 +1046,13 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     </section>
 
     <section class="bcls-section">
-    <h3 id="muted">muted</h3>
+    <h3 id="muted">ミュートされた</h3>
 
-    <p><code translate="No">muted</code>情報:</p>
+    <p><code translate="No">muted</code> information:</p>
 
     <ul>
       <li>データ型:ブール値</li>
-      <li>デフォルト:false</li>
+      <li>デフォルト： false</li>
       <li>プレーヤーのロード時にサウンドをミュートするかどうかを決定します。</li>
     </ul>
     </section>
@@ -2198,7 +1060,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="picture_in_picture_control">picture_in_picture_control </h3>
 
-    <p><code translate="No">picture_in_picture_control</code>情報:</p>
+    <p><code translate="No">picture_in_picture_control</code> information:</p>
 
     <ul>
       <li>データ型:ブール値</li>
@@ -2210,21 +1072,21 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="playback_rates">playback </h3>
 
-    <p><code translate="No">playback_rates</code>情報:</p>
+    <p><code translate="No">playback_rates</code> information:</p>
 
     <ul>
       <li>データタイプ:配列</li>
-      <li>デフォルト:なし</li>
+      <li>デフォルト：なし</li>
       <li>再生レートコントロールに表示する再生レートの配列。</li>
     </ul>
 
     <p>値は読み込まれ、プレイヤーのコントロールバーの再生レートコントロールに表示されます。</p>
 
-    <figure class="bcls-figure"><img class="bcls-image" alt="再生レート UI" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/playback-rates-ui.png"/></figure>
+    <figure class="bcls-figure"><img class="bcls-image" alt="playback rates ui" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/playback-rates-ui.png" /></figure>
 
     <p>Studio または curl を使用して、プロパティの値を変更できます。</p>
 
-    <figure class="bcls-figure"><img class="bcls-image" alt="再生レート jsonエディタ" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/playback-rates-json-editor.png"/></figure>
+    <figure class="bcls-figure"><img class="bcls-image" alt="playback rates json editor" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/playback-rates-json-editor.png" /></figure>
 
     <pre class="line-numbers">
     <code class="language-bash" translate="No">curl \
@@ -2234,17 +1096,17 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       --data '{
           "playback_rates": [0.1,1,2.5,6]
          }' \
-      https://players.api.brightcove.com/v2/accounts/$ACCOUNT_ID/players/$PLAYER_ID/configuration</code></pre>
+      https://players.api.brightcove.com/v2/accounts/{account_id}/players/{player_id}/configuration</code></pre>
     </section>
 
     <section class="bcls-section">
     <h3 id="player">プレーヤ</h3>
 
-    <p><code translate="No">player</code>情報:</p>
+    <p><code translate="No">player</code> information:</p>
 
     <ul>
       <li>データタイプ:オブジェクト</li>
-      <li>デフォルト:プレイヤー固有の情報を入力</li>
+      <li>デフォルト：プレイヤー固有の情報を入力</li>
       <li><code translate="No">inactive</code>やなど、このプレーヤーに関するさまざまなメタデータが含まれています<code translate="No">template.version</code>。</li>
     </ul>
     </section>
@@ -2252,7 +1114,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="play_button">play_button</h3>
 
-    <p><code translate="No">play_button</code>情報:</p>
+    <p><code translate="No">play_button</code> information:</p>
 
     <ul>
       <li>データタイプ:オブジェクト</li>
@@ -2269,17 +1131,17 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
           <tr>
             <td>ホバー</td>
             <td>文字列</td>
-            <td><code translate="No">glow</code>または<code translate="No">darken</code> ; デフォルトはピンク/プログレスカラー</td>
+            <td><code translate="No">glow</code> or <code translate="No">darken</code>; default is pink / progress color</td>
           </tr>
           <tr>
-            <td>シェイプ</td>
+            <td>形状</td>
             <td>文字列</td>
-            <td><code translate="No">square</code>または<code translate="No">rectangle</code> ; デフォルトは円です</td>
+            <td><code translate="No">square</code> or <code translate="No">rectangle</code>; default is a circle</td>
           </tr>
           <tr>
             <td>ポジション</td>
             <td>文字列</td>
-            <td><code translate="No">topLeft</code>または<code translate="No">topRight</code> ; デフォルトは中央です</td>
+            <td><code translate="No">topLeft</code> or <code translate="No">topRight</code>; default is center</td>
           </tr>
         </tbody>
       </table>
@@ -2290,7 +1152,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="player_id">player_id</h3>
 
-    <p><code translate="No">player_id</code>情報:</p>
+    <p><code translate="No">player_id</code> information:</p>
 
     <ul>
       <li>データ型:文字列</li>
@@ -2301,22 +1163,22 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="player_name">player_name</h3>
 
-    <p><code translate="No">player_name</code>情報:</p>
+    <p><code translate="No">player_name</code> information:</p>
 
     <ul>
       <li>データ型:文字列</li>
-      <li>プレーヤーに関連付けられた Video Cloud プレーヤー名-注: <code translate="No">name<code translate="No">config.json</code></code>プレーヤーに入力したは、<code translate="No">player_name</code>設定を取得したときと同様に、プレーヤープレビュー URL の最後 (これは、プレーヤー管理 API <code translate="No">name</code>を使用して設定を取得したときと同じように返されます。しかし、<code translate="No">name</code>プレーヤーを作成または更新するときに使用する必要があります。</li>
+      <li>プレイヤーに関連付けられた Video Cloud プレーヤー名-注: <code translate="No">name</code>プレーヤーに対して入力した名前は、<code translate="No">player_name</code>次の設定を取得したときと同じように返されます。プレイヤープレビュー URL <code translate="No">config.json</code>の末尾に置く（プレイヤー管理 API <code translate="No">name</code>経由で設定を取得したときと同じように返されます）。しかし、<code translate="No">name</code>プレーヤーを作成または更新するときに使用する必要があります。</li>
     </ul>
     </section>
 
     <section class="bcls-section">
     <h3 id="playsinline">プレイシンライン</h3>
 
-    <p><code translate="No">playsinline</code>情報:</p>
+    <p><code translate="No">playsinline</code> information:</p>
 
     <ul>
       <li>データ型:ブール値</li>
-      <li>デフォルト:false</li>
+      <li>デフォルト： false</li>
       <li>プレーヤーのインライン再生を有効にします (一部のデバイスでの再生に必要)。</li>
     </ul>
     </section>
@@ -2329,8 +1191,8 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <p>どちらの構成でも、次の設定方法を示します。</p>
 
     <ul>
-      <li><code translate="No">autoadvance</code> :再生リストに次のビデオを読み込む前に遅延する整数（秒）。<code translate="No">0</code> assigned の値を指定すると、ビデオ間の待機は発生しません。<code translate="No">null</code> assigned の値は自動進みません。</li>
-      <li><code translate="No">playOnSelect</code> :<code translate="No">true</code>割り当てられているので、プレイリストメニューから項目をクリックすると、プレーヤー内の前のビデオが一時停止していても、ロード時にビデオが再生されます。</li>
+      <li><code translate="No">autoadvance</code>:再生リストに次のビデオを読み込む前に遅延する整数（秒）。<code translate="No">0</code> assigned の値を指定すると、ビデオ間の待機は発生しません。<code translate="No">null</code> assigned の値は自動進みません。</li>
+      <li><code translate="No">playOnSelect</code>:<code translate="No">true</code>割り当てられているので、プレイリストメニューから項目をクリックすると、プレーヤー内の前のビデオが一時停止していても、ロード時にビデオが再生されます。</li>
     </ul>
 
     <h3>プレイリストバージョン 3 (デフォルト)</h3>
@@ -2356,7 +1218,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
             ]
           }
       }' \
-      https://players.api.brightcove.com/v2/accounts/$ACCOUNT_ID/players</code></pre>
+      https://players.api.brightcove.com/v2/accounts/{account_id}/players</code></pre>
 
     <p>その使用方法と利点については、<a href="https://player.support.brightcove.com/plugins/plugin-registry.html">プラグインレジストリのドキュメントを参照してください</a>。</p>
 
@@ -2385,15 +1247,15 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
             <span class="bcls-highlight">"autoadvance": 2</span>
           }
       }' \
-      https://players.api.brightcove.com/v2/accounts/$ACCOUNT_ID/players</code></pre>
+      https://players.api.brightcove.com/v2/accounts/{account_id}/players</code></pre>
 
     <h3>プレイリストバージョン 1 (レガシー)</h3>
 
     <p><code translate="No">autoadvance</code>と<code translate="No">playOnSelect</code> 2 つのプロパティに加えて、プレイリストバージョン 1 の使用を構成するために使用されます。非対応形式:</p>
 
     <ul>
-      <li><code translate="No">playlist</code> :<code translate="No">true</code>プレイヤーにプレイリストを使用させるように割り当てられます。</li>
-      <li><code translate="No">adjusted</code> :<code translate="No">true</code>プレイリストのプレーヤーのサイズをプレーヤーに調整するように割り当てられます。</li>
+      <li><code translate="No">playlist</code>:<code translate="No">true</code>プレイヤーにプレイリストを使用させるように割り当てられます。</li>
+      <li><code translate="No">adjusted</code>:<code translate="No">true</code>プレイリストのプレーヤーのサイズをプレーヤーに調整するように割り当てられます。</li>
     </ul>
 
     <p>プレイリスト関連のプロパティの3つを設定するcurlステートメントは次のとおりです。</p>
@@ -2414,9 +1276,9 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
         }
       }
     }' \</span>
-    https://players.api.brightcove.com/v2/accounts/$ACCOUNT_ID/players/$PLAYER_ID/configuration</code></pre>
+    https://players.api.brightcove.com/v2/accounts/{account_id}/players/{player_id}/configuration</code></pre>
 
-    <aside class="bcls-aside bcls-aside--information">いつ<code translate="No">height</code>そして<code translate="No">width</code>値が割り当てられていない場合、プレーヤーとプレイリストのサイズは自動的に調整されます。</aside>
+    <aside class="bcls-aside bcls-aside--information">いつ<code translate="No">height</code>と<code translate="No">width</code>値が割り当てられていない場合、プレーヤーとプレイリストのサイズは自動的に調整されます。</aside>
 
     <p>プレイリストバージョン 1 <code translate="No">playOnSelect</code>に設定するには、次の curl ステートメントを使用します。</p>
 
@@ -2428,7 +1290,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       --data '{
            <span class="bcls-highlight">{"playOnSelect": true}</span>
       }' \
-      https://players.api.brightcove.com/v2/accounts/$ACCOUNT_ID/players/$PLAYER_ID/configuration</code></pre>
+      https://players.api.brightcove.com/v2/accounts/{account_id}/players/{player_id}/configuration</code></pre>
     <!-- <p><code data-gist-id="9629223" data-gist-hide-footer="true" data-gist-line="248-263" data-gist-highlight-line="252-262"></code></p> -->
 
     <h3>プレーヤーにプレイリストが含まれているかどうかをプログラムで判断する</h3>
@@ -2440,7 +1302,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
 
     <p>プレイリストプラグインの存在をチェックし、プレーヤーのあるページではなく（例えば、コネクタで使用するプレーヤーのリストをチェックする場合）、もう少し複雑なプロセスを使用する必要があります。プレイヤーの設定を読んで、プレイヤーの JSON <strong>のプラグインセクションに</strong><strong>「名前」:「bcPlayListui」</strong>が含まれているかどうかを確認します。そのタスクの 1 つの解決方法は次のとおりです。</p>
 
-    <aside class="bcls-aside bcls-aside--information">注:<code translate="No">the JSON String</code>変数には、プレイヤーの JSON 設定の縮小版が含まれています。</aside>
+    <aside class="bcls-aside bcls-aside--information">注意：NS <code translate="No">the JSON String</code>変数には、プレーヤーのJSON構成の縮小バージョンが含まれているだけです。</aside>
 
     <pre class="line-numbers">
     <code class="language-javascript" translate="No">var theJSON = {},
@@ -2460,7 +1322,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       console.log('No playlist');
     }</code></pre>
 
-    <aside class="bcls-aside bcls-aside--warning">以前にプレーヤの設定を確認して、<code translate="No">“playlist”: true</code>プレイリストが有効になっているかどうかを判断するために、の存在を確認している可能性があります。これは一貫して正しく動作しません。</aside>
+    <aside class="bcls-aside bcls-aside--warning">以前にプレーヤーの構成をチェックして、<code translate="No">“playlist”: true</code>プレーヤーでプレイリストが有効になっているかどうかを確認します。これは一貫して正しく機能しません。</aside>
     </section>
 
     <section class="bcls-section">
@@ -2469,8 +1331,8 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <p><code translate="No">plugins</code>プロパティは、video.js プラグインを初期化する順序と、それらに適用されるカスタマイズされた設定を指定します。プラグインは、<code translate="No">scripts</code>対応するプロパティの URL エントリ、および必要に応じてサポート<code translate="No">stylesheets</code> URL でサポートされる必要があります。<code translate="No">plugins</code>配列の各要素は、<code translate="No">name</code>プロパティを持つオブジェクトであり、<code translate="No">options</code>オプションのプロパティを含めることもできます。</p>
 
     <ul>
-      <li><code translate="No">name</code> :video.js プラグインの名前。サポートする JavaScript コードから取得されます。</li>
-      <li><code translate="No">options</code> :設定値のオブジェクトハッシュは、初期化時にプラグインに提供するためにオーバーライドされます</li>
+      <li><code translate="No">name</code>:video.js プラグインの名前。サポートする JavaScript コードから取得されます。</li>
+      <li><code translate="No">options</code>:設定値のオブジェクトハッシュは、初期化時にプラグインに提供するためにオーバーライドされます</li>
     </ul>
 
     <h3>オプション子</h3>
@@ -2495,17 +1357,17 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
 
     <p>注：標準プラグインの実装を使用しますが、<code translate="No">options</code>無名関数のパラメータとして使用します。その後、<code translate="No">options.propertyName</code>記法を使用して値にアクセスできます。</p>
 
-    <aside class="bcls-aside bcls-aside--information"><em>options </em>プロパティには、オブジェクトの配列など、必要な任意のデータ構造を指定できます。オブジェクトの配列を渡す場合は、オブジェクトの配列としてデータにアクセスする必要があることに注意してください。</aside>
+    <aside class="bcls-aside bcls-aside--information">NS <em>options</em> プロパティは、オブジェクトの配列など、必要な任意のデータ構造にすることができます。オブジェクトの配列を渡す場合は、オブジェクトの配列としてデータにアクセスする必要があることを覚えておいてください。</aside>
 
-    <p>Brightcove が提供するプラグインの中には、プラグインレジストリを利用するものもあり、ここで示したものとは設定が異なります。<a href="https://player.support.brightcove.com/plugins/plugin-registry.html">概要を参照してください。詳細については、プラグインレジストリドキュメント</a>。</p>
+    <p>Brightcoveが提供するプラグインの中には、プラグインレジストリを利用するものもあり、ここで示したものとは設定が異なります。<a href="https://player.support.brightcove.com/plugins/plugin-registry.html">概要を参照してください。詳細については、プラグインレジストリドキュメント</a>。</p>
     </section>
 
     <section class="bcls-section">
     <h3 id="preload">プリロード</h3>
 
-    <p><code translate="No">preload</code>情報:</p>
+    <p><code translate="No">preload</code> information:</p>
 
-    <aside class="bcls-aside bcls-aside--warning">注：プリロード設定は、実際にはHTML5仕様の提案に過ぎないため、ブラウザごとに異なる動作が発生する可能性があります。値を<strong> Auto </strong>に設定すると、帯域幅の消費に大きな影響を与える可能性があります。</aside>
+    <aside class="bcls-aside bcls-aside--warning">注:プリロード設定は、実際にはHTML5仕様の提案に過ぎないため、ブラウザごとに異なる動作が発生する可能性があります。値をに設定する<strong>自動</strong>帯域幅の消費に重大な影響を与える可能性があります。</aside>
 
     <ul>
       <li>データ型:文字列</li>
@@ -2530,23 +1392,23 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     or
     { "preload": "auto" }</code></pre>
 
-    <aside class="bcls-aside bcls-aside--information">注：サーバーサイド広告挿入 (SSAI) を使用する場合は、をBrightcove が推奨しています<code translate="No">preload=none</code>。<code translate="No">preload<code translate="No">auto</code></code>がまたはに設定されている場合<code translate="No">metadata</code>、動画ストリームの最初のフレームが要求され、ユーザーが再生を開始しない場合でも、広告は配信済みとしてカウントされます。</aside>
+    <aside class="bcls-aside bcls-aside--information">注:サーバーサイド広告挿入 (SSAI) を使用する場合は、をブライトコーブが推奨しています<code translate="No">preload=none</code>。もしも<code translate="No">preload</code>に設定されています<code translate="No">auto</code>また<code translate="No">metadata</code>、ビデオストリームの最初のフレームが要求されます。これにより、ユーザーが再生を開始しなくても、広告は配信されたものとしてカウントされます。</aside>
     </section>
 
     <section class="bcls-section">
     <h3 id="query_string_to_window">query_string_to_window</h3>
 
-    <p><code translate="No">query_string_to_window</code>情報:</p>
+    <p><code translate="No">query_string_to_window</code> information:</p>
 
-    <aside class="bcls-aside bcls-aside--information">標準 (iframe) プレーヤー実装のみをサポートします。</aside>
-    クエリ文字列パラメータからのグローバル名前空間 (ウィンドウ) の移入を制御するために使用されます。これは、Google の AMP コンポーネントや Facebook インスタント記事など、埋め込みプレーヤーの場合に特に便利です。クエリ文字列の解析は、<a href="//nodejs.org/api/querystring.html#querystring_querystring_parse_str_sep_eq_options"> Node.js querystring モジュールを使用して実行されます</a>。この設定オブジェクトを使用するには、次のサブプロパティのうち少なくとも 1 つが必要です。両方同時に使用できます。
+    <aside class="bcls-aside bcls-aside--information">標準（iframe）プレーヤーの実装のみをサポートします。</aside>クエリ文字列パラメータからのグローバル名前空間 (ウィンドウ) の移入を制御するために使用されます。これは、Google の AMP コンポーネントや Facebook インスタント記事など、埋め込みプレーヤーの場合に特に便利です。クエリ文字列の解析は、<a href="//nodejs.org/api/querystring.html#querystring_querystring_parse_str_sep_eq_options"> Node.js querystring モジュールを使用して実行されます</a>。この設定オブジェクトを使用するには、次のサブプロパティのうち少なくとも 1 つが必要です。両方同時に使用できます。
 
     <ol class="bcls-tasklist">
       <li>
       <ul>
         <li>名前: <code translate="No">query_string_to_window.target</code></li>
         <li>データ型:文字列</li>
-        <li>説明：ウィンドウに作成する宛先オブジェクト。パースされたクエリ文字列全体が移入されます。たとえば、<code translate="No">query_string_to_window.target</code>プレーヤー構成で次のものを使用します。
+        <li>
+description: ウィンドウに作成する宛先オブジェクト。パースされたクエリ文字列全体が移入されます。たとえば、<code translate="No">query_string_to_window.target</code>プレーヤー構成で次のものを使用します。
         <pre class="line-numbers">
     <code class="language-json" translate="No">{
     "query_string_to_window": {"target": "queryStringParams"}
@@ -2569,7 +1431,8 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       <ul>
         <li>名前: <code translate="No">query_string_to_window.globals</code></li>
         <li>データタイプ:配列</li>
-        <li>説明：ウィンドウオブジェクトのプロパティ名の配列で、クエリ文字列内の値から移入されます。<code translate="No">window</code>オブジェクトまたはそのプロトタイプチェーンにすでに存在する一致するプロパティは設定されません。たとえば、<code translate="No">query_string_to_window.globals</code>プレーヤー構成で次のものを使用します。
+        <li>
+description: ウィンドウオブジェクトのプロパティ名の配列で、クエリ文字列内の値から移入されます。<code translate="No">window</code>オブジェクトまたはそのプロトタイプチェーンにすでに存在する一致するプロパティは設定されません。たとえば、<code translate="No">query_string_to_window.globals</code>プレーヤー構成で次のものを使用します。
         <pre class="line-numbers">
     <code class="language-json" translate="No">{
     "query_string_to_window": {
@@ -2602,7 +1465,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="repeat">繰り返す</h3>
 
-    <p><code translate="No">repeat</code>情報:</p>
+    <p><code translate="No">repeat</code> information:</p>
 
     <ul>
       <li>データ型は<code translate="No">boolean</code></li>
@@ -2613,11 +1476,11 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="responsive">応答します</h3>
 
-    <p><code translate="No">responsive</code>情報:</p>
+    <p><code translate="No">responsive</code> information:</p>
 
     <ul>
       <li>データ型:ブール値</li>
-      <li>デフォルト: <code translate="No">true</code></li>
+      <li>デフォルト：<code translate="No">true</code></li>
       <li><code translate="No">true</code>このオプションをに設定すると、プレーヤーは応答性のあるブレークポイントに基づいて自分自身をカスタマイズします (参照: <a href="#breakpoints">ブレークポイントオプション</a> )。</li>
     </ul>
 
@@ -2627,7 +1490,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="scripts">スクリプト</h3>
 
-    <p><code translate="No">scripts</code>情報:</p>
+    <p><code translate="No">scripts</code> information:</p>
 
     <ul>
       <li>データ型は、プレーヤーに含まれている JavaScript ファイルを参照する文字列の配列です</li>
@@ -2640,7 +1503,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="skin">スキン</h3>
 
-    <p><code translate="No">skin</code>情報:</p>
+    <p><code translate="No">skin</code> information:</p>
 
     <ul>
       <li>データ型:ブールまたは文字列</li>
@@ -2656,19 +1519,19 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
         </thead>
         <tbody class="bcls-table__body">
           <tr>
-            <td>グラファイト</td>
-            <td>グラファイト</td>
+            <td>"graphite"</td>
+            <td>"graphite"</td>
             <td>旧バージョンの Brightcove Player スタイルといくつかの互換性ハックを使用します。</td>
           </tr>
           <tr>
             <td>false</td>
-            <td>「なし」</td>
+            <td>"none"</td>
             <td>すべての Brightcove プレーヤーのスタイリングを無効にします。これは、高度にカスタマイズされた UI をゼロから使用するオプションです。</td>
             <td>&nbsp;</td>
           </tr>
           <tr>
             <td>未定義</td>
-            <td>「luna」</td>
+            <td>"luna"</td>
             <td><code translate="No">undefined</code>このままにすると、プレイヤーはデフォルトのスキン (例:k.a.Luna)。</td>
             <td>&nbsp;</td>
           </tr>
@@ -2681,7 +1544,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="stylesheets">stylesheets</h3>
 
-    <p><code translate="No">stylesheets</code>情報:</p>
+    <p><code translate="No">stylesheets</code> information:</p>
 
     <ul>
       <li>プレーヤーに含めるべきCSSファイルを参照するURL文字列の配列</li>
@@ -2689,13 +1552,13 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       <li>スタイルシートは指定した順序に含まれます</li>
     </ul>
 
-    <aside class="bcls-aside bcls-aside--warning">プレーヤースタイルシートでは CSS <code translate="No">@import</code>ルールを使用しないでください。パーシングの問題はプレーヤーのビルドで発生し、プレーヤーを正常に公開することはできません。</aside>
+    <aside class="bcls-aside bcls-aside--warning">CSSを使用しないでください<code translate="No">@import</code>プレーヤーのスタイルシートのルール。解析の問題はプレーヤーのビルド時に発生し、プレーヤーを正常に公開できません。</aside>
     </section>
 
     <section class="bcls-section">
     <h3 id="techOrder">techOrder</h3>
 
-    <p><code translate="No">techOrder</code>情報:</p>
+    <p><code translate="No">techOrder</code> information:</p>
 
     <ul>
       <li>データタイプ:配列</li>
@@ -2703,7 +1566,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       <li>デフォルトでは、Brightcove Player は、動画を再生するソースと技術の組み合わせを検索するときに、<strong>技術ファースト・オーダーを実行します</strong>。つまり、2 つのソースと 2 つの技術がある場合、プレーヤーは次の再生テクノロジを試す前に、<code translate="No">techOrder</code>オプションプロパティの最初の技術を使用して各ビデオを再生しようとします。<a href="https://player.support.brightcove.com/playback/guide-playback-technology.html">ガイドを参照してください。詳細については、再生テクノロジのドキュメントを参照してください</a>。</li>
     </ul>
 
-    <p>次の curl ステートメントを使用して、<code translate="No">techOrder</code>をデフォルトのからに変更できます<code translate="No">['flash','html5']</code>。<code translate="No">['html5','flash']</code></p>
+    <p>次の curl ステートメントを使用して、<code translate="No">techOrder</code>をデフォルトからに変更できます。<code translate="No">['html5','flash']</code><code translate="No">['flash','html5']</code> :</p>
 
     <pre class="line-numbers">
     <code class="language-bash" translate="No">curl \
@@ -2713,7 +1576,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       --data '{
           "techOrder": "['flash','html']"
          }' \
-      https://players.api.brightcove.com/v2/accounts/$ACCOUNT_ID/players/$PLAYER_ID/configuration</code></pre>
+      https://players.api.brightcove.com/v2/accounts/{account_id}/players/{player_id}/configuration</code></pre>
     </section>
 
     <section class="bcls-section">
@@ -2721,7 +1584,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
 
     <p>プレーヤーモジュールの<strong> JSON エディタを使用して</strong>、<strong>プレーヤーのバージョンを手動で設定できます</strong>。</p>
 
-    <figure class="bcls-figure"><img class="bcls-image" alt="version" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/version.png"/></figure>
+    <figure class="bcls-figure"><img class="bcls-image" alt="version" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/version.png" /></figure>
 
     </section>
 
@@ -2743,34 +1606,34 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
           }
         }
       }' \</span>
-      https://players.api.brightcove.com/v2/accounts/$ACCOUNT_ID/players</code></pre>
+      https://players.api.brightcove.com/v2/accounts/{account_id}/players</code></pre>
     <!-- <p><code data-gist-id="8759542" data-gist-hide-footer="true" data-gist-line="240-252" data-gist-highlight-line="247-249"></code></p> -->
 
-    <p>リクエストボディオブジェクトでは、<code translate="No">name<code translate="No">description</code></code>およびは最上位のプロパティであり、<code translate="No">configuration</code>その他はすべてオブジェクトのプロパティであることに注意してください。<code translate="No">configuration</code>プレーヤの作成時には、<a href="#configproperties">任意の設定プロパティを含めることができます</a>。</p>
+    <p>リクエストボディオブジェクトでは、<code translate="No">name</code><code translate="No">description</code>およびはトップレベルのプロパティであり、その他はすべて次のプロパティです。<code translate="No">configuration</code>オブジェクト。のいずれか<a href="#configproperties">構成プロパティ</a>に含めることができます<code translate="No">configuration</code>プレーヤーを作成するとき。</p>
 
-    <aside class="bcls-aside bcls-aside--information">注：ID を使用する代わりに、ビデオの参照 ID を構文で使用できます<code translate="No">"video": "ref:1234refid"</code>。</aside>
+    <aside class="bcls-aside bcls-aside--information">注:IDを使用する代わりに、構文で動画の参照IDを使用できます<code translate="No">"video": "ref:1234refid"</code>。</aside>
     </section>
 
     <section class="bcls-section">
     <h3 id="volume_orientation">volume_オリエンテーション</h3>
 
-    <p><code translate="No">volume_orientation</code>情報:</p>
+    <p><code translate="No">volume_orientation</code> information:</p>
 
-    <aside class="bcls-aside bcls-aside--information language-editable">この機能は、Brightcove プレーヤー 6.32.0+ で使用できます。</aside>
+    <aside class="bcls-aside bcls-aside--information">この機能は、Brightcove Player6.32.0以降で使用できます。</aside>
 
     <ul>
       <li>データ型:文字列</li>
       <li>デフォルト:水平</li>
       <li><code translate="No">volume_orientation</code>プロパティは、ボリュームレベルスライダーが水平方向または垂直のどちらに向いているかを決定します。
-      <figure class="bcls-figure"><img class="bcls-image" alt="水平方向のボリューム" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/volume-horizontal.png"/></figure>
+      <figure class="bcls-figure"><img class="bcls-image" alt="volume horizontal" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/volume-horizontal.png" /></figure>
 
-      <figure class="bcls-figure"><img class="bcls-image" alt="ボリューム垂直" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/volume-vertical.png"/></figure>
+      <figure class="bcls-figure"><img class="bcls-image" alt="volume vertical" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/volume-vertical.png" /></figure>
       </li>
     </ul>
 
     <p>Studio または curl を使用して、プロパティの値を変更できます。</p>
 
-    <figure class="bcls-figure"><img class="bcls-image" alt="体積の方向を設定する" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/set-volume-orientation.png"/></figure>
+    <figure class="bcls-figure"><img class="bcls-image" alt="set volume orientation" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/player-management-api/guides/player-configuration/set-volume-orientation.png" /></figure>
 
     <pre class="line-numbers">
     <code class="language-bash" translate="No">curl \
@@ -2780,13 +1643,13 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       --data '{
           "volume_orientation": "vertical"
          }' \
-      https://players.api.brightcove.com/v2/accounts/$ACCOUNT_ID/players/$PLAYER_ID/configuration</code></pre>
+      https://players.api.brightcove.com/v2/accounts/{account_id}/players/{player_id}/configuration</code></pre>
     </section>
 
     <section class="bcls-section">
     <h3 id="vttjs">vttjs</h3>
 
-    <p><code translate="No">vttjs</code>情報:</p>
+    <p><code translate="No">vttjs</code> information:</p>
 
     <ul>
       <li>データ型:文字列</li>
@@ -2798,7 +1661,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     <section class="bcls-section">
     <h3 id="wait_for_ad_block_detect">wait_for_ad_block_detect</h3>
 
-    <p><code translate="No">wait_for_ad_block_detect</code>情報:</p>
+    <p><code translate="No">wait_for_ad_block_detect</code> information:</p>
 
     <ul>
       <li>データ型:ブール値</li>
@@ -2808,161 +1671,3 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
     </section>
   </section>
   </article>
-
-<!-- complete bootstrap layout -->
-    </div>
-    <div class="col-sm-2 right-side-bar">
-      
-      <nav class="right-side-nav" id="right_side_nav">
-        <h6 class="toc">ページコンテンツ</h6>
-        <ul id="in_page_nav" class="list-none"></ul>
-      </nav>
-      
-    </div>
-  </div>
-</div>
-
-<hr>
-<footer class="bcls-footer" role="contentinfo">
-  <div class="row">
-    <div class="region region-footer-top-center col-md-12">
-      <nav role="navigation" aria-labelledby="block-brightcovesupport-menu" id="block-brightcovesupport" class="footer-menu">
-
-        <h2>Brightcove サポート</h2>
-
-        <ul class="menu">
-          <li>
-            <a href="https://status.brightcove.com">システムステータス</a>
-          </li>
-          <li>
-            <a href="https://supportportal.brightcove.com/s/login/?">サポートへのお問い合わせ</a>
-          </li>
-          <li>
-            <a href="https://support.brightcove.com/">ドキュメンテーション</a>
-          </li>
-        </ul>
-
-      </nav>
-      <nav role="navigation" aria-labelledby="block-training-menu" id="block-training" class="footer-menu">
-
-        <h2>トレーニング</h2>
-
-        <ul class="menu">
-          <li>
-            <a href="https://studio.support.brightcove.com/training/online-training-courses.html">オンラインコース</a>
-          </li>
-          <li>
-            <a href="https://studio.support.brightcove.com/training/register-training.html">コースに登録する</a>
-          </li>
-          <li>
-            <a href="https://university.brightcove.com/">Brightcove University</a>
-          </li>
-        </ul>
-
-      </nav>
-      <nav role="navigation" aria-labelledby="block-brightcove-menu" class="footer-menu">
-
-        <h2>Brightcove</h2>
-
-        <ul class="menu">
-          <li>
-            <a href="https://www.brightcove.com">Brightcove.com</a>
-          </li>
-          <li>
-            <a href="https://supportportal.brightcove.com/s/login/?">お問合せ</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </div>
-  <div class="row">
-    <div class="region region-footer-bottom-center col-md-12">
-      <div class="bcls-copyright footer-menu">
-        <table>
-          <tr>
-            <td>
-              <div id="bc_copyright" class="field field--name-field-copyright-year field--type-string field--label-hidden field--item" style="float: left;"> Brightcove Inc. All rights reserved.</div>
-            </td>
-            <td><a href="https://www.brightcove.com/en/legal/privacy">プライバシー</a> | <a href="https://www.brightcove.com/en/terms-and-conditions">利用規約</a></td>
-            <td>
-              <div class="gf-links-cols footer-menu">
-                <div class="gf-social"><a href="https://www.linkedin.com/company/16439" title="LinkedIn" newtab="newtab" class="gf-social-linkedin"><i class="fab fa-linkedin-in" style="font-size: 1.5rem;"></i></a><a href="https://twitter.com/brightcove" title="Twitter" newtab="newtab" class="gf-social-twitter"><i class="fab fa-twitter" style="font-size: 1.5rem;"></i></a><a href="https://www.facebook.com/Brightcove" title="Facebook" newtab="newtab" class="gf-social-facebook"><i class="fab fa-facebook-f" style="font-size: 1.5rem;"></i></a>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </div>
-  </div>
-</footer>
-
-</div>
-</div>
-<script>
-      
-  var searchBox = sajari.init({
-    mode: "search-box",
-    project: "1588255093746585379", // Set this to your project.
-    collection: "brightcove-documenation", // Set this to your collection.
-    instantPipeline: "autocomplete", // Pipeline used as you type
-    inputPlaceholder: "Search", // Input element placeholder
-    maxSuggestions: 5, // Maximum number of suggestions to show
-    attachSearchBox: document.getElementById("nav-search-box") // DOM element to attach to
-  });
-  
-    searchBox("sub", "pipeline.search-sent", function (_, query) {
-      window.location = "/search.html?q=" + encodeURIComponent(query.q);
-    });
-  
-
-</script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/https-fix.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/setDate.js"></script>
-  
-  <script src="https://support.brightcove.com/site-assets/js/site/prism.js"></script>
-  
-  <script src="https://support.brightcove.com/site-assets/js/site/site.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/tabs.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/toc.js"></script>
-  <script src="/assets/js/sites_nav.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/bcls-utils.js"></script>
-  <script src="https://support.brightcove.com/site-assets/js/site/local-link-fix.js"></script>
-  <script src="/assets/js/feedback.js"></script>
-  
-  <script src="/assets/js/sajari-search-foot.js"></script>
-  
-  <!-- <script src="/assets/js/sajari-index.js"></script> -->
-  <style>
-    a.sj-paginator__page-number.sj-paginator__page-number--current.css-so0ov7 {
-      background-color: lightblue;
-    }
-    div.sj-tabs__tab {
-      margin-top: 3rem;
-      margin-left: .3rem;
-      border-top-left-radius: .4rem;
-      border-top-right-radius: .4rem;
-      background-color:#e8e8e8;
-    }
-
-    div.sj-tabs__tab.sj-tabs__tab--selected {
-      border-bottom-color: crimson;
-      background-color: #f8f8f8;
-    }
-
-    p.sj-results__result__description.css-p9jvyt {
-      font-size: 1rem;
-    }
-
-    .sj-result__text.css-31l7gp h3 {
-      color: navy;
-      font-size: 1.4rem;
-    }
-    </style>
-
-</body>
-
-</html>

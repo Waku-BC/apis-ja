@@ -1,0 +1,55 @@
+<section class="bcls-section" id="workingSample">
+  <h2>ビデオレポートジェネレータ</h2>
+
+  <fieldset class="bcls-fieldset">
+    <legend>入力</legend>
+
+    <p>アカウント情報を入力しない場合は、Brightcoveサンプルアカウントが使用されます。</p>
+
+    <p>アカウント ID: <input id="account_id" type="text" value="" placeholder="1752604059001" /></p>
+
+    <p>クライアント ID: <input id="client_id" type="text" size="60" value="" placeholder="c5d0a622-5479-46d8-8d8a-5f034b943fab" /></p>
+
+    <p>クライアントシークレット: <input id="client_secret" type="text" size="60" value="" placeholder="w7NQYu0vUloM4GYYy2SXAxrvyFpt8fwI35qAFZcS13-VIgs0itwKNsAwHOS80sOWK" /></p>
+
+    <p>取得する動画： <select name="videoCount" id="videoCount">
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100年</option>
+        <option value="500">500</option>
+        <option value="All">すべて</option>
+      </select></p>
+
+    <p>開始オフセット： <input id="initial_offset" type="text" value="0" size="20" /><br>
+    （これを、すでに取得したビデオの数に設定します）</p>
+
+    <p>レポート形式： <select name="report_type" id="report_type">
+      <option value="json">JSON</option>
+      <option value="csv">CSV</option>
+    </select></p>
+
+    <aside class="bcls-aside bcls-aside--warning">選択した場合<code translate="No">All</code>、しばらく待つ準備をしてください！上記のオフセットオプションを使用して、レポートをバッチで実行することもできます。これは、大規模なビデオライブラリに推奨されます。</aside>
+
+    <p><button class="bcls-button" id="makeReport">レポートを生成する</button></p>
+  </fieldset>
+
+  <fieldset class="bcls-fieldset">
+    <legend>ログ</legend>
+
+    <div id="logger" style="color:rgb(237, 104, 38)">
+      <p id="logText">入力を待っています...</p>
+    </div>
+
+    <p>現在のAPIリクエスト</p>
+
+    <pre class="line-numbers">
+<code id="apiRequest" class="language-http">APIリクエストはここに表示されます...</code></pre>
+  </fieldset>
+</section>
+
+<section id="csvDisplay" class="bcls-section">
+  <h2>レガシービデオレポート</h2>
+
+  <p>以下のデータをコピーして空のテキストファイルに貼り付け、.csv拡張子を付けて保存します。次に、ファイルを開いてスプレッドシートアプリケーションで表示できます。</p>
+  <textarea name="csvData" id="csvData" class="bcls-code" style="height:30em;"></textarea>
+</section>

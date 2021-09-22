@@ -1,0 +1,116 @@
+---
+title:  '概要：画像API' 
+description: Image APIを使用すると、サイズ変更、トリミング、または回転したバージョンの画像を取得できます。
+parent: Getting Started 
+grandparent: Image API
+layout: staging
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  <section class="bcls-section">
+    <h2 id="Introduction">入門</h2>
+    <p>Brightcove Image APIは、単純なGETリクエストを使用して、画像のサイズ変更、トリミング、回転をすばやく簡単に行う方法を提供します。</p>
+    <h3>URL をリクエスト</h3>
+    <p>ImageAPIのリクエストURLは次のとおりです。</p>
+    <pre><code class="language-http" translate="No">https://images.brightcovecdn.com/image/v1/<span class="bc-input">account_id</span>/default/url/<span class="bc-input">{image_url}</span></code></pre>
+    <p>必要なパスパラメータは次のとおりです。</p>
+    <ul>
+      <li><code translate="No">account_id</code>：ビデオクラウドアカウントID</li>
+      <li><code translate="No">image_url</code>：画像を見つけることができる公開URL</li>
+    </ul>
+    <aside class="bcls-aside bcls-aside--information language-editable">ノート：
+      <ul>
+        <li>次の画像形式がサポートされています。PNG、JPG、GIF</li>
+        <li>
+          NS <code translate="No">image_url</code>適切にエンコードする必要があります。JavaScriptを使用する場合は、<code translate="No">encodeURIComponent()</code>方法。また、使用することができます<a href="https://general.support.brightcove.com/utilities/string-encoder.html">文字列エンコーダ</a> Brightcove Learning Servicesが提供：
+          <figure class="bcls-figure">
+            <img class="bcls-image" src="/assets/images/image-api/string-encoder.png" alt="String Encoder">
+            <figcaption class="bcls-caption--image">文字列エンコーダ</figcaption>
+          </figure>
+        </li>
+      </ul>
+    </aside>
+  </section>
+  <section class="bcls-section">
+    <h2 id="URL_parameters">URL パラメータ</h2>
+    <p>画像の変換バージョンを取得するには、リクエストで以下に説明する1つ以上のURLパラメータを使用します。3つのパラメータを任意に組み合わせて使用できることに注意してください。</p>
+    <table class="bcls-table">
+      <caption class="bcls-caption--table">ImageAPIのURLパラメータ</caption>
+      <thead class="bcls-table__head">
+          <tr>
+              <th>パラメーター</th>
+              <th>説明</th>
+          </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+          <tr>
+              <td><code translate="No">resize</code></td>
+              <td>これを「widthxheight」に設定して画像のサイズを変更します-例：<code translate="no">サイズ変更= 160x90</code>）</td>
+          </tr>
+          <tr>
+              <td><code translate="No">crop</code></td>
+              <td>これを「widthxheight」に設定して、幅と高さを切り取ります-例：<code translate="no">作物= 160x90</code> -原点は画像の中心です。</td>
+          </tr>
+          <tr>
+              <td><code translate="No">rotate</code></td>
+              <td>画像を指定された度数だけ時計回りに回転させます-例：<code translate="no">回転= 90</code></td>
+          </tr>
+      </tbody>
+  </table>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Best_practices">ベストプラクティス</h2>
+    <p>変換された画像がWebページまたはオンラインアプリに表示される場合は、APIを使用して画像を取得し、サーバーに保存します。行う<strong>いいえ</strong> APIのレート制限により、トラフィックの多いページやアプリで一部のリクエストが失敗するため、実行時にそれらを取得します。また、APIリクエストが読み込まれるたびに強制的に行われるため、ページ/アプリのパフォーマンスが低下します。ユーザー。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Examples"> 例</h2>
+    <p>以下の例の元の画像は次のとおりです。</p>
+    <figure class="bcls-figure">
+      <img class="bcls-image" src="/assets/images/image-api/leaf.jpg" alt="Original Image">
+      <figcaption class="bcls-caption--image">元の画像（726x985）</figcaption>
+    </figure>
+    <h3>サイズ変更</h3>
+    <h4>要求</h4>
+    <pre><code class="language-http" translate="No">https://images.brightcovecdn.com/image/v1/1752604059001/default/url/https%3A%2F%2Fapis.support.brightcove.com%2Fassets%2Fimages%2Fimage-api%2Fleaf.jpg?resize=221x300</code></pre>
+    <figure class="bcls-figure">
+      <img class="bcls-image" src="/assets/images/image-api/leaf-resized.png" alt="Resized Image">
+      <figcaption class="bcls-caption--image">サイズ変更された画像</figcaption>
+    </figure>
+    <h3>トリミング</h3>
+    <h4>要求</h4>
+    <pre><code class="language-http" translate="No">https://images.brightcovecdn.com/image/v1/1752604059001/default/url/https%3A%2F%2Fapis.support.brightcove.com%2Fassets%2Fimages%2Fimage-api%2Fleaf.jpg?crop=580x670</code></pre>
+    <figure class="bcls-figure">
+      <img class="bcls-image" src="/assets/images/image-api/leaf-cropped.png" alt="Cropped Image">
+      <figcaption class="bcls-caption--image">トリミングされた画像</figcaption>
+    </figure>
+    <h3>回転</h3>
+    <h4>要求</h4>
+    <pre><code class="language-http" translate="No">https://images.brightcovecdn.com/image/v1/1752604059001/default/url/https%3A%2F%2Fapis.support.brightcove.com%2Fassets%2Fimages%2Fimage-api%2Fleaf.jpg?rotate=-90</code></pre>
+    <figure class="bcls-figure">
+      <img class="bcls-image" src="/assets/images/image-api/leaf-rotated.png" alt="Rotated Image">
+      <figcaption class="bcls-caption--image">回転画像</figcaption>
+    </figure>
+    <h3>サイズ変更と回転</h3>
+    <h4>要求</h4>
+    <pre><code class="language-http" translate="No">https://images.brightcovecdn.com/image/v1/1752604059001/default/url/https%3A%2F%2Fapis.support.brightcove.com%2Fassets%2Fimages%2Fimage-api%2Fleaf.jpg?resize=221x300&rotate=-90</code></pre>
+    <figure class="bcls-figure">
+      <img class="bcls-image" src="/assets/images/image-api/leaf-resized-rotated.png" alt="Resized and Rotated Image">
+      <figcaption class="bcls-caption--image">サイズ変更および回転された画像</figcaption>
+    </figure>
+    <h3>トリミングして回転</h3>
+    <h4>要求</h4>
+    <pre><code class="language-http" translate="No">https://images.brightcovecdn.com/image/v1/1752604059001/default/url/https%3A%2F%2Fapis.support.brightcove.com%2Fassets%2Fimages%2Fimage-api%2Fleaf.jpg?crop=570x660&rotate=-90</code></pre>
+    <figure class="bcls-figure">
+      <img class="bcls-image" src="/assets/images/image-api/leaf-cropped-rotated.png" alt="Cropped and Rotated Image">
+      <figcaption class="bcls-caption--image">トリミングおよび回転された画像</figcaption>
+    </figure>
+    <h3>サイズ変更、トリミング、回転</h3>
+    <h4>要求</h4>
+    <pre><code class="language-http" translate="No">https://images.brightcovecdn.com/image/v1/1752604059001/default/url/https%3A%2F%2Fapis.support.brightcove.com%2Fassets%2Fimages%2Fimage-api%2Fleaf.jpg?resize=221x300&crop=570x660&rotate=-90</code></pre>
+    <figure class="bcls-figure">
+      <img class="bcls-image" src="/assets/images/image-api/leaf-resized-cropped-rotated.png" alt="Resized, Cropped and Rotated Image">
+      <figcaption class="bcls-caption--image">サイズ変更、トリミング、回転された画像</figcaption>
+    </figure>
+  </section>
+</article>

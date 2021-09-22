@@ -1,0 +1,1021 @@
+- section: 
+  name: 'ホーム'
+  url: '/index.html'
+- section: 
+  name: '入門'
+  url: '/getting-started/index.html'
+  docs:
+    - name: '概要:プラットフォームAPI'
+      url: '/getting-started/getting-started-brightcove-apis.html'
+    - name: 'API リクエストの認証'
+      url: '/getting-started/authentication-brightcove-api-requests.html'
+    - name: 'Brightcove API のテストツール'
+      url: '/getting-started/concepts-testing-tools-brightcove-apis.html'
+    - name: '学習ガイド:REST API を使用する'
+      url: '/getting-started/learning-guide-using-rest-apis.html'
+- section: 
+  name: '一般情報'
+  url: '/general/index.html'
+  docs:
+    - name: 'すべてのAPIリファレンス'
+      url: '/general/all-api-references.html'
+    - name: 'コンテキスト認識エンコーディングの概要'
+      url: '/general/overview-context-aware-encoding.html'
+    - name: 'API 認証資格情報の管理'
+      url: '/general/managing-api-authentication-credentials.html'
+    - name: '概要:フォレンジック透かし'
+      url: '/general/overview-forensic-watermarking.html'
+    - name: 'よくある質問：フォレンジック透かし'
+      url: '/general/faq-forensic-watermarking.html'
+    - name: 'CMSとビデオクラウドの統合'
+      url: '/general/integrating-your-cms-video-cloud.html'
+    - name: 'プラットフォームAPIコードサンプル'
+      url: '/general/platform-api-code-samples.html'
+    - name: 'プラットフォームAPIトレーニングビデオ'
+      url: '/general/video-cloud-api-training-videos.html'
+    - name: 'オンラインAPIテスター'
+      url: '/general/concepts-api-tester.html'
+    - name: 'API リクエストにインソムニアを使用する'
+      url: '/general/use-insomnia-api-requests.html'
+    - name: 'API リクエストに郵便配達を使用する'
+      url: '/general/use-postman-api-requests.html'
+    - name: 'オーディオコンテンツ'
+      url: '/general/audio-content.html'
+    - name: 'プラットフォームAPIの既知の問題'
+      url: '/general/known-issues.html'
+- section: 
+  name: 'Analytics API'
+  url: '/analytics/index.html'
+  docs:
+    - name: '入門'
+      url: '/analytics/getting-started/index.html'
+      docs:
+        - name: '概要:Analytics API'
+          url: '/analytics/getting-started/overview-analytics-api-v1.html'
+        - name: Analytics API Explorer
+          url: '/analytics/getting-started/analytics-api-explorer.html'
+        - name: '概要:ビデオデータエンドポイント'
+          url: '/analytics/getting-started/overview-video-data-endpoint.html'
+        - name: '概要:次元、フィールド、およびパラメーター'
+          url: '/analytics/getting-started/analytics-api-overview-dimensions-fields-and-parameters.html'
+    - name: '一般情報'
+      url: '/analytics/general/index.html'
+      docs: 
+        - name: 'よくある質問：Analytics API'
+          url: '/analytics/general/faq-analytics-api.html'
+        - name: 'Analytics API用語集'
+          url: '/analytics/general/analytics-api-glossary.html'
+        - name: 'ユニークユーザー'
+          url: '/analytics/general/analytics-api-unique-users.html'
+        - name: 'ライブメトリクス'
+          url: '/analytics/general/live-metrics.html'
+    - name: '参考文献'
+      url: '/analytics/references/index.html'
+      docs: 
+        - name: 'Analytics APIリファレンス'
+          url: '/analytics/references/reference.html'
+        - name: 'リリースノート'
+          url: '/analytics/references/analytics-api-release-notes.html'
+        - name: '既知の問題'
+          url: '/analytics/references/known-issues.html'
+        - name: 'エラーリファレンス'
+          url: '/analytics/references/analytics-api-error-reference.html'
+    - name: '寸法ガイド'
+      url: '/analytics/dimension-guides/index.html'
+      docs: 
+        - name: '寸法： <code translate="No">account</code>'
+          url: '/analytics/dimension-guides/dimension-account.html'
+        - name: '寸法： <code translate="No">browser_type</code>'
+          url: '/analytics/dimension-guides/dimension-browsertype.html'
+        - name: '寸法： <code translate="No">date</code>'
+          url: '/analytics/dimension-guides/dimension-date.html'
+        - name: '寸法： <code translate="No">date_hour</code>'
+          url: '/analytics/dimension-guides/dimension-datehour.html'
+        - name: '寸法： <code translate="No">destination_domain</code>'
+          url: '/analytics/dimension-guides/dimension-destinationdomain.html'
+        - name: '寸法： <code translate="No">destination_path</code>'
+          url: '/analytics/dimension-guides/dimension-destinationpath.html'
+        - name: '寸法： <code translate="No">device_manufacturer</code>'
+          url: '/analytics/dimension-guides/dimension-devicemanufacturer.html'
+        - name: '寸法： <code translate="No">device_type</code>'
+          url: '/analytics/dimension-guides/dimension-devicetype.html'
+        - name: '寸法： <code translate="No">device_os</code>'
+          url: '/analytics/dimension-guides/dimension-deviceos.html'
+        - name: '寸法： <code translate="No">city</code>'
+          url: '/analytics/dimension-guides/dimension-city.html'
+        - name: '寸法： <code translate="No">country</code>'
+          url: '/analytics/dimension-guides/dimension-country.html'
+        - name: '寸法： <code translate="No">region</code>'
+          url: '/analytics/dimension-guides/dimension-region.html'
+        - name: '寸法： <code translate="No">live_stream</code>'
+          url: '/analytics/dimension-guides/dimension-livestream.html'
+        - name: '寸法： <code translate="No">referrer_domain</code>'
+          url: '/analytics/dimension-guides/dimension-referrerdomain.html'
+        - name: '寸法： <code translate="No">source_type</code>'
+          url: '/analytics/dimension-guides/dimension-sourcetype.html'
+        - name: '寸法： <code translate="No">search_terms</code>'
+          url: '/analytics/dimension-guides/dimension-searchterms.html'
+        - name: '寸法： <code translate="No">social_platform</code>'
+          url: '/analytics/dimension-guides/dimension-socialplatform.html'
+        - name: '寸法： <code translate="No">player</code>'
+          url: '/analytics/dimension-guides/dimension-player.html'
+        - name: '寸法： <code translate="No">video</code>'
+          url: '/analytics/dimension-guides/dimension-video.html'
+    - name: 'コードサンプル'
+      url: '/analytics/code-samples/index.html'
+      docs: 
+        - name: 'ライブイベントの同時閲覧者'
+          url: '/analytics/code-samples/analytics-api-sample-concurrent-viewers-live-events.html'
+        - name: '日次分析レポートジェネレータ'
+          url: '/analytics/code-samples/analytics-api-sample-daily-analytics-report-generator.html'
+        - name: '宛先レポート'
+          url: '/analytics/code-samples/analytics-api-sample-destinations-report.html'
+        - name: '地理分析レポート'
+          url: '/analytics/code-samples/analytics-api-sample-geographical-analytics-report.html'
+        - name: '日別ユニークユーザー'
+          url: '/analytics/code-samples/analytics-api-sample-unique-users-day.html'
+        - name: 'ビデオエンゲージメントグラフ'
+          url: '/analytics/code-samples/analytics-api-sample-video-engagement-graph.html'
+        - name: 'プレイヤーと日別のビデオレポート'
+          url: '/analytics/code-samples/analytics-api-sample-video-report-player-and-day.html'
+        - name: '参照ID別ビデオレポート'
+          url: '/analytics/code-samples/analytics-api-sample-video-report-reference-id.html'
+        - name: 'タグ別ビデオレポート'
+          url: '/analytics/code-samples/analytics-api-sample-video-report-tags.html'
+        - name: 'プレイリスト別分析'
+          url: '/analytics/code-samples/analyticscms-apis-sample-analytics-playlists.html'
+        - name: '最近追加された動画'
+          url: '/analytics/code-samples/analyticscms-apis-sample-recently-added-videos.html'
+        - name: '国と日別のビデオ分析レポート'
+          url: '/analytics/code-samples/code-sample-video-analytics-report-country-and-day.html'
+- section:
+  name: Audience API 
+  url: '/audience/index.html'
+  docs:
+    - name: '入門'
+      url: ' /audience/getting-started/index.html'
+      docs: 
+        - name: '概要:Audience API'
+          url: '/audience/getting-started/overview-audience-api.html'
+    - name: '参考文献'
+      url: '/audience/references/index.html'
+      docs:
+        - name: 'Audience API リファレンス'
+          url: '/audience/references/reference.html'
+- section:
+  name: 'Cloud Playout APIs'
+  url: '/cloud-playout-apis/index.html'
+  docs:
+    - name: '入門'
+      url: ' /cloud-playout-apis/getting-started/index.html'
+      docs: 
+        - name: '概要:Channels API'
+          url: '/cloud-playout-apis/getting-started/overview-channel-api.html'
+        - name: '概要:EPG API'
+          url: '/cloud-playout-apis/getting-started/overview-epg-api.html'
+        - name: 'EPG API：ベストプラクティス'
+          url: '/cloud-playout-apis/getting-started/epg-best-practices.html'
+    - name: '参考文献'
+      url: '/cloud-playout-apis/references/index.html'
+      docs:
+        - name: 'EPG APIリファレンス'
+          url: '/cloud-playout-apis/references/reference-epg.html'
+        - name: 'Channels APIリファレンス'
+          url: '/cloud-playout-apis/references/reference-channels.html'
+        - name: 'クラウドプレイアウトのCMS APIリファレンス'
+          url: '/cloud-playout-apis/references/reference-cms-interactions.html'
+        - name: 'Cloud PlayoutAPIリリースノート'
+          url: '/cloud-playout-apis/references/release-notes.html'
+- section: 
+  name: 'CMS API'
+  url: '/cms/index.html'
+  docs:
+    - name: '入門'
+      url: '/cms/getting-started/index.html'
+      docs:
+        - name: '概要:CMS API'
+          url: '/cms/getting-started/overview-cms-api.html'
+        - name: '練習エリア：CMS API'
+          url: '/cms/getting-started/practice-area-cms-api.html'
+        - name: 'ベストプラクティス：CMSとPlayback API'
+          url: '/cms/getting-started/best-practices-cms-and-playback-apis.html'
+        - name: 'CMS API通知'
+          url: '/cms/getting-started/cms-api-notifications.html'
+    - name: '参考文献'
+      url: '/cms/references/index.html'
+      docs:
+        - name: 'CMS APIリファレンス'
+          url: '/cms/references/reference.html'
+        - name: 'CMS /Playback APIリリースノート'
+          url: '/cms/references/catalog-apis-cms-api-and-playback-api-release-notes.html'
+        - name: '既知の問題'
+          url: '/cms/references/known-issues.html'
+        - name: 'CMS APIビデオフィールドリファレンス'
+          url: '/cms/references/cms-api-video-fields-reference.html'
+        - name: 'CMS APIプレイリストフィールドリファレンス'
+          url: '/cms/references/cms-api-playlist-fields-reference.html'
+        - name: 'CMS APIカスタムフィールドリファレンス'
+          url: '/cms/references/cms-api-custom-fields-reference.html'
+        - name: 'CMS APIフォルダフィールドリファレンス'
+          url: '/cms/references/cms-api-folder-fields-reference.html'
+        - name: 'CMS APIエラーメッセージリファレンス'
+          url: '/cms/references/cms-api-error-message-reference.html'
+    - name: '検索中'
+      url: '/cms/searching/index.html'
+      docs:
+        - name: 'CMS API：ビデオ検索v2'
+          url: '/cms/searching/cms-and-playback-apis-video-search-v2.html'
+        - name: 'CMS API：プレイリスト検索'
+          url: '/cms/searching/cms-api-playlists-search.html'
+        - name: 'ページ検索結果'
+          url: '/cms/searching/using-cms-api-page-search-results.html'
+        - name: 'CMSとPlayback API：ビデオ検索v1'
+          url: '/cms/searching/cmsplayback-api-videos-search.html'
+        - name: 'カタログ検索アーキテクチャ'
+          url: '/playback/guides/catalog-search-architecture.html'
+    - name: 'ビデオ/アセットの管理'
+      url: '/cms/managing-videos/index.html'
+      docs:
+        - name: ビデオのアクティブ化/非アクティブ化またはスケジュール
+          url: /cms/managing-videos/activate-deactivate-videos.html
+        - name: ジオフィルタリングを追加する
+          url: /cms/managing-videos/using-cms-api-add-geo-filtering.html
+        - name: デジタルマスター削除API
+          url: /cms/managing-videos/digital-master-delete-api.html
+        - name: 動画の削除
+          url: /cms/managing-videos/deleting-videos.html
+        - name: 動画と再生リストの数を取得する
+          url: /cms/managing-videos/getting-counts-videos-and-playlists.html
+        - name: CMS APIを使用したプレイリストの管理
+          url: /cms/managing-videos/managing-playlists-using-cms-api.html
+        - name: クリップの管理
+          url: /cms/managing-videos/using-cms-api-managing-clips.html
+        - name: メディア共有
+          url: /cms/managing-videos/media-sharing-cms-api.html
+        - name: 多言語メタデータ
+          url: /cms/managing-videos/multilingual-metadata.html
+        - name: ビデオデータを取得する
+          url: /cms/managing-videos/using-cms-api-retrieve-video-data.html
+        - name: 360度ビデオのプロパティを設定する
+          url: /cms/managing-videos/setting-360-degree-video-properties-cms-api.html
+        - name: リモートアセット
+          url: /cms/managing-videos/using-cms-api-remote-assets.html
+        - name: WebVTTキャプション（テキストトラック）を追加する
+          url: /cms/managing-videos/using-cms-api-add-webvtt-captions-text-tracks.html
+        - name: CMS APIを使用したテキストトラックの管理
+          url: /cms/managing-videos/managing-text-tracks.html
+        - name: ビデオサイトマップを生成する
+          url: /cms/managing-videos/generate-video-sitemaps.html
+        - name: パフォーマンスの低いコンテンツの特定
+          url: /cms/managing-videos/identifying-low-performing-content.html
+        - name: フォルダーの操作
+          url: /cms/managing-videos/cms-api-working-folders.html
+        - name: ラベルの操作
+          url: /cms/managing-videos/working-with-labels.html
+        - name: ZencoderとVideoCloudのリンク
+          url: /cms/managing-videos/linking-zencoder-and-video-cloud-video-demand.html
+    - name: 'コードサンプル'
+      url: '/cms/code-samples/index.html'
+      docs:
+        - name: '複数のアフィリエイトアカウントを追加する'
+          url: '/cms/code-samples/cms-api-sample-add-multiple-affiliate-accounts-media-sharing.html'
+        - name: '複数の動画を共有する'
+          url: '/cms/code-samples/cms-api-sample-share-multiple-videos.html'
+        - name: 'メディア共有レポート'
+          url: '/cms/code-samples/cms-api-sample-media-sharing-report.html'
+        - name: '共有メディアレポート'
+          url: '/cms/code-samples/cms-api-sample-shared-media-report.html'
+        - name: '動画を更新する'
+          url: '/cms/code-samples/cms-api-sample-update-videos.html'
+        - name: '複数の動画にカスタムフィールドを追加する'
+          url: '/cms/code-samples/cms-api-sample-add-custom-field-multiple-videos.html'
+        - name: '図形プロパティの更新'
+          url: '/cms/code-samples/cms-api-sample-update-geo-properties.html'
+        - name: 'キューポイントの追加'
+          url: '/cms/code-samples/cms-api-sample-add-cue-points.html'
+        - name: 'ビデオレポートジェネレータ'
+          url: '/cms/code-samples/cms-api-sample-video-report-generator.html'
+        - name: '配信タイプ別の動画'
+          url: '/cms/code-samples/cms-api-sample-videos-delivery-type.html'
+        - name: 'ダウンロードリンク'
+          url: '/cms/code-samples/cms-api-sample-download-links.html'
+        - name: '動画サイトマップジェネレータ'
+          url: '/cms/code-samples/cms-api-sample-video-sitemap-generator.html'
+        - name: 'MRSS ジェネレータ'
+          url: '/cms/code-samples/cms-api-sample-mrss-generator.html'
+        - name: 'プレイリストからの MRSS フィード'
+          url: '/cms/code-samples/cms-api-sample-mrss-feed-playlist.html'
+        - name: 'iTunes用のRSSポッドキャストフィード'
+          url: '/cms/code-samples/cms-api-sample-generate-rss-podcast-feed-itunes.html'
+        - name: 'ビデオレンディションインスペクタ'
+          url: '/cms/code-samples/cms-api-sample-video-renditions-inspector.html'
+        - name: '音声のみのコンテンツに関するレポート'
+          url: '/cms/code-samples/cms-api-sample-report-audio-only-content.html'
+        - name: 'ビデオスキーマビルダー'
+          url: '/cms/code-samples/cms-api-sample-video-schema-builder.html'
+        - name: 'GETリクエストのPythonコード'
+          url: '/cms/code-samples/cms-api-sample-python-code-get-request.html'
+        - name: '動画検索アプリ'
+          url: '/cms/code-samples/cms-api-sample-video-search-app.html'
+- section: 
+  name: 'Cross-Device Resume（XDR）API'
+  url: '/xdr/index.html'
+  docs:
+    - name: '入門'
+      url: '/xdr/getting-started/index.html'
+      docs:
+        - name: '概要:Cross-Device Resume'
+          url: '/xdr/getting-started/xdr-overview.html'
+        - name: 'XDR API からの再生位置の取得'
+          url: '/xdr/getting-started/get-playback-position.html'
+    - name: 'ガイド'
+      url: '/xdr/index.html'
+      docs:
+        - name: 'Brightcoveプレーヤーでのクロスデバイス再開'
+          url: 'https://player.support.brightcove.com/playback/xdr-with-bcplayer.html'
+        - name: 'ネイティブ SDK を使用したクロスデバイス再開'
+          url: 'https://sdks.support.brightcove.com/features/cross-device-resume-sdks.html'
+    - name: '参考文献'
+      url: '/xdr/references/index.html'
+      docs:
+        - name: 'Cross-Device ResumeAPIリファレンス'
+          url: '/xdr/getting-started/xdr-overview.html'
+- section: 
+  name: 'Data Collection API'
+  url: '/data-collection/index.html'
+  docs:
+    - name: '概要:Data Collection API'
+      url: '/data-collection/getting-started/overview-data-collection-api-v2.html'
+    - name: 'Data Collection APIサンプル'
+      url: '/data-collection/getting-started/data-collection-api-sample.html'
+    - name: 'データ収集 API リファレンス'
+      url: '/data-collection/references/reference.html'
+- section: 
+  name: 'Delivery Rules API'
+  url: '/delivery-rules/index.html'
+  docs:
+    - name: '入門'
+      url: '/delivery-rules/getting-started/index.html'
+      docs:
+        - name: '概要:配信ルール'
+          url: '/delivery-rules/getting-started/overview-delivery-rules.html'
+        - name: '配信ルールの実装'
+          url: '/delivery-rules/getting-started/implementing-delivery-rules.html'
+    - name: 'ガイド'
+      url: '/delivery-rules/guides/index.html'
+      docs:
+        - name: 'Brightcoveプレーヤーで配信ルールを使用する'
+          url: 'https://player.support.brightcove.com/playback/using-delivery-rules-with-bcp.html'
+        - name: 'ネイティブ SDK での配信ルールの使用'
+          url: 'https://sdks.support.brightcove.com/features/using-delivery-rules-with-sdks.html'
+    - name: '参考文献'
+      url: '/delivery-rules/references/index.html'
+      docs:
+        - name: '配信ルール API リファレンス'
+          url: '/delivery-rules/references/reference.html'
+- section: 
+  name: 'Delivery System API'
+  url: '/delivery-system/index.html'
+  docs:
+    - name: '概要:Delivery System API'
+      url: '/delivery-system/overview-delivery-system-api.html'
+    - name: 'ステップバイステップ:Delivery System API'
+      url: '/delivery-system/step-step-delivery-system-api.html'
+    - name: 'Gitの概要'
+      url: '/delivery-system/delivery-system-api-git-overview.html'
+    - name: '配信システム API リファレンス'
+      url: '/delivery-system/references/reference.html'
+- section: 
+  name: 'Dynamic Ingest API'
+  url: '/dynamic-ingest/index.html'
+  docs:
+    - name: '入門'
+      url: '/dynamic-ingest/getting-started/index.html'
+      docs:
+        - name: '概要:Dynamic Ingest API'
+          url: '/dynamic-ingest/getting-started/overview-dynamic-ingest-api-dynamic-delivery.html'
+        - name: '「クイックスタート:Dynamic Ingest API'
+          url: '/dynamic-ingest/getting-started/quick-start-dynamic-ingest-api.html'
+        - name: '動的取り込み用のソースファイルのアップロード API'
+          url: '/dynamic-ingest/getting-started/source-file-upload-api-dynamic-ingest.html'
+        - name: '動的配信の概要'
+          url: '/dynamic-ingest/getting-started/overview-dynamic-delivery.html'
+    - name: '一般情報'
+      url: '/dynamic-ingest/general/index.html'
+      docs:
+        - name: 'Dynamic Ingest API:ベストプラクティス'
+          url: '/dynamic-ingest/general/dynamic-ingest-api-best-practices.html'
+        - name: '動的取り込みの通知'
+          url: '/dynamic-ingest/general/notifications-dynamic-delivery-video-cloud.html'
+        - name: '動的取り込みリクエストのステータスを取得する'
+          url: '/dynamic-ingest/general/get-status-dynamic-ingest-requests-dynamic-delivery.html'
+        - name: 'フォールバック/リトライ戦略'
+          url: '/dynamic-ingest/general/fallback-retry-strategy.html'
+        - name: 'S3 での動的取り込みの使用'
+          url: '/dynamic-ingest/general/using-dynamic-ingest-s3.html'
+        - name: 'UGC戦略'
+          url: '/dynamic-ingest/general/ugc-strategies.html'
+    - name: '参考文献'
+      url: '/dynamic-ingest/references/index.html'
+      docs:
+        - name: 'Dynamic Ingest API リファレンス'
+          url: '/dynamic-ingest/references/reference.html'
+        - name: 'Dynamic Ingest API リリースノート'
+          url: '/dynamic-ingest/references/dynamic-ingest-api-release-notes.html'
+        - name: '既知の問題'
+          url: '/dynamic-ingest/references/known-issues.html'
+        - name: '取り込みフィールドのリファレンス'
+          url: '/dynamic-ingest/references/dynamic-ingest-ingest-fields.html'
+        - name: '動的取り込みエラーメッセージリファレンス'
+          url: '/dynamic-ingest/references/dynamic-ingest-error-message-reference.html'
+    - name: '摂取ガイド'
+      url: '/dynamic-ingest/ingest-guides/index.html'
+      docs:
+        - name: 'コンテキストアウェアエンコーディングの使用'
+          url: '/dynamic-ingest/ingest-guides/context-aware-encoding.html'
+        - name: '動的配信取り込み優先キューイング'
+          url: '/dynamic-ingest/ingest-guides/dynamic-delivery-ingest-priority-queueing.html'
+        - name: 'アーカイブマスター'
+          url: '/ingest-profiles/guides/archiving-masters.html'
+        - name: '複数のオーディオトラックの実装'
+          url: '/dynamic-ingest/ingest-guides/implementing-multiple-audio-tracks-using-apis.html'
+        - name: 'イメージとDynamic Ingest API'
+          url: '/dynamic-ingest/ingest-guides/images-and-dynamic-ingest-api.html'
+        - name: 'メディア共有による動的取り込み'
+          url: '/dynamic-ingest/ingest-guides/dynamic-ingest-media-sharing.html'
+        - name: 'DRM によるコンテンツの取り込み'
+          url: '/dynamic-ingest/ingest-guides/ingesting-content-drm.html'
+        - name: 'WebVTT ファイルの取り込み'
+          url: '/dynamic-ingest/ingest-guides/ingesting-webvtt-files-text-trackscaptions.html'
+    - name: 'コードサンプル'
+      url: '/dynamic-ingest/code-samples/index.html'
+      docs:
+        - name: 'Dynamic Ingest API テスター'
+          url: '/dynamic-ingest/code-samples/dynamic-ingest-api-tester-dynamic-delivery.html'
+        - name: 'ビデオの取り込み'
+          url: '/dynamic-ingest/code-samples/dynamic-ingest-api-sample-ingesting-videos-dynamic-delivery.html'
+        - name: '動画の再トランスコード'
+          url: '/dynamic-ingest/code-samples/dynamic-ingest-api-sample-re-transcoding-videos-dynamic-delivery.html'
+        - name: 'ビデオの置換'
+          url: '/dynamic-ingest/code-samples/dynamic-ingest-api-sample-replacing-videos-dynamic-delivery.html'
+        - name: 'スケジュールされた動画を追加'
+          url: '/dynamic-ingest/code-samples/dynamic-ingest-api-sample-add-scheduled-videos-dynamic-delivery.html'
+        - name: 'テキストトラックの追加'
+          url: '/dynamic-ingest/code-samples/dynamic-ingest-api-sample-adding-text-tracks.html'
+        - name: '優先度の低いビデオの取り込み'
+          url: '/dynamic-ingest/code-samples/dynamic-ingest-api-sample-ingesting-low-priority-videos-dynamic-delivery.html'
+        - name: 'Pythonコード'
+          url: '/dynamic-ingest/code-samples/dynamic-ingest-api-sample-python-code.html'
+- section:
+  name: 'Ingest Profiles API'
+  url: '/ingest-profiles/index.html'
+  docs: 
+    - name: '入門'
+      url: '/ingest-profiles/getting-started/index.html'
+      docs:
+        - name: '概要:Ingest Profiles API'
+          url: '/ingest-profiles/getting-started/overview-ingest-profiles-api-dynamic-delivery-context-aware-encoding.html'
+        - name: '練習エリア：Ingest Profiles API'
+          url: '/ingest-profiles/getting-started/practice-area-ingest-profiles-api-dynamic-delivery.html'
+    - name: 'ガイド'
+      url: '/ingest-profiles/guides/index.html'
+      docs:
+        - name: 'アーカイブマスター'
+          url: '/ingest-profiles/guides/archiving-masters.html'
+        - name: 'HEVCビデオ'
+          url: '/ingest-profiles/guides/hevc-video.html'
+        - name: 'CAE Fast Publish'
+          url: '/ingest-profiles/guides/cae-fast-publish.html'
+        - name: 'オーディオコンテンツ'
+          url: '/general/audio-content.html'
+        - name: '動的配信のMP4'
+          url: '/ingest-profiles/guides/mp4s-dynamic-delivery.html'
+        - name: 'ベストプラクティス'
+          url: 'https://studio.support.brightcove.com/admin/ingest-profiles-best-practices.html'
+    - name: '参考文献'
+      url: '/ingest-profiles/references/index.html'
+      docs:
+        - name: 'Ingest Profiles API リファレンス'
+          url: '/ingest-profiles/references/reference.html'
+        - name: '[ 取り込みプロファイル] フィールドのリファレンス'
+          url: '/ingest-profiles/references/ingest-profiles-api-fields-reference-dynamic-delivery-and-context-aware-encoding.html'
+        - name: '標準の取り込みプロファイル'
+          url: '/ingest-profiles/references/standard-ingest-profiles-dynamic-delivery-and-context-aware-encoding.html'
+        - name: '標準ライブインジェストプロファイル'
+          url: '/ingest-profiles/references/standard-live-ingest-profiles.html'
+        - name: 'カスタムライブインジェストプロファイルのフィールド'
+          url: '/ingest-profiles/references/fields-custom-live-ingest-profiles.html'
+    - name: 'コードサンプル'
+      url: '/ingest-profiles/code-samples/index.html'
+      docs:
+        - name: 'カスタム動的配信プロファイルの作成'
+          url: '/ingest-profiles/code-samples/ingest-profiles-api-sample-create-custom-dynamic-delivery-profile.html'
+        - name: 'カスタムCAEプロファイルを作成する'
+          url: '/ingest-profiles/code-samples/ingest-profiles-api-sample-create-custom-context-aware-encoding-profile.html'
+        - name: '複数のアカウントへのプロファイルの追加'
+          url: '/ingest-profiles/code-samples/ingest-profiles-api-sample-add-profile-multiple-accounts.html'
+        - name: 'アカウントのすべてのプロファイルの取得'
+          url: '/ingest-profiles/code-samples/ingest-profiles-api-sample-get-all-profiles-account.html'
+        - name: '既定のプロファイルを設定'
+          url: '/ingest-profiles/code-samples/ingest-profiles-api-sample-set-default-profile-dynamic-delivery.html'
+- section:
+  name: 'In-Page Experience API'
+  url: '/ipx/index.html'
+  docs:
+    - name: '入門'
+      url: ' /ipx/getting-started/index.html'
+      docs: 
+        - name: '概要:In-Page Experience API'
+          url: '/ipx/getting-started/overview-page-experience-api.html'
+        - name: '「クイックスタート:ページ内エクスペリエンスプラットフォーム (REST) API'
+          url: '/ipx/getting-started/quick-start-page-experience-platform-rest-api.html'
+    - name: '参考文献'
+      url: '/ipx/references/index.html'
+      docs:
+        - name: 'In-Page Experience API リファレンス'
+          url: '/ipx/references/reference.html'
+        - name: 'In-Page Experience API エラーリファレンス'
+          url: '/ipx/references/page-experience-api-error-reference.html'
+        - name: 'In-Page Experience Client API'
+          url: '/in-page-exerience-client-api/index.html'
+- section:
+  name: 'Live API'
+  url: '/live-api/index.html'
+  docs:
+    - name: '入門'
+      url: '/live-api/getting-started/index.html'
+      docs:
+      - name: '概要:Live API'
+        url: '/live-api/getting-started/overview-brightcove-live-api.html'
+      - name: 'APIを使用したライブストリームの作成'
+        url: '/live-api/getting-started/quick-start-create-live-stream-using-brightcove-live-api.html'
+    - name: 'コードサンプル'
+      url: '/live-api/code-samples/index.html'
+      docs:
+      - name: ライブジョブの作成
+        url: /live-api/code-samples/live-api-sample-create-live-job.html
+      - name: MPEG2-TS入力用のライブジョブを作成する
+        url: /live-api/code-samples/quick-start-create-live-job-mpeg2-ts-input.html
+      - name: ライブイベントにRTMP出力を使用する
+        url: /live-api/code-samples/quick-start-using-rtmp-outputs-live-events.html
+    - name: '参考文献'
+      url: '/live-api/references/index.html'
+      docs:
+      - name: エラーメッセージ
+        url: /live-api/references/live-api-error-messages.html
+      - name: リリースノート
+        url: /live-api/references/live-api-release-notes.html
+      - name: Live API リファレンス
+        url: /live-api/references/reference.html
+    - name: 'SSAI '
+      url: '/live-api/ssai/index.html'
+      docs:
+      - name: SSAIを使用したキューポイントと広告ビーコン
+        url: /live-api/ssai/live-api-cue-points-and-ad-beacons-ssai.html
+      - name: 'サーバー側広告挿入 (SSAI) '
+        url: /live-api/ssai/live-api-server-side-ad-insertion-ssai.html
+      - name: '概要:ライブ SSAI のプレーヤーの機能強化'
+        url: /live-api/ssai/overview-player-enhancements-live-ssai.html
+    - name: 'ガイド'
+      url: '/live-api/guides/index.html'
+      docs:
+      - name: BrightcoveLiveのベストプラクティス
+        url: 'https://live.support.brightcove.com/get-started/live-module-guidelines-and-best-practices.html'
+      - name: Brightcoveライブプログラム広告メタデータAPI
+        url: /live-api/guides/brightcove-live-program-ad-metadata-api.html
+      - name: フレーム精度のクリップの作成
+        url: /live-api/guides/live-api-creating-frame-accurate-clip.html
+      - name: VODクリップの作成
+        url: /live-api/guides/live-api-creating-vod-clips.html
+      - name: ライブまたはVODジョブのリストの取得
+        url: /live-api/guides/getting-list-live-or-vod-jobs.html
+      - name: ID3タイミングメタデータを挿入します
+        url: /live-api/guides/live-api-insert-id3-timed-metadata.html
+      - name: Live APIを介したLiveDRM
+        url: /live-api/guides/live-drm-live-api.html
+      - name: Live APIのクレデンシャルの管理
+        url: /live-api/guides/managing-credentials-live-api.html
+      - name: 通知
+        url: /live-api/guides/live-api-notifications.html
+      - name: ライブストリームでの再生制限
+        url: /live-api/guides/live-playback-restrictions.html
+      - name: ライブストリームのレイテンシーの削減
+        url: /live-api/guides/reducing-latency-live-streams.html
+      - name: RTMP出力
+        url: /live-api/guides/live-api-rtmp-outputs.html
+      - name: 静的エントリポイント
+        url: /live-api/guides/live-api-static-entry-points.html
+      - name: ライブストリームでの署名付き URL とトークン認証
+        url: /live-api/guides/signed-urls-and-token-auth-live-stream.html
+      - name: ライブ冗長性の使用
+        url: /live-api/guides/using-live-redundancy.html
+      - name: ライブイベントのVOD
+        url: /live-api/guides/live-api-vod-live-event.html
+      - name: '概要:ライブスケジューラ'
+        url: /live-api/guides/live-scheduler.html
+      - name: SEPストリームのアクティブ化/非アクティブ化のスケジューリング
+        url: /live-api/guides/live-scheduler-stop-start.html
+      - name: ライブストリームのクリップ生成のスケジュール
+        url: /live-api/guides/live-scheduler-clips.html
+      - name: ライブスケジューラ通知
+        url: /live-api/guides/live-scheduler-notifications.html
+- section: 
+  name: 'OAuth API'
+  url: '/oauth/index.html'
+  docs:
+    - name: '入門'
+      url: '/oauth/getting-started/index.html'
+      docs:
+        - name: '概要:OAuth API'
+          url: '/oauth/getting-started/overview-oauth-api-v4.html'
+        - name: '「クイックスタート:OAuth API'
+          url: '/oauth/getting-started/quick-start-oauth.html'
+    - name: 'ガイド'
+      url: '/oauth/guides/index.html'
+      docs:
+        - name: 'クライアントクレデンシャルの作成：cURL'
+          url: '/oauth/guides/oauth-create-client-credentials-using-curl.html'
+        - name: 'クライアント資格情報の作成：Postman員'
+          url: '/oauth/guides/oauth-create-client-credentials-using-postman.html'
+        - name: 'アクセストークンの取得'
+          url: '/oauth/guides/getting-access-tokens.html'
+        - name: 'クライアント資格情報要求のAPI操作'
+          url: '/oauth/guides/api-operations-client-credentials-requests.html'
+        - name: 'BC_TOKENを取得する'
+          url: '/oauth/guides/get-your-bc-token.html'
+    - name: '参考文献'
+      url: '/oauth/references/index.html'
+      docs:
+        - name: 'OAuthAPIリファレンス'
+          url: '/oauth/references/reference.html'
+        - name: 'OAuthAPIエラーメッセージリファレンス'
+          url: '/oauth/references/oauth-api-error-message-reference.html'
+    - name: 'コードサンプル'
+      url: '/oauth/code-samples/index.html'
+      docs:
+        - name: 'クライアント認証情報の作成'
+          url: '/oauth/code-samples/oauth-api-sample-create-client-credentials.html'
+        - name: 'アクセストークンの取得'
+          url: '/oauth/code-samples/oauth-api-sample-get-access-token.html'
+- section:
+  name: 'Playback API'
+  url: '/playback/index.html'
+  docs:
+    - name: '入門'
+      url: '/playback/getting-started/index.html'
+      docs:
+        - name: '概要:Playback API'
+          url: '/playback/getting-started/overview-playback-api.html'
+        - name: '「クイックスタート:Playback API'
+          url: '/playback/getting-started/quick-start-playback-api.html'
+        - name: 'ベストプラクティス：CMSとPlayback API'
+          url: '/cms/getting-started/best-practices-cms-and-playback-apis.html'
+    - name: 'ガイド'
+      url: '/playback/guides/index.html'
+      docs:
+        - name: 'CMSとPlayback API：ビデオ検索'
+          url: '/cms/searching/cmsplayback-api-videos-search.html'
+        - name: 'カタログ検索アーキテクチャ'
+          url: '/cms/getting-started/best-practices-cms-and-playback-apis.html'
+        - name: '静的 URL 配信'
+          url: '/playback/guides/static-url-delivery.html'
+    - name: '参考文献'
+      url: '/playback/references/index.html'
+      docs:
+        # - name: 'Playback APIリファレンスv1'
+        #   url: '/playback/references/reference_v1.html'
+        - name: 'Playback APIリファレンス'
+          url: '/playback/references/reference_v2.html'
+        - name: 'ビデオフィールドリファレンス'
+          url: '/playback/references/playback-api-video-fields-reference.html'
+        - name: 'プレイリストフィールドリファレンス'
+          url: '/playback/references/playback-api-playlist-fields-reference.html'
+        - name: 'エラーリファレンス'
+          url: '/playback/references/playback-api-error-reference.html'
+        - name: 'CMS /Playback APIリリースノート'
+          url: '/cms/references/catalog-apis-cms-api-and-playback-api-release-notes.html'
+    - name: 'コードサンプル'
+      url: '/playback/code-samples/index.html'
+      docs:
+        - name: 'ビデオサムネイルグリッド'
+          url: '/playback/code-samples/thumbnail-grid.html'
+        - name: 'MRSS ジェネレータ'
+          url: '/playback/code-samples/playback-api-sample-mrss-generator.html'
+        - name: 'プレイリストからのJSON/MRSS フィード'
+          url: '/playback/code-samples/playback-api-sample-jsonmrss-feed-playlist.html'
+- section:
+  name: 'Player Management API'
+  url: '/player-management/index.html'
+  docs:
+    - name: '入門'
+      url: '/player-management/getting-started/index.html'
+      docs:
+        - name: '概要:Player Management API'
+          url: '/player-management/getting-started/overview-player-management-api.html'
+        - name: 'ステップバイステップ:プレーヤー管理'
+          url: '/player-management/getting-started/step-step-player-management.html'
+        - name: 'オンデマンドトレーニング:プレーヤー管理へのクイックスタート'
+          url: '/player-management/getting-started/training-demand-quick-start-player-management.html'
+        - name: 'OAuthガイド'
+          url: '/player-management/getting-started/oauth-guide.html'
+    - name: 'ガイド'
+      url: '/player-management/guides/index.html'
+      docs:
+        - name: 'プレーヤー設定ガイド'
+          url: '/player-management/guides/player-configuration-guide.html'
+        - name: 'プラグインレジストリ'
+          url: '/player-management/guides/plugin-registry.html'
+        - name: 'プレリリースプレーヤー'
+          url: '/player-management/guides/pre-release-player.html'
+        - name: 'プレーヤーリポジトリ'
+          url: '/player-management/guides/player-repositories.html'
+        - name: 'APIを埋め込む'
+          url: '/player-management/guides/guide-embed-apis.html'
+        - name: 'プレーヤーの自動更新をオプトアウトする'
+          url: '/player-management/guides/opting-out-automatic-player-updates.html'
+        - name: 'BrightcoveプレーヤーをCMSに埋め込む'
+          url: '/player-management/guides/embedding-brightcove-players-cms.html'
+    - name: '参考文献'
+      url: '/player-management/references/index.html'
+      docs:
+        - name: 'Player Management APIリファレンス'
+          url: '/player-management/references/reference.html'
+        - name: 'リリースノート'
+          url: '/player-management/references/player-management-api-release-notes.html'
+    - name: 'コードサンプル'
+      url: '/player-management/code-samples/index.html'
+      docs:
+        - name: 'プレーヤー管理サンプルのセットアップ'
+          url: '/player-management/code-samples/setup-player-management-samples.html'
+        - name: 'デフォルトプレーヤーの一括更新'
+          url: '/player-management/code-samples/bulk-updating-brightcove-default-player.html'
+        - name: 'プレーヤーを作成する'
+          url: '/player-management/code-samples/player-management-api-sample-create-player.html'
+        - name: 'プレーヤーを表示'
+          url: '/player-management/code-samples/player-management-api-sample-display-players.html'
+        - name: 'プレイヤーを削除'
+          url: '/player-management/code-samples/player-management-api-sample-delete-players.html'
+        - name: 'last_viewedデータの使用'
+          url: '/player-management/code-samples/player-management-api-sample-using-lastviewed-data.html'
+        - name: 'プログラムでプレーヤーを更新する'
+          url: '/player-management/code-samples/player-management-api-sample-programmatically-update-players.html'
+- section:
+  name: 'Playback Restrictions'
+  url: '/playback-restrictions/index.html'
+  docs:
+    - name: '入門'
+      url: '/playback-restrictions/getting-started/index.html'
+      docs:
+        - name: '概要:Brightcoveの再生制限'
+          url: '/playback-restrictions/getting-started/overview-playback-restrictions.html'
+        - name: '再生権限の実装'
+          url: '/playback-restrictions/getting-started/implementing-playback-rights.html'
+        - name: 'Video Cloud Studio：再生権'
+          url: 'https://studio.support.brightcove.com/admin/managing-playback-rights.html'
+    - name: 'ガイド'
+      url: '/playback-restrictions/guides/index.html'
+      docs:
+        - name: 'JSON ウェブトークン (JWT) の作成'
+          url: 'https://general.support.brightcove.com/developer/create-json-web-token.html'
+        - name: '認証APIの使用'
+          url: '/playback-restrictions/guides/authentication-apis.html'
+        - name: 'ビューアごとの同時ストリームを制限する'
+          url: '/playback-restrictions/guides/stream-concurrency.html'
+        - name: 'デバイス制限の実装'
+          url: '/playback-restrictions/guides/device-limits.html'
+        - name: 'BrightcovePlayerでの再生制限'
+          url: 'https://player.support.brightcove.com/playback/playback-restrictions-with-bcp.html'
+        - name: 'ネイティブSDKでの再生制限'
+          url: 'https://sdks.support.brightcove.com/features/playback-restrictions-with-sdks.html'
+        - name: 'ライブストリームでの再生制限'
+          url: '/live-api/guides/live-playback-restrictions.html'
+    - name: '[ 認証] '
+      url: '/playback-restrictions/references/index.html'
+      docs:
+        - name: 'Key APIリファレンス'
+          url: '/playback-restrictions/references/key-api/reference.html'
+        - name: 'Blacklist API リファレンス'
+          url: '/playback-restrictions/references/blacklist-api/reference.html'
+        - name: 'Audit API リファレンス'
+          url: '/playback-restrictions/references/audit-api/reference.html'
+    - name: '参考文献'
+      url: '/playback-restrictions/references/index.html'
+      docs:
+        - name: 'Playback Rights API リファレンス'
+          url: '/playback-restrictions/references/playback-rights/reference.html'
+        - name: 'CMS APIリファレンス'
+          url: '/cms/references/reference.html'
+        - name: 'Devices API リファレンス'
+          url: '/playback-restrictions/references/devices-api/reference.html'
+        - name: '再生制限エラー'
+          url: '/playback-restrictions/references/playback-rights-errors.html'
+- section:
+  name: 'Policy API'
+  url: '/policy/index.html'
+  docs:
+    - name: '入門'
+      url: '/policy/getting-started/index.html'
+      docs:
+        - name: '概要:Policy API'
+          url: '/policy/getting-started/overview-policy-api.html'
+        - name: 'コードサンプル:ポリシーキーを生成する'
+          url: '/policy/getting-started/quick-start-policy-api.html'
+        - name: 'プレイヤーからのポリシーキー'
+          url: '/policy/getting-started/policy-keys.html'
+    - name: '参考文献'
+      url: '/policy/references/index.html'
+      docs:
+        - name: 'Policy API リファレンス'
+          url: '/policy/references/reference.html'
+        - name: 'リリースノート'
+          url: '/policy/references/policy-api-release-notes.html'
+- section:
+  name: 'Social API'
+  url: '/social/index.html'
+  docs:
+    - name: '入門'
+      url: '/social/getting-started/index.html'
+      docs:
+        - name: '概要:Social API'
+          url: '/social/getting-started/overview-social-api.html'
+        - name: '「クイックスタート:Social API'
+          url: '/social/getting-started/quick-start-social-api.html'
+    - name: '参考文献'
+      url: '/social/references/index.html'
+      docs:
+        - name: 'Social API リファレンス'
+          url: '/social/references/reference.html'
+        - name: 'Social API:エラーリファレンス'
+          url: '/social/references/social-api-error-reference.html'
+- section:
+  name: 'Social Syndication API'
+  url: '/social-syndication/index.html'
+  docs:
+    - name: '入門'
+      url: '/social-syndication/getting-started/index.html'
+      docs:
+        - name: '概要: Syndication Configuration API'
+          url: '/social-syndication/getting-started/public-syndication-api-overview.html'
+        - name: '概要: Syndication Feed API'
+          url: '/social-syndication/getting-started/feed-syndication-api-overview.html'
+        - name: 'ユニバーサルシンジケーションのテンプレート'
+          url: '/social-syndication/getting-started/sample-templates-universal-syndication.html'
+        - name: 'CMSとPlayback API：ビデオ検索v2'
+          url: '/cms/searching/cms-and-playback-apis-video-search-v2.html'
+    - name: '参考文献'
+      url: '/social-syndication/references/index.html'
+      docs:
+        - name: 'Syndication Configuration API リファレンス'
+          url: '/social-syndication/references/configuration-reference.html'
+        - name: 'Syndication Feed API リファレンス'
+          url: '/social-syndication/references/feed-reference.html'
+        - name: 'リリースノート'
+          url: '/policy/references/policy-api-release-notes.html'
+- section:
+  name: SSAI API 
+  url: '/ssai/index.html'
+  docs:
+    - name: '入門'
+      url: '/ssai/getting-started/index.html'
+      docs:
+        - name: 'ビデオクラウドSSAI API'
+          url: '/ssai/getting-started/video-cloud-ssai-ad-config-api.html'
+    - name: '参考文献'
+      url: '/ssai/references/index.html'
+      docs:
+        - name: 'SSAI APIリファレンス'
+          url: '/ssai/references/reference.html'
+        - name: 'SSAI APIエラーリファレンス'
+          url: '/ssai/references/ssai-api-error-reference.html'
+
+# - section:
+#   name: '動的取り込みAPIレガシー'
+#   url: '/dynamic-ingest-legacy/index.html'
+#   docs:
+#     - name: '入門'
+#       url: '/dynamic-ingest-legacy/getting-started/index.html'
+#       docs:
+#         - name: '概要:Dynamic Ingest API'
+#           url: '/dynamic-ingest-legacy/getting-started/overview-dynamic-ingest-api-legacy-ingest.html'
+#         - name: '「クイックスタート:Dynamic Ingest API'
+#           url: '/dynamic-ingest-legacy/getting-started/quick-start-dynamic-ingest-api-legacy-ingest.html'
+#         - name: '動的配信への移行'
+#           url: '/dynamic-ingest-legacy/getting-started/migrating-legacy-ingest-system-dynamic-delivery.html'
+#         - name: '動的取り込み用のソースファイルのアップロード API'
+#           url: '/dynamic-ingest/getting-started/source-file-upload-api-dynamic-ingest.html'
+#     - name: '一般情報'
+#       url: '/dynamic-ingest-legacy/general/index.html'
+#       docs:
+#         - name: 'Dynamic Ingest API:ベストプラクティス'
+#           url: '/dynamic-ingest/general/dynamic-ingest-api-best-practices.html'
+#         - name: '動的取り込み通知'
+#           url: '/dynamic-ingest-legacy/general/dynamic-ingest-notifications-legacy-ingest.html'
+#         - name: 'リクエストのステータスを取得'
+#           url: '/dynamic-ingest-legacy/general/get-status-dynamic-ingest-requests-legacy-ingest.html'
+#         - name: 'フォールバック/リトライ戦略'
+#           url: '/dynamic-ingest/general/fallback-retry-strategy.html'
+#         - name: 'S3 での動的取り込みの使用'
+#           url: '/dynamic-ingest/general/using-dynamic-ingest-s3.html'
+#         - name: 'UGC戦略'
+#           url: '/dynamic-ingest/general/ugc-strategies.html'
+#     - name: '参考文献'
+#       url: '/dynamic-ingest-legacy/references/index.html'
+#       docs:
+#         - name: 'Dynamic Ingest API リファレンス'
+#           url: '/dynamic-ingest/references/reference.html'
+#         - name: 'Dynamic Ingest API リリースノート'
+#           url: '/dynamic-ingest/references/dynamic-ingest-api-release-notes.html'
+#         - name: '取り込みフィールドのリファレンス'
+#           url: '/dynamic-ingest/references/dynamic-ingest-ingest-fields.html'
+#         - name: '動的取り込みエラーメッセージリファレンス'
+#           url: '/dynamic-ingest/references/dynamic-ingest-error-message-reference.html'
+#     - name: '摂取ガイド'
+#       url: '/dynamic-ingest-legacy/ingest-guides/index.html'
+#       docs:
+#         - name: 'イメージとDynamic Ingest API'
+#           url: '/dynamic-ingest/ingest-guides/images-and-dynamic-ingest-api.html'
+#         - name: 'メディア共有による動的取り込み'
+#           url: '/dynamic-ingest/ingest-guides/dynamic-ingest-media-sharing.html'
+#         - name: 'WebVTT ファイルの取り込み'
+#           url: '/dynamic-ingest/ingest-guides/ingesting-webvtt-files-text-trackscaptions.html'
+#     - name: 'コードサンプル'
+#       url: '/dynamic-ingest-legacy/code-samples/index.html'
+#       docs:
+#         - name: 'ビデオの取り込み'
+#           url: '/dynamic-ingest-legacy/code-samples/dynamic-ingest-api-sample-ingesting-videos-legacy-ingest.html'
+#         - name: '動画の再トランスコード'
+#           url: '/dynamic-ingest-legacy/code-samples/dynamic-ingest-api-sample-re-transcoding-videos-legacy-ingest.html'
+#         - name: 'ビデオの置換'
+#           url: '/dynamic-ingest-legacy/code-samples/dynamic-ingest-api-sample-replacing-videos-legacy-ingest.html'
+#         - name: 'スケジュールされた動画を追加'
+#           url: '/dynamic-ingest-legacy/code-samples/dynamic-ingest-api-sample-add-scheduled-videos-legacy-ingest.html'
+#         - name: 'テキストトラックの追加'
+#           url: '/dynamic-ingest/code-samples/dynamic-ingest-api-sample-adding-text-tracks.html'
+#         - name: 'Pythonコード'
+#           url: '/dynamic-ingest/code-samples/dynamic-ingest-api-sample-python-code.html'
+# - section:
+#   name: 'プロファイルAPIレガシーの取り込み'
+#   url: '/ingest-profiles-legacy/index.html'
+#   docs: 
+#     - name: '入門'
+#       url: '/ingest-profiles-legacy/getting-started/index.html'
+#       docs:
+#         - name: '概要:Ingest Profiles API'
+#           url: '/ingest-profiles-legacy/getting-started/overview-ingest-profiles-api-legacy-ingest.html'
+#         - name: '「クイックスタート:Ingest Profiles API'
+#           url: '/ingest-profiles-legacy/getting-started/quick-start-ingest-profiles-api.html'
+#     - name: 'ガイド'
+#       url: '/ingest-profiles-legacy/guides/index.html'
+#       docs:
+#         - name: 'アーカイブマスター'
+#           url: '/ingest-profiles/guides/archiving-masters.html'
+#         - name: 'レンディション設定とビデオ品質'
+#           url: '/ingest-profiles-legacy/guides/rendition-settings-and-video-quality.html'
+#         - name: '条件付き出力'
+#           url: '/ingest-profiles-legacy/guides/conditional-output.html'
+#         - name: 'オーディオコンテンツ'
+#           url: '/general/audio-content.html'
+#         - name: 'ベストプラクティス'
+#           url: 'https://studio.support.brightcove.com/admin/ingest-profiles-best-practices.html'
+#     - name: '参考文献'
+#       url: '/ingest-profiles-legacy/references/index.html'
+#       docs:
+#         - name: 'Ingest Profiles API リファレンス'
+#           url: '/ingest-profiles/references/reference.html'
+#         - name: '[ 取り込みプロファイル] フィールドのリファレンス'
+#           url: '/ingest-profiles-legacy/references/ingest-profiles-api-fields-reference-legacy-ingest.html'
+#         - name: '標準取り込みプロファイル:レガシーシステム'
+#           url: '/ingest-profiles-legacy/references/standard-ingest-profiles-legacy-transcoding.html'
+#         - name: '標準ライブインジェストプロファイル'
+#           url: '/ingest-profiles/references/standard-live-ingest-profiles.html'
+#     - name: 'コードサンプル'
+#       url: '/ingest-profiles-legacy/code-samples/index.html'
+#       docs:
+#         - name: '複数のアカウントへのプロファイルの追加'
+#           url: '/ingest-profiles/code-samples/ingest-profiles-api-sample-add-profile-multiple-accounts.html'
+#         - name: 'アカウントのすべてのプロファイルの取得'
+#           url: '/ingest-profiles/code-samples/ingest-profiles-api-sample-get-all-profiles-account.html'
+#         - name: 'デフォルトプロファイルの複数アカウントの設定'
+#           url: '/ingest-profiles-legacy/code-samples/ingest-profiles-api-sample-set-default-profile-multiple-accounts-legacy-ingest.html'
+- section: 
+  name: 'トレーニング'
+  url: '/training/index.html'
+  docs:
+  - name: 'オンライントレーニングコース'
+    url: '/training/online-training-courses.html'
+  - name: 'インストラクター主導トレーニングへの登録'
+    url: '/training/register-training.html'
+  - name: Brightcove Universityトレーニングコース
+    url: /training/brightcove-university.html
+- section:
+  name: 'サポート'
+  url: '/support/index.html'
+  docs:
+    - name: 'Brightcoveのシステムステータスページの表示'
+      url: '/support/viewing-brightcove-system-status-page.html'
+    - name: '営業へのお問い合わせ'
+      url: '/support/contact-sales.html'
+    - name: 'サポートケースを開く'
+      url: '/support/opening-case-with-brightcove-support.html'
+    - name: 'サポートポータルのパスワードをリセットする'
+      url: '/support/reset-support-portal-password.html'

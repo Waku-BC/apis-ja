@@ -1,0 +1,438 @@
+---
+title:  'ブライトコーブライブ：ベストプラクティス'
+description:  'このトピックでは、Live APIを使用してライブストリームを作成するためのベストプラクティスのガイドを提供します。'
+parent: Guides 
+grandparent: Live API
+---
+ <h1>このページは移動しました-に移動します<a href="https://live.support.brightcove.com/get-started/live-module-guidelines-and-best-practices.html">新しい場所</a> 3秒で。ブックマークを更新してください！</h1>
+<script type="text/javascript">
+var t = setTimeout（function（）{ window.location.href = 'https://live.support.brightcove.com/get-started/live-module-guidelines-and-best-practices.html'; }、3000）;
+</script>
+
+<h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  <section class="bcls-section">
+<h2 id="Overview">概要</h2>
+
+<p>Brightcoveライブは、ライブストリーミングイベントや 24 時間 365 日のライブストリームを作成するための堅牢なサービスを提供しています。このガイドでは、ライブ配信を最適化するためのベストプラクティスを概説します</p>
+</section>
+
+<section class="bcls-section">
+  <h2 id="Content_context">コンテンツコンテキスト</h2>
+  <p>ストリーミングされるコンテンツのタイプは、入力の品質を維持するために必要な設定に影響を与えるため、考慮する必要があります。トレードオフがあり、可能な限り高い設定を使用すると、フレームがスキップされるなどの問題が発生する可能性があることに注意してください。</p>
+  <p>以下の情報に基づいて、ライブイベントの前に、品質とパフォーマンスについてさまざまな設定の組み合わせをテストすることをお勧めします。</p>
+	<p>次の表に、主要な入力パラメーターの概要を示します。</p>
+	<table class="bcls-table">
+    <caption class="bcls-caption--table">ライブストリーミングの主要な入力パラメータ</caption>
+    <thead class="bcls-table__head">
+        <tr>
+            <th>パラメーター</th>
+            <th>注</th>
+        </tr>
+    </thead>
+    <tbody class="bcls-table__body">
+        <tr>
+            <td>入力ビットレート</td>
+            <td>エンコーダが送信するビットレート。レートが高いほどネットワーク損失の影響を受けやすいため、できるだけ低く抑える必要があります。</td>
+        </tr>
+        <tr>
+            <td>入力解像度</td>
+            <td>これはソースコンテンツと一致する必要があります。これを元のソースより大きくすることに利点はなく、この値が高いほど、それをサポートするために必要なビットレートが高くなります。</td>
+        </tr>
+        <tr>
+            <td>トッププロファイルに対するビットレートの比率を入力します</td>
+            <td>
+              入力ビットレートはトッププロファイルのレートよりも高くする必要がありますが、高すぎるとフレームのドロップやその他の問題が発生する可能性があります。たとえば、トップレートが1080p 30fpsの場合、入力は理想的には約4MBPSである必要があります。これはプロファイルの影響を受けることに注意してください。
+              <p>高ビットレートのトップ出力が必要な場合は、テストする価値があります。<code> copy_video</code>入力エンコードを出力にコピーするだけの設定。</p>
+            </td>
+        </tr>
+        <tr>
+          <td>プロファイル</td>
+          <td>
+            さまざまなプロファイル（ベースライン、メイン、高）は、データを昇順で圧縮します（ベースライン：最低、最高：最高）。圧縮率を上げると、伝送速度が向上しますが、データをデコードするためにより多くのCPUリソースが必要になります。エンコーダーが利用可能なリソースに高度に制約されていない限り、ベースラインプロファイルは避ける必要があります。一方、高ビットレートでハイプロファイルを使用すると、必要なデコードCPUリソースが増えるため、フレームがスキップされる可能性が高くなります。
+            <p>こちらもご覧ください<a href="#gop_structure">GOP構造</a>未満。</p>
+          </td>
+        </tr>
+        <tr>
+          <td>フレームレート</td>
+          <td>
+            これはソースと一致する必要があります。
+            <p>レートが高くなると、それに比例して高い入力ビットレートが必要になります。たとえば、アクションスポーツコンテンツの場合、60fpsの入力ストリームは30fpsのストリームよりも大幅に多くのデータを伝送します。</p>
+            <p>60 fpsなどの高レートでは、高ビットレートの複雑なコンテンツでフレームスキップの問題が発生する可能性が高くなります。</p>
+          </td>
+        </tr>
+        <tr>
+          <td>キーフレームレート</td>
+          <td>
+            このための最も効率的な設定は、セグメント期間xフレームレートです。たとえば、6秒のセグメントと30 fpsがある場合、キーフレームレートを180（6x30）にすると、デコーダーの負荷が最小になります。
+            <p>ただし、変動を考慮して、これはフレームレートの2倍に設定されます。たとえば、30fpsのフレームレートの場合は60に設定されます。</p>
+          </td>
+        </tr>
+        <tr>
+          <td>GOP構造</td>
+          <td>見る<a href="#gop_structure">GOP構造</a>未満。</td>
+        </tr>
+    </tbody>
+</table>
+</section>
+
+<section class="bcls-section">
+  <h2 id="Key_issues">ストリーミングに関する重要な問題</h2>
+  <p>エンコーダーからBrightcoveへのストリーミングエクスペリエンスの問題に関連して、一般的に発生するいくつかの問題があります。</p>
+  <ol>
+    <li>
+      入力に影響を与えるネットワークの不安定性：
+      <ol>
+        <li>インターネットは一般的に非常に信頼性がありますが、間違いはなく、問題は発生します。ビットレートが高いほど、問題が発生する可能性が高くなります。</li>
+        <li>ビデオのアップロードにリアルタイムよりも時間がかかる場合、入力ドリフトが発生する可能性があります（ビデオの受信時間は送信時よりも大幅に遅くなります）</li>
+      </ol>
+    </li>
+    <li>
+      トランスコーダーの過負荷によりフレームがスキップされる：トランスコーダーに十分なオーバーヘッドがあることを確認するためにあらゆることを行っていますが、コンテンツの複雑さが突然急上昇したり、ネットワークの一時的な中断やトランスコーダーへのその他の中断によってフレームがスキップされたりすることがあります。入力が複雑になるほど、スキップされたフレームが発生する可能性が高くなります。また、静止画像から5分以上の長時間の変更や、アクションコンテンツの突然の変更により、過負荷が発生する可能性があるという既知の問題もあります。
+    </li>
+    <li>可変フレーム期間を送信するエンコーダー：フレームレートは一定である必要があり、一定のキーフレーム間隔を許容するようなものである必要があります。たとえば、29.97別名30000/1001または23.976別名24000/1001などのフレームレートの場合、一定の間隔でキーフレームを設定することはできないため、避ける必要があります。</li>
+    <li>一定の期間間隔ではないキーフレームを送信するエンコーダーの場合、キーフレームレートは、秒単位のフレームレートの2倍以上である必要があります。たとえば、フレームレートが30 fpsの場合、キーフレーム間隔は60フレーム（2秒）で、セグメントごとに1回の最大間隔である必要があります。たとえば、6秒のセグメントがある場合、最大間隔は180フレームになります。 30 fps</li>
+  </ol>
+</section>
+
+<section class="bcls-section">
+  <h2 id="Content_types">コンテンツタイプ</h2>
+  <p>一般に、より複雑なコンテンツでは、これらの設定のうち高い方を使用する必要があるため、フレームがスキップされる可能性が高くなります。以下の表は、複雑な順にいくつかの例を示しています。これらは単なる例であり、ほぼすべてのエンコーダ設定が異なることに注意してください。テストと検証を実行する必要があります。</p>
+  <table class="bcls-table">
+    <caption class="bcls-caption--table">コンテンツタイプの例</caption>
+    <thead class="bcls-table__head">
+        <tr>
+            <th>コンテンツタイプ</th>
+            <th>設定例</th>
+        </tr>
+    </thead>
+    <tbody class="bcls-table__body">
+        <tr>
+            <td>ウェブカメラ</td>
+            <td>
+              <ul>
+                <li>解像度：360p</li>
+                <li>ビットレート：1 MBPS</li>
+                <li>プロフィール：ベースライン</li>
+              </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>Web会議</td>
+            <td>
+              <ul>
+                <li>解像度：480p</li>
+                <li>ビットレート：2.5 MBPS</li>
+                <li>プロフィール：主要</li>
+              </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>アニメーション</td>
+            <td>
+              <ul>
+                <li>解像度：720p</li>
+                <li>ビットレート：2.5 MBPS</li>
+                <li>プロフィール：主要</li>
+              </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>トーキングヘッド/ニュース</td>
+            <td>
+              <ul>
+                <li>解像度：720p</li>
+                <li>ビットレート：4 MBPS</li>
+                <li>プロフィール：主要</li>
+              </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>ライブコンサート</td>
+            <td>
+              <ul>
+                <li>解像度：1080p（またはソース）</li>
+                <li>ビットレート：5 MBPS</li>
+                <li>プロフィール：高い</li>
+              </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>ライブスポーツ</td>
+            <td>
+              <ul>
+                <li>解像度：1080p（またはソース）</li>
+                <li>ビットレート：6 MBPS</li>
+                <li>プロフィール：高い</li>
+              </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>ライブスポーツ高FPS</td>
+            <td>
+              <ul>
+                <li>解像度：1080p（またはソース）</li>
+                <li>ビットレート：10 MBPS</li>
+                <li>プロフィール：高い</li>
+              </ul>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</section>
+
+<section class="bcls-section">
+  <h2 id="verification">検証とテスト</h2>
+  <p>理想的には、顧客は最も複雑な（最も変化するコンテンツ）で可能な限り低い設定から始めて、出力が受け入れられるまでさまざまな設定を増やしてコンテンツでテストする必要があります。これは、一般に設定が高いほど、ネットワークまたはトランスコーディングのいずれかで問題が発生する可能性が高くなるためです。</p>
+</section>
+
+<section class="bcls-section">
+  <h2 id="gop_structure">GOP構造</h2>
+  <p>ビデオのGroupof Pictures（GOP）構造は、最初に次のように使用されるプロファイルに依存します。</p>
+  <ol>
+    <li><strong>ベースライン</strong>プロファイルは、IフレームとPフレームおよびCAVLCエントロピーエンコーディングのみをサポートします</li>
+    <li><strong>主要</strong>と<strong>高い</strong> I、B、PフレームとCABACエントロピー符号化をサポート</li>
+  </ol>
+  <p>メインプロファイルとハイプロファイルは、一般に、より良い品質でより良い圧縮をもたらしますが、スキップされたフレームの影響を受けやすくなるため、エンコードとデコードに追加の計算も必要になります。さらに、これらのプロファイルはB（双方向）フレームを使用するため、エンコードプロセスにいくらかの遅延が発生します。</p>
+  <p>ベースラインプロファイルは、エンコードとデコードに必要なCPUが少なくて済みますが、圧縮が少ないため、品質を維持するために必要なビットレートが高くなり、ネットワークの問題の影響を受けやすくなります。</p>
+  <h3>フレームタイプとパフォーマンスへの影響の可能性に関する注意：</h3>
+  <ol>
+    <li><strong>Iフレーム</strong>：最も多くの帯域幅を使用します。完全なシーンの変更またはセグメントの境界で追加するのが最適です。つまり、コンテンツが変更されるほど、必要なものが多くなります（GOPの長さが短くなります）。</li>
+    <li><strong>Pフレーム</strong>：Iフレーム間の基本単位です</li>
+    <li><strong>Bフレーム</strong>：前のフレームと将来のフレームの両方を使用すると、追加するほど圧縮率は高くなりますが、CPUとレイテンシーは高くなります</li>
+  </ol>
+  <p>の用法<strong>Iフレーム</strong>理想的には、セグメントの開始（パススルーを使用する場合は重要）またはシーンの変更に限定する必要があります。すべてまたは多数のIフレームは、フレームのスキップにつながる過剰な負荷を引き起こす可能性があるため、避ける必要があります。</p>
+  <h3>その他の注意事項：</h3>
+  <ul>
+    <li>キーフレームの密な配置を防ぐためのオプションを使用します（例：<code> min_keyin</code> = 3+）。</li>
+    <li>キーフレームの挿入の定期的なリズムを保証するオプションを使用します。たとえば、GOPの長さを秒単位で指定する代わりに、正確な分数またはフレームで指定します。</li>
+  </ul>
+</section>
+
+<section class="bcls-section">
+  <h2 id="bitrate">ビットレート</h2>
+  <ul>
+    <li>最小入力帯域幅:2.5メガビット/秒</li>
+    <li>最大入力帯域幅:10 mbps</li>
+  </ul>
+  
+  <ul>
+    <li>ストリームを「ほぼCBR」にする-で<code>max_bitrate</code> = 1.1 * target_bitrate。</li>
+    <li>可能な場合は、厳密なHRD準拠のレート制御モードを使用します。</li>
+  </ul>
+</section>
+
+<section class="bcls-section">
+  <h2 id="Protocol">プロトコル</h2>
+  <p>インターネットは保証された配信ネットワークではないことに注意することが重要です。インターネット接続は「良好」と見なされる場合もありますが、高品質で信頼性の高いライブビデオストリーミングには不十分な場合があります。ISPでの少量の輻輳、ルーター間の計画外のフェイルオーバー、または同様の問題など、カスタマーエンコーダーとBrightcoveトランスコーディングプラットフォーム間のパスの小さな中断は、ビデオ出力の中断を引き起こす可能性があります。ハイステークスのライブブロードキャストでは、専用ファイバー、予約済み衛星帯域幅、または管理対象ネットワーク上のコミット済み帯域幅のいずれかで構成される複数の専用ネットワークを使用するのが通常の方法です。これにはかなりのコストがかかり、ほとんどの場合、インターネットを介して十分な成果を上げることができます。ただし、障害のないトランスポートを維持することが重要な場合は、AWS DirectConnectまたはある程度の専用帯域幅を提供できるISPを検討してください。</p>
+  <p>私たちが推奨するオプションは（順番に）：</p>
+  <ol>
+    <li><strong>SRT</strong> -トランスポート速度（UDP）と、ある程度の制御およびエラー回復力の適切な組み合わせを提供します。srt-transmitなどのローカルRTPから変換できるツールはありますが、すべてのエンコーダーで使用できるわけではありません。</li>
+    <li><strong>RTMP</strong> --TCPベースであるため、優れたレベルのエラー回復力が提供されます。欠点は、これにはかなりのオーバーヘッドが伴うことです。複数のオーディオトラックなどのすべての機能がRTMPで使用できるわけではないことに注意してください。</li>
+    <li><strong>RTP-FEC</strong> -エラー回復力を備えた高速UDPベースのトランスポートを提供します</li>
+    <li><strong>RTP</strong> -エラー回復力のない高速転送と高度な機能を提供します</li>
+  </ol>
+  <aside class="bcls-aside bcls-aside--information">注：RTMPを使用する場合は、フレームの一部が順不同で到着する可能性があるため、可能であればスライスを無効にすることを検討してください。</aside>
+</section>
+
+<section class="bcls-section">
+<h2 id="Certified_encoders">サポートされているエンコーダ</h2>
+
+<p>Live <a href="https://live.support.brightcove.com/general/supported-encoders-live-events.html">で動作することが知られているエンコーダの一覧については、「ライブイベントでサポートされるエンコーダ</a>」を参照してください。他のエンコーダも動作しますが、テストされていないことに注意してください。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Supported_CDNs">サポートされるCDN</h2>
+
+<ul>
+	<li>Akamai</li>
+	<li>Amazon CloudFront</li>
+</ul>
+
+<aside class="bcls-aside bcls-aside--information">上記のCDNは公式にサポートされていますが、他のファイルベースのCDNも機能するはずです。</aside>
+
+</section>
+
+<section class="bcls-section">
+<h2 id="retries">再試行</h2>
+
+<p>エンコーダからの RTMP 接続の再試行をイネーブルにすることを推奨します。5 秒の再試行間隔での再試行回数が多くなると、エンコーダとエントリポイント間の断続的な接続の問題が軽減されます。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="job_settings">ジョブ設定</h2>
+
+<p>推奨ジョブ設定</p>
+
+<table class="bcls-table">
+	<caption class="bcls-caption--table">ジョブ設定</caption>
+	<thead class="bcls-table__head">
+		<tr>
+			<th>フィールド</th>
+			<th>推奨値</th>
+		</tr>
+	</thead>
+	<tbody class="bcls-table__body">
+		<tr>
+			<td><code translate="No">ad_audio_loudness_level</code></td>
+			<td><code translate="No">-23 </code>（EBU R.128規格）</td>
+		</tr>
+	</tbody>
+</table>
+</section>
+
+<section class="bcls-section">
+<h2 id="input_requirements">入力要件</h2>
+
+<p>次の表に、入力ライブストリームの要件を示します。</p>
+
+<table class="bcls-table">
+	<caption class="bcls-caption--table">入力要件</caption>
+	<thead class="bcls-table__head">
+		<tr>
+			<th>項目</th>
+			<th>要件</th>
+		</tr>
+	</thead>
+	<tbody class="bcls-table__body">
+		<tr>
+			<td>プロトコル</td>
+			<td><code translate="No">rtmp</code>、<code translate="No">rpt</code>、<code translate="No">rtp-fec</code>、 また<code translate="No">srt</code>（を除くすべて<code translate="No">rtmp</code> MPEG2-TS入力用です）<sup>[1-1]<strong><a href="#note1-1"></a></strong></sup></td>
+		</tr>
+		<tr>
+			<td>動画形式</td>
+			<td>h.264</td>
+		</tr>
+		<tr>
+			<td>オーディオフォーマット</td>
+			<td>AAC</td>
+		</tr>
+		<tr>
+			<td>最大オーディオサンプリングレート</td>
+			<td>最大 48000 Hz（Brightcoveサポートはリクエストに応じてこの値を増やすことができます）</td>
+		</tr>
+		<tr>
+			<td>解明</td>
+			<td>最大1080p (幅:1920 ピクセル、高さ:1080 ピクセル)</td>
+		</tr>
+		<tr>
+			<td>ビットレート</td>
+			<td>少なくとも最高の出力ビットレートと同じ高さでなければなりません-最大:10MBPS。
+			<p>ほとんどの場合、Brightcoveサポートでは、入力ストリームに定数ビットレートを使用すると、問題が発生する可能性が大幅に減少することがわかりました。</p>
+			</td>
+		</tr>
+		<tr>
+			<td>フレームレート</td>
+			<td>30 fps ( <a href="https://supportportal.brightcove.com/s/login/?language=en_US">サポートリクエストを送信して</a>、制限を 60 fps に引き上げることができます)</td>
+		</tr>
+		<tr>
+			<td>スライス</td>
+			<td>エンコーダにこのオプションがある場合は、次のように設定します。<code translate="no"> 1</code></td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>注</h3>
+
+<ul>
+	<li id="note1-1"><sup>[1-1]<strong></strong></sup> TS入力に複数のビデオ/オーディオトラックがある場合は、それぞれについて最初のトラックを選択します。また、インターネット経由の UDP 上のプレーンなTSは非常に信頼できないため、FEC を使用することを強くお勧めします。FECの場合、 <em>小さい</em> 行/列に使用する値ほど、エラー訂正の信頼性が高くなります（帯域幅が増加しますが）。</li>
+</ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="slate_source_file_recommendations">スレートソースファイルの推奨事項</h2>
+
+<ul>
+	<li><strong>解像度</strong> : (あなたのエンコーディングラダーで最高)</li>
+	<li><strong>FPS </strong> : (ソースと同じ)</li>
+	<li><strong>ビットレート</strong>：（あなたのエンコーディングラダーで最高）</li>
+	<li><strong>オーディオ</strong> : (最高のレンディションと同じビットレート、チャンネル、サンプリング周波数、サンプルあたりのビット数、または入力と同じ)</li>
+</ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="output_recommendations" class="bcls-section">推奨を出力する</h2>
+
+<p>以下は推奨出力設定ですが、多くのエンコーダでは、RTMP入力は10MBPS（ビデオ+オーディオ）、フレームレートは30fpsに制限されています。</p>
+
+<table class="bcls-table">
+	<caption class="bcls-caption--table">出力に関する推奨事項</caption>
+	<thead class="bcls-table__head">
+		<tr>
+			<th>項目</th>
+			<th>推奨</th>
+		</tr>
+	</thead>
+	<tbody class="bcls-table__body">
+		<tr>
+			<td>動画コーデック</td>
+			<td><code translate="No">h264</code>は現在、唯一の選択肢です</td>
+		</tr>
+		<tr>
+			<td>オーディオコーデック</td>
+			<td><code translate="No">aac</code>は現在、唯一の選択肢です</td>
+		</tr>
+		<tr>
+			<td>幅</td>
+			<td><code translate="No">width</code>または<code translate="No">height</code>が指定されていない場合は、ソース寸法が使用されます。<code translate="No">width</code><code translate="No">height</code>またはが指定されている場合は、ソースの縦横比を維持するために、もう一方の寸法が計算されます。</td>
+		</tr>
+		<tr>
+			<td>高さ</td>
+			<td><code translate="No">width</code>または<code translate="No">height</code>が指定されていない場合は、ソース寸法が使用されます。<code translate="No">width</code><code translate="No">height</code>またはが指定されている場合は、ソースの縦横比を維持するために、もう一方の寸法が計算されます。</td>
+		</tr>
+		<tr>
+			<td>ビットレート</td>
+			<td>入力ビットレート以下の値</td>
+		</tr>
+		<tr>
+			<td>キーフレームレート</td>
+			<td>2秒</td>
+		</tr>
+	</tbody>
+</table>
+</section>
+
+<section id="AWS_regions">AWS リージョン
+<p><a href="/live-api/getting-started/overview-brightcove-live-api.html#Support_aws_regions">Live API の概要を参照してください</a>。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="FAQ">よくある質問</h2>
+
+<dl>
+	<dt class="bcls-question">ライブジョブを作成した後、ストリーミングを開始する必要があるのはどれくらいですか？</dt>
+	<dd class="bcls-answer">Brightcoveライブでは、<code translate="No">waiting </code>状態がからに移行する場合の 2 つの条件があります<code translate="No">finishing </code>。
+	<ol>
+		<li><strong>ジョブが待機状態</strong>（まだ開始されていない）で、<code translate="No">max_waiting_time_ms</code>が経過した場合、ジョブは終了または非アクティブになります。</li>
+		<li><strong>ジョブが切断状態</strong>（開始されたが切断済み）で、<code translate="No">reconnect_time</code>が経過した場合、ジョブは終了/非アクティブになります。</li>
+	</ol>
+
+	<p>が<code translate="No">event_length </code> 30 分を超える場合、ジョブは 30 分で終了します。が<code translate="No">event_length </code> 30 分未満の場合、ジョブはで終了します<code translate="No">event_length </code>。</p>
+
+	<p>たとえば、が<code translate="No">event_length </code> 60 分である場合、ライブジョブは 30 分で終了します。<code translate="No">event_length </code>が 15 分の場合、ライブジョブは 15 分で終了します。</p>
+
+	<p><code translate="No">reconnect_time </code>は、待機状態には影響しません。</p>
+	</dd>
+	<dt class="bcls-question">同時ライブ job_settings の制限は何ですか？</dt>
+	<dd class="bcls-answer">
+	<p><strong>アクティブな待機中の未開始ジョブは、</strong>いつでも 5 つまで許可されます。</p>
+
+	<p>同時ジョブの追加制限:</p>
+
+	<ul>
+		<li><code translate="No">channel</code>（24x7）ジョブの数は、リージョンごとに0または低い数に制限されます（アカウントの種類によって異なります）。</li>
+		<li>同時に<strong>「実行中」</strong><code translate="No">event</code>ジョブの数は、地域によって制限されており、通常は100に制限されています。</li>
+		<li><strong></strong><code translate="No">event</code>同時に接続するジョブの数は5に制限されています 。</li>
+		<li>リージョンごとの SEP ジョブ数は 3 または 10 に制限されています（「<a href="/live-api/getting-started/overview-brightcove-live-api.html#Support_aws_regions">サポートされている AWS リージョン</a>」を参照）。</li>
+	</ul>
+
+	<p>これらの制限は、サポートがアカウントレベルで調整できます。追加の容量が必要な場合は、アカウントマネージャーにお問い合わせください。</p>
+	</dd>
+	<dt class="bcls-question">入力帯域幅が十分であれば、Brightcoveライブは 1080p 品質をプッシュできますか？</dt>
+	<dd class="bcls-answer">はい、1080p 入力はすべてのアカウントで有効です。</dd>
+	<dt class="bcls-question">DRMは利用可能ですか？</dt>
+	<dd class="bcls-answer">はい！ライブアカウントに DRM サポートを追加する場合は、アカウントマネージャーにお問い合わせください。</dd>
+</dl>
+</section>
+</article>

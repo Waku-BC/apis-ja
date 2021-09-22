@@ -1,0 +1,185 @@
+---
+title:  'ライブAPI：エラーメッセージ' 
+description: このトピックでは、Live API によって返されるエラーメッセージの一覧を示します。これは進行中の作業です。ここに記載されていないエラーが表示された場合は、ラーニングサービスチームにお知らせください。追加します。
+parent: References 
+grandparent: Live API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+
+<section class="bcls-section">
+<h2 id="error_message_reference">エラーメッセージリファレンス</h2>
+
+<table class="bcls-table">
+  <caption class="bcls-caption--table">Live API エラーメッセージ</caption>
+  <thead class="bcls-table__head">
+    <tr>
+      <th>エラー</th>
+      <th>説明</th>
+      <th>適用先</th>
+      <th>レスポンス本文</th>
+    </tr>
+  </thead>
+  <tbody class="bcls-table__body">
+    <tr>
+      <td><code translate="No">400 BAD_REQUEST</code></td>
+      <td><code translate="No">region </code>要求で指定されたは存在しないか、サポートされていません</td>
+      <td>ライブジョブの作成</td>
+      <td>
+      
+<code class="language-json" translate="No">{
+"error": "Invalid region"
+}
+</code>
+
+      </td>
+    </tr>
+    <tr>
+      <td><code translate="No">400 BAD_REQUEST</code></td>
+      <td>挿入されるキューポイントのデュレーションは、ジョブ内のセグメントの長さの 2 倍以上である必要があります</td>
+      <td>キューポイントを挿入する</td>
+      <td>
+      
+<code class="language-json" translate="No">{
+  "error": "The parameter duration should be greater than or equal to (2 * target duration) of the job"
+}
+</code>
+    
+      </td>
+    </tr>
+    <tr>
+      <td><code translate="No">400 BAD_REQUEST</code></td>
+      <td>JSONにはいくつかのフィールドに無効な値が含まれていました</td>
+      <td>ライブジョブの作成、VODクリップの作成、広告構成の作成/更新、ビーコンセットの作成/更新、スレートの取り込み、ビーコンセットの作成</td>
+      <td>
+      
+<code class="language-json" translate="No">{
+"error": "Invalid input value"
+}
+</code>
+
+      </td>
+    </tr>
+    <tr>
+      <td><code translate="No">400 BAD_REQUEST</code></td>
+      <td>通知 URL にプロトコルがないか、プロトコルがサポートされていないタイプです</td>
+      <td>ライブジョブの作成、VODクリップの作成、広告構成の作成/更新、ビーコンセットの作成/更新、スレートの取り込み、ビーコンセットの作成</td>
+      <td>
+      
+<code class="language-json" translate="No">{
+"error": "The notification target type is not supported currently"
+}
+</code>
+
+      </td>
+    </tr>
+    <tr>
+      <td><code translate="No">400 BAD_REQUEST</code></td>
+      <td>許可される SEP ジョブの数は制限されています。このエラーは、<code translate="No">"channel_type": "24x7"</code>ジョブの作成リクエストにを含み、イベントではなく SEP のみを購入した場合にも表示されます。</td>
+      <td>ライブジョブの作成</td>
+      <td>
+      
+<code class="language-json" translate="No">{
+    "error": "You've reached the number of static entry points jobs you can create in this region for your account"
+}
+</code>
+
+      </td>
+    </tr>
+    <tr>
+      <td><code translate="No">400 BAD_REQUEST</code></td>
+      <td>待機状態（エンコーダが接続されるのを待っている）の 5 つのジョブのみが許可されます。追加のジョブを作成するには、待機中のジョブの 1 つにエンコーダを接続するか、キャンセルする必要があります</td>
+      <td>ライブジョブの作成</td>
+      <td>
+      
+<code class="language-json" translate="No">{
+"error" : "You've reached the number of waiting jobs you can create for your account"
+}
+</code>
+
+      </td>
+    </tr>
+    <tr>
+      <td><code translate="No">400 BAD_REQUEST</code></td>
+      <td>VODアセットを作成するには、当社独自の配信を使用する必要があります</td>
+      <td>最も可能性の高い原因は、完全な VOD アセットまたは暗号化されたストリーム上のクリップを要求していることです。暗号化されたストリームの VOD アセットはサポートされていません</td>
+      <td>
+      
+<code class="language-json" translate="No">{
+"error": "The notification target type is not supported currently"
+}
+</code>
+
+      </td>
+    </tr>
+    <tr>
+      <td><code translate="No">401 UNAUTHORIZED</code></td>
+      <td><code translate="No">X-API-KEY </code>要求とともにヘッダーが送信されなかったか、キー値が有効ではありませんでした</td>
+      <td>すべてのリクエスト</td>
+      <td>
+      
+<code class="language-json" translate="No">{
+"message": "Unauthorized"
+}
+</code>
+
+      </td>
+    </tr>
+    <tr>
+      <td><code translate="No">404 RESOURCE_NOT_FOUND</code></td>
+      <td>リクエストURLに誤りがあった</td>
+      <td>すべてのリクエスト</td>
+      <td>
+      
+<code class="language-json" translate="No">{
+"message": "Unauthorized"
+}
+</code>
+
+      </td>
+    </tr>
+    <tr>
+      <td><code translate="No">500 INTERNAL_SERVER_ERROR</code></td>
+      <td>すでに停止されているライブジョブを停止しようとしました</td>
+      <td>ライブジョブのキャンセル</td>
+      <td>
+      
+<code class="language-json" translate="No">{
+"error": "After filtering, there is no job to process"
+}
+</code>
+
+      </td>
+    </tr>
+    <tr>
+      <td><code translate="No">500 INTERNAL_SERVER_ERROR</code></td>
+      <td>存在しないジョブまたはアセット ID を指定しました</td>
+      <td>ジョブの詳細の取得、ライブジョブのキャンセル、SEP ジョブの有効化、キューポイントの挿入、ID3 時間メタデータの挿入、VOD クリップの作成</td>
+      <td>
+      
+<code class="language-json" translate="No">{
+"error": "DB getItem, no results found"
+}
+</code>
+
+      </td>
+    </tr>
+    <tr>
+      <td><code translate="No">400 BAD_REQUEST</code></td>
+      <td>ライブジョブあたり5RTMP出力の制限に達すると、次のメッセージが表示されます。
+      </td>
+      <td>RTMP出力は、ライブジョブごとに5つの出力に制限されています</td>
+      <td>
+      
+<code class="language-json" translate="No">{ 
+  "error":"RTMP outputs limit reached, failed to add" 
+}
+</code>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+</section>
+</article>

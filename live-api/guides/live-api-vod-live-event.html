@@ -1,0 +1,199 @@
+---
+title:  'ライブAPI：ライブイベントのVOD'
+description:  'このトピックでは、イベントの完了後にライブストリーミングイベントからビデオオンデマンド（VOD）を作成する方法を学習します。'
+parent: Guides 
+grandparent: Live API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+ <summary>{{ page.description }}</summary>
+  <aside class="bcls-aside bcls-aside--information">Live to VODは暗号化されたストリームでは使用できず、Liveジョブイベントの作成時にエラーを返します。</aside>
+
+
+
+<section class="bcls-section">
+<h2 id="Introduction">入門</h2>
+
+<p>短いライブストリーミングイベントの場合は、イベントの記録をビデオオンデマンド（VOD）として利用できるようにすることができます。<span translate="No">ビデオクラウド</span>イベントが完了した後のアカウント。これは、<a href="/live-api/references/reference.html#api-Live_Jobs-Create_a_Live_Job">ライブジョブの作成時に</a> VOD の設定を追加することで簡単に実行できます。</p>
+
+<p>Fast Live to VOD では、クリップをセグメント精度で迅速に公開できます。また、顧客に対して完全に透過的なバックエンドプロセスでは、クリップ境界をクリーンアップして再公開できます。</p>
+
+<p>その結果、必要なクリップ境界で自動的に再公開されるクリップにより、市場投入までの時間が短縮されます。</p>
+
+<p><strong>重要</strong>:</p>
+
+<ul>
+	<li>ライブストリーミングイベントが完了したら、エンコーダを停止しますが、<strong><a href="/live-api/references/reference.html#api-Live_Jobs-Cancel_Live_Job">ジョブをキャンセルしないでください</a></strong>。ジョブをキャンセルする前に、VOD クリップが作成されるまで待ってください。そうしないと、ビデオクリップは正常に作成されません。</li>
+	<li>ライブジョブの有効期限が切れるまで、<code translate="No">reconnect_time</code> VOD の作成は開始されません。</li>
+	<li>ライブイベントの期間が 24 時間を超える場合は、最後の 24 時間のみがVODにキャプチャされます。</li>
+</ul>
+
+<section class="bcls-subsection">
+<h3 id="fast_vod">高速VODオプション</h3>
+
+<p>高速 VOD オプションを使用すると、ライブイベントの VOD バージョンをより迅速に取得できます。Fast Live to VOD では、<strong>セグメントが正確になるライブレンディションを</strong> (トランスマルチプレックスを使用して) 公開します。</p>
+
+<p>高速 VOD <code translate="No">output</code>のフィールドは次のとおりです。</p>
+
+<ul>
+  <li><code translate="No">live_to_vod</code>に設定<code translate="No">true</span></code></li>
+	<li><code translate="No">mode</code>（高速VODに必要）-高速VODの場合、値は<code translate="No">instant</code></li>
+	<li><code translate="No">playlist_label</code>（オプション）-インスタントモードの VOD にのみ適用されます。VOD 出力の作成に使用するプレイリストを示します（ライブジョブから）。ライブジョブの作成時にカスタムプレイリストが定義されている場合にのみ必要です。</li>
+</ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="Implementation">実装</h2>
+
+<h3>ライブジョブを作成するとき</h3>
+<p>ライブをVODに実装する最も簡単な方法は、<code translate="No">"live_to_vod": true</code>ジョブを作成するときのリクエスト本文のフィールドは、次のいずれかです。</p>
+<ul>
+  <li>トップレベル<code translate="No">videocloud</code>オブジェクト（VODをリモートアセットとして作成するため）</li>
+  <li>VideoCloudまたはS3に出力する出力オブジェクト</li>
+</ul>
+<h4>に送る<span translate="No">ビデオクラウド</span></h4>
+
+<p><code translate="No">videocloud</code>新しいライブジョブを作成するときにオブジェクトを使用する方法は 2 つあります。</p>
+
+<ol class="bcls-tasklist-restart">
+	<li>含む<code translate="No">videocloud</code>の中に<strong>ジョブレベルのフィールド</strong>でビデオを作成します<span translate="No">ビデオクラウド</span>ライブストリームをリモートアセットとして取得し、VideoCloudライブラリにVODを作成するアカウント：
+
+	<pre class="line-numbers">
+<code class="language-json" translate="No">{
+    "live_stream": true,
+    "region": "us-west-2",
+    "reconnect_time": 2400,
+    "live_dvr_sliding_window_duration": 30,
+    <strong>
+      "videocloud": {
+        "video": {
+          "name": "test_live_stream"
+        },
+        <span class="bcls-highlight">"live_to_vod": true</span>
+        }
+    </strong></code></pre>
+	</li>
+	<li>
+	<p>含んでいる<code translate="No">videocloud</code>プロパティ内のオブジェクト<code translate="No">outputs</code>クリップまたは完全なVODオブジェクトは、<span translate="No">ビデオクラウド</span>クリップのビデオ-クリップはに取り込まれます<span translate="No">ビデオクラウド</span>そしてVODライブラリの一部になります：</p>
+
+	<pre class="line-numbers">
+<code class="language-json" translate="No">{
+  "live_stream": true,
+  "region": "us-west-2",
+  "reconnect_time": 2400,
+  "live_dvr_sliding_window_duration": 30,
+	"videocloud": {
+		"video": {
+			"name": "test_live_stream"
+		}
+	},
+  "outputs": [
+    { "videocloud": {
+        "video": {
+            "name": "video name",
+        },
+        "ingest": {
+            "profile": "<span class="bcls-input">valid-ingest-profile-name</span>"
+        }
+    },
+    "credentials": "<span class="bcls-input">USER_VIDEOCLOUD_CREDENTIAL_LABEL</span>"
+    }
+  ]
+}</code></pre>
+    <p>注：アカウントのデフォルトの取り込みプロファイルを使用するには、ingest--profileフィールドを省略します。</p>
+	</li>
+</ol>
+
+<p>を含めることもできます<code translate="no">videocloud</code>出力オブジェクト内のオブジェクト（この場合、必要はありません）<code translate="No">live_to_vod</code>分野）：</p>
+
+<pre class="line-numbers">
+<code class="language-json" translate="No">{
+  "live_stream": true,
+  "region": "us-west-2",
+  "reconnect_time": 600,
+  "ad_insertion": false,
+  "outputs": [
+    { OTHER_JOB_OUTPUT_OBJECT },
+    { OTHER_JOB_OUTPUT_OBJECT_2 },
+    <span class="bcls-highlight">{ "videocloud": {
+        "video": {
+            "name": "video name",
+            "description": "video description",
+            "long_description": "long description",
+            "tags": [
+            "tag1", "tag2"
+            ],
+            "schedule":
+            { "starts_at": "2017-01-01T12:00:00-04:00", "ends_at": "2099-01-01T12:00:00-04:00" }
+            ,
+            "custom_fields": {
+                "someCustomField": "value"
+            },
+
+        },
+        "ingest": {
+            "profile": "<span class="bcls-input">valid-ingest-profile-name</span>"
+        }
+    },
+    "credentials": "<span class="bcls-input">USER_VIDEOCLOUD_CREDENTIAL_LABEL</span>"
+    } </span>
+  ]
+}</code></pre>
+
+<aside class="bcls-aside bcls-aside--information">Video Cloudアカウントのクレデンシャルをまだ設定していない場合は、新しいクレデンシャルを追加できます<a href="/live-api/references/reference.html#operation/CreateCredential">API経由</a>。</aside>
+
+<p>ビデオメタデータには、CMS API の [ <a href="https://docs.brightcove.com/cms-api/v1/doc/index.html#api-videoGroup-Create_Video">ビデオの作成</a> ] 操作にリストされたフィールドを含めることができます。</p>
+
+<p>取り込みプロファイルは、VOD 用に作成されるレンディションを定義します。では<code translate="No">valid-ingest-profile-name</code>、アカウントのカスタムまたは標準取り込みプロファイルの名前に置き換えることができます。どの標準プロファイルを持っているかは、アカウントが動的配信が有効になっているかどうかによって異なります。<a href="https://apis.support.brightcove.com/ingest-profiles/references/standard-ingest-profiles-dynamic-delivery-and-context-aware-encoding.html">ダイナミック配信およびコンテキスト認識エンコーディングの標準インジェストプロファイル</a>、<a href="https://apis.support.brightcove.com/ingest-profiles-legacy/references/standard-ingest-profiles-legacy-transcoding.html">またはレガシートランスコーディングの標準インジェストプロファイルを参照してください</a>。</p>
+
+<aside class="bcls-aside bcls-aside--information">注意してください<code translate="No">profile</code>フィールドはオプションです。プロファイルを指定しない場合、アカウントのデフォルトプロファイルが使用されます。</aside>
+
+<h4>S3 に送信</h4>
+
+<p>イベントの VOD バージョンを S3 バケットに保存するには、<strong>強調表示された出力のバージョンを以下に含めます</strong>。</p>
+
+<pre class="line-numbers">
+<code class="language-json" translate="No">{
+  "live_stream": true,
+  "region": "us-west-2",
+  "reconnect_time": 600,
+  "ad_insertion": false,
+  "outputs": [
+    { OTHER_JOB_OUTPUT_OBJECT },
+    { OTHER_JOB_OUTPUT_OBJECT_2 },
+    <span class="bcls-highlight">{
+      "url":"s3://YOUR_BUCKET/path/filename.mp4",
+      "credentials": "<span class="bcls-input">YOUR_CREDENTIAL_LABEL</span>",
+      "notifications": [
+        {
+          "url": "http://httpbin.org/post?vodStateChange"
+        },
+        {
+          "url": "http://httpbin.org/post?vodFinished",
+          "event": "output_finished"
+        }
+      ]
+    }</span>
+  ]
+}</code></pre>
+
+<aside class="bcls-aside bcls-aside--information">S3バケットの有効なユーザー名とパスワードのクレデンシャルラベルは、Liveアカウントの設定時に作成され、クレデンシャルラベルが送信されているはずです。お持ちでない方はどうぞ<a href="https://supportportal.brightcove.com/s/login/?language=en_US">Brightcoveサポートに連絡する</a>。</aside>
+<h3>オープンエンドのビデオクリップとしてVODを作成する</h3>
+<p>ライブイベントのVODを取得する別の方法は、<a href="/live-api/guides/live-api-creating-vod-clips.html"> VODクリップを作成する</a>終了時間なし。詳細については、クリッピングドキュメントを参照してください。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Limitations">制約事項</h2>
+
+<ul>
+	<li>VOD <a href="/live-api/references/reference.html#api-Live_Jobs-Stop_Live_Job">が作成される前にライブジョブを停止 (キャンセル) </a>した場合、そのジョブは作成されません。代わりに、エンコーダを停止して VOD の作成を開始し、ジョブを停止する前にその終了を待ってください。</li>
+	<li><a href="/live-api/guides/live-api-static-entry-points.html">静的エントリポイント</a>ストリーム<strong>のみ</strong>の場合、Live to VODは、完了時にストリームをアーカイブするように設定できません。
+	<p style="font-weight:bold;">選択肢:</p>
+
+	<ul>
+		<li><a href="/live-api/guides/live-api-creating-vod-clips.html">クリップを使用して</a>、ライブイベント全体を VOD としてアーカイブします。クリッピングのウィンドウは、イベントの後、または SEP の次のアクティブ化 (どちらか短い方) まで、標準期間使用できます。</li>
+	</ul>
+	</li>
+</ul>
+</section>
+</article>

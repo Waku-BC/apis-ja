@@ -1,0 +1,84 @@
+---
+title:  'ビデオレポートジェネレータ'
+description:  'これは、の簡略版です。<a href="/cms/code-samples/cms-api-sample-video-report-generator.html">ビデオレポートジェネレータのサンプル</a>。これはより少ない情報を返すので、はるかに速く実行されます。また、ビデオライブラリの合計期間をログに報告し、結果をCSVまたはJSONとして返すオプションを提供します。'
+parent: 'Code Samples' 
+grandparent: CMS API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  <section class="bcls-section">
+    <h2 id="limitations">制約事項</h2>
+
+    <aside class="bcls-aside bcls-aside--information">このサンプルと関連コードは、製品開発のガイドとして提供されています。このコードは、実稼働での使用が認定されておらず、正式にサポートされていません。</aside>
+  </section>
+
+  <section class="bcls-section">
+    <details>
+      <summary>
+        <h2 id="getCredentials">資格情報を取得する</h2>
+      </summary>
+      <p>を使用するには<span translate="No">CMS API</span>適切な資格情報が必要になります。</p>
+
+      <p>ほとんどの場合、資格情報を取得する最も簡単な方法は、Studioの管理API認証セクションを使用することです（アカウントに対する管理者権限が必要です）。詳細については、「<a href="/general/managing-api-authentication-credentials.html"> API 認証資格情報の管理</a>」を参照してください。ほとんどの場合、おそらくすべての権限を取得したいだけです<span translate="No">CMS API</span>手術：</p>
+
+      <figure class="bcls-figure"><img class="bcls-image" alt="CMS API Permissions" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/cms-api/cms-permissions.png" />
+        <figcaption class="bcls-caption--image">CMS API のアクセス許可</figcaption>
+      </figure>
+
+      <p>必要な権限が Studio で使用できない場合、または OAuth API から直接取得する場合は、以下に示す [ <strong>クライアント認証情報の取得</strong> ] ドキュメントを選択します。どちらのオプションを選択しても、正しい操作権限を要求する必要があります。以下を cURL または Postman で使用して、CMS API のすべての権限を取得できます。</p>
+
+      <pre class="line-numbers">
+            <code class="language-json" translate="No">"operations": [
+              "video-cloud/video/all",
+              "video-cloud/playlist/all",
+              "video-cloud/sharing-relationships/all",
+              "video-cloud/notifications/all"
+            ]</code></pre>
+
+      <ul>
+        <li><a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">OAuth:cURL を使用してクライアント認証情報を取得する</a></li>
+        <li><a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">OAuth:Postmanを使用してクライアントの資格情報を取得する</a></li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="bcls-section" id="workingSample">
+    <h2>ビデオレポートジェネレータ</h2>
+    <h3>ソースコード</h3>
+    <p>
+      このサンプルに関連付けられているすべてのコードを、この<a href="https://github.com/BrightcoveLearning/18032-video-report-generator"> GitHub リポジトリで検索します</a>。
+    </p>
+    <h3>サンプルアプリ</h3>
+    <p data-height="1200" data-theme-id="34967" data-slug-hash="mxYYMR" data-default-tab="result" data-user="rcrooks1969" data-pen-title="CMS API Sample: Video Report Generator" class="codepen">Pen <a href="https://codepen.io/team/rcrooks1969/pen/mxYYMR/"> CMS API のサンプルを参照してください。ビデオレポートジェネレータ</a> Brightcove Learning Services（<a href="https://codepen.io/rcrooks1969"> @ rcrooks1969</a>） オン<a href="https://codepen.io">CodePen</a>。</p>
+    <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+  </section>
+
+  <section class="bcls-section">
+    <details>
+      <summary>
+        <h2 id="Using_the_CodePen">CodePen を使用する</h2>
+      </summary>
+      <p>上記のCodePenを効果的に使用するためのヒントは次のとおりです。</p>
+
+      <ul>
+        <li>[ <strong>結果</strong> ] ボタンをクリックして、プレーヤーの実際の表示を切り替えます。</li>
+        <li><strong>HTML/CSS/JS </strong>ボタンをクリックして、コードタイプの 1 つを表示します。</li>
+        <li><strong>右上隅にある CodePen の編集をクリックして</strong>、この CodePen を自分のアカウントにフォークします。</li>
+        <li>このサンプルに関連付けられているすべてのコードを、この<a href="https://github.com/BrightcoveLearning/18032-video-report-generator"> GitHub リポジトリで検索します</a>。</li>
+      </ul>
+    </details>
+
+  </section>
+
+    <section class="bcls-section">
+    <details>
+      <summary>
+        <h2 id="proxy">プロキシコード</h2>
+      </summary>
+
+      <p>このページのサンプルアプリを独自のバージョンで作成するには、独自のプロキシを作成してホストする必要があります。（Brightcoveラーニングサービスで使用されるプロキシは、Brightcoveのドメインからのリクエストのみを受け付けます）。サンプルプロキシは、私たちが使用しているものと非常に似ていますが、BrightCove 以外のドメインからのリクエストをブロックするチェックがないサンプルプロキシは、<a href="https://github.com/BrightcoveLearning/sample-proxy-apps">この GitHub リポジトリにあります</a>。また、そこで使用するための基本的な手順と、<a href="/getting-started/learning-guide-using-rest-apis.html"> REST API </a>の使用で説明されているプロキシの周りにアプリを構築するためのより精巧なガイドがあります。</p>
+    </details>
+  </section>
+
+</article>

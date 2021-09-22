@@ -1,0 +1,453 @@
+---
+title:  'クイックスタート：Brightcove Live APIを使用してライブストリームを作成する'
+description:  'このチュートリアルでは、Live APIを使用してライブストリームジョブを作成する方法について説明します。'
+parent: Getting Started 
+grandparent: Live API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+ <summary>{{ page.description }}</summary>
+
+<section class="bcls-section">
+<h2 id="What_you_need">必要なもの</h2>
+
+<p>このチュートリアルを完了するには、次のものが必要です。</p>
+
+<ul>
+	<li>Live API 用にセットアップされたアカウント</li>
+	<li>Live API の API キー (アカウントの設定時に提供されます)</li>
+	<li>Video Cloud アカウント（ライブストリームジョブの作成には必要ありませんが、Brightcove Player での再生の設定には必要）</li>
+	<li>を使用する場合<span translate="No">CMS API</span> StudioではなくVideoCloudビデオを作成するには、ビデオ/読み取りおよびビデオ/書き込み権限を持つクライアントクレデンシャルが必要です。クライアントクレデンシャルを取得するプロセスに慣れていない場合は、を参照してください。<a href="#authentication">認証</a>以下のセクション。</li>
+	<li><a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">cURL </a>または<a href="/general/use-insomnia-api-requests.html"> Insomnia </a>や<a href="/oauth/guides/oauth-create-client-credentials-using-postman.html"> Postman </a>などの REST クライアントを介して REST API 要求を行う機能。
+	<p>お手伝いするために、エクササイズに使用できる不眠症と郵便配達の輸入品を用意しました（Brightcoveラーニングサービスでは、不眠症を好み、使用していますが、それがあれば郵便配達も機能します）。</p>
+
+	<p>各zipファイルには、あなたを助けるためのreadmeページがあります。</p>
+
+	<ul>
+		<li><a href="/assets/downloads/insomnia-imports.zip">不眠症ワークスペースのインポート</a></li>
+		<li><a href="/assets/downloads/postman-imports.zip">郵便配達の収集と環境のインポート</a></li>
+	</ul>
+	</li>
+	<li>実際のライブストリームを作成するには、ライブストリーミング用のソフトウェアまたはハードウェアエンコーダが必要です。以下の手順には、Wirecast（<a href="http://www.telestream.net/controls/wirecast/download-wirecast.htm">トライアルにサインアップ</a>）を使用してライブ配信を設定する手順が含まれます。別のエンコーダを使用している場合、プロセスは異なりますが、Live API レスポンスから必要な情報の点で類似している必要があります。</li>
+</ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="getCredentials" class="bcls-expander-head">CMS API の認証情報を取得する</h2>
+
+<div class="bcls-expander-content">
+<p>を使用するには<span translate="No">CMS API</span>適切な資格情報が必要になります。</p>
+
+<p>ほとんどの場合、資格情報を取得する最も簡単な方法は、Studioの管理API認証セクションを使用することです（アカウントに対する管理者権限が必要です）。詳細については、「<a href="https://studio.support.brightcove.com/admin/managing-api-authentication-credentials.html"> API 認証資格情報の管理</a>」を参照してください。この場合、<strong>必要な権限は共有関係です</strong>。読み取りと書き込みの両方の権限が必要です。</p>
+
+<figure class="bcls-figure"><img class="bcls-image" alt="Sharing Relationship Permissions" src="/assets/images/live-api/17765/17765-api-permissions.png" />
+<figcaption class="bcls-caption--image">リレーションシップのアクセス許可の共有</figcaption>
+</figure>
+
+<p>必要な権限が Studio で使用できない場合、または OAuth API から直接取得する場合は、以下に示す [ <strong>クライアント認証情報の取得</strong> ] ドキュメントを選択します。どちらのオプションを選択しても、正しい操作権限を要求する必要があります。cURL または Postman で次のものを使用すると、適切な権限を取得できます。</p>
+
+<pre class="line-numbers">
+    <code class="language-json" translate="No">"operations": [
+    "video-cloud/videos/read",
+    "video-cloud/videos/create",
+    "video-cloud/videos/update"]</code></pre>
+
+<ul>
+	<li><a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">OAuth:cURL を使用してクライアント認証情報を取得する</a></li>
+	<li><a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">OAuth:Postmanを使用してクライアントの資格情報を取得する</a></li>
+</ul>
+</div>
+</section>
+
+<section class="bcls-section">
+<h2 id="Create_live_job">ライブジョブの作成</h2>
+
+<p>まず、ライブジョブを作成します。</p>
+
+<ol class="bcls-tasklist-restart">
+	<li>このステップでは、<code translate="No">POST </code>次の宛てにリクエストを送信します。
+
+	<pre class="line-numbers">
+<code class="language-http" translate="No">https://api.bcovlive.io/v1/jobs
+</code>
+</pre>
+
+	<p>リクエスト本文として以下を使用します。</p>
+
+	<pre class="line-numbers">
+<code class="language-json" translate="No">{
+    "live_stream": true,
+    "region": "us-west-2",
+    "reconnect_time": 1800,
+    "outputs": [
+        {
+            "label": "hls720p",
+            "live_stream": true,
+            "width": 1280,
+            "height": 720,
+            "video_codec": "h264",
+            "h264_profile": "high",
+            "video_bitrate": 2100,
+            "segment_seconds": 4,
+            "keyframe_interval": 60
+        },
+        {
+            "label": "hls540p",
+            "live_stream": true,
+            "width": 960,
+            "height": 540,
+            "video_codec": "h264",
+            "h264_profile": "main",
+            "video_bitrate": 1500,
+            "segment_seconds": 4,
+            "keyframe_interval": 60
+        },
+        {
+            "label": "hls360p",
+            "live_stream": true,
+            "width": 640,
+            "height": 360,
+            "video_codec": "h264",
+            "h264_profile": "main",
+            "video_bitrate": 800,
+            "segment_seconds": 4,
+            "keyframe_interval": 60
+        }
+    ]
+}
+</code>
+</pre>
+	</li>
+	<li><a href="/general/use-insomnia-api-requests.html">Insomnia </a>や<a href="/general/use-postman-api-requests.html"> Postman </a>などの REST クライアントを使用している場合は、リクエストに次のヘッダーを追加する必要があります。
+	<table class="bcls-table">
+		<thead>
+			<tr>
+				<th>キー</th>
+				<th>値</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>X-API-KEY</td>
+				<td><span class="bcls-input">あなたの API キー</span></td>
+			</tr>
+			<tr>
+				<td>コンテンツタイプ</td>
+				<td>アプリケーション/json</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<p>上記の手順 1 で示したリクエスト本文を使用し、必ず POST メソッドを使用してリクエストを送信してください。</p>
+
+	<aside class="bcls-aside bcls-aside--information">cURLを使用したい場合は、<a href="#curlCreateLiveJob">以下の同等のcURLコマンド</a>。</aside>
+	</li>
+	<li>API からの応答は、次のようになります。
+		
+	<details>
+		<summary>レスポンスの例</summary>
+		<pre class="line-numbers">
+		<code class="language-json" translate="No">{
+				"id": "15981d93877e490185e6ebc9af2c79a3",
+				"outputs": [
+						{
+								"id": "0-15981d93877e490185e6ebc9af2c79a3",
+								"playback_url": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/profile_0/chunklist.m3u8",
+								"playback_url_dvr": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/profile_0/chunklist_dvr.m3u8",
+								"playback_url_vod": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/profile_0/chunklist_vod.m3u8",
+								"label": "hls720p"
+						},
+						{
+								"id": "1-15981d93877e490185e6ebc9af2c79a3",
+								"playback_url": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/profile_1/chunklist.m3u8",
+								"playback_url_dvr": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/profile_1/chunklist_dvr.m3u8",
+								"playback_url_vod": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/profile_1/chunklist_vod.m3u8",
+								"label": "hls540p"
+						},
+						{
+								"id": "2-15981d93877e490185e6ebc9af2c79a3",
+								"playback_url": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/profile_2/chunklist.m3u8",
+								"playback_url_dvr": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/profile_2/chunklist_dvr.m3u8",
+								"playback_url_vod": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/profile_2/chunklist_vod.m3u8",
+								"label": "hls360p"
+						},
+						{
+								"id": "3-15981d93877e490185e6ebc9af2c79a3",
+								"playlist_type": "defaultS3",
+								"type": "playlist",
+								"filename": "playlist.m3u8",
+								"dvr_filename": "playlist_dvr.m3u8",
+								"playback_url": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/playlist.m3u8",
+								"playback_url_dvr": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/playlist_dvr.m3u8",
+								"ssai_playback_urls": {
+										"685b239f582c42fca49da33be4f2328e": {
+												"playback_url": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/685b239f582c42fca49da33be4f2328e/playlist_ssaiM.m3u8",
+												"playback_url_dvr": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/685b239f582c42fca49da33be4f2328e/playlist_dvr_ssaiM.m3u8",
+												"playback_added_cdns": [],
+												"description": "House Ads - a95ac581551b4478b27910e5675db1f8",
+												"type": "ads"
+										},
+										"c96e2d00d6744c65a3eddb15425e4a51": {
+												"playback_url": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/counter/playlist_ssaiM.m3u8",
+												"playback_url_dvr": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/counter/playlist_dvr_ssaiM.m3u8",
+												"playback_added_cdns": [],
+												"description": "House Counter - a95ac581551b4478b27910e5675db1f8",
+												"type": "counter"
+										}
+								}
+						}
+						],
+						<span class="bcls-highlight">"stream_url": "rtmp://ep1-apse2.bcovlive.io:1935/15981d93877e490185e6ebc9af2c79a3"</span>,
+						<span class="bcls-highlight">"stream_name": "alive"</span>,
+						"encryption": {},
+						"playback_url": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/playlist.m3u8",
+						"playback_url_dvr": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/playlist_dvr.m3u8",
+						"ssai_playback_urls": {
+								"685b239f582c42fca49da33be4f2328e": {
+								"playback_url": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/685b239f582c42fca49da33be4f2328e/playlist_ssaiM.m3u8",
+								"playback_url_dvr": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/685b239f582c42fca49da33be4f2328e/playlist_dvr_ssaiM.m3u8",
+								"playback_added_cdns": [],
+								"description": "House Ads - a95ac581551b4478b27910e5675db1f8",
+								"type": "ads"
+								},
+								"c96e2d00d6744c65a3eddb15425e4a51": {
+								"playback_url": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/counter/playlist_ssaiM.m3u8",
+								"playback_url_dvr": "http://bcovlive-a.akamaihd.net/15981d93877e490185e6ebc9af2c79a3/us-west-2/counter/playlist_dvr_ssaiM.m3u8",
+								"playback_added_cdns": [],
+								"description": "House Counter - a95ac581551b4478b27910e5675db1f8",
+								"type": "counter"
+						}
+				}
+		}
+		</code>
+		</pre>
+	</details>
+	</li>
+	<li>私たちの目的のために、応答の重要なフィールドは次のとおりです。
+	<ul>
+		<li>stream_url (51 行目)</li>
+		<li>ストリーム名 (52 行目)</li>
+		<li>playback_url (54行目)</li>
+	</ul>
+
+	<aside class="bcls-aside bcls-aside--information">を使用することもできることに注意してください<code translate="No">playback_url_dvr</code> DVR機能が必要な場合。 NS <code translate="No">playback_url_vod</code>内部使用のみです。</aside><aside class="bcls-aside bcls-aside--information">DVR機能は、プレーヤーがサポートしている場合にのみ機能することに注意してください。見る<a href="https://player.support.brightcove.com/plugins/live-dvrux-plugin.html">ライブDVRUXプラグイン</a> BrightcovePlayerプラグインが必要です。</aside>
+
+	<p>以下の手順では、ユーザー独自の応答から、これらのフィールドの値が必要になります。</p>
+	</li>
+</ol>
+</section>
+
+<section class="bcls-section">
+<h2 id="Set_up_Video_Cloud_video">Video Cloud ビデオを設定する</h2>
+
+<p>ライブストリーム情報を入手したので、Video Cloud にリモート動画を設定し、Brightcove Player で再生できるようにします。</p>
+
+<div>これらのステップでは、<a href="/cms/"> CMS API </a>を使用してビデオを設定しますが、必要に応じて Video Cloud Studio でも実行できます。<a href="#useStudio">以下の代替手順を参照してください</a>。
+
+<p>Insomnia または Postman を使用している場合は、クライアントの資格情報を使用して OAuth2 認証を設定する必要があります。ヘルプが必要な場合は、次のいずれかのガイドを参照してください。</p>
+
+<ul>
+	<li><a href="/general/use-insomnia-api-requests.html">API リクエストにインソムニアを使用する</a></li>
+	<li><a href="/general/use-postman-api-requests.html">API リクエストに郵便配達を使用する</a></li>
+</ul>
+
+<ol class="bcls-tasklist-restart">
+	<li>
+	<p>まず、<code translate="No">POST</code>次のことをリクエストして、新しいビデオを作成する必要があります。</p>
+
+	<pre>
+<code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/<span class="bcls-input">account_id</span>/videos</code></pre>
+	</li>
+	<li>
+	<p>リクエスト本文には複数のメタデータを含めることができます（詳細については<a href="/cms/references/reference.html#/Videos/CreateVideo"> API リファレンスを参照してください</a>）が、<code translate="No">name</code>必要なのは以下だけです。</p>
+
+	<pre class="line-numbers">
+<code class="language-json" translate="No">{
+    "name": "<span class="bcls-input">some name for your live stream</span>"
+}</code></pre>
+	</li>
+	<li>
+	<p>応答にはすべての動画メタデータが含まれますが、<code translate="No">id</code>重要なフィールドはです。リモートアセットを追加する必要があります。</p>
+	</li>
+	<li>
+	<p>HLS ストリームを追加するには、<code translate="No">POST</code>次のことを要求します。</p>
+
+	<pre>
+<code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/<span class="bcls-input">account_id</span>/videos/<span class="bcls-input">video_id</span>/assets/hls_manifest</code></pre>
+	</li>
+	<li>
+	<p>今回は、リクエスト本文は次のようになります。</p>
+
+	<pre class="line-numbers">
+<code class="language-json" translate="No">{
+    "remote_url": "<span class="bcls-input">playback_url for your live stream</span>"
+}</code></pre>
+	</li>
+</ol>
+</div>
+</section>
+
+<section class="bcls-section">
+<h2 id="Add_video_to_player">プレーヤーにビデオを追加する</h2>
+
+<p>今度は、単純なHTMLページを作成し、作成したばかりのビデオでそれにプレーヤーを追加します。</p>
+
+<aside class="bcls-aside bcls-aside--information">ここでも、Studioを使用してプレーヤーの公開コードを取得します。これは、<a href="/player-management/getting-started/overview-player-management-api.html">Player Management API</a>必要に応じて。</aside>
+
+<ol class="bcls-tasklist-restart">
+	<li>ライブストリームプレーヤーをテストするための単純な HTML ページを作成します。あなたが好きな他のコンテンツを含めることもできますし、まったく含まないこともできます。</li>
+	<li>Studio Media モジュールで、前の手順で作成したビデオを選択し、[ <strong> &gt; Web プレーヤーを公開して埋め込む</strong> ] をクリックします。
+	<figure class="bcls-figure"><img class="bcls-image" alt="Publish Video" src="/assets/images/live-api/17765/17765-publish-video.png" />
+	<figcaption class="bcls-caption--image">動画の公開</figcaption>
+	</figure>
+	</li>
+	<li>[パブリッシュ] ダイアログで、プレーヤーを選択します (Brightcove のデフォルトプレーヤーは問題ありません)。
+	<figure class="bcls-figure"><img class="bcls-image" alt="Select Player" src="/assets/images/get-started/select-player.png" />
+	<figcaption class="bcls-caption--image">プレーヤーの選択</figcaption>
+	</figure>
+	</li>
+	<li>下にスクロールし、必要に応じてプレーヤーのサイズを設定し、コードブロックをクリックして標準プレーヤーコードを選択します。このコードをコピーして、htmlページの本文に貼り付けます。
+	<figure class="bcls-figure"><img class="bcls-image" alt="Get Publishing Code" src="/assets/images/get-started/get-publishing-code.png" />
+	<figcaption class="bcls-caption--image">発行コードを取得</figcaption>
+	</figure>
+	</li>
+	<li>HTML ページをリモートまたはローカルの Web サーバに保存して、参照できるようにします。</li>
+	<li>Web ブラウザでページを開きます。蒸しを開始していないので、メディアエラーが表示されます。
+	<figure class="bcls-figure"><img class="bcls-image" alt="Media Error" src="/assets/images/get-started/media-error.png" />
+	<figcaption class="bcls-caption--image">メディアエラー</figcaption>
+	</figure>
+	</li>
+</ol>
+</section>
+
+<section class="bcls-section">
+<h2 id="curl_commands">cURL コマンド</h2>
+
+<p>このセクションでは、Insomnia や Postman などの REST クライアントを使用しないユーザー向けの代替の cURL コマンドを提供します。</p>
+
+<details>
+	<summary>
+		<h3 id="curlCreateLiveJob">ライブジョブを作成するためのcURL</h3>
+	</summary>
+	
+	<pre class="line-numbers">
+	<code class="language-bash" translate="No">## Create Job - Simple
+	curl -X "POST" "https://api.bcovlive.io/v1/jobs" \
+	-H "X-API-KEY: <span class="bcls-input">YOUR_API_KEY_HERE</span>" \
+	-H "Content-Type: application/json" \
+	-d $'{
+	"outputs": [
+	{
+	"height": 720,
+	"video_bitrate": 2100,
+	"segment_seconds": 4,
+	"keyframe_interval": 60,
+	"width": 1280,
+	"video_codec": "h264",
+	"label": "hls720p",
+	"h264_profile": "high",
+	"live_stream": true
+	},
+	{
+	"height": 540,
+	"video_bitrate": 1500,
+	"segment_seconds": 4,
+	"keyframe_interval": 60,
+	"width": 960,
+	"video_codec": "h264",
+	"label": "hls540p",
+	"h264_profile": "main",
+	"live_stream": true
+	},
+	{
+	"height": 360,
+	"video_bitrate": 800,
+	"segment_seconds": 4,
+	"keyframe_interval": 60,
+	"width": 640,
+	"video_codec": "h264",
+	"label": "hls360p",
+	"h264_profile": "main",
+	"live_stream": true
+	}
+	],
+	"region": "us-west-2",
+	"reconnect_time": 1800,
+	"live_stream": true
+	}'</code></pre>
+</details>
+
+<p>コードをテキストエディタにコピーし、置き換えます<code translate="No">YOUR_API_KEY_HERE </code>独自のAPIキーを使用します。次に、コードをコマンドラインにコピーして貼り付けて実行します。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="useStudio">Studio を使用してビデオを作成する</h2>
+
+<p>Studio でビデオを作成する別の手順を次に示します。</p>
+
+<ol class="bcls-tasklist-restart">
+	<li>Video Cloud Studioにログインします。</li>
+	<li>メディアモジュールに移動します。</li>
+	<li>左側のオプションで、[ <strong>リモートビデオを追加</strong> ] をクリックします。
+	<figure class="bcls-figure"><img class="bcls-image" alt="Add Remote Video Menu Item" src="/assets/images/get-started/add-remote-video-option.png" />
+	<figcaption class="bcls-caption--image">リモートビデオメニュー項目の追加</figcaption>
+	</figure>
+	</li>
+	<li>[ <strong>リモートビデオを追加</strong> ] ダイアログで、ビデオ名を追加し、Live API <code translate="No">playback_url</code>レスポンスからのの値をコピーして [URL] フィールドに貼り付けます。次に、[ <strong>レンディションを追加</strong> ] をクリックし、[ <strong>保存</strong> ] をクリックします。
+	<figure class="bcls-figure"><img class="bcls-image" alt="Add Rendition Dialog" src="/assets/images/get-started/remote-video-dialog.png" />
+	<figcaption class="bcls-caption--image">レンディションの追加ダイアログ</figcaption>
+	</figure>
+
+	<aside class="bcls-aside bcls-aside--information">注：安全なストリームのためにHTTPS経由でストリーミングする場合は、単に変更してください<code translate="No">http</code>再生_URLで<code translate="No">https</code>。</aside>
+	</li>
+</ol>
+</section>
+
+<section class="bcls-section">
+<h2 id="wirecast">Wirecast を使用してイベントをストリーミングする</h2>
+
+<p>このセクションでは、ライブストリーミングイベントをサポートするようにTelestream Wirecastエンコーダーを設定し、使用します。Telestream Wirecastソフトウェアは、カメラから入力を取り込み、CDNによって配信できるストリームを生成するデスクトップアプリケーションです。ハードウェアベースおよび他のソフトウェアベースのエンコーディングソリューションには、ご利用のライブストリーミングイベントの配信に、より適したものが存在する可能性があります。Wirecastソフトウェアの体験版を <a href="http://www.telestream.net/controls/wirecast/download-wirecast.htm">TelestreamのWebサイト</a>からダウンロードすることができます。</p>
+
+<p class="BCL-aside">注:先へ進む前に、ご利用のコンピューターにWirecastソフトウェアをインストールし、カメラを接続しておく必要があります。</p>
+
+<p>ライブイベント用にWirecastを設定するには、次の手順を行います。</p>
+
+<ol class="bcls-tasklist-restart">
+	<li>Wirecastを開きます。</li>
+	<li><strong>+ にカーソルを合わせ、</strong> [ <strong>キャプチャデバイス</strong> ] をクリックし、カメラを選択します。
+	<figure class="bcls-figure"><img class="bcls-image" alt="Select camera" src="/assets/images/get-started/wirecast-camera-select.png" />
+	<figcaption class="bcls-caption--image">カメラを選択する</figcaption>
+	</figure>
+	</li>
+	<li>矢印ボタンをクリックします（ <img alt="" src="/assets/images/get-started/arrow-icon.png" />）カメラショットをライブショットにする。
+	<figure class="bcls-figure"><img class="bcls-image" alt="Camera setup" src="/assets/images/get-started/wirecast-camera-setup.png" />
+	<figcaption class="bcls-caption--image">Wirecast カメラ設定</figcaption>
+	</figure>
+	</li>
+	<li>クリック<strong>ストリーム</strong>ボタン （ <img alt="" src="/assets/images/get-started/stream-icon.png" />）。出力設定を構成するように求められます。</li>
+	<li><strong>配信先</strong>を <strong>RTMPサーバー</strong>に設定します。[<strong>OK</strong>]をクリックします。</li>
+	<li><strong>アドレスには</strong>、Live API から返された<strong> stream_url </strong>を使用します (ステップ 3)。</li>
+	<li><strong>ストリームの場合は</strong>、生きているを使用してください。
+	<figure class="bcls-figure"><img class="bcls-image" alt="Output settings" src="/assets/images/get-started/output-settings.png" />
+	<figcaption class="bcls-caption--image">Wirecast 出力設定</figcaption>
+	</figure>
+	</li>
+	<li><strong>（オプション）</strong>追加の出力ストリームを作成するには、[<strong>追加...</strong>]をクリックします。追加の出力ストリームを作成するとき、出力ビットレートを制御するため、独自のカスタムエンコーディングプロファイルを作成したいと思うかもしれません。<strong>ストリーム</strong>名が新しいビットレートを反映していることを確認します。</li>
+	<li>[<strong>OK</strong>]をクリックし、出力設定を保存します。</li>
+	<li>クリック<strong>ストリーム</strong>ボタン （ <img alt="" src="/assets/images/get-started/stream-icon.png" />）。ライブストリームが始まるはずです。</li>
+</ol>
+</section>
+
+<section class="bcls-section">
+<h2 id="conclusion">結論</h2>
+
+<p>これで、ライブストリーミングセッションを作成する準備ができました。エンコーダ設定に以下を追加する必要があります。</p>
+
+<ul>
+	<li><code translate="No">stream_url</code> : <code translate="No">stream_url</code>ジョブから追加 ( <code translate="No">rtmp</code>住所)</li>
+	<li><code translate="No">stream_name</code> : ストリーム名は<code translate="No">alive</code></li>
+</ul>
+
+<p>ライブストリームを開始すると、前の手順で作成した Brightcove プレーヤーにライブストリームが表示されます。</p>
+</section>
+</article>

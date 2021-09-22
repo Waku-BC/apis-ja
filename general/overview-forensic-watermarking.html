@@ -1,0 +1,463 @@
+---
+title:  '概要：フォレンジック透かし' 
+description: 「このトピックでは、Brightcoveのフォレンジック透かし機能の概要を説明します。」
+parent: Forensic Watermarking
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+
+  <section class="bcls-section">
+    <h2 id="Introduction">入門</h2>
+    <p>ブライトコーブは<a href="https://dtv.nagra.com/nexguard-forensic-watermarking">ナグラ</a> VideoCloudプラットフォームの機能としてフォレンジック透かしを提供します。これにより、著作権侵害や不正なコンテンツ共有からプレミアムコンテンツを保護できます。この機能は、コンテンツリークの原因をすばやく特定するのにも役立ち、アクションを実行できます。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Setup">セットアップ</h2>
+    <p>Brightcoveのフォレンジック透かしソリューションをサポートするには、次の設定が必要です。</p>
+    <ol class="bcls-tasklist-restart">
+      <li>
+        アカウントマネージャーに連絡してください：
+        <ol>
+          <li>アカウントで動的配信が有効になっていることを確認してください。</li>
+          <li>アカウントでフォレンジック透かしを有効にします。これは、VideoCloudへの有料アドオンです。</li>
+        </ol>
+      </li>
+      <li>からライセンスキーを取得します<a href="https://dtv.nagra.com/nexguard-forensic-watermarking">ナグラ</a>。</li>
+      <li>Forensic Watermarking JWTによって使用され、CDNによって復号化される公開鍵と秘密鍵のペアを生成します。 （下記参照）</li>
+      <li>NAGRAが提供するスクリプトを使用して、フォレンジック透かし用のJSON Webトークン（JWT）を生成します。フォレンジック透かしトークンと各ビューアのリンク方法を必ず管理してください。あなたがするときにそれが必要になります<a href="#Configure_your_player">プレーヤーを構成する</a>また、検出サービスを実行して、どのビューアがコンテンツを不正にリークしたかを知る場合。</li>
+    </ol>
+    <p>
+      公開鍵と秘密鍵のペアを生成する方法は多数あります。以下にいくつかの例を挙げます。
+    </p>
+    <h3>
+      bashスクリプトの例:
+    </h3>
+    <aside class="bcls-aside bcls-aside--information">以下のスクリプトは<strong>jq</strong> JSONを解析するためのパッケージ。jqがインストールされていない場合は、<a href="https://github.com/stedolan/jq/wiki/Installation">インストール手順</a>。</aside>
+    <p>
+      キーペアを生成するスクリプト例:
+    </p>
+<pre class="line-numbers"><code class="language-bash" translate="No">#!/bin/bash
+set -euo pipefail
+
+NAME=${1:-}
+test -z "${NAME:-}" &amp;&amp; NAME="brightcove-forensic-watermarking-key-$(date +%s)"
+mkdir "$NAME"
+
+PRIVATE_PEM="./$NAME/private.pem"
+PUBLIC_PEM="./$NAME/public.pem"
+PUBLIC_TXT="./$NAME/public_key.txt"
+
+ssh-keygen -t rsa -b 2048 -m PEM -f "$PRIVATE_PEM" -q -N ""
+openssl rsa -in "$PRIVATE_PEM" -pubout -outform PEM -out "$PUBLIC_PEM" 2&gt;/dev/null
+openssl rsa -in "$PRIVATE_PEM" -pubout -outform DER | base64 &gt; "$PUBLIC_TXT"
+
+rm "$PRIVATE_PEM".pub
+
+echo "Public key to saved in $PUBLIC_TXT"
+</code></pre>
+    <p>
+      スクリプトを実行します。
+    </p>
+    <pre><code class="language-bash" translate="No">$ bash keygen.sh
+</code></pre>
+
+    <details id="Example_using_Go">
+      <summary>使用例<span translate="No">行け</span></summary>
+      <p>
+        を使用した例<span translate="No">行け</span>キーペアを生成するためのプログラミング言語：
+      </p>
+      <aside class="bcls-aside bcls-aside--tip">初めての方<span translate="No">行け</span>、を参照してください<a href="https://golang.org/">NS <span translate="No">行け</span>プログラミング言語</a>ホームページ。</aside>
+<pre class="line-numbers"><code class="language-bash" translate="No">package main
+  
+  import (
+    "crypto/rand"
+    "crypto/rsa"
+    "crypto/x509"
+    "encoding/base64"
+    "encoding/pem"
+    "flag"
+    "fmt"
+    "io/ioutil"
+    "os"
+    "path"
+    "strconv"
+    "time"
+  )
+  
+  func main() {
+    var out string
+  
+    flag.StringVar(&amp;out, "output-dir", "", "Output directory to write files into")
+    flag.Parse()
+  
+    if out == "" {
+      out = "rsa-key_" + strconv.FormatInt(time.Now().Unix(), 10)
+    }
+  
+    if err := os.MkdirAll(out, os.ModePerm); err != nil {
+      panic(err.Error())
+    }
+  
+    priv, err := rsa.GenerateKey(rand.Reader, 2048)
+    if err != nil {
+      panic(err.Error())
+    }
+  
+    privBytes := x509.MarshalPKCS1PrivateKey(priv)
+  
+    pubBytes, err := x509.MarshalPKIXPublicKey(priv.Public())
+    if err != nil {
+      panic(err.Error())
+    }
+  
+    privOut, err := os.OpenFile(path.Join(out, "private.pem"), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+    if err != nil {
+      panic(err.Error())
+    }
+  
+    if err := pem.Encode(privOut, &amp;pem.Block{Type: "RSA PRIVATE KEY", Bytes: privBytes}); err != nil {
+      panic(err.Error())
+    }
+  
+    pubOut, err := os.OpenFile(path.Join(out, "public.pem"), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+    if err != nil {
+      panic(err.Error())
+    }
+  
+    if err := pem.Encode(pubOut, &amp;pem.Block{Type: "PUBLIC KEY", Bytes: pubBytes}); err != nil {
+      panic(err.Error())
+    }
+  
+    var pubEnc = base64.StdEncoding.EncodeToString(pubBytes)
+  
+    var pubEncOut = path.Join(out, "public_key.txt")
+    if err := ioutil.WriteFile(pubEncOut, []byte(pubEnc+"\n"), 0600); err != nil {
+      panic(err.Error())
+    }
+  
+    fmt.Println("Public key saved in " + pubEncOut)
+  }
+  </code></pre>
+    </details>
+    <br>
+
+    <details id="Example_using_node_js">
+      <summary>node.js の使用例</summary>
+      <p>
+        node.js を使用してキーペアを生成する例:
+      </p>
+      <aside class="bcls-aside bcls-aside--tip">このスクリプト例には、ノードバージョン11以降が必要です。</aside>
+  <pre class="line-numbers"><code class="language-javascript" translate="No">var crypto = require("crypto");
+  var fs = require("fs");
+  
+  var now = Math.floor(new Date() / 1000);
+  var dir = "rsa-key_" + now;
+  fs.mkdirSync(dir);
+  
+  crypto.generateKeyPair(
+    "rsa",
+    {modulusLength: 2048},
+    (err, publicKey, privateKey) =&gt; {
+      fs.writeFile(
+        dir + "/public.pem",
+        publicKey.export({ type: "spki", format: "pem" }),
+        err =&gt; {}
+      );
+      fs.writeFile(
+        dir + "/public_key.txt",
+        publicKey.export({ type: "spki", format: "der" }).toString("base64") +
+          "\n",
+        err =&gt; {}
+      );
+      fs.writeFile(
+        dir + "/private.pem",
+        privateKey.export({ type: "pkcs1", format: "pem" }),
+        err =&gt; {}
+      );
+    }
+  );
+  
+  console.log("Public key saved in " + dir + "/public_key.txt");</code></pre>
+    </details>
+
+  </section>
+  <section class="bcls-section">
+    <h2 id="Implementation">実装</h2>
+    <p>フォレンジック透かしは、Video Cloud Studioを使用して実装することも、BrightcoveAPIを使用して手動で実装することもできます。これらの方法については、次のセクションで詳しく説明します。</p>
+  </section>
+  <section class="bcls-section"></section>
+    <h2 id="Video_Cloud_Studio">Video Cloud Studio</h2>
+    <p>Video Cloud Studioでフォレンジック透かしを使用するには、次の手順に従います。</p>
+    <ol class="bcls-tasklist-restart">
+      <li>
+        <p>フォレンジック透かしは、特定の取り込みプロファイルにリンクされていません。動的配信またはコンテキストアウェアエンコーディングプロファイルを使用できます。</p>
+        <ol>
+          <li>BrightcoveにNAGRAライセンスキーを提供します。このライセンスキーは、透かしを生成するためのトランスコーディング中に使用されます。</li>
+          <li>の中に<strong>アップロード</strong>モジュールで、取り込みプロファイルを選択します。</li>
+          <li>
+            <p>を確認してください<strong>フォレンジックウォーターマークを有効にする</strong>オプション。</p>
+            <figure class="bcls-figure"><img class="bcls-image--no-border" alt="Enable watermarking option" src="/assets/images/general/forensic-watermarking/enable-watermarking.png" />
+              <figcaption class="bcls-caption--image">透かしオプションを有効にする</figcaption>
+              </figure> 
+          </li>
+          <li>
+          タグを追加します<code translate="No">watermarked</code>これにより、フォレンジック透かしを使用してビデオを識別しやすくなります。<a href="#Analytics_reports">それらに関する分析レポートを生成します</a>：
+          <figure class="bcls-figure">
+            <img class="bcls-image" src="/assets/images/general/forensic-watermarking/add-tag.png" alt="Add Tag">
+            <figcaption class="bcls-caption--image">タグ付けする</figcaption>
+          </figure>
+          </li>
+          <li>
+            <p>ビデオをドラッグまたは参照して、取り込みを開始します。</p>
+            <aside class="bcls-aside bcls-aside--information">透かしを入れたいビデオを取り込んだり、再トランスコードしたりできます。</aside>
+          </li>
+        </ol>
+      </li>
+      <!-- <li>In the <strong>Media</strong> module, you can enable/disable your videos for watermarking.</li> -->
+      <li id="Configure_your_player">
+        <p>プレーヤーを構成します。</p>
+        <p>ここで、NAGRA透かしトークンとビューアIDをプレーヤーに渡します。BrightcoveWebプレーヤーまたはネイティブSDKプレーヤーのいずれかを使用できます。</p>
+        <ul>
+          <li><a href="https://player.support.brightcove.com/playback/forensic-watermarking-with-bcp.html">Brightcoveプレーヤーによるフォレンジック透かし</a></li>
+          <li><a href="https://sdks.support.brightcove.com/features/forensic-watermarking-with-sdks.html">ネイティブSDKを使用したフォレンジック透かし</a></li>
+          <!-- <li><a href="https://live.support.brightcove.com/general/forensic-watermarking-live.html">Forensic Watermarking with Live Streams</a></li> -->
+        </ul>
+      </li>
+      <li>フォレンジック透かし用に取り込まれたコンテンツを再生します。</li>
+    </ol>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Analytics_reports">分析レポート</h2>
+    <p>フォレンジック透かし入りビデオの視聴者に関する分析レポートは、<a href="/analytics/index.html"> Analytics API</a>それだけ。レポートは、JSON、CSV、またはXLXS形式で返すことができます</p>
+    <p>分析データ：</p>
+    <pre><code translate="no">1トランザクション= 24時間で動画ごとに1人のユニークな視聴者</code></pre>
+    <aside class="bcls-aside bcls-aside--information language-editable">以下に示す例のいくつかは、タグを追加したことを前提としていることに注意してください<code translate="No">watermarked</code>フォレンジック透かしを使用してビデオに追加します。そうでない場合は、を使用してリクエストをフィルタリングする必要があります<code translate="No">where=video=={video_id}</code>フィルタ（最初の例のように）。</aside>
+    <h3>例1：日付別の動画の視聴者</h3>
+    <p>この例では、<code translate="No">video</code>、<code translate="No">viewer</code>と<code translate="No">date</code>ディメンションを作成し、レポートをCSV形式で取得します。</p>
+    <h4>リクエストの例</h4>
+<pre><code class="language-http" translate="No">https://analytics.api.brightcove.com/v1/data?accounts=4800266849001&from=2021-06-23&to=2021-06-25&dimensions=date,viewer&limit=10&where=video==70702952720202&fields=video,viewer,video_view&format=csv</code></pre>
+    <h4>応答</h4>
+<pre><code class="language-csv" translate="No">"date","video","viewer","video_view"
+"2021-06-25","70702952720202","3f46037f932b0c5a","1"
+"2021-06-24","70702952720202","3f46037f932b0c5a","2"</code></pre>
+<p>注意してください<code translate="No">viewer</code> Brightcoveプレーヤーによって生成され、ユーザーエージェントとIPに基づいて一意の文字列に設定されます。理想的には、サインインIDに基づいてビューア識別子を自分で設定する必要があります-を参照してください<a href="https://player.support.brightcove.com/playback/xdr-with-bcplayer.html#Set_the_user_identifier">このトピック</a>その方法については。識別子は、JavaScriptを介して取得できる情報に基づいています。</p>
+    <h3>例2：視聴者数</h3>
+    <p>この例では、フォレンジック透かしを使用したすべての動画にタグが付いていると想定します<code translate="No">watermarked</code>。再度クエリを実行します<code translate="No">video</code>、<code translate="No">viewer</code>と<code translate="No">date</code>ここで関心のある要約であるため、ディメンションを1つだけ返します。</p>
+    <h4>リクエストの例</h4>
+<pre><code class="language-http" translate="No">https://analytics.api.brightcove.com/v1/data?accounts=4800266849001&from=2021-06-23&to=2021-06-25&dimensions=date,viewer&limit=1&where=video.q==tags:watermarked</code></pre>
+    <h4>応答</h4>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "item_count": 7,
+  "items": [
+    {
+      "date": "2021-06-25",
+      "viewer": "07B1489C-5786-400E-945B-ABB3559B3897",
+      "video_view": 1
+    }
+  ],
+  "summary": {
+    "video_view": 25
+  }
+}</code></pre>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="APIs">API</h2>
+    <p>フォレンジック透かしに関連するAPIとフィールドは次のとおりです。</p>
+    <h3><a href="/dynamic-ingest/index.html">Dynamic Ingest API </a></h3>
+    <p>アカウントでフォレンジックウォーターマークが有効になったら、フォレンジックウォーターマークを追加して動画に追加できます。<code translate="No">forensic_watermarking</code>フィールドを取り込み要求に設定し、に設定します<code translate="No">true</code>。これは、ビデオの元の取り込み、置換、または再トランスコーディングに対して実行できます。</p>
+    <h4>リクエスト本文の例</h4>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "master": {
+          "url": "http://solutions.brightcove.com/video/Walking_Dead_609.mp4",
+          "audio_tracks": [
+              {
+                  "language": "en",
+                  "variant": "main"
+              }
+          ]
+      },
+    "profile": "multi-platform-standard-static-with-mp4",
+    <span class="bc-highlight">"forensic_watermarking": true,</span>
+    "capture-images": true
+}</code></pre>
+    <p>もあります<code translate="No">forensic_watermarking_stub_mode</code>に設定されている場合、フラグ<code translate="No">true</code>目に見えるフォレンジック透かしを生成します。</p>
+    <figure class="bcls-figure">
+      <img class="bcls-image" src="/assets/images/general/forensic-watermarking/visible-watermarks.png" alt="Visible Forensic Watermarks">
+      <figcaption class="bcls-caption--image">目に見えるフォレンジック透かし</figcaption>
+    </figure>
+    <aside class="bcls-aside bcls-aside--information language-editable">ご了承ください<code translate="No">forensic_watermarking_stub_mode</code> Dynamic IngestAPIを使用してのみ設定できます。Uploadモジュールを使用して設定することはできません。</aside>
+    <p><code translate="No">forensic_watermarking</code>また、に設定する必要があります<code translate="no">NS</code>目に見える透かしを有効にします。</p>
+    <p>ビデオに表示される透かしを使用して統合をテストします（少なくとも10分の長さのビデオでテストする必要があります）。フォレンジック透かしが存在することを確認したら、それらを削除して、フォレンジック透かしが非表示になるようにします。これを行うには、ビデオを再トランスコードするために別の動的取り込みリクエストを送信する必要があります。今回は設定します。<code translate="No">forensic_watermarking_stub_mode</code>に<code translate="No">false</code>。</p>
+    <h4>目に見えるフォレンジック透かしのサンプルリクエスト本文</h4>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "master": {
+          "url": "http://solutions.brightcove.com/video/Walking_Dead_609.mp4",
+          "audio_tracks": [
+              {
+                  "language": "en",
+                  "variant": "main"
+              }
+          ]
+      },
+    "profile": "multi-platform-standard-static-with-mp4",
+    <span class="bc-highlight">"forensic_watermarking": true,</span>
+    <span class="bc-highlight">"forensic_watermarking_stub_mode": true,</span>
+    "capture-images": true
+}</code></pre>
+    <h4>目に見えるフォレンジック透かしを削除するためのサンプルリクエスト本文</h4>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+    "profile": "multi-platform-standard-static-with-mp4",
+    <span class="bc-highlight">"forensic_watermarking": true,</span>
+    <span class="bc-highlight">"forensic_watermarking_stub_mode": false,</span>
+    "capture-images": true
+}</code></pre>
+    
+    <h3><a href="/cms/index.html">CMS API </a></h3>
+    <p>デフォルトでは、取り込み中にフォレンジックウォーターマークが要求された場合、フォレンジックウォーターマークレンディションが配信されます。フォレンジック透かしの存在は、読み取り専用フィールドによって示されます<code translate="No">forensic_watermarking</code>。フィールドの値が<code translate="No">ACTIVE</code>、フォレンジック透かしがVODに追加されました。フィールドの値が<code translate="No">UNAVAILABLE</code>また<code translate="No">null</code>、VODにはフォレンジック透かしがありません。</p>
+      
+      <!-- <p>You can disable this using a video update request to the CMS API and setting <code translate="No">forensic_watermarking</code> to <code translate="No">INACTIVE</code>. To enable delivery of forensic watermarked renditions again, send another update request setting <code translate="No">forensic_watermarking</code> to <code translate="No">ACTIVE</code>.</p>
+    <p>For accounts not enable for forensic watermarking, <code translate="No">forensic_watermarking</code> will be <code translate="No">null</code> and not included in API responses</p>
+    <h4>Sample request body</h4>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "forensic_watermarking": "INACTIVE"
+}</code></pre> -->
+
+    <h3>Playback API</h3>
+    <p>Playback APIGETビデオ応答には、<code translate="No">forensic_watermarking</code>（アカウントでフォレンジック透かしが有効になっている場合）。値が<code translate="No">ACTIVE</code>、フォレンジックウォーターマーク付きのレンディションがソースとしてプレーヤーに配信されます。それ以外の場合は、透かしのないレンディションが配信されます。</p>
+    <h3>Zencoder<a href="https://zencoder.support.brightcove.com/index.html"></a></h3>
+      <p>Zencoderでフォレンジック透かしを使用して出力を生成するには、ビデオごとに2つの出力を指定する必要があります。<code translate="no"> "forensic_watermark"："NS"</code>と他の<code translate="no">"forensic_watermark"："NS"</code>（これらは2つの値だけです<code translate="no">forensic_watermark</code>フィールドを持つことができます）。</p>
+      <h4>サンプルリクエスト（出力のみ）</h4>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "outputs": [
+      {
+          "base_url": "s3://urlTest",
+          "filename": "contextAwareEncoding1_A.m4f",
+          "public": false,
+          "format": "m4f",
+          "label": "m4f-contextAwareEncoding1-A-b30e1",
+          "generate_mp4_atom_map": true,
+          "Mp4_atom_map_filename": "contextAwareEncod-A-atom_map.json",
+          "skip_audio": true,
+          <span class="bc-highlight">"forensic_watermark": "A"</span>,
+          "dynamic_profile_rendition": 1,
+          "skip": {
+              "require_video": true
+          },
+          "fragment_duration": 2000,
+          "segment_seconds": 2,
+          "headers": {
+              "x-amz-server-side-encryption": "AES256"
+          }
+      },
+      {         
+          "base_url": "s3://urlTest",
+          "filename": "contextAwareEncoding1_B.m4f",
+          "public": false,
+          "format": "m4f",
+          "label": "m4f-contextAwareEncoding1-B-e348",
+          "generate_mp4_atom_map": true,
+          "mp4_atom_map_filename": "contextAwareEncod-B-atom_map.json",
+          "skip_audio": true,
+          <span class="bc-highlight">"forensic_watermark": "B"</span>,
+          "dynamic_profile_rendition": 1,
+          "skip": {
+              "require_video": true
+          },
+          "fragment_duration": 2000,
+          "segment_seconds": 2,
+          "headers": {
+              "x-amz-server-side-encryption": "AES256"
+          }
+      }
+  ]
+}</code></pre>
+    <h4>テスト用の目に見える透かし</h4>
+    <p>テストの目的で、フォレンジックウォーターマークが存在することを確認するために、追加することで、目に見えるフォレンジックウォーターマークを強制することができます。<code translate="No">"forensic_watermark_stub_mode":true</code>以下のサンプルに示すように出力します。</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "outputs": [
+      {
+          "base_url": "s3://urlTest",
+          "filename": "contextAwareEncoding1_A.m4f",
+          "public": false,
+          "format": "m4f",
+          "label": "m4f-contextAwareEncoding1-A-b30e1",
+          "generate_mp4_atom_map": true,
+          "Mp4_atom_map_filename": "contextAwareEncod-A-atom_map.json",
+          "skip_audio": true,
+          <span class="bc-highlight">"forensic_watermark": "A"</span>,
+          <span class="bc-highlight">"forensic_watermark_stub_mode":true</span>,
+          "dynamic_profile_rendition": 1,
+          "skip": {
+              "require_video": true
+          },
+          "fragment_duration": 2000,
+          "segment_seconds": 2,
+          "headers": {
+              "x-amz-server-side-encryption": "AES256"
+          }
+      },
+      {         
+          "base_url": "s3://urlTest",
+          "filename": "contextAwareEncoding1_B.m4f",
+          "public": false,
+          "format": "m4f",
+          "label": "m4f-contextAwareEncoding1-B-e348",
+          "generate_mp4_atom_map": true,
+          "mp4_atom_map_filename": "contextAwareEncod-B-atom_map.json",
+          "skip_audio": true,
+          <span class="bc-highlight">"forensic_watermark": "B"</span>,
+          <span class="bc-highlight">"forensic_watermark_stub_mode":true</span>,
+          "dynamic_profile_rendition": 1,
+          "skip": {
+              "require_video": true
+          },
+          "fragment_duration": 2000,
+          "segment_seconds": 2,
+          "headers": {
+              "x-amz-server-side-encryption": "AES256"
+          }
+      }
+  ]
+}</code></pre>
+  </section>
+  <section class="bcls-section">
+    <h2 id="supported_features">サポートされている機能</h2>
+    <ul>
+      <li>DRM</li>
+      <li>Playback Restrictions</li>
+      <li>再トランスコーディング</li>
+      <li>ソースファイルの置き換え</li>
+      <li>カエ</li>
+      <li>オフラインダウンロード</li>
+      <li>Chromecast</li>
+      <li>Airplay</li>
+    </ul>
+
+  </section>
+  <section class="bcls-section">
+    <h2 id="Limitations">制約事項</h2>
+    <ul>
+      <li>現時点ではVODのみがサポートされています。ライブストリームのフォレンジック透かしはサポートされていません。</li>
+      <li>フォレンジック透かしを適用するには、動画の長さが5分以上である必要があります。</li>
+      <li>HLSv7はサポートされていません。HLSv7は、HEVC、混合コーデック、および5.1オーディオの配信に使用されます。したがって、HEVC、混合コーデックビデオ、および5.1オーディオは現在サポートされていません。</li>
+      <li>暗号化されたHLSビデオ（HLSe）は現在サポートされていません。</li>
+      <li>この機能には、NAGRAライセンスキーが必要です。</li>
+      <li>プレーヤーには、NAGRAが提供するスクリプトを使用して作成するフォレンジック透かしJWTが必要です。</li>
+      <li><a href="/delivery-rules/index.html">配達規則</a>フォレンジック透かしを使用してビデオを配信するために使用されるプレーヤーでは使用できません。</li>
+      <li>BrightcoveのCDNを使用する必要があります。BYOCDNはサポートされていません。</li>
+      <!-- <li>You are responsible for generating and managing the tokens used to identify each viewer.</li> -->
+      <li>Brightcoveは検出分析を処理しません。これについては、NAGRAにお問い合わせください。</li>
+    </ul>
+  </section>
+  <section class="bcls-section">
+    <h2 id="related_topics">関連トピック</h2>
+    <ul>
+      <li><a href="https://player.support.brightcove.com/playback/forensic-watermarking-with-bcp.html">Brightcoveプレーヤーによるフォレンジック透かし</a></li>
+      <li><a href="https://sdks.support.brightcove.com/features/forensic-watermarking-with-sdks.html">ネイティブSDKを使用したフォレンジック透かし</a></li>
+      <li><a href="https://zencoder.support.brightcove.com/encoding-guides/forensic-watermarking.html">Zencoder  :フォレンジック透かし</a></li>
+      <li><a href="https://zencoder.support.brightcove.com/encoding-settings/content-protection/encoding-settings-forensic-watermarking.html">Zencoder  :フォレンジック透かし設定</a></li>
+    </ul>
+  </section>
+</article>

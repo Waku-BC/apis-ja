@@ -1,0 +1,2480 @@
+<!doctype html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="このトピックでは、Analytics Data Collection API v2の概要を説明します。これにより、Brightcoveがイベントを直接追跡できない状況で、Video CloudAnalyticsデータにイベントを追加できます。">
+  
+  <title>概要：Data Collection APIv2</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">  
+<link rel="preconnect" href="https://fonts.gstatic.com"> 
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/prism.css">
+  <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/styles.css">
+  <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/landing-page.css">
+  <link rel="stylesheet" href="https://support.brightcove.com/site-assets/css/site/tabs.css">
+  <link rel="stylesheet" href="/assets/css/local.css">
+  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-2728311-17"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];関数gtag（）{dataLayer.push(arguments);} gtag（ 'js'、new Date（））; gtag（ 'config'、 'UA-2728311-17'）;
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-2728311-17"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];関数gtag（）{dataLayer.push(arguments);} gtag（ 'js'、new Date（））; gtag（ 'config'、 'UA-2728311-17'）;
+</script>
+  <script src="/assets/js/sajari-head.js"></script>
+</head>
+<script src="https://unpkg.com/feather-icons"></script>
+<body class="body">
+
+<header>
+  <div class="div-header">
+    <a href="/"><img class="product-logo" src="https://support.brightcove.com/site-assets/images/site/product-logos/SVG/COVE004_Brightcove_Video_Cloud_Logo_RGB_K.svg" alt="Brightcove"></a>
+<!-- GTranslate: https://gtranslate.io/ -->
+<select onchange="doGTranslate(this);"><option value="">言語の選択</option><option value="en|en" translate="No">英語</option><option value="en|zh-TW" translate="No">繁體中文</option><option value="en|fr" translate="No">フランス語</option><option value="en|de" translate="No">ドイツ銀行</option><option value="en|ja" translate="No">日本語</option><option value="en|ko" translate="No">한국어</option><option value="en|es" translate="No">スペイン語</option></select>
+
+<script>
+/ *<![CDATA[ * / function doGTranslate（lang_pair）{if(lang_pair.value)lang_pair=lang_pair.value;if(lang_pair=='')return;var lang=lang_pair.split('|')[1];var plang=location.hostname.split('.')[0];if(plang.length !=2 && plang.toLowerCase() != 'zh-cn' && plang.toLowerCase() != 'zh-tw')plang='en';location.href=location.protocol+'//'+(lang == 'en' ? '' : lang+'.')+location.hostname.replace('www.', '').replace(RegExp('^' + plang + '\\.'), '')+location.pathname+location.search;} / *]]> * /
+</script>
+
+
+
+    <span class="secondary-nav"><a href="https://supportportal.brightcove.com/s/login/?"><i data-feather="help-circle"></i> サポート問い合わせ先</a><span style="vertical-align: middle;margin-left:1em;margin-right:1em;">|</span><a href="https://status.brightcove.com/"><i data-feather="cloud"></i> システムステータス</a></span>
+    <br>
+    
+  </div>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb arr-right">
+    
+    <li class="breadcrumb-item first-item"><a href="/">ホーム</a></li>
+     
+        <li class="breadcrumb-item"><a href="/data-collection/">Data collection</a></li>
+        
+        <li class="breadcrumb-item"><a href="/data-collection/getting-started/">Getting started</a></li>
+        
+        <li class="breadcrumb-item active" aria-current="page">概要：Data Collection APIv2</li>
+       
+  </nav>
+</header>
+<div class="container">
+    <div class="row">
+      <div class="col-sm-3 left-side-bar">
+				<select id="site_select" class="bcls-select" style="margin-left: 1rem;">
+					<option value="">Brightcoveのその他のドキュメント</option>
+					 
+							<option value="https://support.brightcove.com">ドキュメンテーションホーム</option>
+						  
+							<option value="">-ビデオクラウド-</option>
+						  
+							<option value="https://studio.support.brightcove.com">&nbsp;&nbsp;&nbsp;&nbsp; Video Cloud Studio</option>
+						  
+							<option value="https://player.support.brightcove.com">&nbsp;&nbsp;&nbsp;&nbsp; Brightcoveプレーヤーの開発</option>
+						  
+							<option value="https://apis.support.brightcove.com">&nbsp;&nbsp;&nbsp;&nbsp;ビデオクラウドプラットフォームAPI</option>
+						  
+							<option value="https://sdks.support.brightcove.com">&nbsp;&nbsp;&nbsp;&nbsp;ビデオクラウドデバイスSDK</option>
+						  
+							<option value="https://integrations.support.brightcove.com">&nbsp;&nbsp;&nbsp;&nbsp;統合とCMSコネクタ</option>
+						  
+							<option value="https://general.support.brightcove.com">&nbsp;&nbsp;&nbsp;&nbsp;ビデオクラウドの一般情報</option>
+						  
+							<option value="">-ビデオエッセンシャル-</option>
+						  
+							<option value="https://beacon.support.brightcove.com">&nbsp;&nbsp;&nbsp;&nbsp;ブライトコーブビーコン</option>
+						  
+							<option value="https://live.support.brightcove.com">&nbsp;&nbsp;&nbsp;&nbsp;ブライトコーブライブ</option>
+						  
+							<option value="https://zencoder.support.brightcove.com">&nbsp;&nbsp;&nbsp;&nbsp; Zencoder</option>
+						  
+							<option value="">-ビデオクラウドアドオン-</option>
+						  
+							<option value="https://campaign.support.brightcove.com">&nbsp;&nbsp;&nbsp;&nbsp;ブライトコーブキャンペーン</option>
+						  
+							<option value="https://engage.support.brightcove.com">&nbsp;&nbsp;&nbsp;&nbsp;ブライトコーブエンゲージ</option>
+						  
+							<option value="https://gallery.support.brightcove.com">&nbsp;&nbsp;&nbsp;&nbsp;ブライトコーブギャラリー</option>
+						  
+							<option value="https://studio.support.brightcove.com/social/index.html">&nbsp;&nbsp;&nbsp;&nbsp;ブライトコーブソーシャル</option>
+						  
+							<option value="https://ssai.support.brightcove.com">&nbsp;&nbsp;&nbsp;&nbsp;ブライトコーブSSAI</option>
+						 
+				</select>
+        <nav class="sidenav" id="side_nav">
+           
+            <h5><a href="/index.html">ホーム</a></h5>
+              
+              <h5 class="submenu-header"><a href="/getting-started/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;入門</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li><a href="/getting-started/getting-started-brightcove-apis.html">概要:プラットフォームAPI</a></li>
+                    
+                    <li><a href="/getting-started/authentication-brightcove-api-requests.html">API リクエストの認証</a></li>
+                    
+                    <li><a href="/getting-started/concepts-testing-tools-brightcove-apis.html">Brightcove API のテストツール</a></li>
+                    
+                    <li><a href="/getting-started/learning-guide-using-rest-apis.html">学習ガイド:REST API を使用する</a></li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/general/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;一般情報</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li><a href="/general/all-api-references.html">すべてのAPIリファレンス</a></li>
+                    
+                    <li><a href="/general/overview-context-aware-encoding.html">コンテキスト認識エンコーディングの概要</a></li>
+                    
+                    <li><a href="/general/managing-api-authentication-credentials.html">API 認証資格情報の管理</a></li>
+                    
+                    <li><a href="/general/overview-forensic-watermarking.html">概要:フォレンジック透かし</a></li>
+                    
+                    <li><a href="/general/faq-forensic-watermarking.html">よくある質問：フォレンジック透かし</a></li>
+                    
+                    <li><a href="/general/integrating-your-cms-video-cloud.html">CMSとビデオクラウドの統合</a></li>
+                    
+                    <li><a href="/general/platform-api-code-samples.html">プラットフォームAPIコードサンプル</a></li>
+                    
+                    <li><a href="/general/video-cloud-api-training-videos.html">プラットフォームAPIトレーニングビデオ</a></li>
+                    
+                    <li><a href="/general/concepts-api-tester.html">オンラインAPIテスター</a></li>
+                    
+                    <li><a href="/general/use-insomnia-api-requests.html">API リクエストにインソムニアを使用する</a></li>
+                    
+                    <li><a href="/general/use-postman-api-requests.html">API リクエストに郵便配達を使用する</a></li>
+                    
+                    <li><a href="/general/audio-content.html">オーディオコンテンツ</a></li>
+                    
+                    <li><a href="/general/known-issues.html">プラットフォームAPIの既知の問題</a></li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/analytics/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;Analytics API</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li class="submenu-header">
+                      <a href="/analytics/getting-started/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;入門</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/analytics/getting-started/overview-analytics-api-v1.html">概要:Analytics API</a></li>
+                            
+                            <li><a href="/analytics/getting-started/analytics-api-explorer.html">Analytics API Explorer</a></li>
+                            
+                            <li><a href="/analytics/getting-started/overview-video-data-endpoint.html">概要:ビデオデータエンドポイント</a></li>
+                            
+                            <li><a href="/analytics/getting-started/analytics-api-overview-dimensions-fields-and-parameters.html">概要:次元、フィールド、およびパラメーター</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/analytics/general/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;一般情報</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/analytics/general/faq-analytics-api.html">よくある質問：Analytics API</a></li>
+                            
+                            <li><a href="/analytics/general/analytics-api-glossary.html">Analytics API用語集</a></li>
+                            
+                            <li><a href="/analytics/general/analytics-api-unique-users.html">ユニークユーザー</a></li>
+                            
+                            <li><a href="/analytics/general/live-metrics.html">ライブメトリクス</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/analytics/references/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;参考文献</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/analytics/references/reference.html">Analytics APIリファレンス</a></li>
+                            
+                            <li><a href="/analytics/references/analytics-api-release-notes.html">リリースノート</a></li>
+                            
+                            <li><a href="/analytics/references/known-issues.html">既知の問題</a></li>
+                            
+                            <li><a href="/analytics/references/analytics-api-error-reference.html">エラーリファレンス</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/analytics/dimension-guides/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;寸法ガイド</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/analytics/dimension-guides/dimension-account.html">寸法： <code translate="No">account</code></a></li>
+                            
+                            <li><a href="/analytics/dimension-guides/dimension-browsertype.html">寸法： <code translate="No">browser_type</code></a></li>
+                            
+                            <li><a href="/analytics/dimension-guides/dimension-date.html">寸法： <code translate="No">date</code></a></li>
+                            
+                            <li><a href="/analytics/dimension-guides/dimension-datehour.html">寸法： <code translate="No">date_hour</code></a></li>
+                            
+                            <li><a href="/analytics/dimension-guides/dimension-destinationdomain.html">寸法： <code translate="No">destination_domain</code></a></li>
+                            
+                            <li><a href="/analytics/dimension-guides/dimension-destinationpath.html">寸法： <code translate="No">destination_path</code></a></li>
+                            
+                            <li><a href="/analytics/dimension-guides/dimension-devicemanufacturer.html">寸法： <code translate="No">device_manufacturer</code></a></li>
+                            
+                            <li><a href="/analytics/dimension-guides/dimension-devicetype.html">寸法： <code translate="No">device_type</code></a></li>
+                            
+                            <li><a href="/analytics/dimension-guides/dimension-deviceos.html">寸法： <code translate="No">device_os</code></a></li>
+                            
+                            <li><a href="/analytics/dimension-guides/dimension-city.html">寸法： <code translate="No">city</code></a></li>
+                            
+                            <li><a href="/analytics/dimension-guides/dimension-country.html">寸法： <code translate="No">country</code></a></li>
+                            
+                            <li><a href="/analytics/dimension-guides/dimension-region.html">寸法： <code translate="No">region</code></a></li>
+                            
+                            <li><a href="/analytics/dimension-guides/dimension-livestream.html">寸法： <code translate="No">live_stream</code></a></li>
+                            
+                            <li><a href="/analytics/dimension-guides/dimension-referrerdomain.html">寸法： <code translate="No">referrer_domain</code></a></li>
+                            
+                            <li><a href="/analytics/dimension-guides/dimension-sourcetype.html">寸法： <code translate="No">source_type</code></a></li>
+                            
+                            <li><a href="/analytics/dimension-guides/dimension-searchterms.html">寸法： <code translate="No">search_terms</code></a></li>
+                            
+                            <li><a href="/analytics/dimension-guides/dimension-socialplatform.html">寸法： <code translate="No">social_platform</code></a></li>
+                            
+                            <li><a href="/analytics/dimension-guides/dimension-player.html">寸法： <code translate="No">player</code></a></li>
+                            
+                            <li><a href="/analytics/dimension-guides/dimension-video.html">寸法： <code translate="No">video</code></a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/analytics/code-samples/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;コードサンプル</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/analytics/code-samples/analytics-api-sample-concurrent-viewers-live-events.html">ライブイベントの同時閲覧者</a></li>
+                            
+                            <li><a href="/analytics/code-samples/analytics-api-sample-daily-analytics-report-generator.html">日次分析レポートジェネレータ</a></li>
+                            
+                            <li><a href="/analytics/code-samples/analytics-api-sample-destinations-report.html">宛先レポート</a></li>
+                            
+                            <li><a href="/analytics/code-samples/analytics-api-sample-geographical-analytics-report.html">地理分析レポート</a></li>
+                            
+                            <li><a href="/analytics/code-samples/analytics-api-sample-unique-users-day.html">日別ユニークユーザー</a></li>
+                            
+                            <li><a href="/analytics/code-samples/analytics-api-sample-video-engagement-graph.html">ビデオエンゲージメントグラフ</a></li>
+                            
+                            <li><a href="/analytics/code-samples/analytics-api-sample-video-report-player-and-day.html">プレイヤーと日別のビデオレポート</a></li>
+                            
+                            <li><a href="/analytics/code-samples/analytics-api-sample-video-report-reference-id.html">参照ID別ビデオレポート</a></li>
+                            
+                            <li><a href="/analytics/code-samples/analytics-api-sample-video-report-tags.html">タグ別ビデオレポート</a></li>
+                            
+                            <li><a href="/analytics/code-samples/analyticscms-apis-sample-analytics-playlists.html">プレイリスト別分析</a></li>
+                            
+                            <li><a href="/analytics/code-samples/analyticscms-apis-sample-recently-added-videos.html">最近追加された動画</a></li>
+                            
+                            <li><a href="/analytics/code-samples/code-sample-video-analytics-report-country-and-day.html">国と日別のビデオ分析レポート</a></li>
+                           
+                      </ul>
+                    </li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/audience/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;Audience API</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li class="submenu-header">
+                      <a href=" /audience/getting-started/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;入門</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/audience/getting-started/overview-audience-api.html">概要:Audience API</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/audience/references/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;参考文献</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/audience/references/reference.html">Audience API リファレンス</a></li>
+                           
+                      </ul>
+                    </li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/cloud-playout-apis/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;Cloud Playout APIs</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li class="submenu-header">
+                      <a href=" /cloud-playout-apis/getting-started/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;入門</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/cloud-playout-apis/getting-started/overview-channel-api.html">概要:Channels API</a></li>
+                            
+                            <li><a href="/cloud-playout-apis/getting-started/overview-epg-api.html">概要:EPG API</a></li>
+                            
+                            <li><a href="/cloud-playout-apis/getting-started/epg-best-practices.html">EPG API：ベストプラクティス</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/cloud-playout-apis/references/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;参考文献</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/cloud-playout-apis/references/reference-epg.html">EPG APIリファレンス</a></li>
+                            
+                            <li><a href="/cloud-playout-apis/references/reference-channels.html">Channels APIリファレンス</a></li>
+                            
+                            <li><a href="/cloud-playout-apis/references/reference-cms-interactions.html">クラウドプレイアウトのCMS APIリファレンス</a></li>
+                            
+                            <li><a href="/cloud-playout-apis/references/release-notes.html">Cloud PlayoutAPIリリースノート</a></li>
+                           
+                      </ul>
+                    </li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/cms/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;CMS API</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li class="submenu-header">
+                      <a href="/cms/getting-started/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;入門</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/cms/getting-started/overview-cms-api.html">概要:CMS API</a></li>
+                            
+                            <li><a href="/cms/getting-started/practice-area-cms-api.html">練習エリア：CMS API</a></li>
+                            
+                            <li><a href="/cms/getting-started/best-practices-cms-and-playback-apis.html">ベストプラクティス：CMSとPlayback API</a></li>
+                            
+                            <li><a href="/cms/getting-started/cms-api-notifications.html">CMS API通知</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/cms/references/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;参考文献</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/cms/references/reference.html">CMS APIリファレンス</a></li>
+                            
+                            <li><a href="/cms/references/catalog-apis-cms-api-and-playback-api-release-notes.html">CMS /Playback APIリリースノート</a></li>
+                            
+                            <li><a href="/cms/references/known-issues.html">既知の問題</a></li>
+                            
+                            <li><a href="/cms/references/cms-api-video-fields-reference.html">CMS APIビデオフィールドリファレンス</a></li>
+                            
+                            <li><a href="/cms/references/cms-api-playlist-fields-reference.html">CMS APIプレイリストフィールドリファレンス</a></li>
+                            
+                            <li><a href="/cms/references/cms-api-custom-fields-reference.html">CMS APIカスタムフィールドリファレンス</a></li>
+                            
+                            <li><a href="/cms/references/cms-api-folder-fields-reference.html">CMS APIフォルダフィールドリファレンス</a></li>
+                            
+                            <li><a href="/cms/references/cms-api-error-message-reference.html">CMS APIエラーメッセージリファレンス</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/cms/searching/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;検索中</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/cms/searching/cms-and-playback-apis-video-search-v2.html">CMS API：ビデオ検索v2</a></li>
+                            
+                            <li><a href="/cms/searching/cms-api-playlists-search.html">CMS API：プレイリスト検索</a></li>
+                            
+                            <li><a href="/cms/searching/using-cms-api-page-search-results.html">ページ検索結果</a></li>
+                            
+                            <li><a href="/cms/searching/cmsplayback-api-videos-search.html">CMSとPlayback API：ビデオ検索v1</a></li>
+                            
+                            <li><a href="/playback/guides/catalog-search-architecture.html">カタログ検索アーキテクチャ</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/cms/managing-videos/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;ビデオ/アセットの管理</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/cms/managing-videos/activate-deactivate-videos.html">ビデオのアクティブ化/非アクティブ化またはスケジュール</a></li>
+                            
+                            <li><a href="/cms/managing-videos/using-cms-api-add-geo-filtering.html">ジオフィルタリングを追加する</a></li>
+                            
+                            <li><a href="/cms/managing-videos/digital-master-delete-api.html">デジタルマスター削除API</a></li>
+                            
+                            <li><a href="/cms/managing-videos/deleting-videos.html">動画の削除</a></li>
+                            
+                            <li><a href="/cms/managing-videos/getting-counts-videos-and-playlists.html">動画と再生リストの数を取得する</a></li>
+                            
+                            <li><a href="/cms/managing-videos/managing-playlists-using-cms-api.html">CMS APIを使用したプレイリストの管理</a></li>
+                            
+                            <li><a href="/cms/managing-videos/using-cms-api-managing-clips.html">クリップの管理</a></li>
+                            
+                            <li><a href="/cms/managing-videos/media-sharing-cms-api.html">メディア共有</a></li>
+                            
+                            <li><a href="/cms/managing-videos/multilingual-metadata.html">多言語メタデータ</a></li>
+                            
+                            <li><a href="/cms/managing-videos/using-cms-api-retrieve-video-data.html">ビデオデータを取得する</a></li>
+                            
+                            <li><a href="/cms/managing-videos/setting-360-degree-video-properties-cms-api.html">360度ビデオのプロパティを設定する</a></li>
+                            
+                            <li><a href="/cms/managing-videos/using-cms-api-remote-assets.html">リモートアセット</a></li>
+                            
+                            <li><a href="/cms/managing-videos/using-cms-api-add-webvtt-captions-text-tracks.html">WebVTTキャプション（テキストトラック）を追加する</a></li>
+                            
+                            <li><a href="/cms/managing-videos/managing-text-tracks.html">CMS APIを使用したテキストトラックの管理</a></li>
+                            
+                            <li><a href="/cms/managing-videos/generate-video-sitemaps.html">ビデオサイトマップを生成する</a></li>
+                            
+                            <li><a href="/cms/managing-videos/identifying-low-performing-content.html">パフォーマンスの低いコンテンツの特定</a></li>
+                            
+                            <li><a href="/cms/managing-videos/cms-api-working-folders.html">フォルダーの操作</a></li>
+                            
+                            <li><a href="/cms/managing-videos/working-with-labels.html">ラベルの操作</a></li>
+                            
+                            <li><a href="/cms/managing-videos/linking-zencoder-and-video-cloud-video-demand.html">ZencoderとVideoCloudのリンク</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/cms/code-samples/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;コードサンプル</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/cms/code-samples/cms-api-sample-add-multiple-affiliate-accounts-media-sharing.html">複数のアフィリエイトアカウントを追加する</a></li>
+                            
+                            <li><a href="/cms/code-samples/cms-api-sample-share-multiple-videos.html">複数の動画を共有する</a></li>
+                            
+                            <li><a href="/cms/code-samples/cms-api-sample-media-sharing-report.html">メディア共有レポート</a></li>
+                            
+                            <li><a href="/cms/code-samples/cms-api-sample-shared-media-report.html">共有メディアレポート</a></li>
+                            
+                            <li><a href="/cms/code-samples/cms-api-sample-update-videos.html">動画を更新する</a></li>
+                            
+                            <li><a href="/cms/code-samples/cms-api-sample-add-custom-field-multiple-videos.html">複数の動画にカスタムフィールドを追加する</a></li>
+                            
+                            <li><a href="/cms/code-samples/cms-api-sample-update-geo-properties.html">図形プロパティの更新</a></li>
+                            
+                            <li><a href="/cms/code-samples/cms-api-sample-add-cue-points.html">キューポイントの追加</a></li>
+                            
+                            <li><a href="/cms/code-samples/cms-api-sample-video-report-generator.html">ビデオレポートジェネレータ</a></li>
+                            
+                            <li><a href="/cms/code-samples/cms-api-sample-videos-delivery-type.html">配信タイプ別の動画</a></li>
+                            
+                            <li><a href="/cms/code-samples/cms-api-sample-download-links.html">ダウンロードリンク</a></li>
+                            
+                            <li><a href="/cms/code-samples/cms-api-sample-video-sitemap-generator.html">動画サイトマップジェネレータ</a></li>
+                            
+                            <li><a href="/cms/code-samples/cms-api-sample-mrss-generator.html">MRSS ジェネレータ</a></li>
+                            
+                            <li><a href="/cms/code-samples/cms-api-sample-mrss-feed-playlist.html">プレイリストからの MRSS フィード</a></li>
+                            
+                            <li><a href="/cms/code-samples/cms-api-sample-generate-rss-podcast-feed-itunes.html">iTunes用のRSSポッドキャストフィード</a></li>
+                            
+                            <li><a href="/cms/code-samples/cms-api-sample-video-renditions-inspector.html">ビデオレンディションインスペクタ</a></li>
+                            
+                            <li><a href="/cms/code-samples/cms-api-sample-report-audio-only-content.html">音声のみのコンテンツに関するレポート</a></li>
+                            
+                            <li><a href="/cms/code-samples/cms-api-sample-video-schema-builder.html">ビデオスキーマビルダー</a></li>
+                            
+                            <li><a href="/cms/code-samples/cms-api-sample-python-code-get-request.html">GETリクエストのPythonコード</a></li>
+                            
+                            <li><a href="/cms/code-samples/cms-api-sample-video-search-app.html">動画検索アプリ</a></li>
+                           
+                      </ul>
+                    </li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/xdr/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;Cross-Device Resume（XDR）API</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li class="submenu-header">
+                      <a href="/xdr/getting-started/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;入門</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/xdr/getting-started/xdr-overview.html">概要:Cross-Device Resume</a></li>
+                            
+                            <li><a href="/xdr/getting-started/get-playback-position.html">XDR API からの再生位置の取得</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/xdr/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;ガイド</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="https://player.support.brightcove.com/playback/xdr-with-bcplayer.html">Brightcoveプレーヤーでのクロスデバイス再開</a></li>
+                            
+                            <li><a href="https://sdks.support.brightcove.com/features/cross-device-resume-sdks.html">ネイティブ SDK を使用したクロスデバイス再開</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/xdr/references/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;参考文献</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/xdr/getting-started/xdr-overview.html">Cross-Device ResumeAPIリファレンス</a></li>
+                           
+                      </ul>
+                    </li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/data-collection/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;Data Collection API</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li><a href="/data-collection/getting-started/overview-data-collection-api-v2.html">概要:Data Collection API</a></li>
+                    
+                    <li><a href="/data-collection/getting-started/data-collection-api-sample.html">Data Collection APIサンプル</a></li>
+                    
+                    <li><a href="/data-collection/references/reference.html">データ収集 API リファレンス</a></li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/delivery-rules/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;Delivery Rules API</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li class="submenu-header">
+                      <a href="/delivery-rules/getting-started/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;入門</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/delivery-rules/getting-started/overview-delivery-rules.html">概要:配信ルール</a></li>
+                            
+                            <li><a href="/delivery-rules/getting-started/implementing-delivery-rules.html">配信ルールの実装</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/delivery-rules/guides/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;ガイド</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="https://player.support.brightcove.com/playback/using-delivery-rules-with-bcp.html">Brightcoveプレーヤーで配信ルールを使用する</a></li>
+                            
+                            <li><a href="https://sdks.support.brightcove.com/features/using-delivery-rules-with-sdks.html">ネイティブ SDK での配信ルールの使用</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/delivery-rules/references/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;参考文献</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/delivery-rules/references/reference.html">配信ルール API リファレンス</a></li>
+                           
+                      </ul>
+                    </li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/delivery-system/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;Delivery System API</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li><a href="/delivery-system/overview-delivery-system-api.html">概要:Delivery System API</a></li>
+                    
+                    <li><a href="/delivery-system/step-step-delivery-system-api.html">ステップバイステップ:Delivery System API</a></li>
+                    
+                    <li><a href="/delivery-system/delivery-system-api-git-overview.html">Gitの概要</a></li>
+                    
+                    <li><a href="/delivery-system/references/reference.html">配信システム API リファレンス</a></li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/dynamic-ingest/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;Dynamic Ingest API</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li class="submenu-header">
+                      <a href="/dynamic-ingest/getting-started/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;入門</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/dynamic-ingest/getting-started/overview-dynamic-ingest-api-dynamic-delivery.html">概要:Dynamic Ingest API</a></li>
+                            
+                            <li><a href="/dynamic-ingest/getting-started/quick-start-dynamic-ingest-api.html">「クイックスタート:Dynamic Ingest API</a></li>
+                            
+                            <li><a href="/dynamic-ingest/getting-started/source-file-upload-api-dynamic-ingest.html">動的取り込み用のソースファイルのアップロード API</a></li>
+                            
+                            <li><a href="/dynamic-ingest/getting-started/overview-dynamic-delivery.html">動的配信の概要</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/dynamic-ingest/general/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;一般情報</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/dynamic-ingest/general/dynamic-ingest-api-best-practices.html">Dynamic Ingest API:ベストプラクティス</a></li>
+                            
+                            <li><a href="/dynamic-ingest/general/notifications-dynamic-delivery-video-cloud.html">動的取り込みの通知</a></li>
+                            
+                            <li><a href="/dynamic-ingest/general/get-status-dynamic-ingest-requests-dynamic-delivery.html">動的取り込みリクエストのステータスを取得する</a></li>
+                            
+                            <li><a href="/dynamic-ingest/general/fallback-retry-strategy.html">フォールバック/リトライ戦略</a></li>
+                            
+                            <li><a href="/dynamic-ingest/general/using-dynamic-ingest-s3.html">S3 での動的取り込みの使用</a></li>
+                            
+                            <li><a href="/dynamic-ingest/general/ugc-strategies.html">UGC戦略</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/dynamic-ingest/references/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;参考文献</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/dynamic-ingest/references/reference.html">Dynamic Ingest API リファレンス</a></li>
+                            
+                            <li><a href="/dynamic-ingest/references/dynamic-ingest-api-release-notes.html">Dynamic Ingest API リリースノート</a></li>
+                            
+                            <li><a href="/dynamic-ingest/references/known-issues.html">既知の問題</a></li>
+                            
+                            <li><a href="/dynamic-ingest/references/dynamic-ingest-ingest-fields.html">取り込みフィールドのリファレンス</a></li>
+                            
+                            <li><a href="/dynamic-ingest/references/dynamic-ingest-error-message-reference.html">動的取り込みエラーメッセージリファレンス</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/dynamic-ingest/ingest-guides/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;摂取ガイド</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/dynamic-ingest/ingest-guides/context-aware-encoding.html">コンテキストアウェアエンコーディングの使用</a></li>
+                            
+                            <li><a href="/dynamic-ingest/ingest-guides/dynamic-delivery-ingest-priority-queueing.html">動的配信取り込み優先キューイング</a></li>
+                            
+                            <li><a href="/ingest-profiles/guides/archiving-masters.html">アーカイブマスター</a></li>
+                            
+                            <li><a href="/dynamic-ingest/ingest-guides/implementing-multiple-audio-tracks-using-apis.html">複数のオーディオトラックの実装</a></li>
+                            
+                            <li><a href="/dynamic-ingest/ingest-guides/images-and-dynamic-ingest-api.html">イメージとDynamic Ingest API</a></li>
+                            
+                            <li><a href="/dynamic-ingest/ingest-guides/dynamic-ingest-media-sharing.html">メディア共有による動的取り込み</a></li>
+                            
+                            <li><a href="/dynamic-ingest/ingest-guides/ingesting-content-drm.html">DRM によるコンテンツの取り込み</a></li>
+                            
+                            <li><a href="/dynamic-ingest/ingest-guides/ingesting-webvtt-files-text-trackscaptions.html">WebVTT ファイルの取り込み</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/dynamic-ingest/code-samples/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;コードサンプル</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-tester-dynamic-delivery.html">Dynamic Ingest API テスター</a></li>
+                            
+                            <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-ingesting-videos-dynamic-delivery.html">ビデオの取り込み</a></li>
+                            
+                            <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-re-transcoding-videos-dynamic-delivery.html">動画の再トランスコード</a></li>
+                            
+                            <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-replacing-videos-dynamic-delivery.html">ビデオの置換</a></li>
+                            
+                            <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-add-scheduled-videos-dynamic-delivery.html">スケジュールされた動画を追加</a></li>
+                            
+                            <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-adding-text-tracks.html">テキストトラックの追加</a></li>
+                            
+                            <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-ingesting-low-priority-videos-dynamic-delivery.html">優先度の低いビデオの取り込み</a></li>
+                            
+                            <li><a href="/dynamic-ingest/code-samples/dynamic-ingest-api-sample-python-code.html">Pythonコード</a></li>
+                           
+                      </ul>
+                    </li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/ingest-profiles/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;Ingest Profiles API</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li class="submenu-header">
+                      <a href="/ingest-profiles/getting-started/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;入門</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/ingest-profiles/getting-started/overview-ingest-profiles-api-dynamic-delivery-context-aware-encoding.html">概要:Ingest Profiles API</a></li>
+                            
+                            <li><a href="/ingest-profiles/getting-started/practice-area-ingest-profiles-api-dynamic-delivery.html">練習エリア：Ingest Profiles API</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/ingest-profiles/guides/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;ガイド</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/ingest-profiles/guides/archiving-masters.html">アーカイブマスター</a></li>
+                            
+                            <li><a href="/ingest-profiles/guides/hevc-video.html">HEVCビデオ</a></li>
+                            
+                            <li><a href="/ingest-profiles/guides/cae-fast-publish.html">CAE Fast Publish</a></li>
+                            
+                            <li><a href="/general/audio-content.html">オーディオコンテンツ</a></li>
+                            
+                            <li><a href="/ingest-profiles/guides/mp4s-dynamic-delivery.html">動的配信のMP4</a></li>
+                            
+                            <li><a href="https://studio.support.brightcove.com/admin/ingest-profiles-best-practices.html">ベストプラクティス</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/ingest-profiles/references/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;参考文献</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/ingest-profiles/references/reference.html">Ingest Profiles API リファレンス</a></li>
+                            
+                            <li><a href="/ingest-profiles/references/ingest-profiles-api-fields-reference-dynamic-delivery-and-context-aware-encoding.html">[ 取り込みプロファイル] フィールドのリファレンス</a></li>
+                            
+                            <li><a href="/ingest-profiles/references/standard-ingest-profiles-dynamic-delivery-and-context-aware-encoding.html">標準の取り込みプロファイル</a></li>
+                            
+                            <li><a href="/ingest-profiles/references/standard-live-ingest-profiles.html">標準ライブインジェストプロファイル</a></li>
+                            
+                            <li><a href="/ingest-profiles/references/fields-custom-live-ingest-profiles.html">カスタムライブインジェストプロファイルのフィールド</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/ingest-profiles/code-samples/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;コードサンプル</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-create-custom-dynamic-delivery-profile.html">カスタム動的配信プロファイルの作成</a></li>
+                            
+                            <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-create-custom-context-aware-encoding-profile.html">カスタムCAEプロファイルを作成する</a></li>
+                            
+                            <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-add-profile-multiple-accounts.html">複数のアカウントへのプロファイルの追加</a></li>
+                            
+                            <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-get-all-profiles-account.html">アカウントのすべてのプロファイルの取得</a></li>
+                            
+                            <li><a href="/ingest-profiles/code-samples/ingest-profiles-api-sample-set-default-profile-dynamic-delivery.html">既定のプロファイルを設定</a></li>
+                           
+                      </ul>
+                    </li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/ipx/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;In-Page Experience API</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li class="submenu-header">
+                      <a href=" /ipx/getting-started/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;入門</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/ipx/getting-started/overview-page-experience-api.html">概要:In-Page Experience API</a></li>
+                            
+                            <li><a href="/ipx/getting-started/quick-start-page-experience-platform-rest-api.html">「クイックスタート:ページ内エクスペリエンスプラットフォーム (REST) API</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/ipx/references/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;参考文献</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/ipx/references/reference.html">In-Page Experience API リファレンス</a></li>
+                            
+                            <li><a href="/ipx/references/page-experience-api-error-reference.html">In-Page Experience API エラーリファレンス</a></li>
+                            
+                            <li><a href="/in-page-exerience-client-api/index.html">In-Page Experience Client API</a></li>
+                           
+                      </ul>
+                    </li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/live-api/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;Live API</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li class="submenu-header">
+                      <a href="/live-api/getting-started/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;入門</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/live-api/getting-started/overview-brightcove-live-api.html">概要:Live API</a></li>
+                            
+                            <li><a href="/live-api/getting-started/quick-start-create-live-stream-using-brightcove-live-api.html">APIを使用したライブストリームの作成</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/live-api/code-samples/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;コードサンプル</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/live-api/code-samples/live-api-sample-create-live-job.html">ライブジョブの作成</a></li>
+                            
+                            <li><a href="/live-api/code-samples/quick-start-create-live-job-mpeg2-ts-input.html">MPEG2-TS入力用のライブジョブを作成する</a></li>
+                            
+                            <li><a href="/live-api/code-samples/quick-start-using-rtmp-outputs-live-events.html">ライブイベントにRTMP出力を使用する</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/live-api/references/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;参考文献</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/live-api/references/live-api-error-messages.html">エラーメッセージ</a></li>
+                            
+                            <li><a href="/live-api/references/live-api-release-notes.html">リリースノート</a></li>
+                            
+                            <li><a href="/live-api/references/reference.html">Live API リファレンス</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/live-api/ssai/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;SSAI </a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/live-api/ssai/live-api-cue-points-and-ad-beacons-ssai.html">SSAIを使用したキューポイントと広告ビーコン</a></li>
+                            
+                            <li><a href="/live-api/ssai/live-api-server-side-ad-insertion-ssai.html">サーバー側広告挿入 (SSAI) </a></li>
+                            
+                            <li><a href="/live-api/ssai/overview-player-enhancements-live-ssai.html">概要:ライブ SSAI のプレーヤーの機能強化</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/live-api/guides/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;ガイド</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="https://live.support.brightcove.com/get-started/live-module-guidelines-and-best-practices.html">BrightcoveLiveのベストプラクティス</a></li>
+                            
+                            <li><a href="/live-api/guides/brightcove-live-program-ad-metadata-api.html">Brightcoveライブプログラム広告メタデータAPI</a></li>
+                            
+                            <li><a href="/live-api/guides/live-api-creating-frame-accurate-clip.html">フレーム精度のクリップの作成</a></li>
+                            
+                            <li><a href="/live-api/guides/live-api-creating-vod-clips.html">VODクリップの作成</a></li>
+                            
+                            <li><a href="/live-api/guides/getting-list-live-or-vod-jobs.html">ライブまたはVODジョブのリストの取得</a></li>
+                            
+                            <li><a href="/live-api/guides/live-api-insert-id3-timed-metadata.html">ID3タイミングメタデータを挿入します</a></li>
+                            
+                            <li><a href="/live-api/guides/live-drm-live-api.html">Live APIを介したLiveDRM</a></li>
+                            
+                            <li><a href="/live-api/guides/managing-credentials-live-api.html">Live APIのクレデンシャルの管理</a></li>
+                            
+                            <li><a href="/live-api/guides/live-api-notifications.html">通知</a></li>
+                            
+                            <li><a href="/live-api/guides/live-playback-restrictions.html">ライブストリームでの再生制限</a></li>
+                            
+                            <li><a href="/live-api/guides/reducing-latency-live-streams.html">ライブストリームのレイテンシーの削減</a></li>
+                            
+                            <li><a href="/live-api/guides/live-api-rtmp-outputs.html">RTMP出力</a></li>
+                            
+                            <li><a href="/live-api/guides/live-api-static-entry-points.html">静的エントリポイント</a></li>
+                            
+                            <li><a href="/live-api/guides/signed-urls-and-token-auth-live-stream.html">ライブストリームでの署名付き URL とトークン認証</a></li>
+                            
+                            <li><a href="/live-api/guides/using-live-redundancy.html">ライブ冗長性の使用</a></li>
+                            
+                            <li><a href="/live-api/guides/live-api-vod-live-event.html">ライブイベントのVOD</a></li>
+                            
+                            <li><a href="/live-api/guides/live-scheduler.html">概要:ライブスケジューラ</a></li>
+                            
+                            <li><a href="/live-api/guides/live-scheduler-stop-start.html">SEPストリームのアクティブ化/非アクティブ化のスケジューリング</a></li>
+                            
+                            <li><a href="/live-api/guides/live-scheduler-clips.html">ライブストリームのクリップ生成のスケジュール</a></li>
+                            
+                            <li><a href="/live-api/guides/live-scheduler-notifications.html">ライブスケジューラ通知</a></li>
+                           
+                      </ul>
+                    </li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/oauth/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;OAuth API</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li class="submenu-header">
+                      <a href="/oauth/getting-started/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;入門</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/oauth/getting-started/overview-oauth-api-v4.html">概要:OAuth API</a></li>
+                            
+                            <li><a href="/oauth/getting-started/quick-start-oauth.html">「クイックスタート:OAuth API</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/oauth/guides/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;ガイド</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">クライアントクレデンシャルの作成：cURL</a></li>
+                            
+                            <li><a href="/oauth/guides/oauth-create-client-credentials-using-postman.html">クライアント資格情報の作成：Postman員</a></li>
+                            
+                            <li><a href="/oauth/guides/getting-access-tokens.html">アクセストークンの取得</a></li>
+                            
+                            <li><a href="/oauth/guides/api-operations-client-credentials-requests.html">クライアント資格情報要求のAPI操作</a></li>
+                            
+                            <li><a href="/oauth/guides/get-your-bc-token.html">BC_TOKENを取得する</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/oauth/references/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;参考文献</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/oauth/references/reference.html">OAuthAPIリファレンス</a></li>
+                            
+                            <li><a href="/oauth/references/oauth-api-error-message-reference.html">OAuthAPIエラーメッセージリファレンス</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/oauth/code-samples/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;コードサンプル</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/oauth/code-samples/oauth-api-sample-create-client-credentials.html">クライアント認証情報の作成</a></li>
+                            
+                            <li><a href="/oauth/code-samples/oauth-api-sample-get-access-token.html">アクセストークンの取得</a></li>
+                           
+                      </ul>
+                    </li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/playback/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;Playback API</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li class="submenu-header">
+                      <a href="/playback/getting-started/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;入門</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/playback/getting-started/overview-playback-api.html">概要:Playback API</a></li>
+                            
+                            <li><a href="/playback/getting-started/quick-start-playback-api.html">「クイックスタート:Playback API</a></li>
+                            
+                            <li><a href="/cms/getting-started/best-practices-cms-and-playback-apis.html">ベストプラクティス：CMSとPlayback API</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/playback/guides/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;ガイド</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/cms/searching/cmsplayback-api-videos-search.html">CMSとPlayback API：ビデオ検索</a></li>
+                            
+                            <li><a href="/cms/getting-started/best-practices-cms-and-playback-apis.html">カタログ検索アーキテクチャ</a></li>
+                            
+                            <li><a href="/playback/guides/static-url-delivery.html">静的 URL 配信</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/playback/references/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;参考文献</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/playback/references/reference_v2.html">Playback APIリファレンス</a></li>
+                            
+                            <li><a href="/playback/references/playback-api-video-fields-reference.html">ビデオフィールドリファレンス</a></li>
+                            
+                            <li><a href="/playback/references/playback-api-playlist-fields-reference.html">プレイリストフィールドリファレンス</a></li>
+                            
+                            <li><a href="/playback/references/playback-api-error-reference.html">エラーリファレンス</a></li>
+                            
+                            <li><a href="/cms/references/catalog-apis-cms-api-and-playback-api-release-notes.html">CMS /Playback APIリリースノート</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/playback/code-samples/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;コードサンプル</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/playback/code-samples/thumbnail-grid.html">ビデオサムネイルグリッド</a></li>
+                            
+                            <li><a href="/playback/code-samples/playback-api-sample-mrss-generator.html">MRSS ジェネレータ</a></li>
+                            
+                            <li><a href="/playback/code-samples/playback-api-sample-jsonmrss-feed-playlist.html">プレイリストからのJSON/MRSS フィード</a></li>
+                           
+                      </ul>
+                    </li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/player-management/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;Player Management API</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li class="submenu-header">
+                      <a href="/player-management/getting-started/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;入門</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/player-management/getting-started/overview-player-management-api.html">概要:Player Management API</a></li>
+                            
+                            <li><a href="/player-management/getting-started/step-step-player-management.html">ステップバイステップ:プレーヤー管理</a></li>
+                            
+                            <li><a href="/player-management/getting-started/training-demand-quick-start-player-management.html">オンデマンドトレーニング:プレーヤー管理へのクイックスタート</a></li>
+                            
+                            <li><a href="/player-management/getting-started/oauth-guide.html">OAuthガイド</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/player-management/guides/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;ガイド</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/player-management/guides/player-configuration-guide.html">プレーヤー設定ガイド</a></li>
+                            
+                            <li><a href="/player-management/guides/plugin-registry.html">プラグインレジストリ</a></li>
+                            
+                            <li><a href="/player-management/guides/pre-release-player.html">プレリリースプレーヤー</a></li>
+                            
+                            <li><a href="/player-management/guides/player-repositories.html">プレーヤーリポジトリ</a></li>
+                            
+                            <li><a href="/player-management/guides/guide-embed-apis.html">APIを埋め込む</a></li>
+                            
+                            <li><a href="/player-management/guides/opting-out-automatic-player-updates.html">プレーヤーの自動更新をオプトアウトする</a></li>
+                            
+                            <li><a href="/player-management/guides/embedding-brightcove-players-cms.html">BrightcoveプレーヤーをCMSに埋め込む</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/player-management/references/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;参考文献</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/player-management/references/reference.html">Player Management APIリファレンス</a></li>
+                            
+                            <li><a href="/player-management/references/player-management-api-release-notes.html">リリースノート</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/player-management/code-samples/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;コードサンプル</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/player-management/code-samples/setup-player-management-samples.html">プレーヤー管理サンプルのセットアップ</a></li>
+                            
+                            <li><a href="/player-management/code-samples/bulk-updating-brightcove-default-player.html">デフォルトプレーヤーの一括更新</a></li>
+                            
+                            <li><a href="/player-management/code-samples/player-management-api-sample-create-player.html">プレーヤーを作成する</a></li>
+                            
+                            <li><a href="/player-management/code-samples/player-management-api-sample-display-players.html">プレーヤーを表示</a></li>
+                            
+                            <li><a href="/player-management/code-samples/player-management-api-sample-delete-players.html">プレイヤーを削除</a></li>
+                            
+                            <li><a href="/player-management/code-samples/player-management-api-sample-using-lastviewed-data.html">last_viewedデータの使用</a></li>
+                            
+                            <li><a href="/player-management/code-samples/player-management-api-sample-programmatically-update-players.html">プログラムでプレーヤーを更新する</a></li>
+                           
+                      </ul>
+                    </li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/playback-restrictions/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;Playback Restrictions</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li class="submenu-header">
+                      <a href="/playback-restrictions/getting-started/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;入門</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/playback-restrictions/getting-started/overview-playback-restrictions.html">概要:Brightcoveの再生制限</a></li>
+                            
+                            <li><a href="/playback-restrictions/getting-started/implementing-playback-rights.html">再生権限の実装</a></li>
+                            
+                            <li><a href="https://studio.support.brightcove.com/admin/managing-playback-rights.html">Video Cloud Studio：再生権</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/playback-restrictions/guides/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;ガイド</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="https://general.support.brightcove.com/developer/create-json-web-token.html">JSON ウェブトークン (JWT) の作成</a></li>
+                            
+                            <li><a href="/playback-restrictions/guides/authentication-apis.html">認証APIの使用</a></li>
+                            
+                            <li><a href="/playback-restrictions/guides/stream-concurrency.html">ビューアごとの同時ストリームを制限する</a></li>
+                            
+                            <li><a href="/playback-restrictions/guides/device-limits.html">デバイス制限の実装</a></li>
+                            
+                            <li><a href="https://player.support.brightcove.com/playback/playback-restrictions-with-bcp.html">BrightcovePlayerでの再生制限</a></li>
+                            
+                            <li><a href="https://sdks.support.brightcove.com/features/playback-restrictions-with-sdks.html">ネイティブSDKでの再生制限</a></li>
+                            
+                            <li><a href="/live-api/guides/live-playback-restrictions.html">ライブストリームでの再生制限</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/playback-restrictions/references/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;[ 認証] </a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/playback-restrictions/references/key-api/reference.html">Key APIリファレンス</a></li>
+                            
+                            <li><a href="/playback-restrictions/references/blacklist-api/reference.html">Blacklist API リファレンス</a></li>
+                            
+                            <li><a href="/playback-restrictions/references/audit-api/reference.html">Audit API リファレンス</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/playback-restrictions/references/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;参考文献</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/playback-restrictions/references/playback-rights/reference.html">Playback Rights API リファレンス</a></li>
+                            
+                            <li><a href="/cms/references/reference.html">CMS APIリファレンス</a></li>
+                            
+                            <li><a href="/playback-restrictions/references/devices-api/reference.html">Devices API リファレンス</a></li>
+                            
+                            <li><a href="/playback-restrictions/references/playback-rights-errors.html">再生制限エラー</a></li>
+                           
+                      </ul>
+                    </li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/policy/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;Policy API</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li class="submenu-header">
+                      <a href="/policy/getting-started/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;入門</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/policy/getting-started/overview-policy-api.html">概要:Policy API</a></li>
+                            
+                            <li><a href="/policy/getting-started/quick-start-policy-api.html">コードサンプル:ポリシーキーを生成する</a></li>
+                            
+                            <li><a href="/policy/getting-started/policy-keys.html">プレイヤーからのポリシーキー</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/policy/references/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;参考文献</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/policy/references/reference.html">Policy API リファレンス</a></li>
+                            
+                            <li><a href="/policy/references/policy-api-release-notes.html">リリースノート</a></li>
+                           
+                      </ul>
+                    </li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/social/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;Social API</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li class="submenu-header">
+                      <a href="/social/getting-started/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;入門</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/social/getting-started/overview-social-api.html">概要:Social API</a></li>
+                            
+                            <li><a href="/social/getting-started/quick-start-social-api.html">「クイックスタート:Social API</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/social/references/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;参考文献</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/social/references/reference.html">Social API リファレンス</a></li>
+                            
+                            <li><a href="/social/references/social-api-error-reference.html">Social API:エラーリファレンス</a></li>
+                           
+                      </ul>
+                    </li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/social-syndication/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;Social Syndication API</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li class="submenu-header">
+                      <a href="/social-syndication/getting-started/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;入門</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/social-syndication/getting-started/public-syndication-api-overview.html">概要: Syndication Configuration API</a></li>
+                            
+                            <li><a href="/social-syndication/getting-started/feed-syndication-api-overview.html">概要: Syndication Feed API</a></li>
+                            
+                            <li><a href="/social-syndication/getting-started/sample-templates-universal-syndication.html">ユニバーサルシンジケーションのテンプレート</a></li>
+                            
+                            <li><a href="/cms/searching/cms-and-playback-apis-video-search-v2.html">CMSとPlayback API：ビデオ検索v2</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/social-syndication/references/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;参考文献</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/social-syndication/references/configuration-reference.html">Syndication Configuration API リファレンス</a></li>
+                            
+                            <li><a href="/social-syndication/references/feed-reference.html">Syndication Feed API リファレンス</a></li>
+                            
+                            <li><a href="/policy/references/policy-api-release-notes.html">リリースノート</a></li>
+                           
+                      </ul>
+                    </li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/ssai/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;SSAI API</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li class="submenu-header">
+                      <a href="/ssai/getting-started/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;入門</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/ssai/getting-started/video-cloud-ssai-ad-config-api.html">ビデオクラウドSSAI API</a></li>
+                           
+                      </ul>
+                    </li>
+                    
+                    <li class="submenu-header">
+                      <a href="/ssai/references/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;参考文献</a>
+                      <ul class="sidenav-subsubmenu" style="display:none;">
+                         
+                            <li><a href="/ssai/references/reference.html">SSAI APIリファレンス</a></li>
+                            
+                            <li><a href="/ssai/references/ssai-api-error-reference.html">SSAI APIエラーリファレンス</a></li>
+                           
+                      </ul>
+                    </li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/training/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;トレーニング</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li><a href="/training/online-training-courses.html">オンライントレーニングコース</a></li>
+                    
+                    <li><a href="/training/register-training.html">インストラクター主導トレーニングへの登録</a></li>
+                    
+                    <li><a href="/training/brightcove-university.html">Brightcove Universityトレーニングコース</a></li>
+                   
+              </ul>
+              
+              <h5 class="submenu-header"><a href="/support/index.html"><span style="color:#8E9093">+ </span>&nbsp;&nbsp;サポート</a></h5>
+              <ul class="sidenav-submenu" style="display:none;">
+                 
+                    <li><a href="/support/viewing-brightcove-system-status-page.html">Brightcoveのシステムステータスページの表示</a></li>
+                    
+                    <li><a href="/support/contact-sales.html">営業へのお問い合わせ</a></li>
+                    
+                    <li><a href="/support/opening-case-with-brightcove-support.html">サポートケースを開く</a></li>
+                    
+                    <li><a href="/support/reset-support-portal-password.html">サポートポータルのパスワードをリセットする</a></li>
+                   
+              </ul>
+             
+      </nav>
+    </div>
+    <div class="col-lg-7" style="background-color: white;color: #333333;margin-top: -1em;margin-bottom: -1em;padding-bottom:1em;">
+  <!-- bootstrap layout -->
+
+<p id="bc_veggie_burger_wrapper" style="display: none;"><img id="bc_veggie_burger" src="/assets/images/feather/menu.svg" alt="Navigation Menu"></p>
+
+<!-- search bar -->
+<div id="nav-search-box" style="margin-top: 1rem;"></div>
+<!-- in-page navigation for narrow screens -->
+<details class="centered-inpage-nav" id="centered_inpage_nav">
+  <summary><h6 class="toc">ページコンテンツ</h6></summary>
+  <nav id="centered_toc"></nav>
+  <ul id="centered_in_page_toc" class="list-none"></ul>
+</details>
+<!-- open in new tab/window -->
+<a id="open_new_tab" href="#" target="_blank" style="display: none;"><img src="/assets/images/feather/external-link.svg" alt="open in new tab" style="margin-top:4em;width: 1.5em;"></a> 
+ <h1>概要：Data Collection APIv2</h1>
+<article class="bcls-article">
+  <summary>このトピックでは、Analytics Data Collection API v2の概要を説明します。これにより、Brightcoveがイベントを直接追跡できない状況で、Video CloudAnalyticsデータにイベントを追加できます。</summary>
+  <aside class="bcls-aside bcls-aside--warning"><strong>ノート：</strong>このAPIを使用して、Brightcoveプレーヤー、またはAndroidおよびiOS SDKプレーヤーのイベントを追跡しないでください。これはすでに自動的に行われ、重複データが追加されるためです。</aside>
+  <section class="bcls-section">
+    <h2 id="introduction">入門</h2>
+
+    <p>アナリティクスデータは、ネイティブプレーヤー SDK によって提供されるものを含め、ブライトコーブプレーヤーによって自動的に送信されます。<strong>Video Cloud 動画の配信に Brightcove Player を使用していない場合は、データコレクターにデータを送信するのに使用しているプレーヤーを計測する必要があります。</strong></p>
+
+    <p>Data Collection APIv2が現在の標準です。v1バージョンは非推奨です。v1を実装している場合は、<a href="#changesFromV1"> v1からの変更</a>以下のセクション。</p>
+
+    <p>この概要と<a href="/data-collection/references/reference.html">APIリファレンス</a>、これも参照してください<a href="/data-collection/getting-started/data-collection-api-sample.html">サンプル実装</a>。</p>
+
+    <p>Analytics Data Collection APIは、リアルタイム分析イベントのエンドポイントです。イベントデータは、次のようなHTTPリクエストを介して送信された一連のパラメータを介してBrightcoveに送信されます。</p>
+
+    <pre style="white-space:pre-wrap;padding-top:1em;padding-bottom:1em;">
+  <code class="language-http" translate="No">http://metrics.brightcove.com/v2/tracker?event=video_view&amp;amp;domain=videocloud&amp;account=123&amp;video=789
+  </code>
+  </pre>
+
+    <p>これらのパラメータは、<strong>事実</strong>イベントが発生したときのシステムの状態について。上記の例は、<code translate="No">video_view</code>ビデオでイベントが発生しました<code translate="No">789</code>アカウント用<code translate="No">123</code>（または：ユーザーがアカウントの視聴を開始しました<code translate="No">123</code>のビデオ<code translate="No">789</code>。見る<a href="#video-cloud-events">未満</a>追跡されている現在の分析イベントの説明について）。</p>
+
+    <h3 id="dimensions">サイズ</h3>
+
+    <p>ディメンションは、イベントが発生したときのシステムの状態に関する定性的な事実です。たとえば、リクエストが次の場合：</p>
+
+    <pre style="white-space:pre-wrap;padding-top:1em;padding-bottom:1em;">
+  <code class="language-http" translate="No">http://metrics.brightcove.com/tracker
+  ?event=video_view&amp;session=581136_2018-07-03T18:34:46.214Z
+  &amp;domain=videocloud&amp;account=123
+  &amp;video=789
+  </code>
+  </pre>
+
+    <p>ビデオID（<code translate="No">789</code>）およびアカウントID（<code translate="No">123</code>）、およびリクエスト自体から収集されたデバイスと場所の情報はすべて、<code translate="No">video_view</code>イベント。分析システムはそれを記録します<code translate="No">video_view</code>このリクエストが行われたときに、これらのディメンションでイベントが発生しました。</p>
+
+    <h3 id="event-and-domain-parameters">イベントとドメインのパラメータ</h3>
+
+    <p>ザ・<code translate="No">event</code>パラメータは、発生したイベントを記述します。ザ・<code translate="No">domain</code>パラメータは、イベントの名前空間を提供します。ザ・<code translate="No">event</code>、<code translate="No">domain</code>、および<code translate="No">session</code>必須パラメータです（の値<code translate="No">domain</code>常に<code translate="No">videocloud</code>）。</p>
+
+    <h3 id="additional-parameters">追加のパラメーター</h3>
+
+    <p>Analyticsシステムがイベントを正常に分析できるように、特定のパラメーターをイベントに含める必要があります</p>
+
+    <aside class="bcls-aside bcls-aside--warning">あなたがすべき<strong>いいえ</strong>送信<code translate="No">player</code>（プレイヤーID）または<code translate="No">player_name</code>ブライトコーブ以外のプレイヤー向けの情報。代わりに、<code translate="No">destination</code>ビデオが見られた場所を追跡するためのパラメータ。</aside>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="responseTypes">応答タイプ</h2>
+
+    <p>分析Data Collection APIリクエストへの応答には、HTTP応答コードと人間が読めるメッセージが含まれます。</p>
+
+    <table class="bcls-table">
+      <thead class="bcls-table__head">
+        <tr>
+          <th>HTTPステータスコード</th>
+          <th>説明</th>
+          <th>例</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">200</code></td>
+          <td>リクエストはコレクターによって正常に受信され、永続化されています。</td>
+          <td>（1x1ピクセルの透明なGIF画像を返します）</td>
+        </tr>
+        <tr>
+          <td><code translate="No">400</code></td>
+          <td>クライアントから送信されたリクエストに必要なパラメータがありません：<code translate="No">domain</code>、<code translate="No">account</code>または<code translate="No">event</code>。（ドメイン固有のパラメーターが欠落している場合、このステータスは返されません。）</td>
+          <td><code translate="No">"Invalid 'event' parameter"</code></td>
+        </tr>
+        <tr>
+          <td><code translate="No">50x</code></td>
+          <td>これはエラーコードであり、サーバー側に問題があることを示しています。イベントは、分析システムによって正常に記録されている場合とされていない場合があります。</td>
+          <td><code translate="No">"Server-side failure, please retry."</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+	<section class="bcls-section">
+		<h2 id="VOD_and_Live_Events">VODとライブイベント</h2>
+		<h3>ライブイベント</h3>
+		<p>Data Collection APIがイベントを次のように分類するには、次の条件を満たす必要があります。<strong>住む</strong>：</p>
+		<ul>
+			<li>リクエストする必要があります<strong>ない</strong> video_durationパラメータがあります。</li>
+			<li>リクエストにはアカウントパラメータが必要です。</li>
+			<li>リクエストにはビデオパラメータが必要です。</li>
+			<li>
+				イベントタイプは、次のいずれかである必要があります。
+				<ul>
+					<li>video_impression<code translate="no"></code></li>
+					<li>video_view<code translate="no"></code></li>
+					<li>video_engagement<code translate="no"></code></li>
+					<li>alive_ss_ad_start<code translate="no"></code></li>
+				</ul>
+			</li>
+			<li>アカウントは、ライブビデオストリーミングのBrightcoveサポートによって有効にされている必要があります。</li>
+		</ul>
+		<h3>VOD</h3>
+		<p>を含むリクエスト<code translate="no">video_duration</code>パラメータは次のように分類されます<strong>VOD</strong>。</p>
+	</section>
+
+  <section class="bcls-section">
+    <h2 id="minimal">最小限のデータ</h2>
+
+    <p>少なくとも、送信する必要があります<code translate="No">session</code> idと<code translate="No">video_view</code>セッション中に再生されるすべてのビデオのイベント。NS <code translate="No">video_view</code>送信する必要があります <em>後</em> プレロール広告が完了します。</p>
+
+    <h3><code translate="No">session</code></h3>
+
+    <p>これはセッション識別子です。ザ・<code translate="No">session</code>本質的には、プレーヤーが含まれているページまたはアプリビューの1つのビューであり、それが続く限りです。値は、セッションの間一定である必要があり、<strong>すべてのイベントに送信</strong>。グローバル一意識別子（GUID）にできるだけ近い必要があります。衝突が発生した場合、2つのセッションを解くことができないと、無効として破棄される可能性があります。</p>
+    <p>JavaScriptでGUIDを作成するためのさまざまなスキームがあります。一例は<a href="https://github.com/dustinpoissant/GUIDJS">このGitHubリポジトリ</a>。サードパーティのスクリプトはBrightcoveではサポートされていないことに注意してください。</p>
+
+    <h3>パフォーマンスの最小限のデータ（プレイレートとエンゲージメントスコア）</h3>
+    <h4>イベント</h4>
+    <ul>
+      <li><code translate="No">video_impression</code></li>
+      <li><code translate="No">video_view</code></li>
+      <li><code translate="No">video_engagement</code></li>
+    </ul>
+    <h4>属性（すべてのイベント）</h4>
+    <ul>
+      <li><code translate="No">account</code></li>
+      <li><code translate="No">video</code></li>
+    </ul>
+    <h4>追加の属性（<code translate="No">video_engagement</code>イベントのみ）</h4>
+    <h5>VOD</h5>
+    <ul>
+      <li><code translate="No">range</code></li>
+      <li><code translate="No">video_duration</code></li>
+    </ul>
+    <h5>ライブ</h5>
+    <ul>
+      <li><code translate="No">video_seconds_viewed</code></li>
+    </ul>
+    <h4>HTTPヘッダー</h4>
+    <ul>
+      <li><code translate="No">User-Agent</code> -デバイスレポートに必要</li>
+    </ul>
+
+    <aside class="bcls-aside bcls-aside--warning">Analyticsシステムは、指定されたもののみを返すことができることに注意してください。完全なデータを送信しないと、VideoCloud分析のデータが不足します。</aside>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="bestPractices">ベストプラクティス</h2>
+
+    <p>コレクターに正しいデータを送信していることを確認するには、データ収集スクリプトを一般的にデプロイする前にテストする必要があります。おすすめ：</p>
+
+    <ol>
+      <li>プレーヤーのデータ収集スクリプトを作成します。</li>
+      <li>制御された環境で少なくとも1日テストします。</li>
+      <li>分析モジュールまたは分析モジュールを介して分析データを確認します。<span translate="No"> Analytics API</span>収集されたものがあなたの期待に一致することを保証するため。</li>
+    </ol>
+
+    <h3>リクエストの送信-CORSの問題の回避</h3>
+
+    <aside class="bcls-aside bcls-aside--tip">
+      <p>Data Collection APIに「送信」する最良の方法は、リクエストURLを次のように設定することです。<code translate="No">src</code>新しい画像の値（<code translate="No">img</code>）要素を入力し、その要素をページに挿入します。</p>
+
+      <p>ではなく、同じ方法を使用する必要があります<code translate="No">XMLHttpRequest</code>または回避するために他のいくつか<a href="https://general.support.brightcove.com/developer/concepts-cors.html">CORS</a>問題。</p>
+
+      <p>実装例については、を参照してください。<a href="/data-collection/getting-started/data-collection-api-sample.html">データ収集サンプル</a>。</p>
+    </aside>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="junk-data">ジャンクデータ</h2>
+
+    <p><strong>一般に、コレクターに送信されたデータは、分析システムによって真実として記録されます。</strong>イベントに不適切または不正確な情報が含まれている場合、Analyticsシステムはデータを誤って解釈します。</p>
+
+    <p>たとえば、誤ってタイムスタンプをビデオIDとして送信した場合、分析データは全体的な要約に影響を与える方法で歪められます。</p>
+
+    <aside class="bcls-aside bcls-aside--tip">データの送信を開始する前に、生成しているURLを注意深く調べてください。</aside>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="encoding">URI エンコード</h2>
+
+    <p>スペースや特殊文字を含む可能性のあるData Collection APIに送信する文字列<strong>URIエンコードする必要があります</strong>リクエストが成功するために。JavaScriptを介してリクエストを送信する場合は、<code class="language-javascript" translate="No">encodeURI()</code>メソッドは、リクエスト文字列をエンコードします。例は次のとおりです。</p>
+
+    <pre class="line-numbers">
+  <code class="language-javascript" translate="No">urlStr += "&amp;video=" + currentVideo.id + "&amp;video_name=" + encodeURI(currentVideo.video_name);
+  </code>
+  </pre>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="video-cloud-events">イベント</h2>
+
+    <p>以下にリストされているイベントは、Analyticsシステムによって処理されます。</p>
+
+    <dl>
+      <dt><code translate="No">player_load</code></dt>
+      <dd>
+        <h5>意図/意味</h5>
+        <p>プレーヤーセッションがエンドユーザーによって開始されました。これは分析セッションの開始を示し、他のイベントの前に送信する必要があります。</p>
+        <h5>例</h5>
+        <pre><code class="language-http" translate="No">http://metrics.brightcove.com/tracker
+  ?event=player_load
+  &amp;session=581136_2018-07-03T18:34:46.214Z
+  &amp;destination=http%3A-%2F%2Fsup-port.brightcove.com%2F
+  &amp;source=http%3A-%2F%2Fwww.google.com
+  %2Furl%3Fsa%3D-t%26rct%3Dj%26q%3D%26esrc%3Ds%26source
+  %253A-%252F%252Fsupport.brightcove.com%252F%26ei%3D
+  OdxWZSGdJ-pL7WJaEeUJVlnw%26bvm%3Dbv.51156542%2Cd.dmg
+  &amp;domain=videocloud
+  &amp;account=1749339200
+  &amp;time=1377191644796</code></pre>
+      </dd>
+      <dt><code translate="No">error</code></dt>
+      <dd>
+        <h5>意図/意味</h5>
+        <p>再生体験を妨げる致命的なエラーが発生したときに送信されます。</p>
+        <h5>例</h5>
+        <pre><code class="language-http" translate="No">http://metrics.brightcove.com/tracker
+  ?event=error
+  &amp;error_code=MEDIA_ERR_SRC_NOT_SUPPORTED
+  &amp;session=581136_2018-07-03T18:34:46.214Z
+  &amp;destination=http%3A-%2F%2Fsup-port.brightcove.com%2F
+  &amp;source=http%3A-%2F%2Fwww.google.com
+  %3Dhttp%253A-%252F%252Fsupport.brightcove.com
+  %26usgWZSGdJ-pL7WJaEeUJVlnw%26bvm%3Dbv.51156542%2Cd.dmg
+  &amp;domain=videocloud
+  &amp;account=1749339200
+  &amp;time=1377191644796</code></pre>
+      </dd>
+      <dt><code translate="No">catalog_request</code></dt>
+      <dd>
+        <h5>意図/意味</h5>
+        <p>ビデオクラウドPlayback APIへのリクエストが行われたときに送信されます。</p>
+        <h5>例</h5>
+        <pre><code class="language-http" translate="No">http://metrics.brightcove.com/tracker
+  ?event=catalog_request
+  &amp;session=581136_2018-07-03T18:34:46.214Z
+  &amp;catalog_url=https%3A%2F%2Fedge.api.brightcove.com%2Fplayback
+  &amp;destination=http%3A-%2F%2Fsup-port.brightcove.com%2F
+  &amp;source=http%3A-%2F%2Fwww.google.com
+  %3Dhttp%253A-%252F%252Fsupport.brightcove.com
+  WZSGdJ-pL7WJaEeUJVlnw%26bvm%3Dbv.51156542%2Cd.dmg
+  &amp;domain=videocloud&amp;account=1749339200
+  &amp;time=1377191644796</code></pre>
+      </dd>
+      <dt><code translate="No">catalog_response</code></dt>
+      <dd>
+        <h5>意図/意味</h5>
+        <p>前への応答時に送信されます<code translate="No">catalog_request</code>受け取ります。</p>
+        <h5>例</h5>
+        <pre><code class="language-http" translate="No">http://metrics.brightcove.com/tracker
+  ?event=catalog_response
+  &amp;session=581136_2018-07-03T18:34:46.
+  &amp;catalog_url=https%3A%2F%2Fedge.api.brightcove.com%2Fp2F23823423800
+  &amp;response_time_ms=243
+  &amp;destination=http%3A-%2F%2Fsup-port.brightcove.com%2F
+  &amp;source=http%3A-%2F%2Fwww.google.com
+  53A-%252F%252Fsupport.brightcove.com%252F%2Tzn-oCgCQ
+  AFQjCNJaEeUJVlnw%26bvm%3Dbv.51156542%2Cd.dmg
+  &amp;domain=videocloud
+  &amp;account=1749339200
+  &amp;time=1377191644796</code></pre>
+      </dd>
+      <dt><code translate="No">play_request</code></dt>
+      <dd>
+        <h5>意図/意味</h5>
+        <p>ユーザーが明示的に再生ボタンをクリックしたときに再生が開始されたとき、またはプラットフォームが自動再生シナリオで再生をトリガーしたときに自動的に送信されます。複数のことに注意してください<code translate="No">play_request</code>視聴者がビデオを一時停止および再開した場合、1回の視聴セッション中にイベントが送信されることがあります。</p>
+        <h5>例</h5>
+        <pre><code class="language-http" translate="No">http://metrics.brightcove.com/tracker
+  ?event=play_request
+  &amp;session=581136_2018-07-03T18:34:46.214Z
+  &amp;destination=http%3A-%2F%2Fsup-port.brightcove.com%2F
+  &amp;source=http%3A-%2F%2Fwww.google.com
+  %3Dhttp%253A-%252F%252Fsupport.brightcove.com%252F%2
+  dJ-pL7WJaEeUJVlnw%26bvm%3Dbv.51156542%2Cd.dmg
+  &amp;domain=videocloud
+  &amp;account=1749339200
+  &amp;time=1377191644796</code></pre>
+      </dd>
+      <dt><code translate="No">ad_mode_begin</code></dt>
+      <dd>
+        <h5>意図/意味</h5>
+        <p>再生プラットフォームによってコントロールが広告エージェントに引き渡されたときに送信されます。</p>
+        <h5>例</h5>
+        <pre><code class="language-http" translate="No">http://metrics.brightcove.com/tracker
+  ?event=ad_mode_begin
+  &amp;session=581136_2018-07-03T18:34:46.214Z
+  &amp;destination=http%3A-%2F%2Fsup-port.brightcove.com%2F
+  &amp;source=http%3A-%2F%2Fwww.google.com
+  %3Dhttp%253A-%252F%252Fsupport.brightcove.com%252
+  %26usg%3DAFQjCNEtLod%3Dbv.51156542%2Cd.dmg
+  &amp;domain=videocloud
+  &amp;account=1749339200
+  &amp;time=1377191644796</code></pre>
+      </dd>
+      <dt><code translate="No">ad_mode_complete</code></dt>
+      <dd>
+        <h5>意図/意味</h5>
+        <p>再生プラットフォームによってコントロールが広告エージェントに引き渡されたときに送信されます。</p>
+        <h5>例</h5>
+        <pre><code class="language-http" translate="No">http://metrics.brightcove.com/tracker
+  ?event=ad_mode_complete
+  &amp;session=581136_2018-07-03T18:34:46.214Z
+  &amp;destination=http%3A-%2F%2Fsup-port.brightcove.com%2F
+  &amp;source=http%3A-%2F%2Fwww.google.com
+  %3Dhttp%253A-%252F%252Fsupport.brightcove.com%252F%2
+  WZSGdJ-pL7WJaEeUJVlnw%26bvm%3Dbv.51156542%2Cd.dmg
+  &amp;domain=videocloud
+  &amp;account=1749339200
+  &amp;time=1377191644796</code></pre>
+      </dd>
+      <dt><code translate="No">video_impression</code></dt>
+      <dd>
+        <h5>意図/意味</h5>
+        <p>プレーヤーに追加されたビデオのメタデータの読み込みが完了し、プレーヤーは自動再生またはユーザー操作のいずれかを介してビューイベントをトリガーする準備ができています。</p>
+        <h5>例</h5>
+        <pre><code class="language-http" translate="No">http://metrics.brightcove.com/tracker
+  ?event=video_impression
+  &amp;session=581136_2018-07-03T18:34:46.214Z
+  &amp;destination=http%3A%2F%2Fwww.current-times.com%2F
+  &amp;time=1377191644801
+  &amp;source=http%3A%2F%2Fwww.google.com
+  %252-F%26ei%3DoEYWUtCgEIXq9ATznoCgCQ
+  %26usg%3DAFQjCNEtLod-Odx6bvm%3Dbv.5115-6542%2Cd.dmg
+  &amp;video=2621468623001
+  &amp;video_name=Democratic-Rivals%20Target%20Bill
+  &amp;domain=videocloud
+  &amp;account=1749339200</code></pre>
+      </dd>
+      <dt><code translate="No">video_view</code></dt>
+      <dd>
+        <h5>意図/意味</h5>
+        <p>ビデオの再生が開始されました（ロード後の自動再生、またはユーザーの操作による）。1つだけであることに注意してください<code translate="No">video_view</code>イベントは、視聴者がビデオを停止して再起動または再生した場合でも、視聴セッション中に記録されます。</p>
+        <aside class="bcls-aside bcls-aside--information">注:動画にプレロール広告がある場合は、広告の完了後に送信する必要があります。</aside>
+        <h5>例</h5>
+        <pre><code class="language-http" translate="No">http://metrics.brightcove.com/tracker
+  ?event=video_view
+  &amp;session=581136_2018-07-03T18:34:46.214Z
+  &amp;destination=http%3A%2F%2Fwww.current-times.com%2F
+  &amp;video=2621468623001
+  &amp;video_name=Debate-2
+  &amp;video_duration=189
+  &amp;time=1377191666432
+  &amp;source=http%3A%2F%2Fwww.google.com%2Furl%
+  %252F%26ei%3DoEYWUtCgEIXq9ATznoCgCQ%26us-g
+  %3DAFQjCNEtv.51156542%2Cd.dmg
+  &amp;domain=videocloud
+  &amp;account=1749339200</code></pre>
+      </dd>
+      <dt><code translate="No">video_engagement</code></dt>
+      <dd>
+        <h5>意図/意味</h5>
+        <p>ユーザーが動画のタイムラインの秒の範囲を視聴しました。このイベントは、動画エンゲージメントを追跡するためのハートビートであり、ユーザーの操作と動画の長さによっては、再生中に何回も送信されます。再生が中断されない場合、Brightcoveプレーヤーインストルメンテーションはこのイベントを10秒ごとに送信します。<strong>20秒を超える範囲を説明するイベントは、Analyticsシステムによって破棄されます。</strong></p>
+        <h5>例</h5>
+        <pre><code class="language-http" translate="No">http://metrics.brightcove.com/tracker
+  ?event=video_engagement
+  &amp;session=581136_2018-07-03T18:34:46.214Z
+  &amp;destination=http%3A%2F%2Fwww.current-times.com%2F
+  &amp;video=2621468623001
+  &amp;video_name=Debate-2
+  &amp;video_duration=189
+  &amp;time=1377191676589
+  &amp;range=0..9
+  &amp;source=http%3A%2F%2Fwww.google.com
+  %2Furl%3Fsa%3Dt-%26rct%3Dj%26q%3D%26esrc%3Ds
+  %26source%3Dweb%26cd%3D1%26ved%3D0CDYQFjAA
+  %26url%3Dhttp%253A%252F%252Fwww.current-times.com
+  %252F%26ei%3DoEYWUtC-gEIXq9ATznoCgCQ
+  %26usg%3DAFQjCNEtLodOdxWZSGdJpL7WJ.51156542%2Cd.dmg
+  &amp;domain=videocloud
+  &amp;account=1749339200</code></pre>
+      </dd>
+    </dl>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="all-event-parameters">すべてのイベントのパラメーター</h2>
+
+    <p>これらのイベントのパラメーターには、イベントが発生したときのシステムの現在の状態に関連する情報を含める必要があり、可能な限り具体的にする必要があります。このセクションでは、すべてのイベントで送信できるパラメーターについて詳しく説明します。次のセクションでは、特定のイベントのパラメーターを示します。</p>
+
+    <table class="bcls-table">
+      <thead class="bcls-table__head">
+        <tr>
+          <th style="width:16em;">フィールド</th>
+          <th>タイプ</th>
+          <th>説明</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">account</code></td>
+          <td>文字列</td>
+          <td>
+            <p>アカウント ID</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">domain</code></td>
+          <td>文字列</td>
+          <td>
+            <p>常に等しい<code translate="No">videocloud</code></p>
+
+            <p class="type-size">許容値：<code translate="No">"videocloud"</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">session</code></td>
+          <td>文字列</td>
+          <td>可能な限り普遍的に一意であるセッションID-を参照してください<a href="#minimal">最小限のデータ</a>詳細については、上記のセクション</td>
+        </tr>
+        <tr>
+          <td><code translate="No">device_os</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>ユーザーエージェントが信頼できない場合（デバイスOSとデバイスタイプの両方が含まれていない場合、または送信された値がここに表示されている値のリストにない場合は無視されます）、イベントを発生させたデバイスのOSを指定するようにオーバーライドします。<strong>通常は含まれません</strong> )</p>
+
+            <p class="type-size">許容値：<code translate="No">"android"</code>、<code translate="No">"bada"</code>、<code translate="No">"ios"</code>、<code translate="No">"linux"</code>、<code translate="No">"mac"</code>、<code translate="No">"tv"</code>、<code translate="No">"os_x"</code>、<code translate="No">"rim"</code>、<code translate="No">"sybian"</code>、<code translate="No">"windows"</code>、<code translate="No">"other"</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">device_os_version</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>デバイスで使用されている OS のバージョン。指定されていない場合、これは追跡要求のユーザーエージェント文字列を解析することによって計算されます</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">device_type</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>ユーザーエージェントが信頼できない場合（デバイスOSとデバイスタイプの両方が含まれていない場合、または送信された値がここに表示されている値のリストにない場合は無視されます）、イベントを発生させたデバイスのタイプを指定するようにオーバーライドします。<strong>通常は含まれません</strong> )</p>
+
+            <p class="type-size">許容値：<code translate="No">"mobile"</code>、<code translate="No">"tablet"</code>、<code translate="No">"tv"</code>、<code translate="No">"desktop"</code>、<code translate="No">"other"</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">event</code></td>
+          <td>文字列</td>
+          <td>
+            <p>イベントタイプ</p>
+
+            <p class="type-size">許容値：<code translate="No">"player_load"</code>、<code translate="No">"catalog_request"</code>、<code translate="No">"catalog_response"</code>、<code translate="No">"play_request"</code>、<code translate="No">"ad_mode_begin"</code>、<code translate="No">"ad_mode_complete"</code>、<code translate="No">"video_impression"</code>、<code translate="No">"video_view"</code>、<code translate="No">"video_engagement"</code>、<code translate="No">"error"</code></p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">destination</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>イベントを発生させたURI</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">source</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>エンドユーザーをに送信したURI <code translate="No">destination</code> URI</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">time</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>数値</td>
+          <td>
+            <p>エポック時間でのイベントのタイムスタンプ（ミリ秒）</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">country</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>ISO-3166（アルファ2）リージョンcISO-3166（アルファ2）リージョンコード（システムがIPアドレスから地理情報を検出できない場合にオーバーライド）<strong>通常は含まれません</strong></p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">country_name</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>人間が読める国の名前（システムがIPアドレスから地理情報を検出できない場合は上書きします）<strong>通常は含まれません</strong></p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">region</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>ISO-3166（アルファ2）地域コード（システムがIPアドレスから地理情報を検出できない場合にオーバーライド）<strong>通常は含まれません</strong></p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">region_name</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>人間が読める地域名（システムがIPアドレスから地理情報を検出できない場合にオーバーライド）<strong>通常は含まれません</strong></p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">city</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>市の名前<strong>通常は含まれません</strong></p>
+          </td>
+        </tr>
+        <tr id="userData">
+          <td><code translate="No">user</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>一意のユーザー識別子-提供されていないか空白の場合、VideoCloudはフォールバック方式を使用して<code translate="No">Source IP address + the User-Agent</code>一意の識別子としての文字列。<strong> Brightcoveは、この情報を一意のユーザーの計算にのみ使用することに注意してください。APIまたはAnalyticsモジュールを介してユーザーデータ自体を取得することはできません</strong></p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 id="user">ユーザーパラメータ</h3>
+
+    <ul>
+      <li>プレーヤー/クライアントアプリケーションが一意のビューアを追跡する場合は、ユーザーパラメータとしてユーザーの一意のIDをコレクタに送信する必要があります。</li>
+      <li>の場合<code translate="No">user</code>提供されていないか空白の場合は、フォールバック方式を使用します。<code translate="No">Source IP address + the User-Agent String</code>一意の識別子として。</li>
+      <li>ユーザーパラメータの値がログ/データベースに保存されることはなく、ハッシュ（SHA-256を使用）のみが保存されます。</li>
+      <li>コレクターによってCookieは設定されません。</li>
+    </ul>
+
+    <h4 id="uniqueuser">ユニークユーザー</h4>
+
+    <p>Brightcove Playerのプラグイン機能を使用して、レポートされた分析に固有のビデオビューアデータを追加できます。これを行うには、一意の識別子をに追加します<code translate="No">settings</code>分析機能のオブジェクト。</p>
+
+    <p>もちろん、一意のユーザーIDを取得する方法はアプリケーションごとに異なりますが、たとえば、このコードは、次のような一意のユーザーデータを含むログインURLが取得されることを前提としています。<strong> http://exampledomain.com/users/912389123</strong>。この一意のURLはプラグインに渡されます。</p>
+
+    <p>以下のプラグインのコードは、次のタスクを実行します。</p>
+
+    <ul>
+      <li>標準構文を使用して、プラグイン名が次のように定義されたBrightcovePlayerプラグインを作成します。<code translate="No">uniqueUserForAnalyticsPlugin</code>。プラグインは、<code translate="No">options</code>プラグインに渡されたデータを含むオブジェクト。</li>
+      <li>ザ・<code translate="No">myPlayer</code>変数には、プレーヤーへの参照が割り当てられます。同様に、他の2つの変数が作成されます。</li>
+      <li>ザ・<code translate="No">userPath</code>変数には、プラグインに渡されるパスが割り当てられます。<code translate="No">options</code>オブジェクト。</li>
+      <li>ザ・<code translate="No">uniqueViewer</code>変数には、解析されたバージョンの<code translate="No">userPath</code>、したがって、ユーザーIDの数字のみが変数に割り当てられます。</li>
+      <li>ユーザープロパティがAnalyticsプラグインに追加されます<code translate="No">settings</code>オブジェクト。</li>
+    </ul>
+
+    <pre class="line-numbers">
+  <code class="language-javascript" translate="No">videojs.registerPlugin('uniqueUserForAnalyticsPlugin', function(options) {
+  var myPlayer = this,
+  userPath = '',
+  uniqueViewer = '';
+  //Assign uniqueViewer a value according to your app and business rules
+  //In this example, parsing the path passed to the plugin in the options object
+  userPath = options.path;
+  uniqueViewer = userPath.substring( userPath.lastIndexOf('/') + 1 );
+  //Assign a user variable to Analytic's settings object
+  myPlayer.bcAnalytics.client.user(USER) = uniqueViewer;
+  });
+  </code>
+  </pre>
+
+    <p>このコードは、アプリケーションロジックに合わせて変更し、インターネットでアクセス可能なURLに保存する必要があります。</p>
+
+    <p>Studioから、<strong>プラグイン</strong>示されているように、プレーヤーにプラグインをロードするセクション。</p>
+
+    <figure class="bcls-figure"><img class="bcls-image" alt="Studio Plugin Section" src="//learning-services-media.brightcove.com/doc-assets/video-cloud-apis/analytics-api/data-collection/data-collection-api-overview/unique-user-plugin-studio.png" />
+      <figcaption class="bcls-caption--image">スタジオプラグインセクション</figcaption>
+    </figure>
+
+    <p>次のJSONの代わりに、ユーザーデータを含む文字列をプラグインに渡します。もちろん、一意のユーザーIDを抽出するには、それに応じてプラグインコードを更新する必要があります。</p>
+
+    <pre class="line-numbers">
+  <code class="language-json" translate="No">{
+  "path": "http://exampledomain.com/users/912389123"
+  }
+  </code>
+  </pre>
+
+    <p>プラグイン開発の詳細については、<a href="https://player.support.brightcove.com/coding-topics/step-step-plugin-development.html">ステップバイステップ：プラグイン開発</a>資料。</p>
+
+    <h3 id="device_type-and-device_os-parameters"><code translate="No">device_type</code>、<code translate="No">device_os</code>、<code translate="No">device_os_version</code>、<code translate="No">device_manufacturer</code>、および<code translate="No">browser_type</code>パラメーター</h3>
+
+    <p>デフォルトでは、AnalyticsシステムはUser-AgentヘッダーからデバイスタイプとOS情報を検出しようとします。場合<strong>どちらも</strong><code translate="No">device_type</code>そして<code translate="No">device_os</code>が送信されると、User-Agentヘッダーからの情報は無視され、<code translate="No">device_type</code>そして<code translate="No">device_os</code>。<strong>ほとんどの場合、デバイス、OS、およびブラウザーの情報を送信する必要はありません。</strong> -このオーバーライドは、User-Agentが信頼できないか、そうでなければ利用できない場合にのみ使用する必要があります。</p>
+
+    <p>分析システムは記録します<code translate="No">other</code>リクエストにデバイスパラメータオーバーライドの認識されない値が含まれている場合。</p>
+
+    <h3 id="geographic-data-parameters">地理データパラメータ</h3>
+
+    <p>デフォルトでは、AnalyticsシステムはリモートIPアドレスから地理情報を検出しようとします。この動作は、渡すことでオーバーライドできます<code translate="No">country</code>、<code translate="No">country_name</code>、<code translate="No">region</code>、<code translate="No">region_name</code>、<code translate="No">city</code>そして<code translate="No">dma</code>パラメーター。<strong>ほとんどの場合、これらのパラメーターは必要ありません</strong> -このオーバーライドは、リモートIPアドレスが信頼できない場合、またはその他の方法で使用できない場合にのみ使用する必要があります。</p>
+
+    <p>分析システムは記録します<code translate="No">ZZ</code>または<code translate="No">unknown</code>リクエストにオーバーライドの認識されない値が含まれている場合。</p>
+
+    <h3 id="destination-and-source-parameters">宛先およびソースパラメータ</h3>
+
+    <p>ザ・<code translate="No">destination</code>そして<code translate="No">source</code>パラメータは、イベントを発生させたURIを提供します（<code translate="No">destination</code>）およびユーザーをそこに送信したURI（<code translate="No">source</code>）。</p>
+
+    <p>ザ・<code translate="No">source</code>パラメータは、トラフィックソース情報を決定するために使用されます。場合<code translate="No">source</code>指定されていない場合、Analyticsシステムはイベントを直接トラフィックによって開始されたものとして扱います。</p>
+
+    <p>ザ・<code translate="No">destination</code>パラメータは、トラフィックの宛先情報、つまりビデオが視聴されている場所を決定するために使用されます。URI に権限が含まれていない場合、API はを記録しません<code translate="No">destination_domain</code>。<code translate="No">destination_path</code>は URI のパスとして記録されます。</p>
+
+    <p>Web再生中、ビデオが再生されているページのアドレスバーのURLは<code translate="No">destination</code>、 そしてその<code translate="No">source</code>リファラーです（<code translate="No">top.document.referrer</code>）。</p>
+
+    <p>たとえば、Brightcoveサポートサイトで「ライブストリーミングワイヤーキャスト」を検索し、結果に表示されるビデオを見る場合、次のようになります。</p>
+
+    <table class="bcls-table">
+      <thead class="bcls-table__head">
+        <tr>
+          <th>パラメーター</th>
+          <th>値</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">source</code></td>
+          <td>
+            <pre class="line-numbers" style="white-space:pre-wrap;padding-top:1em;padding-bottom:1em;">
+  <code class="language-http" translate="No">https://support.brightcove.com/en/video-cloud/search/live%20streaming%20wirecast
+  </code>
+  </pre>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">destination</code></td>
+          <td>
+            <pre class="line-numbers" style="white-space:pre-wrap;padding-top:1em;padding-bottom:1em;">
+  <code class="language-http" translate="No">https://support.brightcove.com/en/video-cloud/training-videos/live-streaming-wirecast
+  </code>
+  </pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>URLがない場合（たとえば、ネイティブ再生の場合など）、両方<code translate="No">destination</code>そして<code translate="No">source</code>ビデオが再生されている場所とユーザーがそこに到達した方法をそれぞれ識別する有効なURIである必要があります。</p>
+
+    <p>と仮定して<code translate="No">destination</code>は<a href="http://en.wikipedia.org/wiki/URI_scheme#Generic_syntax">有効なURI</a>：</p>
+
+    <pre>
+  <code translate="No">&lt;scheme name&gt; : &lt;hierarchical part&gt; [ ? &lt;query&gt; ] [ # &lt;fragment&gt; ]
+  ex. https://www.example.com/foo/bar/baz
+ 
+---
+-----------/----------/
+  |             |
+  authority        path
+ 
+---
+/   
+---
+----------------------/
+  |                |
+  scheme       hierarchical part
+  </code>
+  </pre>
+
+    <p>Analyticsシステムはそれを次のように処理します。</p>
+
+    <p>URIにが含まれている場合<strong>権限</strong>、API応答は、その権限を<code translate="No">destination_domain</code>およびとして提供されるパス<code translate="No">destination_path</code>。URI に権限が含まれていない場合、API はを記録しません<code translate="No">destination_domain</code>。<code translate="No">destination_path</code>は URI のパスとして記録されます。A <code translate="No">destination</code>階層部分がない場合（たとえば、スキームのみ）は、スキームがない場合と同様に無効と見なされます。</p>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="parameters_for_specific_events">特定のイベントのパラメーター</h2>
+
+    <h3 id="errorEvent">エラーイベントパラメータ</h3>
+
+    <p>次のパラメータを一緒に送信する必要があります<code translate="No">error</code>イベント。</p>
+
+    <table class="bcls-table">
+      <thead class="bcls-table__head">
+        <tr>
+          <th style="width: 30%">フィールド</th>
+          <th style="width: 10%">タイプ</th>
+          <th style="width: 70%">説明</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">error_code</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>数値</td>
+          <td>
+            <p>イベントに関連付けられたプラットフォーム固有のエラーコード</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 id="catalog_requestEvent">catalog_requestイベントパラメータ</h3>
+
+    <p>次のパラメータを一緒に送信する必要があります<code translate="No">catalog_request</code>イベント。</p>
+
+    <table class="bcls-table">
+      <thead class="bcls-table__head">
+        <tr>
+          <th style="width: 30%">フィールド</th>
+          <th style="width: 10%">タイプ</th>
+          <th style="width: 70%">説明</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">catalog_url</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>catalog_requestイベントに関連付けられた宛先URL</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 id="catalog_responseEvent">catalog_responseイベントパラメータ</h3>
+
+    <p>次のパラメータを一緒に送信する必要があります<code translate="No">catalog_response</code>イベント。</p>
+
+    <table class="bcls-table">
+      <thead class="bcls-table__head">
+        <tr>
+          <th style="width: 30%">フィールド</th>
+          <th style="width: 10%">タイプ</th>
+          <th style="width: 70%">説明</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">catalog_url</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>この応答を開始したcatalog_requestイベントに関連付けられた宛先URL</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">response_time_ms</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>数値</td>
+          <td>
+            <p>catalog_requestイベントとcatalog_responseイベントの間のミリ秒単位の時間</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 id="video_impressionEvent">video_impressionイベントパラメータ</h3>
+
+    <p>次のパラメータを一緒に送信する必要があります<code translate="No">video_impression</code>イベント。</p>
+
+    <table class="bcls-table">
+      <thead class="bcls-table__head">
+        <tr>
+          <th style="width: 30%">フィールド</th>
+          <th style="width: 10%">タイプ</th>
+          <th style="width: 70%">説明</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">video</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>動画ID</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">video_name</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>動画の名前</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 id="video_viewEvent">video_viewイベントパラメータ</h3>
+
+    <p>次のパラメータを一緒に送信する必要があります<code translate="No">video_view</code>イベント。</p>
+
+    <table class="bcls-table">
+      <thead class="bcls-table__head">
+        <tr>
+          <th style="width: 30%">フィールド</th>
+          <th style="width: 10%">タイプ</th>
+          <th style="width: 70%">説明</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">video</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>動画ID</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">video_name</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>動画の名前</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">start_time_ms</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>再生の開始からレンダリングされるビデオの最初のフレームまでの時間（ミリ秒単位）。これはエクスペリエンスによって異なる場合があります。たとえば、プレロール広告が設定されていない場合、この測定値は<code translate="No">play_request</code>そして<code translate="No">video_view</code>イベント。プレロール広告がある場合、その間の時間<code translate="No">ad_mode_begin</code>そして<code translate="No">ad_mode_complete</code>含めるべきではありません</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 id="engagementEventParams">video_engagementイベントパラメータ</h3>
+
+    <p>次のパラメータを一緒に送信する必要があります<code translate="No">video_engagement</code>イベント。</p>
+
+    <table class="bcls-table">
+      <thead class="bcls-table__head">
+        <tr>
+          <th style="width: 30%">フィールド</th>
+          <th style="width: 10%">タイプ</th>
+          <th style="width: 70%">説明</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">video</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>動画ID</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">video_name</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>動画の名前</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">range</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>視聴されたビデオの範囲<code translate="No">video_engagement</code>形式のイベント<code translate="No">StartSecond..EndSecond</code>（StartSecondとEndSecondの値は整数[整数]である必要があります）-範囲はエンゲージメントイベントから除外して、イベントの対象期間中に視聴アクティビティがなかったことを示すことができます。 （たとえば、再バッファリングアクティビティのみがある場合）</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">rendition_url</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>最後に選択したレンディションへの URL。たとえば、HLSストリームの場合、これは最後に選択されたバリアントへのURLになります</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">rendition_indicated_bps</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>最近選択されたレンディションの表示されたビットレート（ビット/秒）</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">rendition_mime_type</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>最近選択されたレンディションのmimeタイプ</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">rendition_height</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>ビデオレンディションのエンコードされた高さ（ピクセル単位）</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">rendition_width</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>ビデオレンディションのエンコードされた幅（ピクセル単位）</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">rebuffering_seconds</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>エンゲージメント期間中の要求されていない遅延のために、ユーザーがビデオの再生を待機するのに費やした秒数</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">rebuffering_count</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>エンゲージメント期間中の表されたエンゲージメント期間の遅延中に再バッファリングが原因で再生が停止した回数</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">forward_buffer_seconds</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>現在転送バッファにあるビデオの秒数</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">measured_bps</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>最近ダウンロードされたセグメントに含まれるビット数と、そのセグメントのダウンロードに費やされた時間の比率（ビット/秒）</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">player_width</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>エンゲージメント範囲の終了時のプレーヤーの現在のピクセル幅</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">player_height</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>エンゲージメント範囲の終了時のプレーヤーの現在のピクセルの高さ</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">dropped_frames</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>文字列</td>
+          <td>
+            <p>dropped_frames</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">video_duration</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>数値</td>
+          <td>
+            <p>秒単位のビデオの長さ</p>
+          </td>
+        </tr>
+        <tr>
+          <td><code translate="No">video_seconds_viewed</code><span class="label label-optional" style="float:right;">オプション</span></td>
+          <td>数値</td>
+          <td>
+            <p>の最後の更新以降に監視された秒数<code translate="No">video_engagement</code>イベント</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>ザ・<code translate="No">video_engagement</code>イベントは、動画の再生中に動画のエンゲージメントを追跡する手段であり、再生中に何度も送信される可能性があります。（再生が中断されない場合、Flash / HTML5プレーヤーインストルメンテーションはこのイベントを10秒ごとに送信します。）<strong>現在、20秒を超える範囲を表すイベントは、Analyticsシステムによって破棄されるため、これらのイベントをより頻繁に送信する必要があります。</strong></p>
+
+    <p>2つの形式があります<code translate="No">video_engagement</code>イベントは取ることができます（簡潔にするために他のパラメーターは省略されています）：</p>
+
+    <table class="bcls-table">
+      <thead class="bcls-table__head">
+        <tr>
+          <th>例</th>
+          <th>意味</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td>
+            <pre class="line-numbers" style="white-space:pre-wrap;padding-top:1em;padding-bottom:1em;">
+  <code class="language-http" translate="No">event=video_engagement&amp;video=123&amp;video_duration=75&amp;range=0..9
+  </code>
+  </pre>
+          </td>
+          <td>ビデオ<code translate="No">123</code> 75秒の長さで0から9秒まで再生されました（合計10秒が表示されました）。</td>
+        </tr>
+        <tr>
+          <td><code translate="No">event=video_engagement&amp;video=123&amp;video_seconds_viewed=10</code></td>
+          <td>10秒のビデオ<code translate="No">123</code>見られました。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>どちらのバージョンも視聴秒数を追跡しますが、<code translate="No">video_duration</code>そして<code translate="No">range</code>追加のエンゲージメントデータを計算するために必要な情報も含まれています。<strong>推奨される方法</strong>送信する<code translate="No">video_engagement</code>分析システムへのイベントデータ。ライブストリームの場合、または再生中にビデオのタイムラインが継続的に変更される場合、またはその他の点で信頼性が低い場合は、<code translate="No">video_seconds_viewed</code>利用可能な唯一のデータになります。VODの場合、<code translate="No">duration</code>利用できません、<code translate="No">video_engagement</code>イベントには含める必要があります<code translate="No">video_duration</code>そして<code translate="No">range</code>。</p>
+
+    <table class="bcls-table">
+      <thead class="bcls-table__head">
+        <tr>
+          <th>パラメーター</th>
+          <th>派生エンゲージメント指標（API）</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">video_duration</code>、<code translate="No">range</code></td>
+          <td><code translate="No">video_seconds_viewed</code>、<code translate="No">video_percent_viewed</code>、<code translate="No">engagement_score</code> ;エンゲージメントカーブデータ</td>
+        </tr>
+        <tr>
+          <td><code translate="No">video_seconds_viewed</code></td>
+          <td><code translate="No">video_seconds_viewed</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>3つのパラメータすべての場合（<code translate="No">video_duration</code>、<code translate="No">range</code>そして<code translate="No">video_seconds_viewed</code>）と一緒に送信されます<code translate="No">video_engagement</code>イベントの場合、分析システムはからエンゲージメント指標を計算します<code translate="No">video_duration</code> + <code translate="No">range</code>パラメーター。</p>
+
+    <h3 id="changesFromV1">V2の変更</h3>
+
+    <p>このセクションでは、v1を使用しているユーザー向けに、データコレクターのv1からv2への変更の概要を示します。</p>
+
+    <h3>トラッカーのベースURL</h3>
+
+    <pre>
+  <code translate="No">http(s)://metrics.brightcove.com/v2
+  </code>
+  </pre>
+
+    <h3>すべてのイベントでサポートされる追加のフィールド：</h3>
+
+    <p><strong>device_os_version</strong>：デバイスで使用されている OS のバージョン。指定されていない場合、これは追跡要求のユーザーエージェント文字列を解析することによって計算されます。</p>
+
+    <p><strong>platform_version</strong>：指定されたプラットフォームの新しいリリースがイベントの送信に使用されていることを示すために使用されます。</p>
+
+    <h3>V2の新しいイベント</h3>
+
+    <p><strong>catalog_request</strong>：videocloudカタログAPIへのリクエストが行われたときに送信されます-このイベントは内部使用のためであり、AnalyticsモジュールまたはAnalytics APIを介して公開されないことに注意してください。</p>
+
+    <ul>
+      <li><strong>catalog_url </strong> :に関連付けられているリンク先URL <code translate="No">catalog_request</code>イベント-このイベントは内部使用のためであり、AnalyticsモジュールまたはAnalytics APIを介して公開されないことに注意してください。</li>
+    </ul>
+
+    <p><strong>catalog_response</strong>：前への応答時に送信されます<code translate="No">catalog_request</code>受信-このイベントは内部使用のためであり、AnalyticsモジュールまたはAnalytics APIを介して公開されないことに注意してください。</p>
+
+    <ul>
+      <li><strong>catalog_url </strong> :に関連付けられているリンク先URL <code translate="No">catalog_request</code>この応答を開始したイベント-このイベントは内部使用のためであり、AnalyticsモジュールまたはAnalytics APIを介して公開されないことに注意してください。</li>
+      <li><strong>response_time_ms</strong>：ミリ秒単位の時間<code translate="No">catalog_request</code>イベントと<code translate="No">catalog_response</code>イベント-このイベントは内部使用のためであり、AnalyticsモジュールまたはAnalytics APIを介して公開されないことに注意してください。</li>
+    </ul>
+
+    <p><strong>play_request</strong>：ユーザーが明示的に再生ボタンをクリックしたときに再生が開始されたとき、またはプラットフォームが自動再生シナリオで再生をトリガーしたときに自動的に送信されます。</p>
+
+    <p><strong>ad_mode_begin</strong>：[置換<code translate="No">ad_start</code> ]再生プラットフォームから広告代理店にコントロールが渡されたときに送信されます。</p>
+
+    <p><strong>ad_mode_complete</strong>：[置換<code translate="No">ad_end</code> ]広告代理店から再生プラットフォームに制御が戻されたときに送信されます。</p>
+
+    <p><strong>エラー</strong>：再生体験を妨げる致命的なエラーが発生したときに送信されます。</p>
+
+    <ul>
+      <li><strong>エラーコード</strong>：イベントに関連付けられたプラットフォーム固有のエラーコード。</li>
+    </ul>
+
+    <h3>V2の更新されたイベント</h3>
+
+    <p><strong>video_view</strong>：新しいレイテンシ測定が含まれています</p>
+
+    <ul>
+      <li><strong>load_time_ms</strong>：ビデオのデータロードを開始してからビデオが再生可能になるまでの時間（ミリ秒単位）。</li>
+      <li><strong>start_time_ms</strong>：再生の開始からレンダリングされるビデオの最初のフレームまでの時間（ミリ秒単位）。これはエクスペリエンスによって異なる場合があります。たとえば、プレロール広告が設定されていない場合、この測定値は 'play_request間の時間です。' と<code translate="No">video_view</code>イベント。プレロール広告がある場合、その間の時間<code translate="No">ad_mode_begin</code>そして<code translate="No">ad_mode_complete</code>含まれるべきではありません。</li>
+    </ul>
+
+    <p><strong>video_engagement</strong>：追加のレンディション選択、ビットレート測定、およびバッファリング情報が含まれます。ビデオエンゲージメントにも微妙な変更が加えられ、エンゲージメント期間中に視聴が発生しなかった場合でも定期的に送信する必要があります。この変更は、ユーザーが再生を待機する原因となる再バッファリングの遅延とカウントを追跡できるようにするためのものです。</p>
+
+    <ul>
+      <li><strong>範囲</strong>：範囲パラメーターはオプションになりました。範囲をエンゲージメントイベントから除外して、イベントの対象期間中に視聴アクティビティがなかったことを示すことができます。 （たとえば、再バッファリングアクティビティのみがある場合）</li>
+      <li><strong>rendition_url</strong>：最後に選択したレンディションへの URL。たとえば、HLSストリームの場合、これは最後に選択されたバリアントへのURLになります。</li>
+      <li><strong>rendition_indicated_bps</strong>：最後に選択されたレンディションの、示されたビットレート（ビット/秒）。</li>
+      <li><strong>rendition_mime_type</strong>：最近選択されたレンディションのmimeタイプ。</li>
+      <li><strong>rendition_height</strong>：ビデオレンディションのエンコードされた高さ（ピクセル単位）</li>
+      <li><strong>rendition_width</strong>：ビデオレンディションのエンコードされた幅（ピクセル単位）</li>
+      <li><strong>rebuffering_seconds</strong>：エンゲージメント期間中の要求されていない遅延のために、ユーザーがビデオの再生を待機するのに費やした秒数。</li>
+      <li><strong>rebuffering_count</strong>：表示されたエンゲージメント期間中に再バッファリングが原因で再生が停止した回数。</li>
+      <li><strong>forward_buffer_seconds</strong>：現在フォワードバッファにあるビデオの秒数。</li>
+      <li><strong>Measurement_bps</strong>：最近ダウンロードされたセグメントに含まれるビット数と、そのセグメントのダウンロードに費やされた時間の比率（ビット/秒）。</li>
+      <li><strong>player_width</strong>エンゲージメント範囲の終了時のプレーヤーの現在のピクセル幅。</li>
+      <li><strong>player_height</strong>エンゲージメント範囲の終了時のプレーヤーの現在のピクセルの高さ。</li>
+      <li><strong>dropped_frames</strong>：このエンゲージメント期間中にビデオ再生からドロップされたフレーム数</li>
+    </ul>
+  </section>
+</article>
+<!-- complete bootstrap layout -->
+    </div>
+    <div class="col-sm-2 right-side-bar">
+      
+      <nav class="right-side-nav" id="right_side_nav">
+        <h6 class="toc">ページコンテンツ</h6>
+        <ul id="in_page_nav" class="list-none"></ul>
+      </nav>
+      
+    </div>
+  </div>
+</div>
+
+<hr>
+<div class="last-updated">
+  ページの最終更新日22 Sep 2021
+</div>
+
+<footer class="bcls-footer" role="contentinfo">
+  <div class="row">
+    <div class="region region-footer-top-center col-md-12">
+      <nav role="navigation" aria-labelledby="block-brightcovesupport-menu" id="block-brightcovesupport" class="footer-menu">
+        <img src="https://support.brightcove.com/site-assets/images/site/SVG/COVE004_Brightcove_Logo_093020_RGB_KO.svg" class="bc-footer-logo" alt="Brightcove">
+
+        <h2>Brightcoveサポート</h2>
+
+        <ul class="menu">
+          <li>
+            <a href="https://status.brightcove.com">システムステータス</a>
+          </li>
+          <li>
+            <a href="https://supportportal.brightcove.com/s/login/?">サポートへのお問い合わせ</a>
+          </li>
+          <li>
+            <a href="https://support.brightcove.com/">ドキュメンテーション</a>
+          </li>
+        </ul>
+
+      </nav>
+      <nav role="navigation" aria-labelledby="block-training-menu" id="block-training" class="footer-menu">
+
+        <h2>トレーニング</h2>
+
+        <ul class="menu">
+          <li>
+            <a href="https://studio.support.brightcove.com/training/online-training-courses.html">オンラインコース</a>
+          </li>
+          <li>
+            <a href="https://studio.support.brightcove.com/training/register-training.html">コースに登録する</a>
+          </li>
+          <li>
+            <a href="https://university.brightcove.com/">Brightcove University</a>
+          </li>
+        </ul>
+
+      </nav>
+      <nav role="navigation" aria-labelledby="block-brightcove-menu" class="footer-menu">
+
+        <h2>Brightcove</h2>
+
+        <ul class="menu">
+          <li>
+            <a href="https://www.brightcove.com">Brightcove.com</a>
+          </li>
+          <li>
+            <a href="https://supportportal.brightcove.com/s/login/?">お問合せ</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <div class="row">
+    <div class="region region-footer-bottom-center col-md-12">
+      <div class="bcls-copyright footer-menu">
+        <table>
+          <tr>
+            <td>
+              <div id="bc_copyright" class="field field--name-field-copyright-year field--type-string field--label-hidden field--item" style="float: left;"> Brightcove Inc. All rights reserved.</div>
+            </td>
+            <td><a href="https://www.brightcove.com/en/legal/privacy">プライバシー</a> | <a href="https://www.brightcove.com/en/terms-and-conditions">利用規約</a></td>
+            <td>
+              <div class="gf-links-cols footer-menu">
+                <div class="gf-social"><a href="https://www.linkedin.com/company/16439" title="LinkedIn" newtab="newtab" class="gf-social-linkedin" style="margin-right: 1rem;"><i data-feather="linkedin" style="color:#8E9093;height: 1.25rem;"></i></a><a href="https://twitter.com/brightcove" title="Twitter" newtab="newtab" class="gf-social-twitter" style="margin-right: 1rem;"><i data-feather="twitter" style="color:#8E9093;height: 1.25rem;"></i></a><a href="https://www.facebook.com/Brightcove" title="Facebook" newtab="newtab" class="gf-social-facebook"><i data-feather="facebook" style="color:#8E9093;height: 1.25rem;"></i></a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+      
+  var searchBox = sajari.init（{ mode: "search-box", project: "1588255093746585379", // Set this to your project. collection: "brightcove-documenation", // Set this to your collection. instantPipeline: "autocomplete", // Pipeline used as you type inputPlaceholder: "Search", // Input element placeholder maxSuggestions: 5, // Maximum number of suggestions to show attachSearchBox: document.getElementById("nav-search-box") // DOM element to attach to }）; searchBox（ "sub"、 "pipeline.search-sent"、関数（_、クエリ）{ window.location = "/search.html?q=" + encodeURIComponent(query.q); }）;
+  
+
+</script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://support.brightcove.com/site-assets/js/site/https-fix.js"></script>
+  <script src="https://support.brightcove.com/site-assets/js/site/setDate.js"></script>
+  
+  <script src="https://support.brightcove.com/site-assets/js/site/prism.js"></script>
+  
+  <script src="https://support.brightcove.com/site-assets/js/site/site.js"></script>
+  <script src="https://support.brightcove.com/site-assets/js/site/tabs.js"></script>
+  <script src="https://support.brightcove.com/site-assets/js/site/toc.js"></script>
+  <script src="/assets/js/sites_nav.js"></script>
+  <script src="https://support.brightcove.com/site-assets/js/site/bcls-utils.js"></script>
+  <script src="https://support.brightcove.com/site-assets/js/site/local-link-fix.js"></script>
+  <script src="/assets/js/feedback.js"></script>
+  
+  <script src="/assets/js/sajari-search-foot.js"></script>
+  
+	<script>
+		フェザー.replace（）
+	</script>
+  <!-- <script src="/assets/js/sajari-index.js"></script> -->
+  <style>
+    a.sj-paginator__page-number.sj-paginator__page-number--current.css-so0ov7 { background-color: lightblue; } div.sj-tabs__tab { margin-top: 3rem; margin-left: .3rem; border-top-left-radius: .4rem; border-top-right-radius: .4rem; background-color:#e8e8e8; } div.sj-tabs__tab.sj-tabs__tab--選択済み{ border-bottom-color: crimson; background-color: #f8f8f8; } p.sj-results__result__description.css-p9jvyt { font-size: 1rem; } .sj-result__text.css-31l7gp h3 { color: navy; font-size: 1.4rem; }
+    </style>
+
+</body>
+
+</html>

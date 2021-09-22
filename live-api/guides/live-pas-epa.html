@@ -1,0 +1,193 @@
+---
+title: ライブでPAS / EPAを使用する
+description: このトピックでは、ライブストリームでのPlayback Authorization Service（PAS）またはPlayback Rights Management Service（EPA）の使用について説明します。
+parent: Guides 
+grandparent: Live API
+layout: staging
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article" id="bcls_article">
+  <summary>{{ page.description }}</summary>
+  <aside class="bcls-aside bcls-aside--information"><a href="https://apis.support.brightcove.com/playback-authorization/index.html">PAS</a>と<a href="https://apis.support.brightcove.com/playback-rights/index.html">EPA</a>現在、限定可用性リリースです。これらのサービスの使用に興味がある場合は、アカウントマネージャーに連絡してください。</aside>
+  <section class="bcls-section">
+    <h2 id="Introduction">入門</h2>
+    <p>DRM によって提供される保護を拡張するために、ライブジョブに対して PAS または EPA のいずれかを有効にできます。PAS では、特定のユーザエージェントへの再生を制限する、または IP アドレスの変更回数または総使用量の制限など、制限された一連の制限があります。ライブの場合、顧客はそのユーザーの DRM CRT を上書きすることもできます。これらの制限は、再生認可<a href="https://general.support.brightcove.com/developer/create-jwt-stage.html#Claims_for_Playback_Authorization"> JWT </a>で直接指定されます。</p>
+    <p>EPA は、より包括的な制限セットを提供します。これらの制限のセットの 1 つは、再生権限管理 API を使用して設定され、<code translate="No">id</code>再生権限を使用して参照されます。これは<code translate="No">id</code>、ビデオに関連付けられるか（<code translate="No">playback_rights_id</code>下の属性を使用して）<a href="https://general.support.brightcove.com/developer/create-jwt-stage.html#Claims_for_Playback_Rights"> JWTに含めることができます</a>。2 番目のセットには、同時実行制限やデバイス数などのユーザーレベルの制限が含まれます。これらは JWT クレームで直接指定されます (ユーザーID [v <code translate="No">uid</code>クレーム] も含める必要があります)。</p>
+    <p>どちらのモードでも、Video Cloud ビデオが作成され、ライブジョブにリンクされるように、<code translate="No">videocloud.video</code>ジョブリクエストに属性を含める必要があります。<code translate="No">playback_rights_id</code>この属性をVideo Cloud ビデオで更新して、<a href="https://apis.support.brightcove.com/cms/references/reference.html#operation/UpdateVideo"> CMS API を使用して再生制限を変更できます</a>。</p>
+    <p>また、使用しているものに応じて<a href="https://general.support.brightcove.com/developer/create-jwt-stage.html">、PAS または EPA に適したクレームを使用して JWT を作成する必要があります</a>。ライセンスサーバー要求には、JWT を含める必要があります。独自のプレーヤーを実装する場合は、(DRM トークンに加えて) <code translate="No">BCOV-Auth</code><code translate="No">bcov_auth</code>ヘッダーまたはクエリパラメータにこの値を渡す必要があります。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Create_Live_job_with_EPA_PAS">EPA/PAS でライブジョブを作成する</h2>
+    <p>ライブジョブに EPA または PAS を追加するために、次の新しいフィールドが使用されます。</p>
+    <h3><code translate="No">drm</code>オブジェクトの新しいフィールド:</h3>
+    <dl>
+      <dt><code translate="No">require_playback_token</code> ( ブール値)</dt>
+      <dd>PAS をイネーブルにします。ライセンスをリクエストする場合、再生認証 JWT が必要になります。</dd>
+      <dt><code translate="No">check_playback_rights</code> ( ブール値)</dt>
+      <dd>EPA を有効にします。ライセンスをリクエストする場合、再生認証 JWT が必要になります。ビデオまたは JWT に関連付けられた再生権限 ID を使用して、制限を適用します。</dd>
+    </dl>
+    <h3><code translate="No">videocloud.video</code>オブジェクトの新しいフィールド:</h3>
+    <aside class="bcls-aside bcls-aside--information">このフィールドは、CMS APIを使用してビデオに追加する必要があることに注意してください <em>後</em> ビデオの作成時に追加できないため、ライブジョブを作成します。</aside>
+    <dl>
+      <dt><code translate="No">playback_rights_id</code> ( 文字列)</dt>
+      <dd>指定した EPA 再生権限をビデオに関連付けます。</dd>
+    </dl>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Sample_request_response">リクエストとレスポンスの例</h2>
+    <p>以下は、EPA でライブジョブを作成するためのLive API リクエストボディの例です。注:ライブジョブ用に作成されたビデオをで更新する CMS API リクエストもあります<code translate="No">playback_rights_id</code>。（このフィールドは、<strong>ビデオ更新リクエストでのみ追加できるため</strong>、Live API リクエストがビデオを作成した後に追加する必要があります）。</p>
+    <h3>リクエスト本文の例</h3>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "live_stream": true,
+  "region": "us-west-2",
+  "reconnect_time": 300,
+  "ad_insertion": false,
+  "static": false,
+  "drm": {
+    "modes":["all"],
+    <span class="bcls-highlignt">"require_playback_token": true,</span>
+    <span class="bcls-highlignt"></span>"check_playback_rights": true</code> }、 "live_dvr_sliding_window_duration"：300、 "videocloud"：{ "live_to_vod": true, "video": { "name": "Test EPA", "description": "", "long_description": "", "tags": [], "reference_id": "", "link": { "url": "", "text": "" }、 "カスタムフィールド"：{} }}、 "出力"：[ { "label": "hls720p", "live_stream": true, "height": 720, "video_bitrate": 2000, "segment_seconds": 6, "keyframe_interval": 60 }、{ "label": "hls480p", "live_stream": true, "height": 480, "video_bitrate": 1000, "segment_seconds": 6, "keyframe_interval": 60 } ]}</code></pre>
+    <details>
+      <summary><h2>レスポンスの例</h2></summary>
+      <p>ハイライトされた行には、<code translate="No">id</code>追加する必要があるビデオが含まれています<code translate="No">playback_rights_id</code></p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "id": "f47487cf81f84764b280fbfaefed524a",
+  "outputs": [
+      {
+          "id": "0-f47487cf81f84764b280fbfaefed524a",
+          "label": "hls720p"
+      },
+      {
+          "id": "1-f47487cf81f84764b280fbfaefed524a",
+          "label": "hls480p"
+      },
+      {
+          "id": "2-f47487cf81f84764b280fbfaefed524a",
+          "playlist_type": "defaultS3",
+          "type": "playlist",
+          "drm": {
+              "token": "eyJh...axy8",
+              "modes": [
+                  {
+                      "type": "fairplay",
+                      "key_system": "com.apple.fps.1_0",
+                      "license_url": "https://license-proxy-qa.alive.us-west-2.qa.deploys.brightcove.com/lic/fp?token=eyJh...axy8",
+                      "certificate_url": "https://license-proxy-qa.alive.us-west-2.qa.deploys.brightcove.com/cert/fp?token=eyJh...axy8",
+                      "filename": "playlist_fp.m3u8",
+                      "dvr_filename": "playlist_fp_dvr.m3u8",
+                      "playback_url": "https://playback-qa.a-live.io/f47487cf81f84764b280fbfaefed524a/us-west-2/NA/playlist_fp.m3u8",
+                      "playback_url_dvr": "https://playback-qa.a-live.io/f47487cf81f84764b280fbfaefed524a/us-west-2/NA/playlist_fp_dvr.m3u8",
+                      "playback_added_cdns": []
+                  },
+                  {
+                      "type": "widevine",
+                      "key_system": "com.widevine.alpha",
+                      "license_url": "https://license-proxy-qa.alive.us-west-2.qa.deploys.brightcove.com/lic/wv?token=eyJh...axy8",
+                      "filename": "playlist_wv.m3u8",
+                      "dvr_filename": "playlist_wv_dvr.m3u8",
+                      "playback_url": "https://playback-qa.a-live.io/f47487cf81f84764b280fbfaefed524a/us-west-2/NA/playlist_wv.m3u8",
+                      "playback_url_dvr": "https://playback-qa.a-live.io/f47487cf81f84764b280fbfaefed524a/us-west-2/NA/playlist_wv_dvr.m3u8",
+                      "playback_added_cdns": []
+                  },
+                  {
+                      "type": "playready",
+                      "key_system": "com.microsoft.playready",
+                      "license_url": "https://license-proxy-qa.alive.us-west-2.qa.deploys.brightcove.com/lic/pr?token=eyJh...axy8",
+                      "filename": "playlist.mpd",
+                      "dvr_filename": "playlist_dvr.mpd",
+                      "playback_url": "https://playback-qa.a-live.io/f47487cf81f84764b280fbfaefed524a/us-west-2/NA/playlist.mpd",
+                      "playback_url_dvr": "https://playback-qa.a-live.io/f47487cf81f84764b280fbfaefed524a/us-west-2/NA/playlist_dvr.mpd",
+                      "playback_added_cdns": []
+                  }
+              ],
+              "token_expires_in": 43200,
+              "require_playback_token": true,
+              "check_playback_rights": true
+          }
+      }
+  ],
+  "stream_url": "rtmp://ep8-usw2.a-live.io:1935/f47487cf81f84764b280fbfaefed524a",
+  "stream_name": "alive",
+  "static": false,
+  "event_length": 93600,
+  <span class="bcls-highlignt">"job_videocloud_asset_id": "70701312966202",</span>
+  "encryption": {},
+  "drm_enabled": true,
+  "drm": {
+    "token": "eyJh...axy8",
+    "modes": [
+      {
+        "type": "fairplay",
+        "key_system": "com.apple.fps.1_0",
+        "license_url": "https://license-proxy-qa.alive.us-west-2.qa.deploys.brightcove.com/lic/fp?token=eyJhb...axy8",
+        "certificate_url": "https://license-proxy-qa.alive.us-west-2.qa.deploys.brightcove.com/cert/fp?token=eyJhb...axy8",
+        "filename": "playlist_fp.m3u8",
+        "dvr_filename": "playlist_fp_dvr.m3u8",
+        "playback_url": "https://playback-qa.a-live.io/f47487cf81f84764b280fbfaefed524a/us-west-2/NA/playlist_fp.m3u8",
+        "playback_url_dvr": "https://playback-qa.a-live.io/f47487cf81f84764b280fbfaefed524a/us-west-2/NA/playlist_fp_dvr.m3u8",
+        "playback_added_cdns": []
+      },
+      {
+        "type": "widevine",
+        "key_system": "com.widevine.alpha",
+        "license_url": "https://license-proxy-qa.alive.us-west-2.qa.deploys.brightcove.com/lic/wv?token=eyJhb...axy8",
+        "filename": "playlist_wv.m3u8",
+        "dvr_filename": "playlist_wv_dvr.m3u8",
+        "playback_url": "https://playback-qa.a-live.io/f47487cf81f84764b280fbfaefed524a/us-west-2/NA/playlist_wv.m3u8",
+        "playback_url_dvr": "https://playback-qa.a-live.io/f47487cf81f84764b280fbfaefed524a/us-west-2/NA/playlist_wv_dvr.m3u8",
+        "playback_added_cdns": []
+      },
+      {
+        "type": "playready",
+        "key_system": "com.microsoft.playready",
+        "license_url": "https://license-proxy-qa.alive.us-west-2.qa.deploys.brightcove.com/lic/pr?token=eyJh...axy8",
+        "filename": "playlist.mpd",
+        "dvr_filename": "playlist_dvr.mpd",
+        "playback_url": "https://playback-qa.a-live.io/f47487cf81f84764b280fbfaefed524a/us-west-2/NA/playlist.mpd",
+        "playback_url_dvr": "https://playback-qa.a-live.io/f47487cf81f84764b280fbfaefed524a/us-west-2/NA/playlist_dvr.mpd",
+        "playback_added_cdns": []
+      }
+    ],
+    "token_expires_in": 43200,
+    "require_playback_token": true,
+    "check_playback_rights": true
+  }
+}</code></pre>
+    </details>
+    <h3>CMS API リクエスト</h3>
+    <p>再生権限 ID をビデオに追加するには、次のリクエスト本文を使用して CMS API <a href="https://apis.support.brightcove.com/cms/references/reference.html#operation/UpdateVideo">にビデオ更新リクエストを送信します</a>。</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+	"playback_rights_id": "<span class="bcls-input">your playback_rights_id</span>"
+}</code></pre>
+  </section>
+  <section class="bcls-section">
+    <h2 id="player_implementation">プレイヤーの実装</h2>
+    <p>BrightcoveのウェブプレーヤーまたはBrightcoveのネイティブプレーヤー SDK のいずれかを使用してライブストリームを配信する場合、PAS または EPA の実装は VOD の場合と同じです。以下のいずれかを参照してください。</p>
+    <h3>PAS </h3>
+    <ul>
+      <li><a href="https://apis.support.brightcove.com/playback-authorization/guides/using-pas-with-bcp.html">Brightcoveプレーヤーでの再生認可 DRM の使用</a></li>
+      <li><a href="https://apis.support.brightcove.com/playback-authorization/guides/using-pas-with-sdks.html">ネイティブ SDK での再生認可 DRM の使用</a></li>
+    </ul>
+    <h3>EPA </h3>
+    <ul>
+      <li><a href="https://apis.support.brightcove.com/playback-rights/guides/using-epa-with-bcp.html">Brightcoveプレーヤーでの再生権限の使用</a></li>
+      <li><a href="https://apis.support.brightcove.com/playback-rights/guides/using-epa-with-sdks.html">ネイティブ SDK での再生権限の使用</a></li>
+    </ul>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Related_topics">関連トピック</h2>
+    <ul>
+      <li><a href="https://apis.support.brightcove.com/playback-authorization/index.html">PAS </a></li>
+      <li><a href="https://apis.support.brightcove.com/playback-rights/index.html">EPA </a></li>
+      <li><a href="https://general.support.brightcove.com/developer/create-jwt-stage.html#Claims_for_Playback_Authorization">JSON ウェブトークンの作成 (JWT) </a></li>
+      <li><a href="https://apis.support.brightcove.com/playback-authorization/guides/using-pas-with-bcp.html">Brightcoveプレーヤーでの再生認可 DRM の使用</a></li>
+      <li><a href="https://apis.support.brightcove.com/playback-authorization/guides/using-pas-with-sdks.html">ネイティブ SDK での再生認可 DRM の使用</a></li>
+      <li>a href=」https://apis.support.brightcove.com/playback-rights/guides/using-epa-with-bcp.html "&gt; Brightcoveプレーヤーでの再生権限の使用</a></li>
+      <li><a href="https://apis.support.brightcove.com/playback-rights/guides/using-epa-with-sdks.html">ネイティブ SDK での再生権限の使用</a></li>
+    </ul>
+  </section>
+</article>
+
+<script>
+  var h1 = document.querySelector（ 'h1'）、path = location.pathname、new_location = 'https：//live.support.brightcove.com/live-api/guides/live-playback-restrictions.html'、message = '<h3>このページはに移動しました<a href="' + new_location + '">'  + new_location + '</a>。ブックマークを更新してください！5秒でリダイレクトされます。<h3>'; console.log（ 'new_location'、new_location）; h1.insertAdjacentHTML（ 'afterend'、message）;リダイレクト（）;関数redirect（）{ var t = window.setTimeout(go_to_new_location, 5000); }関数go_to_new_location（）{ window.location.href = new_location; }
+</script>

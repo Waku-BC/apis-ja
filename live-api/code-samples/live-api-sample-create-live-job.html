@@ -1,0 +1,58 @@
+---
+title:  'ライブAPIサンプル：ライブジョブを作成する'
+parent: Code Samples 
+grandparent: Live API 
+---
+
+<article class="bcls-article">
+  <h1>ライブAPIサンプル：ライブジョブの作成</h1>
+  <summary>このサンプルでは、簡単なライブジョブの作成方法を学習します。</summary>
+
+
+<section class="bcls-section">
+<h2 id="Introduction">入門</h2>
+
+<p>この例では、3 つの出力レンディションを持つ単純な Live ジョブを作成します。1080p、720p、480p。</p>
+
+<p>なぜなら<span translate="No">ライブAPI</span> CORSに対応しておらず、サーバー側のアプリからアクセスする必要がある場合、APIリクエストはPHPで記述された単純なプロキシを介して送信されます。これは、任意のサーバーサイド言語で再現できます。JavaScript によって送信されたリクエストパラメーターを収集し、API にリクエストを送信し、応答を JavaScript に返すことです。すべてのコードは、<a href="#code">以下のコードセクションにあります</a>。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="create_live_job_app">ライブジョブアプリの作成</h2>
+このサンプルに関連付けられているすべてのコードを、この<a href="https://github.com/BrightcoveLearning/18519-live-api-sample-create-live-job"> GitHub リポジトリで検索します</a>。
+
+<p data-height="1400" data-theme-id="dark" data-slug-hash="ZoYoVY" data-default-tab="result" data-user="rcrooks1969" data-embed-version="2" data-pen-title="Live API Sample: Create a Live Job" class="codepen"><a href="https://codepen.io/team/rcrooks1969/pen/ZoYoVY/">ペンLive API のサンプルを参照してください。ライブジョブを作成する</a> Brightcove Learning Services（<a href="https://codepen.io/rcrooks1969"> @ rcrooks1969</a>） オン<a href="https://codepen.io">CodePen</a>。</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script></section>
+
+<section class="bcls-section">
+<h2 id="Using_the_CodePen" class="bcls-expander-head">CodePen を使用する</h2>
+
+<div class="bcls-expander-content">
+<p>上記のCodePenを効果的に使用するためのヒントは次のとおりです。</p>
+
+<ul>
+	<li>[ <strong>結果</strong> ] ボタンをクリックして、プレーヤーの実際の表示を切り替えます。</li>
+	<li><strong>HTML/CSS/JS </strong>ボタンをクリックして、コードタイプの 1 つを表示します。</li>
+	<li><strong>右上隅にある CodePen の編集をクリックして</strong>、この CodePen を自分のアカウントにフォークします。</li>
+	<li>このサンプルに関連付けられているすべてのコードを、この<a href="https://github.com/BrightcoveLearning/18519-live-api-sample-create-live-job"> GitHub リポジトリで検索します</a>。</li>
+</ul>
+</div>
+</section>
+
+<section class="bcls-section">
+<h2 id="code">プロキシコード</h2>
+
+<p>このサンプルでは、CodePen (および関連する GitHub レポ) にあるコードに加えて、API リクエストを作成し、アプリに応答を返すプロキシが必要です。このアプリでは、PHPを使用し、コードを以下に示します。プロキシを構築するには、任意のサーバー側言語を使用できます。</p>
+
+<details>
+	<summary>プロキシサンプルコード</summary>
+	<pre class="line-numbers">
+	<code class="language-php">&lt;？php / ** * live-proxy.php --Brightcove Live APIのプロキシ*リクエストを行い、応答を返します*アクセス：*（HTTPS経由で*常に*プロキシにアクセスする必要があることに注意してください）*メソッド：POST * * @post {string} url-APIリクエストのURL * @post {string} [requestType = GET]-リクエストのHTTPメソッド* @ post {string} [requestBody]-書き込みリクエストで送信されるJSONデータ* @ post {string} apiKey-ライブAPIキー** @returns {string} $ response-APIから受信したJSON応答* / // CORSイネーブルメントおよびその他のヘッダーheader（ "Access-Control-Allow-Origin：*"）; header（ "Content-type：application / json"）; header（ "X-Content-Type-Options：nosniff"）; header（ "X-XSS-Protection"）; $ requestData = json_decode（file_get_contents（ 'php：// input'））; // API呼び出しを設定します// APIキーを取得します$ apikey = $ requestData-&gt; apiKey; //リクエストタイプを取得するか、デフォルトでGETになりますif（$ requestData-&gt; requestType）{ $method = $requestData-&gt;requestType; }そうしないと{ $method = "GET"; } //より多くのセキュリティチェック$ needle = '。io'; $ endapi = strpos（$ requestData-&gt; url、$ needle）+ 3; $ nextChar = substr（$ requestData-&gt; url、$ endapi、1）; if（strpos（$ requestData-&gt; url、 'api.bcovlive.io'）== false）{ exit('{"ERROR":"Only requests to Brightcove Live APIs are accepted by this proxy"} '）; } else if（$ nextChar！== '/'  &amp;&amp; $ nextChar！== '？'）{ exit('{"ERROR": "There was a problem with your API request - please check the URL"} '）; } //フォームデータからURLと承認情報を取得します$ request = $ requestData-&gt; url; // httpリクエストを送信するif（$ requestData-&gt; requestBody）{ $ch = curl_init($request); curl_setopt_array($ch, array( CURLOPT_CUSTOMREQUEST =&gt; $method, CURLOPT_RETURNTRANSFER =&gt; TRUE, CURLOPT_SSL_VERIFYPEER =&gt; FALSE, CURLOPT_HTTPHEADER =&gt; array( 'Content-type: application/json', "X-API-KEY: {$apikey} "、）、CURLOPT_POSTFIELDS =&gt; $ requestData-&gt; requestBody））; $ response = curl_exec（$ ch）; curl_close（$ ch）;} else { $ch = curl_init($request); curl_setopt_array($ch, array( CURLOPT_CUSTOMREQUEST =&gt; $method, CURLOPT_RETURNTRANSFER =&gt; TRUE, CURLOPT_SSL_VERIFYPEER =&gt; FALSE, CURLOPT_HTTPHEADER =&gt; array( 'Content-type: application/json', "X-API-KEY: {$apikey} "、）））; $ response = curl_exec（$ ch）; curl_close（$ ch）;} //エラーをチェックするif（$ response === FALSE）{ $logEntry = "\nError:\n". "\n".date("Y-m-d H:i:s")." UTC \n" .$response; $logFileLocation = "log.txt"; $fileHandle = fopen($logFileLocation, 'a') or die("-1"); fwrite($fileHandle, $logEntry); fclose($fileHandle); echo '{"ERROR": "There was a problem with your API call"} '+ die（curl_error（$ ch））; } //応答をデコードします// $ responseData = json_decode（$ response、TRUE）; // AJAX呼び出し元に応答を返します$ responseDecoded = json_decode（$ response）; // if（！isset（$ responseDecoded））{ // $response = '{null} '; //} echo $ response; ？&gt;</code></pre>
+</details>
+</section>
+
+<script src="//learning-services-media.brightcove.com/doc-assets/node/18519-live-api-sample-create-live-job/create-job.js">
+
+</script>
+
+</article>

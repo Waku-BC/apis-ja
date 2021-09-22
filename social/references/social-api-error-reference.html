@@ -1,0 +1,84 @@
+---
+title:  'Social API：エラーリファレンス'
+description:  'このトピックでは、SocialAPIエラーのリファレンスを提供します。'
+parent: References 
+grandparent: Social API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  <section class="bcls-section">
+    <h2 id="errorMessages">一般的なエラーメッセージ</h2>
+    <table class="bcls-table">
+      <thead class="bcls-table__head">
+        <tr>
+          <th>ステータス</th>
+          <th>名前</th>
+          <th>メッセージ</th>
+          <th>原因</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td>401</td>
+          <td><code translate="No">UNAUTHORIZED</code></td>
+          <td><code translate="No">Permission denied.</code></td>
+          <td>OAuth アクセストークンがないか無効です。アクセストークンを指定した場合は、このリクエストに適切なスコープがない可能性があります</td>
+        </tr>
+        <tr>
+          <td>403</td>
+          <td><code translate="No">FORBIDDEN</code></td>
+          <td>&nbsp;</td>
+          <td>リソースにアクセスする権限がありません。ほとんどの場合、リクエストURLにエラーがあります。</td>
+        </tr>
+        <tr>
+          <td>404</td>
+          <td><code translate="No">RESOURCE_NOT_FOUND</code></td>
+          <td><code translate="No">Resource does not exist.</code></td>
+          <td>存在しないリソースを要求しました。スペルチェックとパスエラーです。</td>
+        </tr>
+        <tr>
+          <td>422</td>
+          <td>&nbsp;</td>
+          <td><code translate="No">(Message varies according to the problem; examples: </code>
+            <ul>
+              <li><code translate="No">"Page size is not within the range(1-100) 200"</code></li>
+              <li><code translate="No">"The since parameter must be an ISO-8601 datetime string"</code></li>
+            </ul>
+            <code translate="No"> )</code></td>
+          <td>クエリパラメータをチェックして、値が有効であることを確認します</td>
+        </tr>
+        <tr>
+          <td>500</td>
+          <td>&nbsp;</td>
+          <td><code translate="No">an internal error occurred</code></td>
+          <td>Brightcoveシステムの問題-後でもう一度お試しください。</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  <section class="bcls-section">
+    <h2 id="social_sharing_errors">ソーシャル共有エラー</h2>
+    <p>ソーシャル共有エラーは、API リクエストに対する個別のエラー応答として返されるのではなく、<code translate="No">errors</code>通常の応答の配列で返されます。</p>
+    <p>共有操作が失敗した場合、API <code translate="No">"result": "ERROR"</code>は次の内容を含むエラーオブジェクトを報告して返します。</p>
+    <ul>
+      <li><code translate="No">error_code</code> -ソーシャルプラットフォームからサーバーから記録されたエラーコード（存在する場合）。</li>
+      <li><code translate="No">error_message</code> -サーバーによって記録された、またはソーシャルプラットフォームから返されたエラーメッセージ（存在する場合）。</li>
+      <li><code translate="No">platform_error</code> -ソーシャルプラットフォームから返されたエラーオブジェクトの JSON 表現（存在する場合）。</li>
+    </ul>
+    <p>ここに例があります</p>
+    <pre class="line-numbers">
+<code class="language-json" translate="No">"errors": [
+  {
+    "error_code": "UPLOAD_FAILURE",
+    "message": "Upload error: Received Facebook error response of type OAuthException: (#100) sponsor_id requires publishing profile/page to be verified or branding partner. (code 100, subcode null)"
+  }
+]</code></pre>
+    <p>返されるエラーの詳細については、特定のソーシャルプラットフォームのドキュメントを参照してください。</p>
+    <ul>
+      <li><a href="https://developers.google.com/youtube/v3/docs/errors">ユーチューブ</a></li>
+      <li><a href="https://developers.facebook.com/docs/graph-api/video-uploads#errors">フェイスブック</a></li>
+      <li><a href="https://developer.twitter.com/en/docs/basics/response-codes.html">ツイッター</a></li>
+    </ul>
+  </section>
+</article>

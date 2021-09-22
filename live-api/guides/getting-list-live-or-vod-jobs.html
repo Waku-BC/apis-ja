@@ -1,0 +1,150 @@
+---
+title: ライブまたはVODジョブのリストの取得
+description:  'このトピックでは、ライブジョブまたはライブVODジョブのリストを取得する方法について詳しく説明します。'
+parent: Guides 
+grandparent: Live API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+ <summary>{{ page.description }}</summary>
+<section class="bcls-section">
+<h2 id="Introduction">入門</h2>
+
+<p>Live API <code translate="No">GET</code><code translate="No">https://api.bcovlive.io/v1/jobs</code>のエンドポイントへのリクエストにより、作成したライブジョブのリストを取得できます。同様に、ライブジョブの VOD <code translate="No">GET</code><code translate="No">https://api.bcovlive.io/v1/jobs/{job_id}/vods</code>ジョブのリストを取得するリクエストです。これらのリクエストの詳細については、「<a href="/live-api/references/reference.html"> API リファレンス</a>」を参照してください。このトピックでは、概要といくつかの追加の詳細について説明します。記載がない限り、以下に説明するパラメーターは、これらの要求の両方に適用されます。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="pagination">ページネーション</h2>
+
+<p>結果のページネーションは、<code translate="No">start_token</code><code translate="No">page_size</code>およびクエリパラメータによって処理されます。ページサイズは、各リクエストで返される結果の数を示し、1 ～ 1000 の任意の数値に設定できます。</p>
+
+<p>追加の結果がある場合、<code translate="No">next_token</code>各応答にはフィールドが含まれます。<code translate="No">start_token</code><code translate="No">next_token</code>をの値に設定すると、結果の次のページが返されます。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="sorting">並べ替える</h2>
+
+<p>結果は、パラメータを使用してソートできます。<code translate="No">sort</code>このパラメータは<code translate="No">created_at</code> (デフォルト) またはに設定できます<code translate="No">modified_at</code>。<code translate="No">sort_dir</code>パラメータを<code translate="No">asc</code> (デフォルト) またはに設定して、ソート方向を設定することもできます<code translate="No">desc</code>。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="search_filters">検索フィルタ</h2>
+
+<p>検索フィルタパラメータを追加することで、結果を絞り込むことができます。すべての検索フィルタはオプションです。<code translate="No">AND</code>複数のフィルターは条件として扱われます。つまり、結果に VoD ジョブを含めるには、すべての条件を満たす必要があります。</p>
+
+<p>次の形式を使用して、1 つのフィルタに複数の値を指定できます。</p>
+
+<pre>
+<code class="language-http" translate="No">{filter}=[value1,value2]</code></pre>
+
+<p><code translate="No">OR</code>この方法で指定したフィルタ値は条件として扱われます。いずれかの値に一致すると、ジョブが返されます。</p>
+
+<p>比較演算子は、フィルタ値の前にコロンで区切って含めることができます。</p>
+
+<pre>
+<code class="language-http" translate="No">{filter}={op}:{value}</code></pre>
+
+<p>演算子は、<code translate="No">gt</code>（より大きい）、<code translate="No">ge</code>（より大きい）、（より大きい）、<code translate="No">lt</code>（より小さい）、<code translate="No">le</code>（より小さい）です。たとえば、2018 年 1 月 1 日以降に作成された VoD ジョブを検索するには:</p>
+
+<pre>
+<code class="language-http" translate="No">created_at=gt:1514764800000</code></pre>
+
+<p>フィルタの種類は、値から推定されます。数値またはブール値を文字列として扱う必要がある場合は、一重引用符で囲むことができます。</p>
+
+<pre>
+<code class="language-http" translate="No">{filter}=’1234’</code></pre>
+
+<table class="bcls-table">
+	<caption class="bcls-caption--table">検索フィルタ</caption>
+	<thead class="bcls-table__head">
+		<tr>
+			<th>フィルタ名</th>
+			<th>タイプ</th>
+			<th>説明/値</th>
+		</tr>
+	</thead>
+	<tbody class="bcls-table__body">
+		<tr>
+			<td><code translate="No">user_id</code></td>
+			<td>文字列, 文字列の配列</td>
+			<td>ユーザーID</td>
+		</tr>
+		<tr>
+			<td><code translate="No">created_at</code></td>
+			<td>整数</td>
+			<td>UNIXジョブ作成時間（ミリ秒単位）</td>
+		</tr>
+		<tr>
+			<td><code translate="No">modified_at</code></td>
+			<td>整数</td>
+			<td>ジョブの最終状態変更のUNIX時間（ミリ秒単位）</td>
+		</tr>
+		<tr>
+			<td><code translate="No">static</code></td>
+			<td>ブール値</td>
+			<td>静的エンドポイントがある (リストジョブ要求の場合のみ)</td>
+		</tr>
+		<tr>
+			<td><code translate="No">state</code></td>
+			<td>文字列, 文字列の配列</td>
+			<td>1 つまたは複数のジョブ状態 (リストジョブ要求のみ)</td>
+		</tr>
+		<tr>
+			<td><code translate="No">jvod_state</code></td>
+			<td>文字列, 文字列の配列</td>
+			<td>1 つ以上の VOD ジョブ状態（リストの VoD ジョブリクエストのみ）</td>
+		</tr>
+		<tr>
+			<td><code translate="No">jvod_type</code></td>
+			<td>文字列, 文字列の配列</td>
+			<td>1 つ以上の VOD ジョブタイプ (リストの VOD ジョブリクエストのみ)</td>
+		</tr>
+		<tr>
+			<td><code translate="No">label</code></td>
+			<td>文字列, 文字列の配列</td>
+			<td>1 つ以上の VOD ジョブラベル (リストの VOD ジョブリクエストのみ)</td>
+		</tr>
+		<tr>
+			<td><code translate="No">sep_state</code></td>
+			<td>文字列, 文字列の配列</td>
+			<td>1 つ以上の静的エンドポイント状態 (リストジョブ要求のみ)</td>
+		</tr>
+		<tr>
+			<td><code translate="No">ssai_state</code></td>
+			<td>文字列, 文字列の配列</td>
+			<td>1 つ以上の SSAI 状態 (リストジョブ要求のみ)</td>
+		</tr>
+		<tr>
+			<td><code translate="No">region</code></td>
+			<td>文字列, 文字列の配列</td>
+			<td>1 つ以上のリージョン (リストジョブリクエストのみ)</td>
+		</tr>
+		<tr>
+			<td><code translate="No">account_id</code></td>
+			<td>文字列</td>
+			<td>特定のアカウントを検索するか、「*」を指定してすべてのアカウントを検索します。デフォルト値はアカウント API キーが属しています</td>
+		</tr>
+		<tr>
+			<td><code translate="No">{other_job_fields}</code></td>
+			<td>フィールドタイプから推測</td>
+			<td>他のジョブフィールドは、その内部名と値を指定することによってフィルタリングすることができます</td>
+		</tr>
+	</tbody>
+</table>
+</section>
+
+<section class="bcls-section">
+<h2 id="examples"> 例</h2>
+
+<p>以下は、ライブジョブを取得するためのリクエストの例です。</p>
+
+<dl>
+	<dt>終了状態のライブジョブを取得し、最後に作成された最初のジョブを表示します。</dt>
+	<dd><code translate="No">https://api.bcovlive.io/v1/jobs?state=finished&amp;sort=created_at&amp;sort_dir=desc</code></dd>
+	<dt>現在アクティブな SEP ライブジョブを取得する</dt>
+	<dd><code translate="No">https://api.bcovlive.io/v1/jobs?static=true&amp;sep_state=ready</code></dd>
+	<dt>2018-10-01 以降に作成されたライブジョブを取得する</dt>
+	<dd><code translate="No">https://api.bcovlive.io/v1/jobs?created_at=gt:1538428165517</code></dd>
+</dl>
+</section>
+</article>

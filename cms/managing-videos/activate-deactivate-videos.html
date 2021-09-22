@@ -1,0 +1,244 @@
+---
+title:  'ビデオのアクティブ化/非アクティブ化またはスケジュール'
+description:  'このトピックでは、を使用してビデオをアクティブ化、非アクティブ化、またはスケジュールする方法を示します。<span translate="No"> CMS API</span>。'
+parent: Managing Videos/Assets 
+grandparent: CMS API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+    <section id="intro" class="bcls-section">
+    <h2>入門</h2>
+    
+    <p>しばらくしてからビデオを再生できないようにする理由はいくつかあります。例は次のとおりです。</p>
+    <ul>
+      <li>まだレビュー中です</li>
+      <li>まだ公開されていない映画の予告編です</li>
+      <li>これは、まだ開始されていない、または終了していないマーケティングキャンペーンの一部です。</li>
+      <li>まだ公開されていないニュース記事の一部です</li>
+    </ul>
+
+    <p>動画埋め込みコードをまだ公開ページやアプリに配置していない場合は、もちろん表示できませんが、誤って動画を公開する可能性があります。最も明白なのは、タグやその他のプロパティがスマートに適合していることです。公開されているプレイリスト。</p>
+
+    <p>VideoCloudビデオを表示できないようにする方法は2つあります。</p>
+    <ul>
+      <li>非アクティブ化</li>
+      <li>将来のある時点で再生できるようにスケジュールします</li>
+    </ul>
+
+    <p>これらの変更は両方ともStudioのMediaモジュールを介して実装できますが、ここでは、<span translate="No"> CMS API</span>。これらのアクションは両方とも、<a href="/cms/references/reference.html#operation/UpdateVideo">ビデオ更新リクエスト</a>。</p>
+
+    <aside class="bcls-aside bcls-aside--warning">注：アクティブ化/非アクティブ化とスケジューリングのメカニズムは完全に独立しているため、ユースケースに応じてどちらか一方を使用する必要がありますが、両方を使用することはできません。に従ってビデオを再生できる場合<code translate="no">スケジュール</code>、しかしその<code translate="no">州</code>は<code translate="no">非活性</code>、ビデオは再生されません。</aside>
+  </section>
+  <section class="bcls-section">
+    <h2 id="authentication">認証</h2>
+    <p>へのリクエスト<span translate="No">CMS API</span>アクセストークンを含む認証ヘッダーが必要です。クライアントクレデンシャルを取得してアクセストークンを取得する方法の詳細については、「<a href="/oauth/getting-started/overview-oauth-api-v4.html"> Brightcove OAuth の概要</a>」を参照してください。</p>
+    <p>を使用してクライアントの資格情報を作成できます<a href="/getting-started/authentication-brightcove-api-requests.html">スタジオ管理ページ</a>または<a href="/oauth/guides/oauth-create-client-credentials-using-curl.html">OAuth API</a></p>
+
+    <p>また、使用することができます<a href="/oauth/guides/getting-access-tokens.html">OAuth API</a>アクセストークンを直接取得する場合、またはを使用している場合<span class="”notranslate”">郵便配達員</span>また<span class="”notranslate”">不眠症</span>アプリまたはリクエストを行うには、アクセストークンをフェッチするようにこれらを設定する方法に関するチュートリアルを参照してください。</p>
+    <ul>
+      <li><a href="/general/use-insomnia-api-requests.html">不眠症を使用してAPIリクエストを行う</a></li>
+      <li><a href="/general/use-postman-api-requests.html">Postmanを使用してAPIリクエストを行う</a></li>
+    </ul>
+  </section>
+    
+  <section class="bcls-section">
+    <h2 id="update_video">ビデオの更新リクエスト</h2>
+    
+    <p>ビデオを更新するには、<code translate="no">パッチ</code>リクエストする</p>
+
+<pre class="line-numbers"><code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/<span class="bcls-input">account_id</span>/videos/<span class="bcls-input">video_id</span></code></pre>
+    
+    <p>通常、リクエストの本文には、更新するフィールドのみを含める必要がありますが、現在の値で他のフィールドを含めることもできます。次のセクションでは、アクティブ化/非アクティブ化およびスケジューリングのリクエスト本文を確認します。</p>
+  </section>
+
+  <section class="bcls-section">
+    <h2 id="Activate_deactivate_video">ビデオをアクティブ化/非アクティブ化</h2>
+    <p>ビデオを設定することにより、ビデオをアクティブ（表示可能）または非アクティブ（非表示）にします<code translate="no">州</code>。デフォルトでは、ビデオは<code translate="no">アクティブ</code>それらが取り込まれると（ビデオの作成時に省略された、またはアップロードモジュールを使用してアップロードされた必須フィールドがない場合）。</p>
+    <aside class="bcls-aside bcls-aside--information">ビデオはStudioMediaモジュールのビデオプレビューで引き続き再生可能であることに注意してください（レビュー中にビデオを非アクティブ化する場合に便利です）。</aside>
+    <p>次に、ビデオを非アクティブ化するには、ビデオの更新要求とともに次の要求本文を送信する必要があります。</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "state": "INACTIVE"
+}</code></pre>
+    <p>ビデオが非アクティブになったことを確認するには、<code translate="no">州</code> API応答のフィールド</p>
+    <details>
+      <summary>レスポンスの例</summary>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "id": "1698990613556232930",
+  "account_id": "57838016001",
+  "ad_keys": null,
+  "clip_source_video_id": null,
+  "complete": true,
+  "created_at": "2021-05-06T06:48:31.963Z",
+  "created_by": {
+    "type": "unknown"
+  },
+  "cue_points": [
+  ],
+  "custom_fields": {
+  },
+  "delivery_type": "dynamic_origin",
+  "description": "Updated at: 2021-05-07T22:37:46.492Z",
+  "digital_master_id": null,
+  "duration": 41259,
+  "economics": "AD_SUPPORTED",
+  "folder_id": null,
+  "geo": null,
+  "has_digital_master": true,
+  "images": {
+    "poster": {
+      "src": "https://cf-images.us-east-1.prod.boltdns.net/v1/jit/57838016001/1494916a-e8a7-45ac-882f-6e0aa3489846/main/1280x720/20s629ms/match/image.jpg",
+      "sources": [
+        {
+          "src": "https://cf-images.us-east-1.prod.boltdns.net/v1/jit/57838016001/1494916a-e8a7-45ac-882f-6e0aa3489846/main/1280x720/20s629ms/match/image.jpg",
+          "height": 720,
+          "width": 1280
+        }
+      ]
+    },
+    "thumbnail": {
+      "src": "https://cf-images.us-east-1.prod.boltdns.net/v1/jit/57838016001/1494916a-e8a7-45ac-882f-6e0aa3489846/main/160x90/20s629ms/match/image.jpg",
+      "sources": [
+        {
+          "src": "https://cf-images.us-east-1.prod.boltdns.net/v1/jit/57838016001/1494916a-e8a7-45ac-882f-6e0aa3489846/main/160x90/20s629ms/match/image.jpg",
+          "height": 90,
+          "width": 160
+        }
+      ]
+    }
+  },
+  "link": null,
+  "long_description": null,
+  "name": "Great Horned Owl",
+  "original_filename": "greathornedowl.mp4",
+  "projection": null,
+  "published_at": "2021-05-06T06:48:31.963Z",
+  "reference_id": "greathornedowl.mp4_1620283704192",
+  "schedule": null,
+  "sharing": null,
+  <span class="bcls-highlight">"state": "INACTIVE"</span>,
+  "tags": [
+    "bird",
+    "air",
+    "nature"
+  ],
+  "text_tracks": [
+  ],
+  "updated_at": "2021-05-16T22:54:09.168Z",
+  "updated_by": {
+    "type": "api_key",
+    "email": "rcrooks@brightcove.com"
+  },
+  "offline_enabled": false,
+  "playback_rights_id": "primary"
+}</code></pre>
+    </details>
+
+    <p>動画を再びアクティブにするには、リクエスト本文を使用して別の動画更新リクエストを送信するだけです。</p>
+
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "state": "ACTIVE"
+}</code></pre>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Schedule_video">ビデオをスケジュールする</h2>
+    <p>ビデオを再生可能または再生不可能にする2番目の方法は、<code translate="no">スケジュール</code>動画更新リクエストのオブジェクト。NS <code translate="no">スケジュールオブジェクトには2つのプロパティがあります。</code></p>
+    <ul>
+      <li><code translate="no">start_at</code>ビデオが再生可能になるISO-8601日時（必須）</li>
+      <li><code translate="no">extends_at</code>ビデオが再生できなくなったISO-8601日時（オプション）</li>
+    </ul>
+
+    <p>これは、2021年5月16日の午前6:00（UTC）に動画を再生可能にし、ちょうど1年後に再び再生不可能にするリクエスト本文のサンプルです。</p>
+
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "schedule": {
+		"starts_at": "2021-05-16T06:00:00.000Z",
+		"ends_at": "2022-05-16T06:00:00.000Z"
+	}
+}</code></pre>
+
+    <details>
+      <summary>レスポンスの例</summary>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "id": "1698990613556232930",
+  "account_id": "57838016001",
+  "ad_keys": null,
+  "clip_source_video_id": null,
+  "complete": true,
+  "created_at": "2021-05-06T06:48:31.963Z",
+  "created_by": {
+    "type": "unknown"
+  },
+  "cue_points": [
+  ],
+  "custom_fields": {
+  },
+  "delivery_type": "dynamic_origin",
+  "description": "Updated at: 2021-05-07T22:37:46.492Z",
+  "digital_master_id": null,
+  "duration": 41259,
+  "economics": "AD_SUPPORTED",
+  "folder_id": null,
+  "geo": null,
+  "has_digital_master": true,
+  "images": {
+    "poster": {
+      "src": "https://cf-images.us-east-1.prod.boltdns.net/v1/jit/57838016001/1494916a-e8a7-45ac-882f-6e0aa3489846/main/1280x720/20s629ms/match/image.jpg",
+      "sources": [
+        {
+          "src": "https://cf-images.us-east-1.prod.boltdns.net/v1/jit/57838016001/1494916a-e8a7-45ac-882f-6e0aa3489846/main/1280x720/20s629ms/match/image.jpg",
+          "height": 720,
+          "width": 1280
+        }
+      ]
+    },
+    "thumbnail": {
+      "src": "https://cf-images.us-east-1.prod.boltdns.net/v1/jit/57838016001/1494916a-e8a7-45ac-882f-6e0aa3489846/main/160x90/20s629ms/match/image.jpg",
+      "sources": [
+        {
+          "src": "https://cf-images.us-east-1.prod.boltdns.net/v1/jit/57838016001/1494916a-e8a7-45ac-882f-6e0aa3489846/main/160x90/20s629ms/match/image.jpg",
+          "height": 90,
+          "width": 160
+        }
+      ]
+    }
+  },
+  "link": null,
+  "long_description": null,
+  "name": "Great Horned Owl",
+  "original_filename": "greathornedowl.mp4",
+  "projection": null,
+  "published_at": "2021-05-06T06:48:31.963Z",
+  "reference_id": "greathornedowl.mp4_1620283704192",
+  <span class="bcls-highlight">"schedule": {
+    "ends_at": "2022-05-16T06:00:00.000Z",
+    "starts_at": "2021-05-16T06:00:00.000Z"
+  }</span>,
+  "sharing": null,
+  "state": "ACTIVE",
+  "tags": [
+    "bird",
+    "air",
+    "nature"
+  ],
+  "text_tracks": [
+  ],
+  "updated_at": "2021-05-17T00:42:45.172Z",
+  "updated_by": {
+    "type": "api_key",
+    "email": "rcrooks@brightcove.com"
+  },
+  "offline_enabled": false,
+  "playback_rights_id": "primary"
+}</code></pre>
+    </details>
+  </section>
+  
+  <section class="bcls-section">
+    <h2 id="Related_topics">関連トピック</h2>
+    <ul>
+      <li><a href="https://studio.support.brightcove.com/basics/video-cloud-basics-activating-and-deactivating-video.html">ビデオクラウドの基本：ビデオのアクティブ化と非アクティブ化</a></li>
+      <li><a href="https://studio.support.brightcove.com/media/configuring-video-availability.html">ビデオ可用性の設定</a></li>
+    </ul>
+  </section>
+</article>

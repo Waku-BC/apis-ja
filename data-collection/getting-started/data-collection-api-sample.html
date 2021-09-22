@@ -1,0 +1,56 @@
+---
+title:  'Data Collection APIサンプル'
+description:  'このサンプルでは、BrightcoveWebまたはSDKプレーヤーで表示されていないビデオの分析データを取得できるようにデータコレクターに情報を送信する方法を学習します。この手法は<strong><em>not</em></strong> Brightcove WebまたはSDKプレーヤーを使用している場合は、分析データが重複するため、使用してください。'
+parent: Data Collection API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+    <section class="bcls-section">
+    <h2 id="limitations">制約事項</h2>
+    
+    <aside class="bcls-aside bcls-aside--information">このサンプルと関連コードは、製品開発のガイドとして提供されています。このコードは、実稼働での使用が認定されておらず、正式にサポートされていません。</aside>
+    </section>
+    
+    <section class="bcls-section">
+    <h2 id="player">CodePen</h2>
+    <h3>ソースコード</h3>
+    <p>
+      このサンプルに関連付けられているすべてのコードを、この<a href="https://github.com/BrightcoveLearning/17987-data-collection-api-sample"> GitHub リポジトリで検索します</a>。
+    </p>
+    <h3>サンプルアプリ</h3>
+    <p data-height="1200" data-theme-id="dark" data-slug-hash="QmRWvL" data-default-tab="result" data-user="rcrooks1969" data-embed-version="2" data-pen-title="Collection API Sample" class="codepen">ペンを見る<a href="https://codepen.io/team/rcrooks1969/pen/QmRWvL/">コレクションAPIサンプル</a> Brightcove Learning Services（<a href="https://codepen.io/rcrooks1969"> @ rcrooks1969</a>） オン<a href="https://codepen.io">CodePen</a>。</p>
+    <script async src="https://static.codepen.io/assets/embed/ei.js"></script></section>
+    
+    <section class="bcls-section">
+      <details>
+    <h2 id="Using_the_CodePen">CodePen を使用する</h2>
+    
+    <p>上記のCodePenを効果的に使用するためのヒントは次のとおりです。</p>
+    
+    <ul>
+      <li>[ <strong>結果</strong> ] ボタンをクリックして、プレーヤーの実際の表示を切り替えます。</li>
+      <li><strong>HTML/CSS/JS </strong>ボタンをクリックして、コードタイプの 1 つを表示します。</li>
+      <li><strong>右上隅にある CodePen の編集をクリックして</strong>、この CodePen を自分のアカウントにフォークします。</li>
+      <li>このサンプルに関連付けられているすべてのコードを、この<a href="https://github.com/BrightcoveLearning/17987-data-collection-api-sample"> GitHub リポジトリで検索します</a>。</li>
+    </ul>
+    </details>
+    </section>
+    
+    <section class="bcls-section">
+    <h2 id="Code_for_the_sample">サンプルに関する注意</h2>
+    
+    <p>このサンプルのコードはすべてJavaScriptで、2つの部分があります（どちらもCodePenにあります：プラグインスクリプトは上部にあり、下部にはプラグインをプレーヤーに追加する短いコード）。</p>
+    
+    <ul>
+      <li>プラグインをvideojsプレーヤーに追加するスクリプト</li>
+      <li>データコレクターにデータを送信するプラグインのスクリプト</li>
+    </ul>
+    
+    <aside class="bcls-aside bcls-aside--tip">
+    <p>データがデータ収集 API に「送信」される方法は、リクエスト URL <code translate="No">src</code>を新しいイメージの値として設定することです（<code translate="No">img</code>）。要素を選択し、その要素をページに注入します。</p>
+    
+    <p>ではなく、同じ方法を使用する必要があります<code translate="No">XMLHttpRequest</code>または回避するために他のいくつか<a href="https://general.support.brightcove.com/developer/concepts-cors.html">CORS</a>問題。</p>
+    </aside>
+    </section>
+    </article>

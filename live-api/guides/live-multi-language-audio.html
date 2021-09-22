@@ -1,0 +1,215 @@
+---
+title: ライブ多言語音声
+description: このトピックでは、異なる言語の複数のオーディオトラックを使用してライブジョブを作成する方法について説明します。
+parent: Guides 
+grandparent: Live API
+layout: staging
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+
+  <section class="bcls-section">
+    <h2 id="Requirements">要件</h2>
+    <ul>
+      <li>多言語オーディオ機能を有効にした Live API 用のアカウント設定 (詳細については、アカウントマネージャーにお問い合わせください)</li>
+      <li>Live API の API キー (アカウントの設定時に提供されます)</li>
+      <li>RTP プロトコルをサポートするエンコーダ。多言語オーディオのサポートは、<code translate="No">rtp</code><code translate="No">rtp-fec</code>またはプロトコルに制限されています。</li>
+      <li>ジョブを作成するときは、各オーディオトラックのPIDを知っている必要があります。</li>
+    </ul>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Create_your_Live_Job">ライブジョブを作成する</h2>
+
+    <p>ジョブに複数のオーディオトラックを追加するには、ライブジョブの作成時にリクエストボディにオーディオトラックのリストを指定する必要があります。</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "live_stream": true,
+  "region": "us-west-2",
+  "protocol": "rtp",
+  "cidr_whitelist": [ /* omitted… */ ],
+  "outputs": [ /* omitted… */ ],
+  <span class="bcls-highlight">"alternate_audio": {
+    "tracks": [ { Track Details } ]
+  }</span>
+}</code></pre>
+    <h3><code translate="No">Track</code>オブジェクトでサポートされるフィールド</h3>
+    <p>以下の表は、<code translate="No">track</code>オブジェクトでサポートされるフィールドの完全な説明を示しています</p>
+    <table class="bcls-table">
+      <caption class="bcls-caption--table">トラックフィールド</caption>
+      <thead class="bcls-table__head">
+          <tr>
+              <th>フィールド</th>
+              <th>説明</th>
+          </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+          <tr>
+              <td><code translate="No">pid</code></td>
+              <td><strong>必須</strong>。Wowza に送信されるストリームファイルで指定されているトラックの着信 TS から選択する PID。</td>
+          </tr>
+          <tr>
+              <td><code translate="No">language</code></td>
+              <td>
+                <strong>必須</strong>。使用する言語のコード。現時点では、これは柔軟性があり、仕様によって要求/サポートされているさまざまな言語形式、特に要件に応じてISO-639をカバーするRFC5456/BCP47のいずれかであってもかまいません。<a href="https://tools.ietf.org/html/rfc5646">https://tools.ietf.org/html/rfc5646 </a>
+                <p>&gt; <code translate="No">LANGUAGE</code> HLSフィールド</p>
+                <p>&gt; <code translate="No">AdaptationSet:lang</code>ダッシュフィールド</p>
+              </td>
+          </tr>
+          <tr>
+              <td><code translate="No">variant</code></td>
+              <td>
+                <strong>任意</strong>。DASHロールスキーマの値 (メイン、代替、解説、補足、ダブ) にマッピングします。<code translate="No">urn:mpeg:dash:role:2011</code>ダッシュロールで使用します。<code translate="No">main</code>デフォルトはです。
+                <p>HLS &gt; の特徴を参照してください<a href="https://tools.ietf.org/html/rfc8216#section-4.3.4.1"> https://tools.ietf.org/html/rfc8216#section-4.3.4.1 </a></p>
+              </td>
+          </tr>
+          <tr>
+              <td><code translate="No">label</code></td>
+              <td><strong>任意</strong>。トラックに使用するテキスト説明です。可能な場合はプレーヤーが使用することを推奨します。使用場所:&gt; <code translate="No">NAME</code> HLSフィールド。デフォルトは、各トラックの ID <code translate="No">language</code>を持つです。例えば、<code translate="No">en-0</code>指定されていない場合。</td>
+          </tr>
+          <tr>
+              <td><code translate="No">streams</code> []</td>
+              <td>
+                <strong>任意</strong>。コピーが存在しない場合は、デフォルトのオーディオ設定のみを使用してください。 
+                <p>HLS &gt; <code translate="No">GROUP-ID</code>(オブジェクト)</p>
+                <p>例: <code translate="No">{ “source”: “720p” }</code> -出力ソースのラベルを一致させます。</p> <p>これは、<code translate="No">streams</code>プレイリストの出力タイプのフィールドを模倣します。</p>
+              </td>
+          </tr>
+          <tr>
+              <td><code translate="No">default</code></td>
+              <td>
+                <strong>デフォルト以外の場合は必須です</strong>。<code translate="No">DEFAULT</code>でマークするオーディオトラックと<code translate="No">EXT-X-MEDIA</code>、ビデオストリームにマルチプレックスするオーディオトラック*
+                <p>存在しない場合、最初のものはデフォルトです。</p>
+                <p>* 複数のプレイリストが異なるデフォルトで定義されている場合、トップレベルのデフォルトトラックはマルチプレベルのトラックです</p>
+              </td>
+          </tr>
+      </tbody>
+  </table>
+  </section>
+  <section class="bcls-section">
+    <h2 id="example">例</h2>
+    <p>このサンプルボディは、2 つのオーディオトラックを持つジョブを作成します。</p>
+    <h3>要求</h3>
+<pre><code class="language-http" translate="No">POST https://api.bcovlive.io/v1/jobs
+  Content-Type: application/json
+  X-API-KEY: <span class="bcls-input">your_API_key</span></code></pre>
+    <h3>リクエスト本文</h3>
+<pre class="line-numbers">&lt;code class = "language-json" translate = "No&gt; { "live_stream": true, "region": "us-west-2", "protocol": "rtp", "cidr_whitelist": [ "0.0.0.0/0" ], "outputs": [ { "label": "hls720p", "live_stream": true, "height": 720, "video_bitrate": 2400, "segment_seconds": 6, "keyframe_interval": 90 }、{ "label": "hls540p", "live_stream": true, "height": 540, "video_bitrate": 1200, "segment_seconds": 6, "keyframe_interval": 90 } ]、<span class="bcls-highlight"> "alternate_audio"：{ "tracks": [ { "label": "English", "language": "en", "variant": "main", "pid": 257, "default": true }、{ "label": "Spanish", "language": "es", "variant": "main", "pid": 258 } ]}</span> }</code></pre>
+    <details>
+      <summary><h2>レスポンスの例</h2></summary>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "id": "76f814fbcd7840e99ebf0e335c933730",
+  "outputs": [
+      {
+          "id": "0-76f814fbcd7840e99ebf0e335c933730",
+          "playback_url": "https://playback-qa.a-live.io/76f814fbcd7840e99ebf0e335c933730/us-west-2/NA/profile_0/chunklist.m3u8",
+          "playback_url_dvr": "https://playback-qa.a-live.io/76f814fbcd7840e99ebf0e335c933730/us-west-2/NA/profile_0/chunklist_dvr.m3u8",
+          "playback_url_vod": "https://playback-qa.a-live.io/76f814fbcd7840e99ebf0e335c933730/us-west-2/NA/profile_0/chunklist_vod.m3u8",
+          "playback_added_cdns": [],
+          "label": "hls720p"
+      },
+      {
+          "id": "1-76f814fbcd7840e99ebf0e335c933730",
+          "playback_url": "https://playback-qa.a-live.io/76f814fbcd7840e99ebf0e335c933730/us-west-2/NA/profile_1/chunklist.m3u8",
+          "playback_url_dvr": "https://playback-qa.a-live.io/76f814fbcd7840e99ebf0e335c933730/us-west-2/NA/profile_1/chunklist_dvr.m3u8",
+          "playback_url_vod": "https://playback-qa.a-live.io/76f814fbcd7840e99ebf0e335c933730/us-west-2/NA/profile_1/chunklist_vod.m3u8",
+          "playback_added_cdns": [],
+          "label": "hls540p"
+      },
+      {
+          "id": "2-76f814fbcd7840e99ebf0e335c933730",
+          "playlist_type": "defaultS3",
+          "type": "playlist",
+          "alternate_audio": {
+              "tracks": [
+                  {
+                      "label": "English",
+                      "language": "en",
+                      "name": "Alt0",
+                      "pid": 257,
+                      "playlistDefault": true,
+                      "default": true,
+                      "variant": "main",
+                      "profile_sources": [
+                          "profile_0"
+                      ]
+                  },
+                  {
+                      "label": "Spanish",
+                      "language": "es",
+                      "name": "Alt1",
+                      "pid": 258,
+                      "playlistDefault": false,
+                      "default": false,
+                      "variant": "main",
+                      "profile_sources": [
+                          "profile_0"
+                      ]
+                  }
+              ]
+          },
+          "filename": "playlist.m3u8",
+          "dvr_filename": "playlist_dvr.m3u8",
+          "playback_url": "https://playback-qa.a-live.io/76f814fbcd7840e99ebf0e335c933730/us-west-2/NA/playlist.m3u8",
+          "playback_url_dvr": "https://playback-qa.a-live.io/76f814fbcd7840e99ebf0e335c933730/us-west-2/NA/playlist_dvr.m3u8",
+          "playback_added_cdns": []
+      }
+  ],
+  <span class="bcls-highlight">"stream_url": "rtp://ep3-usw2.a-live.io:11780"</span>,
+  "stream_name": "76f814fbcd7840e99ebf0e335c933730.stream",
+  "static": false,
+  "alternate_audio": {
+      "tracks": [
+          {
+              "label": "English",
+              "language": "en",
+              "pid": 257,
+              "default": true,
+              "variant": "main",
+              "name": "Alt0"
+          },
+          {
+              "label": "Spanish",
+              "language": "es",
+              "pid": 258,
+              "default": false,
+              "variant": "main",
+              "name": "Alt1"
+          }
+      ]
+  },
+  "event_length": 93600,
+  "encryption": {},
+  <span class="bcls-highlight">"playback_url": "https://playback-qa.a-live.io/76f814fbcd7840e99ebf0e335c933730/us-west-2/NA/playlist.m3u8"</span>,
+  "playback_url_dvr": "https://playback-qa.a-live.io/76f814fbcd7840e99ebf0e335c933730/us-west-2/NA/playlist_dvr.m3u8",
+  "playback_added_cdns": []
+}
+</code></pre>
+    </details>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Configure_your_encoder">エンコーダーを設定する</h2>
+    <p>作成応答から stream_url に RTP 経由で MPEG-TS を配信するようにエンコーダを設定します。リクエスト本文で提供されるオーディオトラックが、エンコーダで正しい PID で設定されていることを確認します。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Test_Playback">テスト再生</h2>
+    <p>Playback_url <a href="http://players.brightcove.net/3303963094001/player-reference-app/index.html">をBrightcoveプレーヤーまたは</a> Safari にロードして、再生を確認します。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="DRM Playback">playback</h2>
+    <p>現時点では、DRM はキャッチアップ (タイムシフト) サービスでのみサポートされています。[Create Job] リクエスト本文に次のフィールドを追加します。</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "drm": {
+    "modes": [
+      "all"
+    ]
+  },
+  "timeshift": {
+    "type": "single",
+    "startover_duration": 36000,
+    "skip_live_output": true
+  }
+}
+</code></pre>
+    <p>応答には、<code translate="No">timeshift_url</code>再生に使用するDRM出力とが含まれます。</p>
+  </section>
+</article>

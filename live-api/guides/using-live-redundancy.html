@@ -1,0 +1,489 @@
+---
+title:  'ライブ冗長性の使用'
+description:  '冗長グループを使用すると、2つ以上のライブジョブを1つのストリームに結合し、自動フェイルオーバーを使用して、中断のない信頼性の高い再生を実現できます。このガイドでは、冗長グループの作成、ジョブの追加、およびLive APIを使用したフェイルオーバーの強制について説明します。'
+parent: Guides 
+grandparent: Live API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  <section class="bcls-section">
+    <h2 id="Introduction">入門</h2>
+    
+    <p>Brightcove Live の冗長性機能は、最初のストリームが機能しなくなった場合に Live が自動的にフェイルオーバーするバックアップストリームを作成することで、ライブイベントの信頼性の高いパフォーマンスを保証するのに役立ちます。</p>
+    
+    <p>Live API へのすべてのリクエストには、次のヘッダーが必要です。</p>
+    
+    <table class="bcls-table">
+      <caption class="bcls-caption--table">API リクエストヘッダー</caption>
+      <thead class="bcls-table__head">
+        <tr>
+          <th>キー</th>
+          <th>値</th>
+          <th>注</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">X-API-KEY</code></td>
+          <td>{your API Key}</td>
+          <td>Brightcove Live アカウントを開いたときにキーが提供されているはずです</td>
+        </tr>
+        <tr>
+          <td><code translate="No">Content-Type</code></td>
+          <td>アプリケーション/json</td>
+          <td>技術的には、<code translate="No">content-type</code>ヘッダーは、要求本文を含む書き込み要求にのみ必要ですが、読み取り要求に害を及ぼすことはありません。</td>
+        </tr>
+      </tbody>
+    </table>
+    </section>
+    
+    <section class="bcls-section">
+    <h2 id="Create_your_Live_jobs">ライブジョブを作成する</h2>
+    
+    <p>冗長セットアップの場合は、2 つ以上の Brightcove ライブジョブを作成する必要があります。ジョブの唯一の要件は、<strong></strong><code translate="No">output</code>同じ設定で作成されることです 。これを達成する最も簡単な方法は、必要な出力仕様で 1 つのジョブを作成し、<code translate="No">copy_outputs_from_job</code>パラメータを使用して追加のジョブを作成することです。</p>
+    
+    <p>これらのジョブを作成できるリージョンに制限はありませんが、お互いに比較的近くに配置することをお勧めします。</p>
+    
+    <p>ライブジョブを作成したら、後のためにジョブ ID を保持します。これらのジョブを冗長グループに追加するために使用するリクエストボディは、次のようになります (以下のセクションを参照)。</p>
+    
+    <pre class="line-numbers">
+    <code class="language-json" translate="No">[
+      {
+        "job_id": "0b76bc73f92f46dc917bbe5061c0c633"
+      },
+      {
+        "job_id": "0ae5a4a71dc54b3181af0f98ee407c27"
+      }
+    ]</code></pre>
+    </section>
+    
+    <section class="bcls-section">
+    <h2 id="Create_the_redundant_group">冗長グループの作成</h2>
+    
+    <p>冗長グループを作成するには、<code translate="No">POST</code>次の宛てにリクエストを送信します。</p>
+    
+    <pre>
+    <code class="language-http" translate="No">https://api.bcovlive.io/v1/redundantgroups</code></pre>
+    
+    <p>リクエストボディの例を次に示します。</p>
+    
+    <pre class="line-numbers">
+    <code class="language-json" translate="No">{
+      "ad_insertion": true,
+      "processing_regions": ["us-west-2"],
+      "storage_regions": ["us-west-2", "us-east-1"],
+      "label": "Test RG",
+      "live_dvr_sliding_window_duration": 1800
+    }</code></pre>
+    
+    <p>以下の表に、リクエストボディのフィールドの全リストを示します。いくつかのケースでは、これらはライブジョブの作成に使用されるフィールドと同じです。フィールドの詳細については、<a href="/live-api/references/reference.html">Live API リファレンスを参照してください</a>。</p>
+    
+    <table class="bcls-table">
+      <caption class="bcls-caption--table">冗長グループフィールドの作成</caption>
+      <thead class="bcls-table__head">
+        <tr>
+          <th>フィールド</th>
+          <th>タイプ</th>
+          <th>必須/任意</th>
+          <th>説明</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">ad_insertion</code></td>
+          <td>ブール値</td>
+          <td>オプショナル</td>
+          <td>このストリームを SSAI を有効にする必要がある場合は true に設定します</td>
+        </tr>
+        <tr>
+          <td><code translate="No">add_cdns</code></td>
+          <td>配列</td>
+          <td>オプショナル</td>
+          <td>マニフェスト生成に使用される追加の CDN プロバイダーの配列。提供された CDN ごとに、それに応じてマニフェストが先頭に付加されます</td>
+        </tr>
+        <tr>
+          <td><code translate="No">drm</code></td>
+          <td>オブジェクト</td>
+          <td>オプショナル</td>
+          <td>まだサポートされていません</td>
+        </tr>
+        <tr>
+          <td><code translate="No">encryption</code></td>
+          <td>オブジェクト</td>
+          <td>オプショナル</td>
+          <td>まだサポートされていません</td>
+        </tr>
+        <tr>
+          <td><code translate="No">label</code></td>
+          <td>文字列</td>
+          <td>必須</td>
+          <td>グループを識別するラベル</td>
+        </tr>
+        <tr>
+          <td><code translate="No">live_dvr_sliding_window_duration</code></td>
+          <td>整数</td>
+          <td>オプショナル</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code translate="No">notifications</code></td>
+          <td>配列</td>
+          <td>オプショナル</td>
+          <td>通知先オブジェクトまたは文字列の配列</td>
+        </tr>
+        <tr>
+          <td><code translate="No">processing_regions</code></td>
+          <td>配列</td>
+          <td>必須</td>
+          <td>冗長グループのリージョンの処理。これにより、マニフェストを生成する AWS リージョンが決まります。これは、storage_regions とライブジョブが作成されるリージョンと一致することを推奨します。</td>
+        </tr>
+        <tr>
+          <td><code translate="No">storage_regions</code></td>
+          <td>配列</td>
+          <td>必須</td>
+          <td>ストレージリージョンのメディアチャンクとプレイリストは S3 にアップロードされます。これは processing_regions とライブジョブが作成されるリージョンと一致することを推奨します。</td>
+        </tr>
+        <tr>
+          <td><code translate="No">videocloud</code></td>
+          <td>オブジェクト</td>
+          <td>オプショナル</td>
+          <td>Video Cloud のお客様は、ライブストリームに使用するビデオを作成するオプションがあります。</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <p>応答は次のようになります。</p>
+    
+    <pre class="line-numbers">
+    <code class="language-json" translate="No">{
+      "id": "481ff4cf0bf74956bc2ec6e126588080",
+      "processing_regions": [
+          {
+              "region": "us-west-2",
+              "probability": 1
+          }
+      ],
+      "storage_regions": [
+          "us-west-2",
+          "us-east-1"
+      ],
+      "jobs": [],
+      "state": "standby",
+      "label": "Test RG",
+      "live_dvr_sliding_window_duration": 1800,
+      "status": {
+          "us-west-2": null
+      },
+      "ad_insertion": true,
+      "outputs": {
+          "playback_url": "https://playback-qa.a-live.io/r481ff4cf0bf74956bc2ec6e126588080/us-west-2/NA/playlist.m3u8",
+          "playback_url_dvr": "https://playback-qa.a-live.io/r481ff4cf0bf74956bc2ec6e126588080/us-west-2/NA/playlist_dvr.m3u8",
+          "ssai_playback_urls": {
+              "26f8470f61374e608e27af9c1b3f7ff0": {
+                  "playback_url": "https://playback-qa.a-live.io/r481ff4cf0bf74956bc2ec6e126588080/us-west-2/NA/26f8470f61374e608e27af9c1b3f7ff0/playlist_ssaiM.m3u8",
+                  "playback_url_dvr": "https://playback-qa.a-live.io/r481ff4cf0bf74956bc2ec6e126588080/us-west-2/NA/26f8470f61374e608e27af9c1b3f7ff0/playlist_dvr_ssaiM.m3u8",
+                  "description": "House Ads - 864b84f712ae40bca1510a8052b34312",
+                  "type": "ads"
+              }
+      }
+    }</code></pre>
+    </section>
+    <section class="bcls-section">
+      <h2 id="get_redundant_group">冗長グループの取得</h2>
+      <p><code translate="No">GET</code>リクエストを送信すると、すべての冗長グループを取得できます。</p>
+      <pre><code class="language-http" translate="No">https://api.bcovlive.io/v1/redundantgroups</code></pre>
+      <p><code translate="No">state</code>パラメータを使用して応答をフィルタリングできます。許可される値は次のとおりです。</p>
+      <ul>
+        <li><code translate="No">cancelled</code></li>
+        <li><code translate="No">cancelling</code></li>
+        <li><code translate="No">deleting</code></li>
+        <li><code translate="No">disconnected</code></li>
+        <li><code translate="No">failed</code></li>
+        <li><code translate="No">finished</code></li>
+        <li><code translate="No">finishing</code></li>
+        <li><code translate="No">processing</code></li>
+        <li><code translate="No">standby</code></li>
+        <li><code translate="No">waiting</code></li>
+      </ul>
+      <p><code translate="No">page_size</code> 1000までの整数に設定できるパラメータもあります。<code translate="No">page_size</code>デフォルトは 10 です。</p>
+      <p>レスポンスは次のようになります。</p>
+<pre class="line-numbers"><code class="language-json" translate="No">{
+  "redundant_groups": [
+    {
+      "id": "91c268a6ec5240d79a6004f4ccf0dc6f",
+      "account_id": "a95ac581551b4478b27910e5675db1f8",
+      "user_id": "c2691d4d039040be96c190a949d754a7",
+      "processing_regions": [
+        {
+          "region": "us-west-2",
+          "probability": 1
+        }
+      ],
+      "storage_regions": [
+        "us-west-2",
+        "us-east-1"
+      ],
+      "jobs": [],
+      "state": "standby",
+      "created_at": 1594316624287,
+      "updated_at": 1594316624287,
+      "label": "Test Redundant Group",
+      "live_dvr_sliding_window_duration": 86400,
+      "status": {
+        "us-west-2": null
+      },
+      "outputs": {
+        "playback_url": "https://bcovlive-a.akamaihd.net/r91c268a6ec5240d79a6004f4ccf0dc6f/us-west-2/NA/playlist.m3u8",
+        "playback_url_dvr": "https://bcovlive-a.akamaihd.net/r91c268a6ec5240d79a6004f4ccf0dc6f/us-west-2/NA/playlist_dvr.m3u8"
+      }
+    },
+    {
+      "id": "279ac36e4b4d48a3abbd3e1f98cd57aa",
+      "account_id": "a95ac581551b4478b27910e5675db1f8",
+      "user_id": "c2691d4d039040be96c190a949d754a7",
+      "processing_regions": [
+        {
+          "region": "us-west-2",
+          "probability": 1
+        }
+      ],
+      "storage_regions": [
+        "us-west-2",
+        "us-east-1"
+      ],
+      "jobs": [],
+      "state": "standby",
+      "created_at": 1594323207015,
+      "updated_at": 1594323207015,
+      "label": "Test Redundant Group2",
+      "live_dvr_sliding_window_duration": 86400,
+      "status": {
+        "us-west-2": null
+      },
+      "outputs": {
+        "playback_url": "https://bcovlive-a.akamaihd.net/r279ac36e4b4d48a3abbd3e1f98cd57aa/us-west-2/NA/playlist.m3u8",
+        "playback_url_dvr": "https://bcovlive-a.akamaihd.net/r279ac36e4b4d48a3abbd3e1f98cd57aa/us-west-2/NA/playlist_dvr.m3u8"
+      }
+    }
+  ]
+}</code></pre>
+    </section>
+    <section class="bcls-section">
+    <h2 id="Add_live_jobs_to_the_redundant_group">冗長グループにライブジョブを追加する</h2>
+    
+    <p>冗長グループを作成したら、<code translate="No">POST</code>次の宛先に要求を送信することで、そのグループにジョブを追加できます。</p>
+    
+    <pre>
+    <code class="language-http" translate="No">https://api.bcovlive.io/v1/redundantgroups/{redundant_group_id}/jobs</code></pre>
+    
+    <p>ライブジョブ ID は、リクエスト本文で次のように指定します。</p>
+    
+    <pre class="line-numbers">
+    <code class="language-json" translate="No">[
+      {
+        "job_id": "0b76bc73f92f46dc917bbe5061c0c633"
+      },
+      {
+        "job_id": "0ae5a4a71dc54b3181af0f98ee407c27"
+      }
+    ]</code></pre>
+    
+    <p>ジョブオブジェクトには、追加のオプションプロパティがいくつかあります。次の表は、すべてのフィールドを示しています。</p>
+    
+    <table class="bcls-table">
+      <caption class="bcls-caption--table">ライブジョブリクエストフィールドの追加</caption>
+      <thead class="bcls-table__head">
+        <tr>
+          <th>フィールド</th>
+          <th>タイプ</th>
+          <th>必須/任意</th>
+          <th>説明</th>
+        </tr>
+      </thead>
+      <tbody class="bcls-table__body">
+        <tr>
+          <td><code translate="No">job_id</code></td>
+          <td>文字列</td>
+          <td>必須</td>
+          <td>グループに追加するジョブの ID。<code translate="No">playlist</code><code translate="No">streams</code>またはが指定されていない場合は、<code translate="No">outputs</code>すべてが使用されます。</td>
+        </tr>
+        <tr>
+          <td><code translate="No">playlist</code></td>
+          <td>文字列</td>
+          <td>オプショナル</td>
+          <td>ストリームの出力として使用するプレイリストのラベル。もしも<code translate="No">playlist</code>定義されている、<code translate="No">streams</code><strong>しなければならない</strong>なれ <em>未定義</em>。</td>
+        </tr>
+        <tr>
+          <td><code translate="No">streams</code></td>
+          <td>配列</td>
+          <td>オプショナル</td>
+          <td>ストリームの出力として使用されるストリームラベルのリスト。もしも<code translate="No">streams</code>定義されている、<code translate="No">playlist</code><strong>しなければならない</strong>なれ <em>未定義</em>。</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <p>このリクエストの成功応答では、冗長グループ ID が返されます。</p>
+    </section>
+    
+    <section class="bcls-section">
+    <h2 id="Get_Redundant_Group_Status">冗長グループのステータスを取得する</h2>
+    
+    <p>冗長グループのステータスは、<code translate="No">GET</code>次の宛てにリクエストを送信することで取得できます。</p>
+    
+    <pre>
+    <code class="language-http" translate="No">https://api.bcovlive.io/v1/redundantgroups/{redundant_group_id}</code></pre>
+    
+    <p>レスポンスは次のようになります。</p>
+    
+    <pre class="line-numbers">
+    <code class="language-json" translate="No">{
+      "id": "481ff4cf0bf74956bc2ec6e126588080",
+      "processing_regions": [
+          {
+              "region": "us-west-2",
+              "probability": 1
+          }
+      ],
+      "storage_regions": [
+          "us-west-2",
+          "us-east-1"
+      ],
+      "jobs": [
+          {
+              "job_id": "0b76bc73f92f46dc917bbe5061c0c633",
+              "streams": [
+                  "hls720p",
+                  "hls540p",
+                  "hls360p"
+              ],
+              "state": "processing"
+          },
+          {
+              "job_id": "0ae5a4a71dc54b3181af0f98ee407c27",
+              "streams": [
+                  "hls720p",
+                  "hls540p",
+                  "hls360p"
+              ],
+              "state": "processing"
+          }
+      ],
+      "state": "processing",
+      "created_at": 1568057414849,
+      "updated_at": 1568059153017,
+      "label": "Test RG",
+      "live_dvr_sliding_window_duration": 1800,
+      "status": {
+          "us-west-2": {
+              "SwitchDrift": 0,
+              "Ended": false,
+              "OnAir": "0b76bc73f92f46dc917bbe5061c0c633",
+              "Mode": "auto",
+              "InManifest": true,
+              "MediaSequence": 10,
+              "Healthiness": 0,
+              "Duration": 4,
+              "DiscontinuitySequence": 1,
+              "SourceChunk": {
+                  "MediaSequence": 3639,
+                  "Duration": 4,
+                  "DiscontinuitySequence": 0,
+                  "ProgramDateTime": "2019-09-09T19:59:36Z",
+                  "LiveJobID": "0b76bc73f92f46dc917bbe5061c0c633"
+              },
+              "UpdatedAt": "2019-09-09T19:59:46Z",
+              "ProgramDateTime": "2019-09-09T19:59:36Z"
+          }
+      },
+      "ad_insertion": true,
+      "outputs": {
+          "playback_url": "https://playback-qa.a-live.io/r481ff4cf0bf74956bc2ec6e126588080/us-west-2/NA/playlist.m3u8",
+          "playback_url_dvr": "https://playback-qa.a-live.io/r481ff4cf0bf74956bc2ec6e126588080/us-west-2/NA/playlist_dvr.m3u8",
+          "ssai_playback_urls": {
+              "26f8470f61374e608e27af9c1b3f7ff0": {
+                  "playback_url": "https://playback-qa.a-live.io/r481ff4cf0bf74956bc2ec6e126588080/us-west-2/NA/26f8470f61374e608e27af9c1b3f7ff0/playlist_ssaiM.m3u8",
+                  "playback_url_dvr": "https://playback-qa.a-live.io/r481ff4cf0bf74956bc2ec6e126588080/us-west-2/NA/26f8470f61374e608e27af9c1b3f7ff0/playlist_dvr_ssaiM.m3u8",
+                  "description": "House Ads - 864b84f712ae40bca1510a8052b34312",
+                  "type": "ads"
+              }
+          }
+      }
+    }</code></pre>
+    
+    <p>冗長グループ内の各処理領域には、<code translate="No">status</code>リージョンごとにキー設定された独自のオブジェクトがあります。この例では、<code translate="No">us_west_2</code>処理リージョンでは、<code translate="No">on_air</code>ジョブが次のように表示されます。<code translate="No">0b76bc73f92f46dc917bbe5061c0c633</code>。</p>
+    
+    <p>補足として、<code translate="No">probability</code>この時点では処理領域に関連付けられたは常にになりますが<code translate="No">1</code>、将来の機能強化のために、データモデルに含まれています。これにより、確率を持つ複数の処理領域が可能になりますは、そのリージョンを使用する再生トラフィックのおおよその割合を表します。</p>
+    </section>
+    
+    <section class="bcls-section">
+    <h2 id="add_cuepoints">キューポイントを手動で追加する</h2>
+    
+    <p>冗長性を備えたライブストリームにキューポイントを手動で追加することは、通常のライブストリームにキューポイントを追加することと非常によく似ています。冗長グループに対してこれを行うには、<code translate="No">POST</code>次の要求を行います。</p>
+    
+    <pre>
+    <code class="language-http" translate="No">https://api.bcovlive.io/v1/redundantgroups/{redundant_group_id}/cuepoint</code></pre>
+    
+    <p>次のようなリクエスト本文を含めます。</p>
+    
+    <pre class="line-numbers">
+    <code class="language-json" translate="No">{
+      "ad_server_data": {
+        "subject": "wildlife"
+      },
+      "duration": 30,
+      "timecode": "09:23:18:05"
+    }</code></pre>
+    
+    <p><code translate="No">timecode</code>フィールドを省略すると、キューポイントは直ちに挿入されます。</p>
+    </section>
+    
+    <section class="bcls-section">
+    <h2 id="Force_a_Job_failover">ジョブのフェイルオーバーを強制する</h2>
+    
+    <p>フェールオーバーは Brightcove Live システムによって自動的に管理されるため、ユーザーの介入は必要ありません。ただし、何らかの理由で別のジョブへのフェールオーバーを強制する場合は、<code translate="No">on_air</code>ジョブのエンコーダを停止するのが最も簡単な方法です。</p>
+    
+    <p>API を使用してフェイルオーバーを強制するには、<code translate="No">PUT</code>以下の要求を行います。</p>
+    
+    <pre>
+    <code class="language-http" translate="No">https://api.bcovlive.io/v1/redundantgroups/{redundant_group_id}/switch</code></pre>
+    
+    <p>リクエスト本文は次のようになります。</p>
+    
+    <pre class="line-numbers">
+    <code class="language-json" translate="No">{
+      "mode": "manual",
+      "on_air": "0ae5a4a71dc54b3181af0f98ee407c27"
+    }</code></pre>
+    
+    <p>ここで、<code translate="No">mode</code><code translate="No">manual</code>はまたは<code translate="No">auto</code>（デフォルト）のいずれかになり、<code translate="No">on_air</code>は、<strong></strong>セカンダリジョブ ID の 1 つの値を持ちます。</p>
+    
+    <p>注:一度<code translate="No">manual</code>モード、自動ジョブフェイルオーバーは<strong>ない</strong>発生する。自動フェールオーバーを再開するには、<strong></strong><code translate="No">auto</code>モードをに戻す必要があります 。ボディからモードを省略し、force query <code translate="No">?force=true</code>パラメータを要求に追加することで、手動に切り替えることなく、オンエアジョブを変更できます。これにより、サービスはジョブの切り替えを強制しますが、問題が検出された場合、いつでも元に戻す可能性があります。</p>
+    </section>
+    
+    <section class="bcls-section">
+    <h2 id="Ending_a_redundant_stream">冗長ストリームを終了する</h2>
+    
+    <p>冗長ストリームを終了するには、2 つの方法があります。設計上、冗長グループは暗黙的に<a href="/live-api/guides/live-api-static-entry-points.html"> SEP </a>ストリームです。冗長グループからすべてのジョブを削除することにより、<code translate="No">STANDBY</code>冗長グループをモードにすることができます。</p>
+    
+    <p><code translate="No">DELETE</code>リクエストを使用してこれを行うには、次のことを行います。</p>
+    
+    <pre>
+    <code class="language-http" translate="No">https://api.bcovlive.io/v1/redundantgroups/{redundant_group_id}/jobs/{job_id}</code></pre>
+    
+    <p>削除するジョブごとに。現在あるジョブを削除するには<code translate="No">on_air</code>、<code translate="No">?force-true</code>クエリパラメータを追加する必要があることに注意してください。</p>
+    
+    <p>ストリームを終了する 2 番目の方法は、<code translate="No">DELETE</code>にリクエストを送信して、冗長グループを完全に削除することです。</p>
+    
+    <pre>
+    <code class="language-http" translate="No">https://api.bcovlive.io/v1/redundantgroups/{redundant_group_id}</code></pre>
+    </section>
+    <section class="bcls-section">
+      <h2 id="limitations">制約事項</h2>
+      <ul>
+        <li>ライブ冗長性<strong>できません</strong> DRMで保護されたライブストリームで使用できます。</li>
+      </ul>
+    </section>
+        </article>
+    
+ 

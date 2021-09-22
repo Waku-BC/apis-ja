@@ -1,0 +1,46 @@
+---
+title:  '概要：Social API'
+description:  'このトピックでは、SocialAPIの概要を説明します。'
+parent: Getting Started 
+grandparent: Social API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+  <section class="bcls-section">
+    <h2 id="Introduction">入門</h2>
+    <p>Social API を使用すると、動画のソーシャル共有ステータスと履歴を取得できます。これは、主に CMS 統合を支援し、ユーザーが独自の CMS システムでこの情報を表示できるようにすることを目的としています。</p>
+    <p>リクエストの詳細については、<a href="/social/references/reference.html"> API リファレンスを参照してください</a>。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="base_url">ベース URL</h2>
+    <p>API のベース URL は次のとおりです。</p>
+    <pre>
+  <code class="language-http" translate="No">https://edge.social.api.brightcove.com/v1</code></pre>
+  </section>
+  <section class="bcls-section">
+    <h2 id="authentication">認証</h2>
+    <p>リクエストの認証には、<span translate="No">承認ヘッダー</span>：</p>
+    <pre class="line-numbers">
+        <code class="language-http" translate="No">Authorization: Bearer {access_token}</code></pre>
+    <p>NS <code translate="No">access_token</code>から取得する必要がある一時的なOAuth2アクセストークンです。<span translate="No">ブライトコーブOAuth</span>サービス。クライアントクレデンシャルを取得してアクセストークンを取得する方法の詳細については、「<a href="/oauth/getting-started/overview-oauth-api-v4.html"> Brightcove OAuth の概要</a>」トピックを参照してください。</p>
+    <h3>オペレーション</h3>
+    <p>クライアントの資格情報を要求するときは、必要なアカウントアクセスの種類または操作を指定する必要があります。以下は、現在サポートされている操作のリストです。<span translate="No">Social API</span>：</p>
+    <ul>
+      <li><code translate="No">video-cloud/social/status/read</code></li>
+    </ul>
+    <p>Social API がベータ版の場合、[API 認証情報の管理] の [Studio Admin] セクションでは、Social API <strong>に対する権限は使用できません</strong>。代わりに、OAuth API を使用して認証情報を作成する必要があります。ただし、Brightcove ラーニングサービスは、<a href="/oauth/code-samples/oauth-api-sample-create-client-credentials.html">これを行うための簡単なオンラインツールを作成しました</a>。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Summary_of_requests">リクエストの要約</h2>
+    <p>現在のバージョンの API では、<code translate="No">GET</code>リクエストのみがサポートされます。要求には 2 つのグループがあり、次のセクションに要約します。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="Status_requests">ステータス要求</h2>
+    <p><a href="/social/references/reference.html#tag/Status">ステータスリクエストは</a>、動画の現在のソーシャル共有ステータスを返します。アカウント内のすべての動画、または特定の動画のステータスを取得できます。</p>
+  </section>
+  <section class="bcls-section">
+    <h2 id="History_requests">履歴リクエスト</h2>
+    <p><a href="/social/references/reference.html#tag/History">履歴リクエストは</a>、動画のソーシャル共有履歴を返します。アカウント内のすべての動画、または特定の動画の履歴を取得できます。</p>
+  </section>
+</article>

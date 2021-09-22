@@ -1,0 +1,658 @@
+---
+title:  'Brightcove Live API：サーバーサイド広告挿入（SSAI）' 
+description: このトピックでは、ライブストリームジョブのサーバー側広告挿入（SSAI）を設定する方法を示します。
+parent: SSAI 
+grandparent: Live API
+---
+ <h1>{{ page.title }}</h1>
+<article class="bcls-article">
+  <summary>{{ page.description }}</summary>
+
+  {% raw %}
+<section class="bcls-section">
+<h2 id="Overview">概要</h2>
+
+<p><span translate="No">SSAI</span>ライブストリーミングイベント中に指定した時間に広告を表示できます。主な機能は次のとおりです。</p>
+
+<ul>
+	<li>エンコーダから送信されたキューポイントを使用して広告を挿入するか、を使用してインスタントキューポイントを作成します<span translate="No">ライブAPI</span></li>
+	<li>「スレート」アセットを取り込み、未使用の広告時間を埋める</li>
+	<li>サーバー側のライブストリームに縫い付けられた広告で広告ブロッカーを避ける</li>
+</ul>
+
+<aside class="bcls-aside bcls-aside--information">
+  <ul>
+    <li>使用する前に<span translate="No">SSAI</span>、アカウントで有効にする必要があります。詳細はアカウントマネージャーにお問い合わせください。</li>
+    <li>SSAIは、ライブストリームで使用されるOriginの帯域幅を増やすことに注意してください。広告が配信されているとき、HLSマニフェストは各視聴者セッションに固有であるため、キャッシュすることはできず、代わりに各視聴者の発信元から要求されます。DVRも有効になっている場合、キャッシュされていないマニフェストのサイズが大幅に増加します。</li>
+ </ul>
+
+
+</aside>
+
+<p>サーバーサイド広告でライブストリームを作成するには、次の手順に従います。</p>
+
+<ol class="bcls-tasklist-restart">
+	<li><a href="#General_information">Live API に関する一般的な情報を確認します</a></li>
+	<li><a href="#Create_an_ad_configuration">ライブ広告の設定を作成します</a>。これは、<a href="https://studio.support.brightcove.com/admin/configuring-server-side-ad-settings.html#bc-ipnav-1">ビデオクラウドスタジオでも行うことができます</a>。Live API を使用した広告設定の管理の詳細については、以下のセクションを参照してください。</li>
+	<li><a href="#Managing_slates">スレートアセットを作成します</a>。UI を使用する場合は、<a href="https://live.support.brightcove.com/live-module/implementing-server-side-ads-live-module.html#fill_slate"> Studio でスレートを管理できます</a>。</li>
+	<li>オプション:<a href="/live-api/ssai/live-api-cue-points-and-ad-beacons-ssai.html">キューポイントと広告ビーコンを挿入します</a>。</li>
+	<li>これで、ライブ<a href="/live-api/getting-started/quick-start-create-live-stream-using-brightcove-live-api.html"> API を使用してライブストリームを作成する準備ができました</a>。Studio を使用する場合は、<a href="https://live.support.brightcove.com/live-module/implementing-server-side-ads-live-module.html"> Live モジュールでサーバーサイド広告を実装できます</a>。</li>
+</ol>
+
+<p>DFP と広告マクロを使用したカスタムヘッダー、広告設定変数の詳細については、このドキュメントの残りの部分を参照してください。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="General_information">一般情報</h2>
+
+<p>以下の情報は、すべてのライブAPIとSSAIリクエストに関するものです。</p>
+
+<h3>ベース URL</h3>
+
+<p>SSAI を使用したLive API のベース URL は次のとおりです。</p>
+
+<pre>
+    <code class="language-http" translate="No">https://api.bcovlive.io/v1/ssai</code></pre>
+
+<h3>認証</h3>
+
+<p>リクエストの認証には、API キーを持つヘッダーが必要です。</p>
+
+<pre class="line-numbers">
+    <code class="language-http" translate="No">X-API-KEY: <span class="bcls-input">your API KEY</span>
+    </code></pre>
+
+<p>アカウントに関連付けられた API キーを取得するには、アカウントマネージャーにお問い合わせください。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Create_an_ad_configuration">広告設定を作成する</h2>
+
+<p>新しい広告設定を作成するには、<code translate="No">POST</code>次のようにリクエストを送信します。</p>
+
+<table class="bcls-table">
+	<tbody class="bcls-table__body">
+		<tr>
+			<th>方法</th>
+			<td style="width:80em;"><code class="language-http" translate="No">POST</code></td>
+		</tr>
+		<tr>
+			<th>URL</th>
+			<td><code class="language-http" translate="No">https://api.bcovlive.io/v1/ssai/applications</code></td>
+		</tr>
+		<tr>
+			<th>ヘッダー</th>
+			<td><code class="language-http" translate="No">X-API-KEY: <span class="bcls-input">your API KEY</span></code></td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>リクエスト本文の例</h3>
+<pre class="line-numbers">
+    <code class="language-json" translate="No">{
+      "application_ad_configuration": {
+        "ad_configuration_description": "Human readable description of the configuration",
+        "ad_configuration_expected_response_type": "<span class="bcls-input">Dfp, Vast or SmartXML</span>",
+        "ad_configuration_headers": {
+        "X-Custom-Header-Rand": "{{random.int32}}",
+        "X-VIDEOPLAZA-FORWARDED-FOR": "{{client.ipaddress}}"
+        },
+        "ad_configuration_headers_for_impressions": false,
+        "ad_configuration_strategy": "<span class="bcls-input">SingleAdResponse or MultipleAdResponse</span>",
+        "ad_configuration_transforms": [
+          {
+          "xpath": "/",
+          "xslt": "&lt;xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:Det=\"http://Det.com\"&gt;&lt;xsl:output omit-xml-declaration=\"yes\"/&gt;&lt;xsl:template match=\"node()|@*\"&gt;&lt;xsl:copy&gt;&lt;xsl:apply-templates select=\"node()|@*\"/&gt;&lt;/xsl:copy&gt;&lt;/xsl:template&gt;&lt;/xsl:stylesheet&gt;"
+          }
+        ],
+        "ad_configuration_url_format": "https://ad-provider-host.com/path/to/ad-handler?ip={{client.ipaddress}}&amp;num={{random.int32}}&amp;ses={{session.session_id}}"
+      },
+      "application_description": "Human readable description of the ad application",
+      "account_id": "<span class="bcls-input">User's Account ID [Optional]</span>"
+    }</code></pre>
+<aside class="bcls-aside bcls-aside--information">NS <code translate="No">account_id </code>フィールドはライブアカウントIDです。省略した場合、要求元ユーザーのアカウントIDが使用されます。</aside>
+
+<h3>レスポンスの例</h3>
+
+<pre class="line-numbers">
+    <code class="language-json" translate="No">{
+      "application": {
+        "account_id": "User Account ID",
+        "application_description": "Human readable description of the ad application",
+        "application_ad_configuration": {
+          "ad_configuration_description": "Human readable description of the configuration",
+          "ad_configuration_expected_response_type": "<span class="bcls-highlight">Dfp | Vast | SmartXML</span>",
+          "ad_configuration_headers": {
+            "X-Custom-Header-Rand": "{{random.int32}}",
+            "X-VIDEOPLAZA-FORWARDED-FOR": "{{client.ipaddress}}"
+          },
+          "ad_configuration_headers_for_impressions": false,
+          "ad_configuration_strategy": "<span class="bcls-highlight">SingleAdResponse | MultipleAdResponse</span>",
+          "ad_configuration_transforms": [
+            {
+              "xpath": "/",
+              "xslt": "&lt;xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:Det=\"http://Det.com\"&gt;&lt;xsl:output omit-xml-declaration=\"yes\"/&gt;&lt;xsl:template match=\"node()|@*\"&gt;&lt;xsl:copy&gt;&lt;xsl:apply-templates select=\"node()|@*\"/&gt;&lt;/xsl:copy&gt;&lt;/xsl:template&gt;&lt;/xsl:stylesheet&gt;"
+            }
+          ],
+          "ad_configuration_url_format": "https://ad-provider-host.com/path/to/ad-handler?ip={{client.ipaddress}}&amp;num={{random.int32}}&amp;ses={{session.session_id}}"
+        },
+        "application_id": <span class="bcls-highlight">"Application ID"</span>
+      },
+      "inserted": true
+    }</code></pre>
+</section>
+
+<section class="bcls-section">
+<h2 id="Update_an_ad_configuration">広告設定の更新</h2>
+
+<p>広告設定の更新は、広告設定の作成と非常によく似ています。<code translate="No">PUT</code>次のとおりにリクエストを行います。</p>
+
+<table class="bcls-table">
+	<tbody class="bcls-table__body">
+		<tr>
+			<th>方法</th>
+			<td style="width:80em;"><code class="language-http" translate="No">PUT</code></td>
+		</tr>
+		<tr>
+			<th>URL</th>
+			<td><code class="language-http" translate="No">https://api.bcovlive.io/v1/ssai/applications/application/<span class="bcls-input">Application_ID</span></code></td>
+		</tr>
+		<tr>
+			<th>ヘッダー</th>
+			<td><code class="language-http" translate="No">X-API-KEY: <span class="bcls-input">your API KEY</span></code></td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>リクエスト本文の例</h3>
+
+<pre class="line-numbers">
+    <code class="language-json" translate="No">{
+      "application_ad_configuration": {
+        "ad_configuration_description": "Some Updated Description Value",
+        "ad_configuration_expected_response_type": "<span class="bcls-input">Dfp or Vast or SmartXML</span>,
+        "ad_configuration_headers": {
+          "X-Custom-Header-Rand": "{{random.int32}}",
+          "X-VIDEOPLAZA-FORWARDED-FOR": "{{client.ipaddress}}"
+        },
+        "ad_configuration_headers_for_impressions": false,
+        "ad_configuration_strategy": "<span class="bcls-input">SingleAdResponse or MultipleAdResponse</span>",
+        "ad_configuration_transforms": [
+          {
+          "xpath": "/",
+          "xslt": "&lt;xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:Det=\"http://Det.com\"&gt;&lt;xsl:output omit-xml-declaration=\"yes\"/&gt;&lt;xsl:template match=\"node()|@*\"&gt;&lt;xsl:copy&gt;&lt;xsl:apply-templates select=\"node()|@*\"/&gt;&lt;/xsl:copy&gt;&lt;/xsl:template&gt;&lt;/xsl:stylesheet&gt;"
+          }
+        ],
+        "ad_configuration_url_format": "https://updated-ad-provider-host.com/path/to/ad-handler?ip={{client.ipaddress}}&amp;num={{random.int32}}&amp;ses={{session.session_id}}"
+      },
+      "application_description": "Human readable description of the ad application",
+      "account_id": "<span class="bcls-input">User's Account ID [Optional]</span>"
+    }</code></pre>
+
+<aside class="bcls-aside bcls-aside--information">NS <code translate="No">account_id </code>フィールドはライブアカウントIDです。省略した場合、要求元ユーザーのアカウントIDが使用されます。</aside>
+
+<h3>レスポンスの例</h3>
+
+<pre class="line-numbers">
+    <code class="language-json" translate="No">{
+      "account_id": "User Account ID",
+      "application_description": "Human readable description of the ad application",
+      "application_ad_configuration": {
+        "ad_configuration_description": "Some Updated Description Value",
+        "ad_configuration_expected_response_type": "<span class="bcls-highlight">Dfp | Vast | SmartXML</span>",
+        "ad_configuration_headers": {
+        "X-Custom-Header-Rand": "{{random.int32}}",
+        "X-VIDEOPLAZA-FORWARDED-FOR": "{{client.ipaddress}}"
+        },
+        "ad_configuration_headers_for_impressions": false,
+        "ad_configuration_strategy": "<span class="bcls-highlight">SingleAdResponse | MultipleAdResponse</span>",
+        "ad_configuration_transforms": [
+          {
+          "xpath": "/",
+          "xslt": "&lt;xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:Det=\"http://Det.com\"&gt;&lt;xsl:output omit-xml-declaration=\"yes\"/&gt;&lt;xsl:template match=\"node()|@*\"&gt;&lt;xsl:copy&gt;&lt;xsl:apply-templates select=\"node()|@*\"/&gt;&lt;/xsl:copy&gt;&lt;/xsl:template&gt;&lt;/xsl:stylesheet&gt;"
+          }
+        ],
+        "ad_configuration_url_format": "https://updated-ad-provider-host.com/path/to/ad-handler?ip={{client.ipaddress}}&amp;num={{random.int32}}&amp;ses={{session.session_id}}"
+      },
+      "application_id": <span class="bcls-highlight">"Application ID"</span>
+    }</code></pre>
+</section>
+
+<section class="bcls-section">
+<h2 id="Get_all_ad_configurations">すべての広告設定を取得する</h2>
+
+<p>アカウントのすべての広告設定を取得するには、<code translate="No">GET </code>以下の手順でリクエストを送信します。</p>
+
+<table class="bcls-table">
+	<tbody class="bcls-table__body">
+		<tr>
+			<th>方法</th>
+			<td style="width:80em;"><code class="language-http" translate="No">GET</code></td>
+		</tr>
+		<tr>
+			<th>URL</th>
+			<td><code class="language-http" translate="No">https://api.bcovlive.io/v1/ssai/applications/account/<span class="bcls-input">Account_ID</span></code></td>
+		</tr>
+		<tr>
+			<th>ヘッダー</th>
+			<td><code class="language-http" translate="No">X-API-KEY: <span class="bcls-input">your API KEY</span></code></td>
+		</tr>
+	</tbody>
+</table>
+
+<aside class="bcls-aside bcls-aside--information">NS <code translate="No">Account_ID</code>これがライブアカウントIDです。</aside>
+
+<h3>レスポンスの例</h3>
+
+<pre class="line-numbers">
+    <code class="language-json" translate="No">[
+      {
+        "application_id": "Application_ID_1",
+        "application_description": "DFP Single Midroll",
+        "application_ad_configuration": {
+        "ad_configuration_description": "DFP Test Config Single Midroll",
+        "ad_configuration_strategy": "MultipleAdResponse",
+        "ad_configuration_transforms": [],
+        "ad_configuration_url_format": "https://ad-provider-host.com/path/to/ad-handler",
+        "ad_configuration_expected_response_type": "Dfp"
+        },
+        "account_id": "Account_ID"
+      },
+      {
+        "application_id": "Application_ID_2",
+        "application_description": "Test DFP Single Midroll"
+        "application_ad_configuration": {
+        "ad_configuration_description": "DFP Test Config Single Midroll",
+        "ad_configuration_strategy": "MultipleAdResponse",
+        "ad_configuration_transforms": [
+        {
+          "xslt": "&lt;xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:Det=\"http://Det.com\"&gt;&lt;xsl:output omit-xml-declaration=\"yes\"/&gt;&lt;xsl:template match=\"node()|@*\"&gt;&lt;xsl:copy&gt;&lt;xsl:apply-templates select=\"node()|@*\"/&gt;&lt;/xsl:copy&gt;&lt;/xsl:template&gt;&lt;/xsl:stylesheet&gt;",
+          "xpath": "/"
+        }
+        ],
+        "ad_configuration_url_format": "https://ad-provider-host.com/path/to/ad-handler?ip={{client.ipaddress}}&amp;num={{random.int32}}&amp;ses={{session.session_id}}",
+        "ad_configuration_expected_response_type": "Dfp"
+        },
+        "account_id": "Account_ID"
+      }
+    ]</code></pre>
+</section>
+
+<section class="bcls-section">
+<h2 id="Get_an_ad_configuration">広告設定を取得する</h2>
+
+<p>また、<code translate="No">application_id </code><code translate="No">GET</code>次のようにリクエストを送信することで、特定の広告設定を取得することもできます。</p>
+
+<table class="bcls-table">
+	<tbody class="bcls-table__body">
+		<tr>
+			<th>方法</th>
+			<td style="width:80em;"><code class="language-http" translate="No">GET</code></td>
+		</tr>
+		<tr>
+			<th>URL</th>
+			<td><code class="language-http" translate="No">https://api.bcovlive.io/v1/ssai/applications/application/<span class="bcls-input">Application_ID</span></code></td>
+		</tr>
+		<tr>
+			<th>ヘッダー</th>
+			<td><code class="language-http" translate="No">X-API-KEY: <span class="bcls-input">your API KEY</span></code></td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>レスポンスの例</h3>
+
+<pre class="line-numbers">
+    <code class="language-json" translate="No">{
+      "application_id": "Application_ID",
+      "application_description": "Test DFP Single Midroll",
+      "application_ad_configuration": {
+        "ad_configuration_description": "DFP Test Config Single Midroll",
+        "ad_configuration_strategy": "MultipleAdResponse",
+        "ad_configuration_transforms": [
+          {
+          "xslt": "&lt;xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:Det=\"http://Det.com\"&gt;&lt;xsl:output omit-xml-declaration=\"yes\"/&gt;&lt;xsl:template match=\"node()|@*\"&gt;&lt;xsl:copy&gt;&lt;xsl:apply-templates select=\"node()|@*\"/&gt;&lt;/xsl:copy&gt;&lt;/xsl:template&gt;&lt;/xsl:stylesheet&gt;",
+          "xpath": "/"
+          }
+        ],
+        "ad_configuration_url_format": "https://ad-provider-host.com/path/to/ad-handler?ip={{client.ipaddress}}&amp;num={{random.int32}}&amp;ses={{session.session_id}}",
+        "ad_configuration_expected_response_type": "Dfp"
+      },
+      "account_id": "Account_ID"
+    }</code></pre>
+</section>
+
+<section class="bcls-section">
+<h2 id="Delete_an_ad_configuration">広告設定の削除</h2>
+
+<p>広告設定を削除するには、<code translate="No">DELETE</code>次のようにリクエストを送信します。</p>
+
+<table class="bcls-table">
+	<tbody class="bcls-table__body">
+		<tr>
+			<th>方法</th>
+			<td style="width:80em;"><code class="language-http" translate="No">DELETE</code></td>
+		</tr>
+		<tr>
+			<th>URL</th>
+			<td><code class="language-http" translate="No">https://api.bcovlive.io/v1/ssai/applications/application/<span class="bcls-input">APPLICATION_ID</span></code></td>
+		</tr>
+		<tr>
+			<th>ヘッダー</th>
+			<td><code class="language-http" translate="No">X-API-KEY: <span class="bcls-input">your API KEY</span></code></td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>レスポンスの例</h3>
+
+<pre class="line-numbers">
+    <code class="language-json" translate="No">{
+    "application_id": "Application_ID",
+    "deleted": true
+    }</code></pre>
+</section>
+
+<section class="bcls-section">
+<h2 id="Managing_slates">スレートの管理</h2>
+
+<p>スレートは、未使用の広告時間を埋めるために使用される独自のアセットです。スレートを使用して、「すぐ戻る」メッセージや好きなコンテンツを提供することができます。</p>
+
+<p>以下に、スレートアセットを追加および管理する API リクエストの詳細を示します。</p>
+
+<h3>スレートアセットを追加する</h3>
+
+<p>新しいスレートメディアソースアセットを取り込むには、<code translate="No">POST</code>リクエストを送信してください。</p>
+
+<table class="bcls-table">
+	<tbody class="bcls-table__body">
+		<tr>
+			<th>方法</th>
+			<td style="width:80em;"><code class="language-http" translate="No">POST</code></td>
+		</tr>
+		<tr>
+			<th>URL</th>
+			<td><code class="language-http" translate="No">https://api.bcovlive.io/v1/ssai/slates</code></td>
+		</tr>
+		<tr>
+			<th>ヘッダー</th>
+			<td><code class="language-http" translate="No">X-API-KEY: <span class="bcls-input">your API KEY</span></code></td>
+		</tr>
+	</tbody>
+</table>
+
+<h4>リクエスト本文の例</h4>
+
+<pre class="line-numbers">
+    <code class="language-json" translate="No">{
+      "source_url": "https://somesourceasset.com/slate-to-ingest.mp4",
+      "account_id": "<span class="bcls-input">Account_ID [Optional]</span>",
+      "source_description": "<span class="bcls-input">User identifiable description for the slate  [Optional]</span>"
+    }
+    </code>
+    </pre>
+
+<aside class="bcls-aside bcls-aside--information">NS <code translate="No">account_id </code>これがライブアカウントIDです。省略した場合、要求元ユーザーのアカウントIDが使用されます。</aside>
+
+<h4>レスポンスの例</h4>
+
+<pre class="line-numbers">
+    <code class="language-json" translate="No">{
+      "media_source_asset_id": "New_UUID",
+      "account_id": "Account_ID",
+      "media_source_asset_default": false,
+      "media_source_asset_type": "slate",
+      "media_source_asset_url": "https://somesourceasset.com/slate-to-ingest.mp4",
+      "media_source_asset_status": "transcoding"
+      "media_source_asset_description": "User identifiable description for the slate"
+    }</code></pre>
+
+<aside class="bcls-aside bcls-aside--information">注：その設定<code translate="No">media_source_asset_default</code>は<strong>いいえ</strong>現時点でサポートされています。</aside>
+
+<h3>スレートアセットを削除</h3>
+
+<p>スレートメディアソースアセットを削除するには、<code translate="No">DELETE</code>リクエストを送信します。</p>
+
+<table class="bcls-table">
+	<tbody class="bcls-table__body">
+		<tr>
+			<th>方法</th>
+			<td style="width:80em;"><code class="language-http" translate="No">DELETE</code></td>
+		</tr>
+		<tr>
+			<th>URL</th>
+			<td><code class="language-http" translate="No">https://api.bcovlive.io/v1/ssai/slates/slate/<span class="bcls-input">Slate_MSA_ID</span></code></td>
+		</tr>
+		<tr>
+			<th>ヘッダー</th>
+			<td><code class="language-http" translate="No">X-API-KEY: <span class="bcls-input">your API KEY</span></code></td>
+		</tr>
+	</tbody>
+</table>
+
+<h4>レスポンスの例</h4>
+
+<pre class="line-numbers">
+    <code class="language-json" translate="No">{
+      "media_source_asset_id": "MSA_UUID",
+      "media_source_asset_type": "slate",
+      "media_source_asset_url": "http://someS3urlpath/media.mp4",
+      "media_source_asset_default": false,
+      "media_source_asset_status": "ready",
+      "account_id": "ACCOUNT_ID"
+    }</code></pre>
+
+<h3>スレート資産を手に入れよう</h3>
+
+<p><code translate="No">GET</code>リクエストを送信することで、アカウントのすべてのスレートメディアソースアセットの配列を取得できます。</p>
+
+<table class="bcls-table">
+	<tbody class="bcls-table__body">
+		<tr>
+			<th>方法</th>
+			<td style="width:80em;"><code class="language-http" translate="No">GET</code></td>
+		</tr>
+		<tr>
+			<th>URL</th>
+			<td><code class="language-http" translate="No">https://api.bcovlive.io/v1/ssai/slates/account/<span class="bcls-input">Account_ID</span></code></td>
+		</tr>
+		<tr>
+			<th>ヘッダー</th>
+			<td><code class="language-http" translate="No">X-API-KEY: <span class="bcls-input">your API KEY</span></code></td>
+		</tr>
+	</tbody>
+</table>
+
+<aside class="bcls-aside bcls-aside--information">NS <code translate="No">Account_ID </code>これがライブアカウントIDです。</aside>
+
+<h4>レスポンスの例</h4>
+
+<pre class="line-numbers">
+    <code class="language-json" translate="No">[
+      {
+      "media_source_asset_id": "MSA_UUID_1",
+      "media_source_asset_type": "slate",
+      "media_source_asset_default": false,
+      "media_source_asset_url": "http://someS3urlpath.com/media.mp4",
+      "account_id": "ACCOUNT_ID",
+      "media_source_asset_status": "ready"
+      },
+      {
+      "media_source_asset_id": "MSA_UUID_2",
+      "media_source_asset_type": "slate",
+      "media_source_asset_default": true,
+      "media_source_asset_url": "http://someS3urlpath.com/media.mp4",
+      "account_id": "ACCOUNT_ID",
+      "media_source_asset_status": "ready"
+      }
+    ]</code></pre>
+</section>
+
+<section class="bcls-section">
+<h2 id="Notes_about_DFP">DFP に関する注意事項</h2>
+
+<p>DFP から広告を取得する場合は、問題を防ぐために留意すべき事項をいくつかご紹介します。</p>
+
+<h3>広告タグ</h3>
+
+<p>ライブ広告タグを作成するときは、適切なガイドラインに従っていることを確認してください<code translate="No">/live </code>。詳細については、DFP ドキュメントの「<a href="https://support.google.com/dfp_premium/answer/1068325?hl=en">マスタービデオタグを手動で作成する</a>」を参照してください。</p>
+
+<h3>同時実行性</h3>
+
+<p>同時実行性が高いことが予想される場合は、DFP アカウントチームにご相談いただくことをお勧めします。</p>
+
+<h3>単一/複数広告の回答</h3>
+
+<p>NS <code translate="No">singleadresponse </code>と<code translate="No">multiadresponse </code>パラメータは現在、によって使用されていません<span translate="No">SSAI</span>。</p>
+
+<p>住む<span translate="No">SSAI</span>単一の広告サーバー呼び出しのみを行い、応答には、広告ごとに5リダイレクトの制限がある必要な広告ラッパーに従うことを除いて、休憩のすべての広告が含まれることを期待します。次の広告回答形式が受け入れられ、次のように解析されます。</p>
+
+<ul>
+	<li>VAST-単一のレスポンス、または単一のレスポンスで広告ポッドを表示</li>
+	<li>DFP 広告ルール-プレロール、ミッドロール、ポストロール定義広告を含む、利用可能なすべての広告をレスポンスに集約します。</li>
+	<li>Smart XML-事前定義、ミッドロール、ポストロール定義広告を含む、利用可能なすべての広告をレスポンスに集約します。</li>
+</ul>
+</section>
+
+<section class="bcls-section">
+<h2 id="Custom_headers_for_ad_requests">広告リクエストのカスタムヘッダー</h2>
+
+<p>NS <span translate="No"> SSAI</span>プラットフォームは、バックエンドプラットフォームで使用される広告呼び出しとすべてのビーコンでカスタムヘッダーを渡すことができます。VideoPlaza などの一部の広告サーバーには、カスタムヘッダーが必要です。</p>
+
+<p>カスタムヘッダーは、<code translate="No">ad_configuration_headers</code>オブジェクト内のキーと値のペアのセットとして指定されます<code translate="No">application_ad_configuration </code>（<a href="#Create_an_ad_configuration">Create を参照）。</a>広告設定セクション)。</p>
+
+<h3>注</h3>
+
+<ul>
+	<li>標準ヘッダーは、次のようにデフォルトで処理されます。
+	<ul>
+		<li><code translate="No">X-Forwarded-For </code></li>
+		<li><code translate="No">X-Device-User-Agent </code></li>
+	</ul>
+	</li>
+	<li>ヘッダー値には、<a href="#Ad_configuration_variables">広告の設定変数を使用できます</a></li>
+	<li>ヘッダー値は静的文字列でもできます</li>
+</ul>
+
+<aside class="bcls-aside bcls-aside--warning">ヘッダーは、広告ラッパーやインプレッション/四分位数を含むすべてのダウンストリームリクエストに渡されるため、注意して使用する必要があります。</aside>
+</section>
+
+<section class="bcls-section">
+<h2 id="Targeting_ads_using_ad_macros">広告マクロを使用して広告をターゲティングする</h2>
+
+<p><a href="#Create_an_ad_configuration">広告設定を作成すると</a>、通常、広告タグは次のようになります。</p>
+
+<pre>
+      <code class="language-http" translate="No">https://ad-provider-host.com/path/to/ad-handler?ip={{client.ipaddress}}&amp;
+      num={{random.int32}}&amp;ses={{session.session_id}}&amp;IDFA={{deviceid}}&amp;
+      sitesection={{sitesection}}&amp;breakid={{breakid}}&amp;breaktheme={{breaktheme}}</code></pre>
+
+<p>二重中括弧内の項目は、広告マクロとも呼ばれる変数です。Brightcoveライブでは、広告リクエストを送信するときに、値が置き換えられます（存在する場合）。</p>
+
+<aside class="bcls-aside bcls-aside--information">
+  <p>注意:</p>
+  <ul>
+    <li>役に立つ変数は、広告サーバーによって異なります。</li>
+    <li>Brightcove URIは、広告サーバーのURLに挿入されるすべての値をエンコードします。</li>
+    <li>1つのキーに複数の値がある場合、エンコードされた変数は広告サーバーで読み取ることができません。これは、URIエンコードが原因です。</li>
+  </ul>
+</aside>
+
+<p>広告マクロの値は、次の方法で指定できます。</p>
+
+<ul>
+	<li><a href="#Using_header_information">ヘッダー情報の使用</a></li>
+	<li><a href="#Appending_the_URL">URLの追加</a></li>
+	<li><a href="#Adding_URLs_dynamically">URL を動的に追加する</a></li>
+	<li><a href="#Using_manual_cue_points">手動キューポイントの使用</a></li>
+</ul>
+
+<h3 id="Using_header_information">ヘッダー情報の使用</h3>
+
+<p>上記の [ <a href="#Ad_configuration_variables">広告設定変数</a> ] セクションに詳述されているヘッダー情報は、どのリクエストでも使用できます。広告設定で、必要な変数を適切なキー名で指定するだけです。</p>
+
+<h3 id="Appending_the_URL">URLの追加</h3>
+
+<p>ライブストリームの URL には、次のように、追加のセッション値を追加できます。</p>
+
+<pre>
+      <code class="language-http" translate="No">http://playback.bcovlive.io/e058d9f2737e18/us-west-2/NA/
+      playlist.m3u8<span class="bcls-highlight">?deviceid=123456&amp;sitesection=services</span>"</code></pre>
+
+<h3 id="Adding_URLs_dynamically">URL を動的に追加する</h3>
+
+<p>Javascript と Brightcove Player API を使用して、URL を動的に追加できます。</p>
+
+<pre class="line-numbers">
+      <code class="language-html" translate="No">&lt;!DOCTYPE html&gt;
+      &lt;body&gt;
+        &lt;video
+        id="myPlayerID"
+        data-video-id="5975635167001"
+        data-account="3737230870001"
+        data-player="tIG7lVKBm"
+        data-embed="default"
+        data-application-id
+        class="video-js"
+        controls
+        width="640"
+        height="360"&gt;&lt;/video&gt;
+        &lt;script src="//players.brightcove.net/3737230870001/tIG7lVKBm_default/index.min.js"&gt;&lt;/script&gt;
+
+        &lt;script type="text/javascript"&gt;
+        var player = videojs("myPlayerID");
+
+        player.one("loadstart", function(){
+          var sourceUrl = player.currentSource();
+          console.log(sourceUrl);
+          var liveUrlWithParams = sourceUrl.src + "?player_width={width}&amp;player_height={height}&amp;deviceid={deviceid}";
+
+          player.src([{
+            "type": "application/vnd.apple.mpegurl",
+            "src": liveUrlWithParams
+          }]);
+        });
+      &lt;/script&gt;
+
+      &lt;/body&gt;</code></pre>
+
+<p>この例のキー名は、上記の広告タグの変数名に対応していることに注意してください。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Ad_configuration_variables">広告の設定変数</h2>
+
+<p>広告設定変数（ビーコンとも呼ばれます）は、広告設定を管理するためのリクエストで使用できます。詳細については、<a href="/live-api/ssai/live-api-cue-points-and-ad-beacons-ssai.html#Beacons">Live API を参照してください。キューポイントと広告ビーコン（SSAI </a>ドキュメント）</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Using_manual_cue_points">手動キューポイントの使用</h2>
+
+<p>特定の広告ブレークの値は、手動キューポイント挿入リクエストで送信できます。詳細については、<a href="/live-api/ssai/live-api-cue-points-and-ad-beacons-ssai.html#Manual_cue_point_insertion">Live API を参照してください。キューポイントと広告ビーコンドキュメント</a>。</p>
+</section>
+
+<section class="bcls-section">
+<h2 id="Known_issues">既知の問題</h2>
+
+<ul>
+	<li>SSAI では、ライブストリーミングビデオにオーディオトラックが必要です。</li>
+	<li>返された VAST が同じ広告 ID を持つ場合、広告 URL が動的変数を使用して一意の URL にする場合でも、サーバーは広告コンテンツを要求しません。これは、広告に DFP <strong>を使用している場合は適用されません</strong>。</li>
+	<li>DFP では、同じ広告 ID を使用できますが、別のクリエイティブ ID が必要です。つまり、MediaFile を単純にスワップすることはできません。</li>
+	<li>
+	<p>広告区切りの期間が、広告 URL の最大継続時間（min_ad_duration=0&amp;max_ad_duration=3000）よりも短い場合、広告が広告区切りよりも長く返された場合、広告は再生されません。</p>
+	</li>
+	<li>
+	<p>VPAIDまたはクリック可能な広告はサポートされていません<span translate="No">ブライトコーブライブSSAI</span>。</p>
+	</li>
+	<li>
+	<p>広告ブレークの残り時間がストリームのセグメント秒より短く、スレートが表示されると、そのセグメント期間中はスレートが表示され、実際の広告ブレークは予想よりも長くなります。</p>
+   <li>
+     <p>上記の原因により、セッションをライブエッジに戻そうとするために、次の広告ブレークのいずれかが遅延時間によって縮小される可能性があります。</p></li>
+	</li>
+	<li>Google のシステムで初めて広告が表示された場合は、トランスコードされて配信する準備が整うまで再生されません。</li>
+	<li>Live SSAI 用の VMAP は現在サポートされていません。</li>
+</ul>
+</section>
+{% endraw %}
+
+</article>
