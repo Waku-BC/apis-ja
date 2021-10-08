@@ -1155,7 +1155,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
   <p>Brightcove プラットフォーム API は、Brightcove プラットフォームのさまざまな部分にデータを取得および送信できる RESTful API です。使用例をいくつか挙げます。</p>
   
   <ul>
-    <li>ビデオクラウドへのビデオの取り込み</li>
+    <li>Video Cloudへのビデオの取り込み</li>
     <li>Video Cloud で動画を管理する</li>
     <li>Video Cloud アカウントのカスタム分析レポートの作成</li>
     <li>Brightcove プレーヤーの作成と管理</li>
@@ -1178,13 +1178,13 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
   </section>
   
   <section class="bcls-section">
-  <h2 id="cors">コルス</h2>
+  <h2 id="cors">CORS</h2>
   
-  <p>注意する必要があることの1つは、BrightcoveAPIのほとんどがそうではないということです。<a href="https://general.support.brightcove.com/developer/concepts-cors.html"> CORS</a>有効。完全な説明のためにリンクされたドキュメントを読むことができますが、ほとんどすべての場合において、APIリクエストはWebクライアント（Webアプリなど）から行うことができないということです。</p>
+  <p>注意する必要があることの1つは、ほとんどのBrightcoveAPIが<a href="https://general.support.brightcove.com/developer/concepts-cors.html"> CORS</a>に対応していないことです。リンクされたドキュメントで完全な説明を読むことができますが、結果として、ほとんどすべての場合において、APIリクエストはWebクライアント（Webアプリなど）から行うことができないということです。</p>
   
-  <p>このサイトの多くのサンプルアプリで行っているように、サーバー側プロキシを介してAPIリクエストをルーティングすることで、APIでウェブインターフェースを使用することは引き続き可能です。<a href="/getting-started/learning-guide-using-rest-apis.html"> RESTAPIの使用</a>。</p>
+  <p>このサイトの多くのサンプルアプリで行っているように、サーバー側プロキシを介してAPIリクエストをルーティングすることで、APIでウェブインターフェースを使用することも可能です。<a href="/getting-started/learning-guide-using-rest-apis.html"> RESTAPIの使用</a>で説明します。</p>
   
-  <p>次のようなツールを使用して、インターネットに接続された自分のコンピューターからリクエストを行うことができます。<a href="https://general.support.brightcove.com/developer/concepts-set-curl.html">カール</a>、<a href="/general/use-postman-api-requests.html">郵便配達員</a>、または<a href="/general/use-insomnia-api-requests.html">不眠症</a></p>
+  <p>次のようなツールを使用して、インターネットに接続された自分のコンピューターからリクエストを行うことができます。<a href="https://general.support.brightcove.com/developer/concepts-set-curl.html">Curl</a>、<a href="/general/use-postman-api-requests.html">Postman</a>、または<a href="/general/use-insomnia-api-requests.html">Insomnia</a></p>
   </section>
   
   <section class="bcls-section">
@@ -1194,10 +1194,10 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
   </section>
   
   <section class="bcls-section">
-  <h2 id="videocloudapis">ビデオクラウド API</h2>
+  <h2 id="videocloudapis">Video Cloud API</h2>
   
   <table class="bcls-table">
-    <caption class="bcls-caption--table">ビデオクラウド API</caption>
+    <caption class="bcls-caption--table">Video Cloud API</caption>
     <thead class="bcls-table__head">
       <tr>
         <th>API</th>
@@ -1227,7 +1227,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       </tr>
       <tr>
         <td ><a translate="No" href="/analytics/dimension-guides/index.html">Analytics</a></td>
-        <td >の分析データを取得します<span translate="No">Video Cloud</span>アカウント</td>
+        <td ><span translate="No">Video Cloud</span>アカウントの分析データを取得します</td>
         <td ><a translate="No" href="/analytics/dimension-guides/index.html">Landing Page</a></td>
         <td ><a translate="No" href="/analytics/getting-started/overview-analytics-api-v1.html">Overview</a></td>
         <td ><a translate="No" href="/analytics/getting-started/analytics-api-explorer.html">Quick Start</a></td>
@@ -1235,7 +1235,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       </tr>
       <tr>
         <td ><a translate="No" href="/analytics/dimension-guides/index.html">Data Collection</a></td>
-        <td >分析データをに送信する<span translate="No">Video Cloud</span>非から<span translate="No">Brightcove</span>プレイヤー</td>
+        <td ><span translate="No">Brightcove</span>プレイヤー以外のプレーヤーから<span translate="No">Video Cloud</span>に分析データを送信する</td>
         <td ><a translate="No" href="/analytics/dimension-guides/index.html">Landing Page</a></td>
         <td ><a translate="No" href="/data-collection/overview-data-collection-api-v2.html">Overview</a></td>
         <td ><a translate="No" href="/data-collection/data-collection-api-sample.html">Quick Start</a></td>
@@ -1251,7 +1251,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       </tr>
       <tr>
         <td ><a translate="No" href="https://audience.support.brightcove.com/develop/">Audience</a></td>
-        <td >のオーディエンスデータを取得する<span translate="No">Video Cloud</span>アカウント</td>
+        <td ><span translate="No">Video Cloud</span>アカウントのAudienceデータを取得します</td>
         <td ><a translate="No" href="https://audience.support.brightcove.com">Landing Page</a></td>
         <td ><a translate="No" href="https://audience.support.brightcove.com/develop/overview-audience-api.html">Overview</a></td>
         <td >&nbsp;</td>
@@ -1259,7 +1259,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       </tr>
       <tr>
         <td ><a translate="No" href="https://social.support.brightcove.com/develop/">Social</a></td>
-        <td >ソーシャルプラットフォームへの共有の履歴とステータスを取得します<span translate="No">Video Cloud</span>ビデオ</td>
+        <td ><span translate="No">Video Cloud</span>のソーシャルプラットフォームへの共有の履歴とステータスを取得します</td>
         <td ><a translate="No" href="https://social.support.brightcove.com/develop/">Landing Page</a></td>
         <td ><a translate="No" href="https://social.support.brightcove.com/develop/overview-social-api.html">Overview</a></td>
         <td >&nbsp;</td>
@@ -1299,7 +1299,7 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
       </tr>
       <tr>
         <td ><a translate="No" href="/policy/index.html">Policy</a></td>
-        <td >アクセスに使用されるポリシーキーを生成します<span translate="No">Playback API</span></td>
+        <td ><span translate="No">Playback API</span>へのアクセスに使用されるポリシーキーを生成します</td>
         <td ><a translate="No" href="/policy/index.html">Landing Page</a></td>
         <td ><a translate="No" href="/policy/getting-started/policy-keys.html">Overview</a></td>
         <td ><a translate="No" href="/policy/getting-started/quick-start-policy-api.html">Quick Start</a></td>
@@ -1370,10 +1370,10 @@ function doGTranslate(lang_pair) {if(lang_pair.value)lang_pair=lang_pair.value;i
   </section>
   
   <section class="bcls-section">
-  <h2 id="brightcoveliveapi">Brightcove ライブ API</h2>
+  <h2 id="brightcoveliveapi">Brightcove Live API</h2>
   
   <table class="bcls-table">
-    <caption class="bcls-caption--table">Brightcove ライブ API</caption>
+    <caption class="bcls-caption--table">Brightcove Live API</caption>
     <thead class="bcls-table__head">
       <tr>
         <th>API</th>
