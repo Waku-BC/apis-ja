@@ -29,6 +29,7 @@ description:  |- # this means to ignore newlines until "baseurl:"
 # baseurl: "" # the subpath of your site, e.g. /blog
 site_url: "https://ja.apis.support.brightcove.com"
 site_domain: "ja.apis.support.brightcove.com"
+language: ja
 
 # Build settings
 # theme: minima
