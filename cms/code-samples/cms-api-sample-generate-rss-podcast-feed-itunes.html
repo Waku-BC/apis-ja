@@ -1,6 +1,6 @@
 ---
 title:  'iTunes用のRSSポッドキャストフィード'
-description:  'このサンプルでは、の使用方法を学習します。<span translate="No"> CMS API</span> AppleiTunes用のRSSポッドキャストフィードを生成します。'
+description:  'このサンプルでは、<span translate="No"> CMS API</span> のAppleiTunes用のRSSポッドキャストフィードを生成する方法を学習します。'
 parent: 'Code Samples' 
 grandparent: CMS API
 ---
@@ -10,37 +10,37 @@ grandparent: CMS API
   <section class="bcls-section">
     <h2 id="Introduction">入門</h2>
 
-    <p>このアプリはポッドキャストを作成します<a href="https://itunespartner.apple.com/en/podcasts/overview">iTunesのRSSフィード</a> VideoCloudアカウントの1つ以上の音声のみのタイトルから。</p>
+    <p>このアプリは、VideoCloudアカウントの1つまたは複数の音声のみのタイトルから、<a href="https://itunespartner.apple.com/en/podcasts/overview">iTunes用のポッドキャストのRSSフィード</a> を作成します。</p>
 
     <aside class="bcls-aside bcls-aside--information">このサンプルと関連コードは、製品開発のガイドとして提供されています。このコードは、実稼働での使用が認定されておらず、正式にサポートされていません。</aside>
 
-    <p><strong>注：必要な情報をすべて入力しても、フィードが生成されない場合、または動画が含まれていない場合は、<a href="#troubleshooting">トラブルシューティング</a>以下のセクション。</strong></p>
+    <p><strong>注：必要な情報をすべて入力しても、フィードが生成されない場合、または動画が含まれていない場合は、以下の<a href="#troubleshooting">トラブルシューティング</a>セクションを参照して下さい。</strong></p>
 
     <section class="bcls-subsection">
       <h3>このアプリを使用するために必要なもの：</h3>
 
       <ul>
         <li>検索で返されたすべての動画がフィードに含まれます。したがって、タグまたはカスタムフィールドを使用して、含めたい動画を正確に識別する必要があります。</li>
-        <li>フィード内のURL <strong>しなければならない</strong> MP4レンディションをポイントします。選択した動画にMP4レンディションがない場合、アプリは<strong>ない</strong>それらをフィードに含めます。</li>
-        <li>あなたが満足していることを確認してください<a href="https://help.apple.com/itc/podcasts_connect/#/itc1723472cb">Appleの要件</a>画像などについて。このアプリは、ポッドキャストのアートワークにポスター画像を使用します。カスタムを作成する必要があるかもしれません<a href="https://studio.support.brightcove.com/admin/managing-ingest-profiles.html">取り込みプロファイル</a>ポスターのサイズを画像の要件に合わせるため。</li>
+        <li>フィード内のURLは、MP4レンディションを指している <strong>必要があります</strong>。 選択した動画にMP4レンディションがない場合、アプリはそれらをフィードに <strong>含めません</strong>。</li>
+        <li>画像など関する<a href="https://help.apple.com/itc/podcasts_connect/#/itc1723472cb">Appleの要件</a>を満たしていることを確認してください。このアプリは、ポッドキャストのアートワークにポスター画像を使用します。ポスターのサイズを画像の要件に適合させるために、カスタム<a href="https://studio.support.brightcove.com/admin/managing-ingest-profiles.html">取り込みプロファイル</a>を作成する必要がある場合があります。</li>
         <li>こちらもご覧ください<a href="https://help.apple.com/itc/podcasts_connect/?lang=en#/itc2b3780e76">ポッドキャストのベストプラクティス</a>（このアプリは、入力が許す限りそれらに従います）。</li>
-        <li>ポッドキャストは、オーディオのみのコンテンツとしてビデオクラウドに追加されます-を参照してください<a href="/general/audio-content.html">オーディオコンテンツ</a>これを行う方法の詳細については。</li>
-        <li>ポッドキャストのタイトル。タイトルが与えられていない場合、<code translate="No">name</code>ビデオ（またはエピソードのグループの最初のビデオ）のが使用されます。</li>
+        <li>ポッドキャストを、音声のみのコンテンツとしてVideo Cloudに追加する方法については-<a href="/general/audio-content.html">オーディオコンテンツ</a>を参照して下さい。</li>
+        <li>ポッドキャストのタイトル。タイトルが与えられていない場合、ビデオの<code translate="No">name</code>（またはエピソードのグループの最初のビデオ）が使用されます。</li>
         <li>ポッドキャストの説明。</li>
         <li>あなたのサイトのURL（例：https：//yoursiteurl.com）</li>
         <li>このフィードがホストされるURL（例：https：//yoursiteurl.com/feeds/podcast.rss）</li>
         <li>著者（個人名または組織名）。</li>
         <li>ポッドキャストの連絡先メールアドレス</li>
-        <li>放送の概要（これを省略した場合は、<code translate="No">description</code>ビデオクラウドから）。</li>
+        <li>放送の概要（これを省略した場合は、Video Cloudの<code translate="No">description</code>を使用します）。</li>
       </ul>
 
-      <p>以下のアプリには、提供する必要のあるすべての情報の入力フィールドが含まれています。アプリがデータとビデオのメタデータをポッドキャストフィードフィールドにマッピングする方法を確認するには、<a href="#Field_mappings">フィールドマッピング</a>ページ下部のセクション。</p>
+      <p>以下のアプリには、提供する必要のあるすべての情報の入力フィールドが含まれています。アプリがデータとビデオのメタデータをポッドキャストフィードのフィールドにどのようにマッピングするかは、ページ下部の<a href="#Field_mappings">フィールドマッピング</a>のセクションをご覧下さい。</p>
     </section>
 
     <section class="bcls-subsection">
       <h3>URLトークン化</h3>
 
-      <p>上記の要件に加えて、アカウントのURLトークン化を変更する必要があります。VideoCloudは<code translate="No">ttl</code>コンテンツが盗まれるのを防ぐためのレンディションのURLへのトークン。デフォルトでは、これらのトークンの寿命は非常に短く、ポッドキャストには短すぎます。あなたはする必要があります<a href="https://supportportal.brightcove.com/s/login/?language=en_US">Brightcoveサポートに連絡する</a>トークンの存続可能時間の値を高く設定するようにします。指定できる範囲は 1 時間から 1 年です。ポッドキャストを利用できるようにする時間に適した値に設定するように依頼します。ただし、これはアカウント設定であることを覚えておいてください。他の動画のセキュリティを危険にさらす可能性があるため、この値を高く設定しないでください。</p>
+      <p>上記の要件に加えて、アカウントのURLトークン化を変更する必要があります。VideoCloudは、レンディションのURLに<code translate="No">ttl</code>トークンを追加して、コンテンツが盗まれるのを防止します。デフォルトでは、これらのトークンの寿命は非常に短く、ポッドキャストには短すぎます。<a href="https://supportportal.brightcove.com/s/login/?language=en_US">Brightcoveサポートに連絡して</a>トークンの有効期限を高く設定してもらう必要があります。指定できる範囲は 1 時間から 1 年です。ポッドキャストを利用できるようにする時間に適した値に設定するように依頼します。ただし、これはアカウント設定であることを覚えておいてください。他の動画のセキュリティを脅かすような高い値を設定しないでください。</p>
     </section>
 
     <section class="bcls-subsection">
@@ -150,7 +150,7 @@ grandparent: CMS API
           <td><code translate="No">itunes:author</code></td>
         </tr>
         <tr>
-          <td><code translate="No">{your input}</code>（にフォールバック<code translate="No">author</code>）</td>
+          <td><code translate="No">{your input}</code>（<code translate="No">author</code>にフォールバック）</td>
           <td><code translate="No">itunes:owner:name</code></td>
         </tr>
         <tr>
@@ -180,7 +180,7 @@ grandparent: CMS API
       </tbody>
     </table>
 
-    <p>2番目の表は、このアプリがビデオメタデータをポッドキャストフィードにマッピングする方法を示しています<strong>項目</strong>田畑。</p>
+    <p>2番目の表は、このアプリがビデオメタデータをポッドキャストフィードの<strong>項目</strong>フィールドにどのようにマッピングしているかを示しています。</p>
 
     <table class="bcls-table">
       <caption class="bcls-caption--table">アイテムフィールドのマッピング</caption>
@@ -236,7 +236,7 @@ grandparent: CMS API
           <td><code translate="No">pubDate</code></td>
         </tr>
         <tr>
-          <td><code translate="No">duration</code>（に変換<code translate="No">HH:MM:SS</code>フォーマット）</td>
+          <td><code translate="No">duration</code>（<code translate="No">HH:MM:SS</code>フォーマットに変換）</td>
           <td><code translate="No">itunes:duration</code></td>
         </tr>
         <tr>
@@ -283,7 +283,7 @@ grandparent: CMS API
         <p>どのレンディションもダウンロードできない場合は、MP4（プログレッシブ）レンディションを含む取り込みプロファイルを使用して、ビデオを置換または再トランスコードする必要があります。</p>
       </li>
       <li>
-        <p>動画にMP4レンディションが含まれていても、フィードに動画が含まれていない場合は、使用している検索文字列が正しい動画を返すことを確認してください。これを行う1つの方法は、以下のリクエストURLをコピーして、置き換えることです。<code translate="No">{account_id}</code>そして<code translate="No">{search_string}</code>アカウントIDと検索文字列を使用して、リクエストを試してください<a href="/general/concepts-api-tester.html">APIテスター</a>期待するビデオが返されることを確認するには：</p>
+        <p>動画にMP4レンディションが含まれていても、フィードに動画が含まれていない場合は、使用している検索文字列が正しい動画を返すことを確認してください。以下のリクエストURLをコピーし、<code translate="No">{account_id}</code>と<code translate="No">{search_string}</code>をアカウントIDと検索文字列に置き換えて、<a href="/general/concepts-api-tester.html">APIテスター</a>でリクエストを実行し、期待通りのビデオが返されるかどうかを確認するのも一つの方法です：</p>
 
         <pre>
         <code class="language-http" translate="No">https://cms.api.brightcove.com/v1/accounts/<span class="bcls-input">{account_id}</span>/videos?q=<span class="bcls-input">{search_string}</span></code></pre>
